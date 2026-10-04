@@ -4,6 +4,9 @@
 
 빌드 과정 없는 정적 사이트예요. GitHub에 올리면 Vercel이 그대로 배포하고, 데이터와 로그인은 Supabase(`cnol-radar`)가 맡아요.
 
+- 사이트: https://cnol-radar.vercel.app
+- 저장소: `tigership-link-team/cnol-radar` (비공개) — `main`에 커밋하면 Vercel(miami127-prog's projects · `cnol-radar`)이 자동 배포
+
 ## 페이지
 
 | 주소 | 파일 | 내용 |
@@ -26,9 +29,10 @@
 
 ### 배포 후 꼭 할 일
 
-1. **Authentication → URL Configuration**
-   - Site URL: `https://<배포 주소>`
-   - Redirect URLs: `https://<배포 주소>/app`, `https://<배포 주소>/**`
+1. **Authentication → URL Configuration** — ✅ 완료
+   - Site URL: `https://cnol-radar.vercel.app`
+   - Redirect URLs: `https://cnol-radar.vercel.app/**`
+   - 도메인을 새로 붙이면 여기에도 같이 추가하세요.
 2. **관리자 지정** — 본인 계정으로 한 번 가입한 뒤 SQL 편집기에서:
    ```sql
    update public.profiles set role = 'admin' where email = '<관리자 이메일>';
@@ -36,7 +40,8 @@
 3. **로그인 공급자** (Authentication → Sign In / Providers)
    - **카카오**: Kakao Developers에서 앱 생성 → REST API 키(Client ID)·Client Secret 입력, Redirect URI `https://gbgcoxjnjlrzbwclevul.supabase.co/auth/v1/callback`. 이메일 동의항목은 비즈앱 전환(사업자 정보)이 필요해요.
    - **Google(가입용)**: Google Cloud에서 웹 OAuth 클라이언트 생성, 승인된 리디렉션 URI는 위와 같은 callback 주소. 가입에는 `email`·`profile`만 써서 별도 심사가 필요 없어요.
-   - **네이버**: Supabase 기본 공급자에 없어요. Edge Function으로 직접 OAuth를 붙이거나 다음 단계로 미뤄요(지금은 “곧 열려요” 안내).
+   - **네이버**: Supabase 기본 공급자에는 없어요. Sign In / Providers의 **Custom Providers**(OAuth 직접 등록)나 Edge Function으로 붙일 수 있어요(지금은 “곧 열려요” 안내).
+   - 공급자를 켜기 전에는 로그인 버튼이 “준비 중” 안내만 띄워요(`/auth/v1/settings`로 확인).
    - **이메일 링크**: 기본 메일 발송은 시간당 발송량이 아주 적어요. 출시 전 커스텀 SMTP를 연결하세요.
 
 ## 다음 단계 (지금은 데모 데이터)

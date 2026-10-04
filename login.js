@@ -1,4 +1,4 @@
-import { sb, getLang, setLang, snack, getSession } from '/common.js';
+import { sb, SUPABASE_URL, SUPABASE_KEY, getLang, setLang, snack, getSession } from '/common.js';
 
 const L = {
   ko: { title: '시작하기', sub: '가입은 편한 계정으로 해요. 내 유튜브 채널은 가입 후 채널마다 그 채널의 구글 계정으로 따로 연결해요.', kakao: '카카오로 시작하기', naver: '네이버로 시작하기', google: 'Google로 시작하기', or: '또는 이메일', email: '이메일', send: '로그인 링크 받기', sent: '메일함을 확인해 주세요. 링크를 누르면 바로 들어와요.', agree: '가입하면 아래 약관에 동의하게 돼요.', terms: '이용약관', privacy: '개인정보처리방침', note: '고른 언어로 화면과 브리핑, 알림이 와요. 설정에서 언제든 바꿀 수 있어요.', soonNaver: '네이버 로그인은 곧 열려요. 지금은 카카오, Google, 이메일로 시작해 주세요.', notReady: '이 로그인 방식은 아직 준비 중이에요. 이메일로 먼저 시작해 주세요.', fail: '로그인 링크를 보내지 못했어요. 잠시 후 다시 해주세요.' },
@@ -19,7 +19,15 @@ document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('clic
 
 const redirectTo = location.origin + '/app';
 
+// 켜진 로그인 방식만 Supabase로 보내고, 아직 안 켜진 방식은 안내만 해요
+let enabled = null;
+fetch(SUPABASE_URL + '/auth/v1/settings', { headers: { apikey: SUPABASE_KEY } })
+  .then((r) => (r.ok ? r.json() : null))
+  .then((j) => { enabled = j && j.external ? j.external : null; })
+  .catch(() => {});
+
 async function oauth(provider) {
+  if (enabled && enabled[provider] !== true) { snack(tx('notReady')); return; }
   try {
     const { error } = await sb.auth.signInWithOAuth({ provider, options: { redirectTo, queryParams: provider === 'google' ? { prompt: 'select_account' } : undefined } });
     if (error) throw error;
