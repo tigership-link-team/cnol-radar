@@ -909,7 +909,7 @@ function briefHtml(ov, alerts, picks, covH) {
     <div class="dk-brief">
       ${tile('#home', IC.insights, '', t('br48'), fmtN(ov.views48) + t('unitViews'), flow)}
       ${tile('#alerts', IC.up, breaks.length ? 'good' : '', t('brBreak'), breaks.length ? t('brCount', { n: breaks.length }) : '0', b0 ? `${b0.channel} · “${b0.title}” · ${t('ratio', { x: b0.ratio })}` : t('brBreakNone'))}
-      ${tile('#alerts', issues.length ? IC.warn : IC.lock, issues.length ? 'warn' : 'good', t('brIssue'), issues.length ? t('brCount', { n: issues.length }) : t('brIssueNone'), i0 ? `${i0.title} · ${i0.body}` : (ov.channels.mine ? t('brIssueOk') : t('brIssueNoMine')))}
+      ${tile('#alerts', issues.length ? IC.warn : IC.lock, issues.length ? 'warn' : 'good', t('brIssue'), issues.length ? t('brCount', { n: issues.length }) : ov.channels.mine ? t('brIssueNone') : '–', i0 ? `${i0.title} · ${i0.body}` : (ov.channels.mine ? t('brIssueOk') : t('brIssueNoMine')))}
       ${tile('#picks', IC.picks, p0 ? 'good' : '', t('brIdea'), p0 ? t('ratio', { x: Number(p0.ratio).toFixed(1) }) : '–', p0 ? `“${p0.title}” · ${formatsOf(p0.title).map((k) => t('fmt_' + k)).join(' · ') || p0.channel_title}` : t('brIdeaNone'))}
     </div>
   </section>`;
