@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>관리자 · CNOL RADAR</title>
+<meta name="theme-color" content="#3700B3">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="/styles.css">
+<style>
+.appbar{background:var(--primary-dark)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(140px,100%),1fr));gap:14px}
+.kpi{background:#fff;border-radius:12px;box-shadow:var(--e1);padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.kpi span{font-size:13px;color:var(--ink-2)}
+.kpi b{font-size:30px;font-weight:900;letter-spacing:-.5px}
+.panel-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
+.panel-h h2{margin:0;font-size:18px;font-weight:700}
+.chart{position:relative}
+.cols{display:flex;align-items:stretch;gap:2px;height:180px;border-bottom:1px solid var(--line-2)}
+.cols .c{flex:1 1 0;display:flex;align-items:flex-end;min-width:0}
+.cols .c i{display:block;width:100%;min-height:2px;border-radius:4px 4px 0 0;background:var(--primary);transition:background-color .15s}
+.cols .c i.z{background:var(--line)}
+.cols .c:hover i,.cols .c.on i{background:var(--primary-dark)}
+.axis{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);margin-top:6px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.toolbar .input{flex:1 1 240px}
+.req{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 20px;align-items:start}
+.req p{margin:0;font-size:14px;line-height:1.65;white-space:pre-line;color:var(--ink)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:13px;color:var(--ink-2)}
+.select.sm{min-height:40px;font-size:14px;padding:0 10px}
+td .who{display:flex;flex-direction:column;gap:2px}
+td .who small{color:var(--ink-2);font-size:12px}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="side" aria-label="CNOL RADAR admin">
+    <a class="brand" href="/"><img src="/logo.png" alt="" width="34" height="29"><span class="word"><b>CNOL</b> RADAR</span></a>
+    <span class="tag" style="align-self:flex-start" data-t="badge"></span>
+    <nav id="nav" aria-label="admin menu"></nav>
+  </aside>
+  <div class="main">
+    <header class="appbar">
+      <h1 id="title"></h1>
+      <span style="flex:1 1 auto"></span>
+      <span id="who" style="font-size:13px;color:#E9DDFF"></span>
+    </header>
+    <main id="view" class="content" tabindex="-1"></main>
+  </div>
+</div>
+<script type="module" src="/admin.js"></script>
+</body>
+</html>

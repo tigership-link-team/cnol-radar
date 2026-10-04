@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CNOL RADAR</title>
+<meta name="theme-color" content="#6200EE">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="/styles.css">
+<style>
+.feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(176px,100%),1fr));gap:14px}
+.vcard{background:#fff;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--e1);cursor:pointer;border:0;padding:0;text-align:left;font:inherit;color:inherit}
+.vcard[aria-pressed="true"]{outline:2px solid var(--primary);box-shadow:var(--e8)}
+.vcard .thumb .badge{position:absolute;top:8px;padding:3px 8px;border-radius:10px;font-size:11px;font-weight:700}
+.kanban{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:12px}
+.col{background:#EEEBF3;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px;min-height:160px}
+.kcard{background:#fff;border-radius:8px;padding:12px;box-shadow:var(--e1);display:flex;flex-direction:column;gap:8px}
+.chat .m{max-width:88%;padding:12px 14px;font-size:14px;line-height:1.65;white-space:pre-line}
+.chat .a{align-self:flex-start;background:var(--primary-soft);border-radius:16px 16px 16px 4px}
+.chat .u{align-self:flex-end;background:var(--primary);color:#fff;border-radius:16px 16px 4px 16px}
+.hero-pick{background:var(--primary-dark);color:#fff;border-radius:12px;box-shadow:var(--e4);padding:24px 28px;display:flex;flex-wrap:wrap;gap:20px 32px;align-items:center}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="side" aria-label="CNOL RADAR">
+    <a class="brand" href="/"><img src="/logo.png" alt="" width="34" height="29"><span class="word"><b>CNOL</b> RADAR</span></a>
+    <div id="myCh" class="stack" style="gap:6px;padding:12px;border-radius:8px;background:var(--bg)"></div>
+    <nav id="nav" aria-label="menu"></nav>
+    <div class="stack" style="gap:8px;padding:14px;border-radius:8px;border:1px solid var(--line)">
+      <div style="display:flex;align-items:center;gap:8px"><span class="live" style="width:8px;height:8px;border-radius:4px;background:#00897B"></span><b style="font-size:13px" data-a="agentOn"></b></div>
+      <span style="font-size:13px;color:var(--ink-2);line-height:1.5" data-a="agentDesc"></span>
+      <span id="planLine" style="font-size:13px;color:var(--ink-2)"></span>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="appbar">
+      <h1 id="title"></h1>
+      <span style="flex:1 1 auto"></span>
+      <span class="tag" style="background:rgba(255,255,255,.18);color:#fff" data-a="sample"></span>
+      <span id="who" style="font-size:13px;color:#E9DDFF"></span>
+    </header>
+    <main id="view" class="content" tabindex="-1"></main>
+  </div>
+</div>
+<script type="module" src="/app.js"></script>
+</body>
+</html>
