@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CNOL RADAR · 숏폼 크리에이터를 위한 쇼츠 에이전트</title>
-<meta name="description" content="채널을 연결하면 매일 아침 다음에 만들 소재, 참고할 영상, 48시간 흐름, 채널 이슈를 정리해 보내드려요. 음원·광고·PPL까지 이어주는 CNOL RADAR.">
+<title>CNOL RADAR · 터지는 쇼츠를 먼저 잡는 레이더</title>
+<meta name="description" content="채널 링크만 넣으면 매시간 쇼츠 조회수를 재서, 평소보다 크게 터진 쇼츠와 그 이유, 내 채널에 맞는 다음 소재, 채널 이슈까지 알려주는 CNOL RADAR.">
 <meta property="og:title" content="CNOL RADAR">
-<meta property="og:description" content="내 채널만 아는 쇼츠 에이전트">
+<meta property="og:description" content="터지는 쇼츠, 먼저 잡는 레이더">
 <meta property="og:image" content="/icon-512.png">
 <meta name="theme-color" content="#6200EE">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -16,7 +16,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/dash.css">
 <style>
 .pre{white-space:pre-line}
 .top{background:var(--primary);color:#fff}
@@ -91,8 +93,8 @@ details[open] .chev{transform:rotate(180deg)}
         <button type="button" data-lang="en">EN</button>
         <button type="button" data-lang="ja">日本語</button>
       </div>
-      <a class="btn text rip" href="/login" style="color:#fff" data-i18n="nav.login">로그인</a>
-      <a class="btn white rip" href="/login" data-i18n="nav.start">무료로 시작</a>
+      <a class="btn text rip" href="/app" style="color:#fff" data-i18n="nav.login">대시보드</a>
+      <a class="btn white rip" href="/app" data-i18n="nav.start">지금 써보기</a>
     </div>
   </div>
 </header>
@@ -106,21 +108,21 @@ details[open] .chev{transform:rotate(180deg)}
         <span data-i18n="hero.over">숏폼 크리에이터를 위한 CNOL RADAR</span>
       </span>
       <h1>
-        <span class="rv"><span data-i18n="hero.h1a">내 채널만 아는</span></span>
-        <span class="rv"><span style="animation-delay:120ms;color:var(--secondary)" data-i18n="hero.h1b">쇼츠 에이전트</span></span>
+        <span class="rv"><span data-i18n="hero.h1a">터지는 쇼츠,</span></span>
+        <span class="rv"><span style="animation-delay:120ms;color:var(--secondary)" data-i18n="hero.h1b">먼저 잡는 레이더</span></span>
       </h1>
-      <p class="sub fu" style="animation-delay:200ms" data-i18n="hero.sub">채널을 연결하면 매일 아침, 다음에 만들 소재와 참고할 영상, 48시간 흐름, 채널 이슈를 정리해서 보내드려요. 맞는 음원과 광고·PPL까지 이어드려요.</p>
+      <p class="sub fu" style="animation-delay:200ms" data-i18n="hero.sub">채널 링크만 넣으면 매시간 조회수를 재서, 평소보다 크게 터진 쇼츠와 왜 떴는지, 내 채널에 맞는 다음 소재까지 골라 드려요. 채널에 문제가 생기면 바로 알려드려요.</p>
       <div class="fu" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;animation-delay:300ms">
-        <a class="btn fab rip" id="magnet" href="/login">
+        <a class="btn fab rip" id="magnet" href="/app">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.4 4.5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.42-1.41"/></svg>
-          <span data-i18n="hero.cta1">유튜브 채널 연결하고 시작</span>
+          <span data-i18n="hero.cta1">지금 바로 써보기</span>
         </a>
         <a class="btn ghost-white rip" href="#extension">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h4a2 2 0 1 1 4 0h4v4a2 2 0 1 1 0 4v4H4z"/></svg>
           <span data-i18n="hero.cta2">크롬 확장 받기</span>
         </a>
       </div>
-      <p class="fu" style="margin:0;font-size:14px;color:#E9DDFF;animation-delay:380ms" data-i18n="hero.note">무료로 시작 · 채널마다 그 채널의 구글 계정으로 연결 · 읽기 전용</p>
+      <p class="fu" style="margin:0;font-size:14px;color:#E9DDFF;animation-delay:380ms" data-i18n="hero.note">로그인 없이 바로 · 유튜브 채널 링크만 있으면 돼요 · 실험 모드</p>
     </div>
     <div class="radar zi" aria-hidden="true">
       <div class="ring" style="width:460px;height:460px;border:1px solid rgba(255,255,255,.16)"></div>
@@ -138,64 +140,36 @@ details[open] .chev{transform:rotate(180deg)}
 
 <section class="band" id="dashboard" style="background:var(--bg)">
   <div class="wrap stack" style="gap:36px">
-    <div class="stack" style="max-width:760px">
-      <span class="over" data-i18n="dash.over">실제 대시보드</span>
-      <h2 class="h2 pre" data-i18n="dash.h2">48시간 조회수,
-막대로 바로 보여요</h2>
-      <p class="lead" data-i18n="dash.sub">15분마다 갱신되는 48시간 흐름, 채널 순위, 28일 분석 차트, 잘된 쇼츠까지 한 화면에서 봐요.</p>
-    </div>
-    <div class="dash fu">
-      <div class="dash-bar">
-        <span class="brand"><span class="mark" style="width:30px;height:30px;border-radius:8px"><img src="/logo.png" alt="" width="22" height="19"></span><span class="word" style="font-size:16px"><b>CNOL</b> RADAR</span></span>
-        <span class="tabs"><span class="on" data-i18n="dash.tabDash">대시보드</span><span data-i18n="dash.tabAna">분석</span><span data-i18n="dash.tabIdea">소재</span><span data-i18n="dash.tabRef">레퍼런스</span></span>
-        <span class="tag" style="background:rgba(255,255,255,.18);color:#fff" data-i18n="dash.sample">채널 3개 · 예시 데이터</span>
+    <div style="display:flex;flex-wrap:wrap;gap:20px 32px;justify-content:space-between;align-items:flex-end">
+      <div class="stack" style="max-width:760px">
+        <span class="over" data-i18n="dash.over">실제 대시보드</span>
+        <h2 class="h2 pre" data-i18n="dash.h2"></h2>
+        <p class="lead" data-i18n="dash.sub"></p>
       </div>
-      <div class="dash-body">
-        <div class="row" style="gap:16px;align-items:stretch">
-          <div class="card" style="flex:2 1 540px;min-width:0;display:flex;flex-direction:column;gap:14px">
-            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-end">
-              <div class="stack" style="gap:4px">
-                <span style="display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--ink-2)"><span class="live" style="width:8px;height:8px;border-radius:4px;background:var(--down)"></span><span data-i18n="dash.live">실시간 · 지난 48시간</span></span>
-                <span class="num" id="rtHead" style="font-size:36px;font-weight:900"></span>
-                <span id="rtSub" style="font-size:13px;color:var(--ink-2)"></span>
-              </div>
-              <div class="stack" style="gap:4px;align-items:flex-end">
-                <span style="font-size:13px;color:var(--ink-2)" data-i18n="dash.last1h">지난 1시간</span>
-                <span class="num" id="rtLast" style="font-size:24px;font-weight:900"></span>
-              </div>
-            </div>
-            <div class="bars" id="rtBars" style="height:168px" role="img" aria-label="48h"></div>
-            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2)"><span data-i18n="dash.ago48">48시간 전</span><span data-i18n="dash.ago24">24시간 전</span><span data-i18n="dash.now">지금</span></div>
-          </div>
-          <div class="card" style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:14px">
-            <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><b style="font-size:15px" data-i18n="dash.rank">채널 순위 · 48시간</b><span style="font-size:12px;color:var(--ink-2)" data-i18n="dash.rankSince">직전 수집 대비</span></div>
-            <div id="rank" class="stack" style="gap:14px"></div>
-            <span style="margin-top:auto;font-size:12px;line-height:1.5;color:var(--ink-2)" data-i18n="dash.rankNote">48시간 수치는 공개 조회수로 계산한 자체 지표예요.</span>
-          </div>
+      <a class="btn rip" href="/app"><span data-i18n="dash.open"></span> →</a>
+    </div>
+    <div class="dk-demo fu" role="figure" data-i18n-aria="dash.aria">
+      <div class="dk-orbs" aria-hidden="true"><i style="top:-90px;left:-120px;width:380px;height:380px"></i><i style="top:30px;right:12%;width:220px;height:220px"></i><i style="bottom:-160px;right:-140px;width:480px;height:480px"></i></div>
+      <aside class="dk-side" aria-hidden="true">
+        <div class="dk-brand"><span style="display:flex;align-items:center;gap:12px;flex-grow:1;min-width:0"><span class="dk-logo"><img src="/logo.png" alt="" width="30" height="26"></span><span style="min-width:0"><b>CNOL RADAR</b><small data-i18n="dash.brandSub"></small></span></span><span class="dk-bell"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="dk-badge">3</span></span></div>
+        <span class="dk-nav" aria-current="page"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span data-i18n="dash.m1"></span></span>
+        <p class="dk-sec" data-i18n="dash.s1"></p>
+        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg><span data-i18n="dash.m2"></span></span>
+        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span data-i18n="dash.m3"></span></span>
+        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg><span data-i18n="dash.m4"></span></span>
+        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span data-i18n="dash.m5"></span><span class="n">3</span></span>
+        <p class="dk-sec" data-i18n="dash.s2"></p>
+        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span data-i18n="dash.m6"></span></span>
+        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span data-i18n="dash.m7"></span></span>
+        <p class="dk-sec" data-i18n="dash.s3"></p>
+        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></svg><span data-i18n="dash.m8"></span></span>
+      </aside>
+      <div class="dk-main">
+        <div class="dk-head">
+          <div><div class="dk-h" data-i18n="dash.title"></div><p data-i18n="dash.homeSub"></p></div>
+          <span class="dk-hbtn ghost" style="height:38px;padding:0 14px;font-size:13px" data-i18n="dash.sample"></span>
         </div>
-        <div class="row" style="gap:16px;align-items:stretch">
-          <div class="card" style="flex:2 1 540px;min-width:0;display:flex;flex-direction:column;gap:12px">
-            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;align-items:flex-end">
-              <div class="stack" style="gap:4px"><span style="font-size:13px;font-weight:700;color:var(--ink-2)" data-i18n="dash.daily">일별 조회수 · 지난 28일</span><span class="num" id="lnHead" style="font-size:26px;font-weight:900"></span></div>
-              <div style="display:flex;gap:14px;font-size:12px;color:var(--ink-2)">
-                <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:16px;height:2px;background:var(--primary)"></span><span data-i18n="dash.cur">이번 28일</span></span>
-                <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:16px;border-top:2px dashed #8E8A96"></span><span data-i18n="dash.prev">직전 28일</span></span>
-              </div>
-            </div>
-            <div id="lnWrap" style="position:relative"></div>
-            <span style="font-size:12px;color:var(--ink-2)" data-i18n="dash.confirmed">유튜브 분석 확정치 · 2~3일 늦게 들어와요</span>
-          </div>
-          <div class="card" style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:10px">
-            <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><b style="font-size:15px" data-i18n="dash.tops">잘된 쇼츠 · 48시간</b><span style="font-size:12px;color:var(--ink-2)" data-i18n="dash.ret">평균 시청률</span></div>
-            <div id="tops"></div>
-          </div>
-        </div>
-        <div class="grid-auto" style="grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr))">
-          <div class="card stack" style="gap:6px"><span style="font-size:13px;color:var(--ink-2)" data-i18n="dash.k1">구독자 · 28일</span><b class="num" style="font-size:24px">+2,340</b></div>
-          <div class="card stack" style="gap:6px"><span style="font-size:13px;color:var(--ink-2)" data-i18n="dash.k2">평균 시청률</span><b class="num" style="font-size:24px">71%</b></div>
-          <div class="card stack" style="gap:6px"><span style="font-size:13px;color:var(--ink-2)" data-i18n="dash.k3">쇼츠 피드 유입</span><b class="num" style="font-size:24px">78%</b></div>
-          <div class="card stack" style="gap:6px"><span style="font-size:13px;color:var(--ink-2)" data-i18n="dash.k4">업로드 · 28일</span><b class="num" style="font-size:24px">34</b></div>
-        </div>
+        <div id="demoBody" style="display:flex;flex-direction:column;gap:16px"></div>
       </div>
     </div>
   </div>
@@ -338,11 +312,11 @@ details[open] .chev{transform:rotate(180deg)}
       </div>
     </div>
     <div class="plans">
-      <div class="plan lift"><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.free"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch1"></span></div><div class="stack" style="gap:2px"><span class="price num" data-price="free"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="free"></span></div><ul><li data-i18n="plan.f1"></li><li data-i18n="plan.f2"></li><li data-i18n="plan.f3"></li></ul><a class="btn outline rip" href="/login" data-i18n="plan.start"></a></div>
-      <div class="plan lift"><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.solo"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch1"></span></div><div class="stack" style="gap:2px"><span class="price num" data-price="solo"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="solo"></span></div><ul><li data-i18n="plan.s1"></li><li data-i18n="plan.s2"></li><li data-i18n="plan.s3"></li><li data-i18n="plan.s4"></li><li data-i18n="plan.s5"></li></ul><a class="btn outline rip" href="/login" data-i18n="plan.start"></a></div>
-      <div class="plan rec lift"><span class="tag" style="position:absolute;top:-14px;left:20px;background:var(--secondary);color:#121212" data-i18n="plan.rec"></span><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.plus"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch5"></span></div><div class="stack" style="gap:2px"><span class="price num" style="color:var(--primary-dark)" data-price="plus"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="plus"></span></div><ul><li data-i18n="plan.p1"></li><li data-i18n="plan.p2"></li><li data-i18n="plan.p3"></li><li data-i18n="plan.p4"></li></ul><a class="btn rip" href="/login" data-i18n="plan.start"></a></div>
-      <div class="plan lift"><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.team"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch10"></span></div><div class="stack" style="gap:2px"><span class="price num" data-price="team"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="team"></span></div><ul><li data-i18n="plan.t1"></li><li data-i18n="plan.t2"></li><li data-i18n="plan.t3"></li><li data-i18n="plan.t4"></li></ul><a class="btn outline rip" href="/login" data-i18n="plan.start"></a></div>
-      <div class="plan lift"><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.agency"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch30"></span></div><div class="stack" style="gap:2px"><span class="price num" data-price="agency"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="agency"></span></div><ul><li data-i18n="plan.a1"></li><li data-i18n="plan.a2"></li><li data-i18n="plan.a3"></li><li data-i18n="plan.a4"></li></ul><a class="btn outline rip" href="/login" data-i18n="plan.start"></a></div>
+      <div class="plan lift"><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.free"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch1"></span></div><div class="stack" style="gap:2px"><span class="price num" data-price="free"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="free"></span></div><ul><li data-i18n="plan.f1"></li><li data-i18n="plan.f2"></li><li data-i18n="plan.f3"></li></ul><a class="btn outline rip" href="/app" data-i18n="plan.start"></a></div>
+      <div class="plan lift"><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.solo"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch1"></span></div><div class="stack" style="gap:2px"><span class="price num" data-price="solo"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="solo"></span></div><ul><li data-i18n="plan.s1"></li><li data-i18n="plan.s2"></li><li data-i18n="plan.s3"></li><li data-i18n="plan.s4"></li><li data-i18n="plan.s5"></li></ul><a class="btn outline rip" href="/app" data-i18n="plan.start"></a></div>
+      <div class="plan rec lift"><span class="tag" style="position:absolute;top:-14px;left:20px;background:var(--secondary);color:#121212" data-i18n="plan.rec"></span><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.plus"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch5"></span></div><div class="stack" style="gap:2px"><span class="price num" style="color:var(--primary-dark)" data-price="plus"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="plus"></span></div><ul><li data-i18n="plan.p1"></li><li data-i18n="plan.p2"></li><li data-i18n="plan.p3"></li><li data-i18n="plan.p4"></li></ul><a class="btn rip" href="/app" data-i18n="plan.start"></a></div>
+      <div class="plan lift"><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.team"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch10"></span></div><div class="stack" style="gap:2px"><span class="price num" data-price="team"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="team"></span></div><ul><li data-i18n="plan.t1"></li><li data-i18n="plan.t2"></li><li data-i18n="plan.t3"></li><li data-i18n="plan.t4"></li></ul><a class="btn outline rip" href="/app" data-i18n="plan.start"></a></div>
+      <div class="plan lift"><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.agency"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch30"></span></div><div class="stack" style="gap:2px"><span class="price num" data-price="agency"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="agency"></span></div><ul><li data-i18n="plan.a1"></li><li data-i18n="plan.a2"></li><li data-i18n="plan.a3"></li><li data-i18n="plan.a4"></li></ul><a class="btn outline rip" href="/app" data-i18n="plan.start"></a></div>
     </div>
     <p style="margin:0;font-size:15px;color:var(--ink-2)" data-i18n="price.note"></p>
   </div>
@@ -365,7 +339,7 @@ details[open] .chev{transform:rotate(180deg)}
 <section style="background:var(--primary);color:#fff">
   <div class="wrap" style="padding-top:80px;padding-bottom:80px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:center">
     <h2 style="margin:0;font-size:clamp(28px,3.4vw,36px);line-height:1.3;font-weight:900;flex:1 1 420px" data-i18n="cta.h2"></h2>
-    <a class="btn fab rip" href="/login" data-i18n="hero.cta1"></a>
+    <a class="btn fab rip" href="/app" data-i18n="hero.cta1"></a>
   </div>
 </section>
 </main>

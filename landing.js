@@ -35,13 +35,24 @@ function renderFaq() {
   box.innerHTML = [1, 2, 3, 4, 5].map((i) => `<details><summary>${esc(t('faq.q' + i, lang))}${chev}</summary><p>${esc(t('faq.a' + i, lang))}</p></details>`).join('');
 }
 
-// ---- 대시보드 데모 ----
+// ---- 대시보드 데모 (실제 /app 대시보드와 같은 카드·막대 모양, 예시 데이터) ----
 const W = [0.55, 0.42, 0.33, 0.27, 0.24, 0.25, 0.32, 0.45, 0.58, 0.66, 0.7, 0.74, 0.8, 0.78, 0.76, 0.8, 0.86, 0.94, 1.0, 1.08, 1.18, 1.25, 1.15, 0.85];
 const raw48 = Array.from({ length: 48 }, (_, i) => W[(8 + i) % 24] * (i >= 33 ? 1.4 : 1) * (1 + i * 0.004));
 const k48 = 128 / raw48.reduce((a, b) => a + b, 0);
-const V48 = raw48.map((v) => v * k48);
+const V48 = raw48.map((v) => v * k48); // 만 회 단위
 const CUR = [38, 41, 39, 44, 42, 40, 47, 45, 48, 44, 50, 53, 49, 51, 57, 54, 56, 52, 60, 55, 58, 63, 59, 62, 68, 66, 73, 71];
 const PREV = [33, 35, 34, 36, 38, 35, 37, 39, 36, 40, 41, 38, 42, 40, 43, 41, 44, 42, 45, 43, 46, 44, 47, 45, 48, 46, 49, 47];
+const IC = {
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  chart: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>', up: '<path d="M7 17L17 7M9 7h8v8"/>',
+  warn: '<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+  picks: '<path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/>'
+};
+const svg = (p, n = 18) => `<svg width="${n}" height="${n}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const AV = ['linear-gradient(135deg,#f59e0b,#ec4899)', 'linear-gradient(135deg,#22c55e,#0ea5e9)', 'linear-gradient(135deg,#8b5cf6,#f472b6)'];
+const TH = ['linear-gradient(160deg,#c4b5fd,#7c3aed)', 'linear-gradient(160deg,#fde68a,#f97316)', 'linear-gradient(160deg,#a5f3fc,#0891b2)', 'linear-gradient(160deg,#fbcfe8,#db2777)', 'linear-gradient(160deg,#bbf7d0,#16a34a)'];
+const fmtMan = (man) => fmtViews(man, lang, false);
+const num = (n) => Math.round(n).toLocaleString(lang === 'ko' ? 'ko-KR' : lang === 'ja' ? 'ja-JP' : 'en-US');
 
 function hourLabel(i) {
   const day = 3 + Math.floor((8 + i) / 24);
@@ -56,82 +67,91 @@ function dayLabel(i) {
   if (lang === 'ja') return `${d.getMonth() + 1}月${d.getDate()}日`;
   return `${d.getMonth() + 1}월 ${d.getDate()}일`;
 }
-
-function renderRealtime(hover = null) {
-  const bars = document.getElementById('rtBars');
-  const max = Math.max(...V48);
-  if (!bars.childElementCount) {
-    V48.forEach((v, i) => {
-      const s = document.createElement('span');
-      s.className = 'rise';
-      s.style.height = Math.max(4, Math.round((v / max) * 160)) + 'px';
-      s.addEventListener('mouseenter', () => renderRealtime(i));
-      bars.appendChild(s);
+function bars(id, vals, h) {
+  const max = Math.max(...vals);
+  return `<div class="dk-chart" id="${id}"><div class="dk-bars" style="height:${h}px" role="img" aria-label="${esc(id === 'dm48' ? t('dash.live', lang) : t('dash.daily', lang))}">${vals.map((v, i) => `<div class="c" data-i="${i}"><i class="dk-rise" style="height:${Math.max(3, (v / max) * 100).toFixed(1)}%;animation-delay:${Math.min(i, 60) * 9}ms"></i></div>`).join('')}</div><div class="dk-tip" hidden></div></div>`;
+}
+function bindTips(root, id, vals, tipFn) {
+  const box = root.querySelector('#' + id);
+  if (!box) return;
+  const tip = box.querySelector('.dk-tip');
+  const max = Math.max(...vals);
+  box.querySelectorAll('.c').forEach((c) => {
+    c.addEventListener('pointerenter', () => {
+      const i = Number(c.dataset.i);
+      tip.textContent = tipFn(i);
+      tip.hidden = false;
+      const cx = Math.min(Math.max(c.offsetLeft + c.offsetWidth / 2, 80), box.clientWidth - 80);
+      tip.style.left = cx + 'px';
+      tip.style.top = Math.max(-10, c.offsetTop + c.offsetHeight * (1 - vals[i] / max) - tip.offsetHeight - 8) + 'px';
+      c.classList.add('on');
     });
-    bars.addEventListener('mouseleave', () => renderRealtime(null));
-  }
-  bars.classList.toggle('dim', hover !== null);
-  [...bars.children].forEach((s, i) => s.classList.toggle('hot', i === hover));
-  document.getElementById('rtHead').textContent = hover === null ? fmtViews(128, lang) : fmtViews(V48[hover], lang);
-  document.getElementById('rtSub').textContent = hover === null ? t('dash.liveSub', lang) : t('dash.hourOf', lang, { h: hourLabel(hover) });
-  document.getElementById('rtLast').textContent = fmtViews(V48[47], lang, false);
+    c.addEventListener('pointerleave', () => { tip.hidden = true; c.classList.remove('on'); });
+  });
+}
+function nextRun() {
+  const d = new Date();
+  d.setMinutes(5, 0, 0);
+  if (d <= new Date()) d.setHours(d.getHours() + 1);
+  return d.toLocaleTimeString(lang === 'ko' ? 'ko-KR' : lang === 'ja' ? 'ja-JP' : 'en-US', { hour: 'numeric', minute: '2-digit' });
 }
 
-function renderRank() {
-  const rows = [['ch.1', 82, '+3,210'], ['ch.2', 32, '+1,040'], ['ch.3', 14, '+380']];
-  document.getElementById('rank').innerHTML = rows.map(([k, v, d], i) => `
-    <div class="stack" style="gap:6px">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="width:24px;height:24px;border-radius:12px;background:var(--primary-tint);color:var(--primary-dark);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex:none">${i + 1}</span>
-        <span style="font-size:14px;font-weight:500;flex:1 1 auto;min-width:0">${esc(t(k, lang))}</span>
-        <b class="num" style="font-size:14px">${esc(fmtViews(v, lang, false))}</b>
-        <span class="num" style="font-size:12px;font-weight:700;color:var(--up)">${d}</span>
+function renderDemo() {
+  const box = document.getElementById('demoBody');
+  if (!box) return;
+  const L = (k, v) => esc(t(k, lang, v));
+  const unit = t('dash.views', lang);
+  const curSum = CUR.reduce((a, b) => a + b, 0), prevSum = PREV.reduce((a, b) => a + b, 0);
+  const tile = (ic, tone, label, big, small) => `<div class="dk-bi"><span class="ic ${tone}">${svg(ic)}</span><span class="tx"><b>${label}</b><strong>${big}</strong><span>${small}</span></span></div>`;
+  const rank = [['ch.1', 'dash.mine', 'dash.c1', 82, 3210], ['ch.2', 'dash.ref', 'dash.c2', 32, 1040], ['ch.3', 'dash.mine', 'dash.c3', 14, 380]];
+  const tops = [['top.1', 'ch.1', 46, 9], ['top.2', 'ch.2', 18, 14], ['top.3', 'ch.1', 15, 20], ['top.4', 'ch.3', 9, 31], ['top.5', 'ch.2', 7, 40]];
+  box.innerHTML = `
+  <section class="dk-card full">
+    <div class="dk-ch"><h3 style="display:flex;align-items:center;gap:10px;font-size:18px">${svg(IC.sun, 20)}${L('dash.brTitle')}</h3><span class="dk-live"><i></i>${L('dash.brSub')}</span></div>
+    <div class="dk-brief">
+      ${tile(IC.chart, '', L('dash.br1'), esc(fmtMan(128)) + esc(unit), L('dash.br1s'))}
+      ${tile(IC.up, 'good', L('dash.br2'), L('dash.br2v'), L('dash.br2s'))}
+      ${tile(IC.warn, 'warn', L('dash.br3'), L('dash.br3v'), L('dash.br3s'))}
+      ${tile(IC.picks, 'good', L('dash.br4'), L('dash.br4v'), L('dash.br4s'))}
+    </div>
+  </section>
+  <div class="dk-row">
+    <section class="dk-card f2">
+      <div class="dk-ch"><span class="dk-live"><i></i>${L('dash.live')}</span><span class="dk-sub">${L('dash.sched')}</span></div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px">
+        <div><div class="dk-big">${esc(fmtMan(128))}<span style="font-size:20px;font-weight:800">${esc(unit)}</span></div><div class="dk-sub"><span class="dk-up" style="font-weight:700">${L('dash.liveSub')}</span></div></div>
+        <div style="text-align:right"><div class="dk-sub">${L('dash.last1h')}</div><div class="dk-mid">${esc(fmtMan(V48[46]))}</div></div>
       </div>
-      <span style="display:block;height:8px;border-radius:4px;background:#F3F1F6"><span class="grow" style="display:block;height:8px;border-radius:4px;background:var(--primary);width:${Math.round((v / 82) * 100)}%"></span></span>
-    </div>`).join('');
-}
-
-function renderLine(hover = null) {
-  const X = (i) => 44 + (i / 27) * 586;
-  const Y = (v) => 180 - (v / 80) * 160;
-  const pts = (a) => a.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
-  const curSum = CUR.reduce((a, b) => a + b, 0);
-  const prevSum = PREV.reduce((a, b) => a + b, 0);
-  const pct = Math.round(((curSum - prevSum) / prevSum) * 100);
-  document.getElementById('lnHead').textContent = `${fmtViews(curSum, lang)} ▲ ${pct}%`;
-  const wrap = document.getElementById('lnWrap');
-  const tip = hover === null ? '' : `
-    <line x1="${X(hover)}" y1="20" x2="${X(hover)}" y2="180" stroke="#1D1B20" stroke-dasharray="2 3"/>
-    <circle cx="${X(hover)}" cy="${Y(CUR[hover])}" r="5" fill="#6200EE" stroke="#fff" stroke-width="2"/>
-    <circle cx="${X(hover)}" cy="${Y(PREV[hover])}" r="5" fill="#8E8A96" stroke="#fff" stroke-width="2"/>`;
-  const zones = CUR.map((_, i) => `<rect data-i="${i}" x="${(X(i) - 586 / 54).toFixed(1)}" y="10" width="${(586 / 27).toFixed(1)}" height="176" fill="transparent"/>`).join('');
-  wrap.innerHTML = `
-    <svg viewBox="0 0 640 220" width="100%" role="img" aria-label="${esc(t('dash.daily', lang))}" style="display:block;overflow:visible">
-      <line x1="44" y1="20" x2="630" y2="20" stroke="#EEECF1"/><line x1="44" y1="100" x2="630" y2="100" stroke="#EEECF1"/><line x1="44" y1="180" x2="630" y2="180" stroke="#CFCAD8"/>
-      <text x="36" y="24" text-anchor="end" font-size="11" fill="#5F5B66">${esc(fmtViews(80, lang, false))}</text>
-      <text x="36" y="104" text-anchor="end" font-size="11" fill="#5F5B66">${esc(fmtViews(40, lang, false))}</text>
-      <text x="36" y="184" text-anchor="end" font-size="11" fill="#5F5B66">0</text>
-      <text x="44" y="204" font-size="11" fill="#5F5B66">${esc(dayLabel(0))}</text>
-      <text x="337" y="204" text-anchor="middle" font-size="11" fill="#5F5B66">${esc(dayLabel(14))}</text>
-      <text x="630" y="204" text-anchor="end" font-size="11" fill="#5F5B66">${esc(dayLabel(27))}</text>
-      <polygon points="44,180 ${pts(CUR)} 630,180" fill="#EDE7F6"/>
-      <polyline points="${pts(PREV)}" fill="none" stroke="#8E8A96" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round"/>
-      <polyline points="${pts(CUR)}" fill="none" stroke="#6200EE" stroke-width="2" stroke-linejoin="round"/>
-      ${tip}${zones}
-    </svg>
-    ${hover === null ? '' : `<div class="tip" style="top:-10px;left:${(X(hover) / 640) * 100}%">${esc(dayLabel(hover))}\n${esc(t('dash.cur', lang))} ${esc(fmtViews(CUR[hover], lang, false))} · ${esc(t('dash.prev', lang))} ${esc(fmtViews(PREV[hover], lang, false))}</div>`}`;
-  wrap.querySelectorAll('rect[data-i]').forEach((r) => r.addEventListener('mouseenter', () => renderLine(Number(r.dataset.i))));
-  wrap.onmouseleave = () => renderLine(null);
-}
-
-function renderTops() {
-  const rows = [['top.1', 'ch.1', 46, 82, '#EDE7F6'], ['top.2', 'ch.2', 18, 76, '#FFF3E0'], ['top.3', 'ch.1', 15, 71, '#E0F7FA'], ['top.4', 'ch.3', 9, 64, '#E8F5E9'], ['top.5', 'ch.2', 7, 61, '#FCE4EC']];
-  document.getElementById('tops').innerHTML = rows.map(([tk, ck, v, r, tone]) => `
-    <div style="display:grid;grid-template-columns:30px minmax(0,1fr) 64px;gap:10px;align-items:center;padding:6px 0;border-top:1px solid #F0EEF3">
-      <span style="width:30px;height:52px;border-radius:4px;background:${tone}"></span>
-      <span class="stack" style="gap:4px;min-width:0"><span style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(t(tk, lang))}</span><span style="font-size:12px;color:var(--ink-2)">${esc(t(ck, lang))} · ${esc(fmtViews(v, lang, false))}</span></span>
-      <span class="stack" style="gap:4px;align-items:flex-end"><b class="num" style="font-size:13px">${r}%</b><span style="display:block;width:64px;height:6px;border-radius:3px;background:#F3F1F6"><span style="display:block;height:6px;border-radius:3px;background:var(--primary);width:${r}%"></span></span></span>
-    </div>`).join('');
+      ${bars('dm48', V48, 160)}
+      <div class="dk-axis"><span>${L('dash.ago48')}</span><span>${L('dash.ago24')}</span><span>${L('dash.now')}</span></div>
+    </section>
+    <section class="dk-card f1">
+      <div class="dk-ch"><h3>${L('dash.rank')}</h3><span class="dk-sub">${L('dash.rankSince')}</span></div>
+      <ul class="dk-list">${rank.map(([ck, rk, ct, v, d], i) => `<li class="dk-li"><span class="dk-rank">${i + 1}</span><span class="dk-av" style="background:${AV[i]}"></span><span class="dk-ttl"><b>${L(ck)}</b><small>${L(rk)} · ${L(ct)}</small></span><span class="dk-num">${esc(fmtMan(v))}<small>+${esc(num(d))}</small></span></li>`).join('')}</ul>
+      <span class="dk-sub" style="margin-top:auto">${L('dash.rankNote')}</span>
+    </section>
+  </div>
+  <div class="dk-row">
+    <section class="dk-card f2">
+      <div class="dk-ch"><h3>${L('dash.daily')}</h3><span class="dk-mid" style="font-size:22px">${esc(fmtMan(curSum))}${esc(unit)}</span></div>
+      <div class="dk-sub" style="margin-top:-8px"><span class="dk-up" style="font-weight:700">${L('dash.dailyUp', { p: Math.round(((curSum - prevSum) / prevSum) * 100) })}</span></div>
+      ${bars('dmd', CUR, 140)}
+      <div class="dk-axis"><span>${esc(dayLabel(0))}</span><span>${esc(dayLabel(14))}</span><span>${esc(dayLabel(27))}</span></div>
+      <span class="dk-sub">${L('dash.confirmed')}</span>
+    </section>
+    <section class="dk-card f1">
+      <div class="dk-ch"><h3>${L('dash.tops')}</h3><span class="dk-sub">${L('dash.seeAll')}</span></div>
+      <ul class="dk-list">${tops.map(([tk, ck, v, h], i) => `<li class="dk-li"><span class="dk-av sq" style="background:${TH[i]}"></span><span class="dk-ttl"><b>${L(tk)}</b><small>${L(ck)} · ${L('dash.hAgo', { n: h })}</small></span><span class="dk-num">${esc(fmtMan(v))}</span></li>`).join('')}</ul>
+    </section>
+  </div>
+  <div class="dk-kpis">
+    <div class="dk-kpi"><span>${L('dash.k1')}</span><b>3</b><small>${L('dash.k1s')}</small></div>
+    <div class="dk-kpi"><span>${L('dash.k2')}</span><b>150</b><small>${L('dash.k2s')}</small></div>
+    <div class="dk-kpi"><span>${L('dash.k3')}</span><b>3</b><small>${L('dash.k3s')}</small></div>
+    <div class="dk-kpi"><span>${L('dash.k4')}</span><b>${esc(nextRun())}</b><small>${L('dash.k4s')}</small></div>
+  </div>`;
+  bindTips(box, 'dm48', V48, (i) => `${hourLabel(i)}\n${fmtMan(V48[i])}${unit}`);
+  bindTips(box, 'dmd', CUR, (i) => `${dayLabel(i)}\n${fmtMan(CUR[i])}${unit}`);
 }
 
 function renderAll() {
@@ -139,10 +159,7 @@ function renderAll() {
   document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   renderPrices();
   renderFaq();
-  renderRealtime();
-  renderRank();
-  renderLine();
-  renderTops();
+  renderDemo();
 }
 
 document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('click', () => {

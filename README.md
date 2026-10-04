@@ -5,19 +5,20 @@
 빌드 과정 없는 정적 사이트예요. GitHub에 올리면 Vercel이 그대로 배포하고, 데이터와 로그인은 Supabase(`cnol-radar`)가 맡아요.
 
 - 사이트: https://cnol-radar.vercel.app
-- 저장소: `tigership-link-team/cnol-radar` (비공개) — `main`에 커밋하면 Vercel(miami127-prog's projects · `cnol-radar`)이 자동 배포
+- 저장소: `tigership-link-team/cnol-radar` — `main`에 커밋하면 Vercel(miami127-prog's projects · `cnol-radar`)이 자동 배포
+  - Vercel 무료(Hobby) 팀은 **비공개 저장소**에서 팀 소유자 외의 GitHub 계정이 만든 커밋을 배포하지 않아요. 저장소를 공개로 두거나, 소유자 계정으로 커밋하세요.
 
 ## 페이지
 
 | 주소 | 파일 | 내용 |
 |---|---|---|
-| `/` | `index.html` · `landing.js` | 소개 페이지 — 48시간 막대·28일 차트 데모, 에이전트, 기능, 요금, FAQ, 질문 남기기 |
-| `/login` | `login.html` · `login.js` | 카카오 · Google · 이메일 링크 로그인 (네이버는 준비 중 안내) |
-| `/app` | `app.html` · `app.js` | 크리에이터 화면 — 레이더 홈, 브리핑, 내 채널, 레퍼런스, 소재 보드, 음원·광고, 설정 |
+| `/` | `index.html` · `landing.js` | 소개 페이지 — 히어로(터지는 쇼츠, 먼저 잡는 레이더), 실제 대시보드와 같은 모양의 데모(예시 데이터), 에이전트, 기능, 요금, FAQ, 질문 남기기 |
+| `/login` | `login.html` · `login.js` | 카카오 · Google · 이메일 링크 로그인 (지금은 어디에서도 링크하지 않아요 — 실험 모드) |
+| `/app` | `app.html` · `app.js` · `dash.css` | **실험 모드 대시보드(로그인 없음)** — 크놀뮤직식 사이드 메뉴. 대시보드(에이전트 브리핑·48시간·채널 순위·일별·잘된 쇼츠·추천 소재·알림), 소재 추천, 알고리즘 분석(시간대·요일·길이·제목 유형·월별), 쇼츠 랭킹, 에이전트 알림, 채널 수집(+추천 채널 찾기), 채널 목록·채널 상세, 소재 보드, 음원·광고, 설정·상태 |
 | `/admin` | `admin.html` · `admin.js` | 관리자 콘솔 — 개요(KPI·가입 추이·예상 매출), 회원(요금제 변경), 협업 요청, 문의 |
 | `/privacy` · `/terms` | `privacy.html` · `terms.html` · `legal.js` | 개인정보처리방침 · 이용약관 (한·영·일, **초안**) |
 
-공통: `styles.css`(머티리얼 스타일), `common.js`(Supabase 연결·언어·알림), `i18n.js`(한·영·일 문구), `supabase.js`(supabase-js 2.117.2 고정 번들), 아이콘·로고 PNG, `manifest.webmanifest`, `vercel.json`(깔끔한 주소 + 보안 헤더), `404.html`, `robots.txt`.
+공통: `styles.css`(머티리얼 스타일), `dash.css`(대시보드·데모 공통 — 보라 그라데이션 + 유리 사이드바 + 흰 카드), `common.js`(Supabase 연결·언어·알림), `i18n.js`(한·영·일 문구), `supabase.js`(supabase-js 2.117.2 고정 번들), 아이콘·로고 PNG, `manifest.webmanifest`, `vercel.json`(깔끔한 주소 + 보안 헤더), `404.html`, `robots.txt`.
 
 ## Supabase
 
@@ -44,10 +45,21 @@
    - 공급자를 켜기 전에는 로그인 버튼이 “준비 중” 안내만 띄워요(`/auth/v1/settings`로 확인).
    - **이메일 링크**: 기본 메일 발송은 시간당 발송량이 아주 적어요. 출시 전 커스텀 SMTP를 연결하세요.
 
-## 다음 단계 (지금은 데모 데이터)
+## 실험 모드 수집 엔진 (지금 실제로 돌아가요)
+
+- **Edge Function `radar`** (`../cnol-radar-server/functions/radar/index.ts`) — 유튜브 키(`YOUTUBE_API_KEY`)는 Supabase 비밀값에만 있어요. 화면은 이 함수로만 쓰기를 하고, 읽기는 `radar_*` 함수(RLS 읽기 전용)로 해요.
+  - `add`(채널 링크·@핸들·쇼츠 링크 → 최근 쇼츠 50개 수집), `refresh`, `discover`(키워드로 최근 7일 터진 쇼츠의 채널 찾기, 키워드당 100포인트), `daily`(아침 브리핑 + 추천 채널 자동 발굴), `set`·`remove`·`idea`·`alerts_read`·`status`
+- **자동 일정** (`pg_cron` + `pg_net`): 매시 5분 전체 새로고침 + 이슈 확인, 매일 08:30(KST) 브리핑
+- **이슈 감지** `radar_detect_alerts()`: 레퍼런스·내 쇼츠 터짐(평소의 3배·1만 회 이상), 업로드 공백(3일), 영상 사라짐, 연령 제한, 지역 차단, 48시간 급상승·급락(±30%, 4일치 이상 쌓인 뒤)
+- **한도**: 채널 100개, 유튜브 하루 1만 포인트 중 9천까지. 채널 하나 새로고침에 약 3~4포인트라, 매시간 돌리면 채널 약 90개가 한계예요.
+- **주의**: 실험 모드는 로그인 없는 공용 공간이라 링크를 아는 누구나 채널을 넣고 지울 수 있어요. 정식 공개 전에 로그인과 사용자별 분리를 붙이세요.
+
+## 다음 단계
 
 - **유튜브 채널 연결**: 가입용과 별도인 Google OAuth 클라이언트(`youtube.readonly`, `yt-analytics.readonly`, 수익은 `yt-analytics-monetary.readonly`) + 토큰 교환·저장 Edge Function(리프레시 토큰은 서버에만). 민감 범위라 **Google 앱 인증**(도메인 확인, 개인정보처리방침, 시연 영상)을 받기 전에는 테스트 사용자 100명까지만 써요. 채널은 반드시 그 채널의 구글 계정으로 하나씩 연결.
-- **48시간 조회수**: `pg_cron` + Edge Function이 공개 조회수(`videos.list`, 1회 1유닛)를 주기적으로 측정해 자체 지표로 저장. 일별·월별은 YouTube Analytics API(48~72시간 지연).
+- **로그인 + 사용자별 분리**: 지금의 `radar_*` 테이블에 `owner_id`를 붙이고 RLS를 회원 본인 것만 보이게 바꿔요.
+- **유튜브 분석(비공개 지표)**: 채널 주인이 구글로 연결하면 시청 지속률·트래픽 소스·일별/월별 확정치(YouTube Analytics API, 48~72시간 지연)를 붙여요.
+- **유튜브 API 정책 심사**: 파생 지표(48시간 수치)·장기 보관을 하려면 정식 공개 전에 YouTube API 서비스 감사(Compliance Audit)와 할당량 증설을 받아야 해요.
 - **틱톡·인스타그램**: 공식 API(또는 정식 라이선스 데이터)만 사용. 그 전까지는 링크 저장·분류만.
 - **결제**: 국내 원화는 토스페이먼츠 등 PG, 해외 달러는 Paddle 같은 MoR. 결제가 붙으면 `admin_set_plan` 대신 결제 웹훅이 요금제를 바꾸게 해요.
 - **크놀뮤직 · 크놀AD 연동**: 지금은 요청만 `partner_requests`에 쌓여요(연동은 보류).

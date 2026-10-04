@@ -271,3 +271,83 @@ const APP = {
   }
 };
 for (const l of Object.keys(APP)) Object.assign(DICT[l], APP[l]);
+
+// 소개 페이지 새 문구(2026-10) · 실제 대시보드와 같은 데모
+const LANDING2 = {
+  ko: {
+    'nav.login': '대시보드', 'nav.start': '지금 써보기',
+    'hero.h1a': '터지는 쇼츠,', 'hero.h1b': '먼저 잡는 레이더',
+    'hero.sub': '채널 링크만 넣으면 매시간 조회수를 재서, 평소보다 크게 터진 쇼츠와 왜 떴는지, 내 채널에 맞는 다음 소재까지 골라 드려요. 채널에 문제가 생기면 바로 알려드려요.',
+    'hero.cta1': '지금 바로 써보기', 'hero.note': '로그인 없이 바로 · 유튜브 채널 링크만 있으면 돼요 · 실험 모드',
+    'dash.over': '실제 대시보드', 'dash.h2': '터진 쇼츠와 48시간 흐름,\n한 화면에서 봐요',
+    'dash.sub': '매시간 자동으로 모은 조회수로 에이전트 브리핑, 48시간 흐름, 채널 순위, 일별 조회수, 잘된 쇼츠를 한 화면에서 봐요. 아래는 예시 데이터예요.',
+    'dash.open': '내 채널로 열어보기', 'dash.aria': 'CNOL RADAR 대시보드 예시 화면',
+    'dash.brandSub': '실험 모드', 'dash.sample': '예시 데이터', 'dash.title': '대시보드',
+    'dash.homeSub': '수집 중인 채널 3개 · 마지막 수집 12분 전 · 매시 5분 자동 수집',
+    'dash.m1': '대시보드', 'dash.m2': '소재 추천', 'dash.m3': '알고리즘 분석', 'dash.m4': '쇼츠 랭킹', 'dash.m5': '에이전트 알림', 'dash.m6': '채널 수집', 'dash.m7': '채널 목록', 'dash.m8': '소재 보드',
+    'dash.s1': '레이더', 'dash.s2': '수집', 'dash.s3': '작업',
+    'dash.brTitle': '에이전트 브리핑', 'dash.brSub': '지금 기준 · 매시간 다시 정리해요',
+    'dash.br1': '48시간 흐름', 'dash.br1s': '직전 48시간보다 23% 늘었어요',
+    'dash.br2': '터진 레퍼런스 · 24시간', 'dash.br2v': '2건', 'dash.br2s': '자취요리 1분 · “전자레인지 3분 계란밥” · 평소의 4.2배',
+    'dash.br3': '내 채널 이슈', 'dash.br3v': '1건', 'dash.br3s': '업로드 공백 · 냥집사 일기가 3일째 쇼츠를 안 올렸어요',
+    'dash.br4': '오늘 만들 소재', 'dash.br4v': '평소의 4.2배', 'dash.br4s': '“전자레인지 3분 계란밥” · 정보·꿀팁형',
+    'dash.live': '실시간 · 지난 48시간', 'dash.sched': '매시 5분 · 오전 8:30 브리핑', 'dash.liveSub': '직전 48시간보다 23% 늘었어요', 'dash.hourOf': '{h} 한 시간',
+    'dash.rank': '채널 순위 · 48시간', 'dash.rankSince': '직전 수집 대비', 'dash.rankNote': '48시간 수치는 공개 조회수를 매시간 재서 만든 자체 지표예요.',
+    'dash.mine': '내 채널', 'dash.ref': '레퍼런스', 'dash.c1': '생활꿀템', 'dash.c2': '요리', 'dash.c3': '반려동물',
+    'dash.daily': '일별 조회수 · 지난 28일', 'dash.dailyUp': '직전 28일보다 {p}% 늘었어요', 'dash.confirmed': '채널 총조회수의 하루 차이로 계산해요 · 수집한 날부터 쌓여요',
+    'dash.tops': '잘된 쇼츠 · 48시간', 'dash.seeAll': '모두 보기', 'dash.hAgo': '{n}시간', 'dash.views': '회',
+    'dash.k1': '수집 채널', 'dash.k1s': '내 채널 2 · 레퍼런스 1', 'dash.k2': '추적 중인 쇼츠', 'dash.k2s': '채널마다 최근 50개', 'dash.k3': '오늘의 추천 소재', 'dash.k3s': '레퍼런스에서 골랐어요', 'dash.k4': '다음 자동 수집', 'dash.k4s': '매시 5분',
+    'agent.s1d': '내 채널과 등록한 레퍼런스 채널의 쇼츠·조회수를 매시간 자동으로 모아요.'
+  },
+  en: {
+    'nav.login': 'Dashboard', 'nav.start': 'Try it now',
+    'hero.h1a': 'Breakout Shorts,', 'hero.h1b': 'on your radar first',
+    'hero.sub': 'Paste a channel link and we measure views every hour — surfacing Shorts that beat their usual, why they worked, and what to make next for your channel. Channel issues reach you the moment they happen.',
+    'hero.cta1': 'Try it now', 'hero.note': 'No sign-in needed · Just a YouTube channel link · Test mode',
+    'dash.over': 'Real dashboard', 'dash.h2': 'Breakout Shorts and your 48-hour trend,\non one screen',
+    'dash.sub': 'Views collected automatically every hour power the agent briefing, 48-hour trend, channel ranking, daily views and top Shorts — all on one screen. Sample data below.',
+    'dash.open': 'Open with my channel', 'dash.aria': 'CNOL RADAR dashboard preview',
+    'dash.brandSub': 'Test mode', 'dash.sample': 'Sample data', 'dash.title': 'Dashboard',
+    'dash.homeSub': 'Tracking 3 channels · last collected 12m ago · auto-collects hourly at :05',
+    'dash.m1': 'Dashboard', 'dash.m2': 'Idea picks', 'dash.m3': 'Algorithm insights', 'dash.m4': 'Shorts ranking', 'dash.m5': 'Agent alerts', 'dash.m6': 'Collect channels', 'dash.m7': 'Channels', 'dash.m8': 'Idea board',
+    'dash.s1': 'Radar', 'dash.s2': 'Collection', 'dash.s3': 'Workspace',
+    'dash.brTitle': 'Agent briefing', 'dash.brSub': 'As of now · refreshed hourly',
+    'dash.br1': '48-hour trend', 'dash.br1s': '23% more than the previous 48 hours',
+    'dash.br2': 'Reference breakouts · 24h', 'dash.br2v': '2', 'dash.br2s': '1-Min Cooking · “3-minute microwave egg rice” · 4.2× usual',
+    'dash.br3': 'My channel issues', 'dash.br3v': '1', 'dash.br3s': "Upload gap · Cat Diary hasn't posted a Short for 3 days",
+    'dash.br4': 'Make today', 'dash.br4v': '4.2× usual', 'dash.br4s': '“3-minute microwave egg rice” · How-to',
+    'dash.live': 'Live · last 48 hours', 'dash.sched': 'Hourly at :05 · 8:30 AM briefing', 'dash.liveSub': '23% more than the previous 48 hours', 'dash.hourOf': 'Hour of {h}',
+    'dash.rank': 'Channel ranking · 48h', 'dash.rankSince': 'since last collection', 'dash.rankNote': '48-hour figures are our own metric from hourly public view counts.',
+    'dash.mine': 'My channel', 'dash.ref': 'Reference', 'dash.c1': 'Life hacks', 'dash.c2': 'Cooking', 'dash.c3': 'Pets',
+    'dash.daily': 'Daily views · last 28 days', 'dash.dailyUp': '{p}% more than the previous 28 days', 'dash.confirmed': 'From daily changes in channel total views · fills in from the day tracking starts',
+    'dash.tops': 'Top Shorts · 48h', 'dash.seeAll': 'See all', 'dash.hAgo': '{n}h', 'dash.views': ' views',
+    'dash.k1': 'Channels tracked', 'dash.k1s': 'Mine 2 · References 1', 'dash.k2': 'Shorts tracked', 'dash.k2s': 'Latest 50 per channel', 'dash.k3': "Today's idea picks", 'dash.k3s': 'Picked from references', 'dash.k4': 'Next auto-collect', 'dash.k4s': 'Hourly at :05',
+    'agent.s1d': 'Every hour it collects Shorts and views from your channels and the reference channels you added.'
+  },
+  ja: {
+    'nav.login': 'ダッシュボード', 'nav.start': '今すぐ試す',
+    'hero.h1a': '伸びるショートを、', 'hero.h1b': 'いち早くキャッチ',
+    'hero.sub': 'チャンネルのリンクを入れるだけで毎時再生数を計測。普段より大きく伸びたショートとその理由、あなたのチャンネルに合う次のネタまで選びます。チャンネルの問題もすぐにお知らせします。',
+    'hero.cta1': '今すぐ試す', 'hero.note': 'ログイン不要・YouTubeチャンネルのリンクだけでOK・テストモード',
+    'dash.over': '実際のダッシュボード', 'dash.h2': '伸びたショートと48時間の動きを、\n1画面で',
+    'dash.sub': '毎時自動で集めた再生数で、エージェントのブリーフィング、48時間の動き、チャンネル順位、日別再生数、伸びたショートを1画面で。下はサンプルデータです。',
+    'dash.open': '自分のチャンネルで開く', 'dash.aria': 'CNOL RADARダッシュボードのサンプル画面',
+    'dash.brandSub': 'テストモード', 'dash.sample': 'サンプルデータ', 'dash.title': 'ダッシュボード',
+    'dash.homeSub': '収集中のチャンネル3件・最終収集12分前・毎時5分に自動収集',
+    'dash.m1': 'ダッシュボード', 'dash.m2': 'ネタ提案', 'dash.m3': 'アルゴリズム分析', 'dash.m4': 'ショートランキング', 'dash.m5': 'エージェント通知', 'dash.m6': 'チャンネル収集', 'dash.m7': 'チャンネル一覧', 'dash.m8': 'ネタボード',
+    'dash.s1': 'レーダー', 'dash.s2': '収集', 'dash.s3': '作業',
+    'dash.brTitle': 'エージェントのブリーフィング', 'dash.brSub': '現時点・毎時まとめ直します',
+    'dash.br1': '48時間の動き', 'dash.br1s': '直前48時間より23%増えました',
+    'dash.br2': 'リファレンスのヒット・24時間', 'dash.br2v': '2件', 'dash.br2s': '1分自炊・「レンジで3分たまごご飯」・普段の4.2倍',
+    'dash.br3': 'マイチャンネルの問題', 'dash.br3v': '1件', 'dash.br3s': '投稿の空白・猫日記が3日間ショートを投稿していません',
+    'dash.br4': '今日作るネタ', 'dash.br4v': '普段の4.2倍', 'dash.br4s': '「レンジで3分たまごご飯」・ハウツー型',
+    'dash.live': 'リアルタイム・直近48時間', 'dash.sched': '毎時5分・午前8:30ブリーフィング', 'dash.liveSub': '直前48時間より23%増えました', 'dash.hourOf': '{h}の1時間',
+    'dash.rank': 'チャンネル順位・48時間', 'dash.rankSince': '直前の収集比', 'dash.rankNote': '48時間の数値は公開再生数を毎時計測した独自指標です。',
+    'dash.mine': 'マイチャンネル', 'dash.ref': 'リファレンス', 'dash.c1': '生活の便利グッズ', 'dash.c2': '料理', 'dash.c3': 'ペット',
+    'dash.daily': '日別再生数・直近28日', 'dash.dailyUp': '直前28日より{p}%増えました', 'dash.confirmed': 'チャンネル総再生数の日次差分で計算・収集した日からたまります',
+    'dash.tops': '伸びたショート・48時間', 'dash.seeAll': 'すべて見る', 'dash.hAgo': '{n}時間', 'dash.views': '回',
+    'dash.k1': '収集チャンネル', 'dash.k1s': 'マイ 2・リファレンス 1', 'dash.k2': '追跡中のショート', 'dash.k2s': 'チャンネルごとに最新50本', 'dash.k3': '今日のおすすめネタ', 'dash.k3s': 'リファレンスから選びました', 'dash.k4': '次の自動収集', 'dash.k4s': '毎時5分',
+    'agent.s1d': '自分のチャンネルと登録したリファレンスのショート・再生数を毎時自動で収集します。'
+  }
+};
+for (const l of Object.keys(LANDING2)) Object.assign(DICT[l], LANDING2[l]);

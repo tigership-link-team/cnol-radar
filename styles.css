@@ -15,6 +15,8 @@
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;font-family:var(--font);color:var(--ink);background:var(--surface);word-break:keep-all;line-height:1.5}
+/* 일본어는 띄어쓰기가 없어서 keep-all이면 줄이 안 바뀌어요 */
+html:lang(ja) body{word-break:normal;line-break:strict}
 a{color:var(--primary)}a:hover{color:var(--primary-dark)}
 img{max-width:100%;display:block}
 button,input,select,textarea{font:inherit}
