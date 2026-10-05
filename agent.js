@@ -18,6 +18,24 @@ function tt(k, v) {
   return s;
 }
 const e = (s) => C.esc(s);
+const DISCOVERY_UI = {
+  ko: { failed: '추천 채널을 불러오지 못했어요. 다시 시도해 주세요.', retry: '다시 불러오기', retrying: '불러오는 중이에요…' },
+  en: { failed: 'Recommended channels could not be loaded. Please try again.', retry: 'Try again', retrying: 'Loading…' },
+  ja: { failed: 'おすすめチャンネルを読み込めませんでした。もう一度お試しください。', retry: '再読み込み', retrying: '読み込み中です…' }
+};
+const discoveryRead = (query) => Promise.resolve(query).catch((error) => ({ data: null, error }));
+function discoveryFailureHtml() {
+  const copy = DISCOVERY_UI[L()] || DISCOVERY_UI.ko;
+  return `<div class="dk-banner warn" role="alert"><p style="margin:0 0 10px">${e(copy.failed)}</p><button type="button" class="dk-btn sm line" data-discovery-retry>${e(copy.retry)}</button></div>`;
+}
+function bindDiscoveryRetry(v) {
+  v.querySelectorAll('[data-discovery-retry]').forEach((button) => button.addEventListener('click', () => {
+    button.disabled = true;
+    button.textContent = (DISCOVERY_UI[L()] || DISCOVERY_UI.ko).retrying;
+    // A render re-reads the recommendation cache; it does not collect or discover channels.
+    C.render();
+  }));
+}
 const AIC = {
   search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
   target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
@@ -318,7 +336,7 @@ export async function vHome(v, r, alive) {
   C.loading(v, C.t('home'), '');
   const since = new Date(Date.now() - 36 * 3600e3).toISOString();
   const [ov, , al, nd] = await Promise.all([C.rpc('radar_overview'), C.getChans(), C.sb.from('radar_alerts').select('*').order('created_at', { ascending: false }).limit(40),
-    C.sb.from('radar_discoveries').select('channel_id,title,thumbnail_url,found_at,match').eq('status', 'new').in('via', ['match', 'featured']).gte('found_at', since).order('score', { ascending: false }).limit(6)]);
+    discoveryRead(C.sb.from('radar_discoveries').select('channel_id,title,thumbnail_url,found_at,match').eq('status', 'new').in('via', ['match', 'featured']).gte('found_at', since).order('score', { ascending: false }).limit(6))]);
   if (!alive()) return;
   C.S.unread = ov.unread || 0;
   C.renderNav();
@@ -362,6 +380,7 @@ export async function vHome(v, r, alive) {
   const wv = M.waves(pool, { max: 4 });
   if (wv.length) msgs.push(C.agMsg(tt('a_waveMsg', { k: wv[0].k, n: wv[0].chans }), `<div class="wv-mini">${wv.map((w) => `<a class="wv-chip" href="#tool/topic?q=${encodeURIComponent(w.k)}"><b>#${e(w.k)}</b><span>${e(tt('a_waveMeta', { c: w.chans, x: fmtX(w.x) }))}</span>${w.isNew ? `<em>${e(tt('a_new'))}</em>` : ''}</a>`).join('')}</div><a class="ag-link" href="#wave">${e(tt('a_toWave'))} →</a>`));
   // 4.5) 밤사이 새로 찾은 레퍼런스 · 오래 쉬는 레퍼런스 정리
+  if (nd.error) msgs.push(discoveryFailureHtml());
   const fresh = (nd.data || []).filter((d) => !(C.S.chans || []).some((c) => c.id === d.channel_id));
   if (fresh.length) msgs.push(C.agMsg(tt('n_msg', { n: fresh.length }), `<div class="nd-row">${fresh.slice(0, 5).map((d) => `<span class="nd">${C.avatar(d.thumbnail_url)}<b>${e(d.title)}</b>${d.match?.fit != null ? `<em>${e(tt('a_fitN', { n: d.match.fit }))}</em>` : ''}</span>`).join('')}</div><a class="ag-link" href="#refs">${e(tt('n_go'))} →</a>`));
   const idle = (C.S.chans || []).filter((c) => c.role === 'reference' && ((c.last_upload && now0 - Date.parse(c.last_upload) > 30 * 864e5) || c.error));
@@ -374,6 +393,7 @@ export async function vHome(v, r, alive) {
   const quick = `<nav class="ag-quick dk-fade" aria-label="${e(tt('a_tools'))}">
     <a href="#refs">${ic('plus', 16)}${e(tt('a_qRefs'))}</a><a href="#tool/topic">${ic('search', 16)}${e(tt('t_topic'))}</a><a href="#tool/predict">${ic('target', 16)}${e(tt('t_predict'))}</a><a href="#tool/comments">${ic('chat', 16)}${e(tt('t_comments'))}</a><a href="#tools">${ic('layers', 16)}${e(tt('a_allTools'))}</a></nav>`;
   v.innerHTML = C.head(C.t('home'), '') + hd + cmdHtml() + `<div class="ag-feed">${msgs.join('')}</div>` + quick;
+  bindDiscoveryRetry(v);
   bindCmd(v);
   bindPlan(v, plan);
   C.bindBars(v, 'agb', hv, (x) => `${C.hourLabel(x.h)}\n${x.pre ? C.t('preCollect') : C.fmtFull(x.v) + C.t('unitViews')}`);
@@ -410,7 +430,7 @@ export async function vRefs(v, r, alive) {
   C.loading(v, tt('tab_refs'), '');
   const chans = await C.getChans();
   const mc = (chans || []).find((c) => c.role === 'mine') || null;
-  const [pool, disc] = await Promise.all([loadPool(30), C.sb.from('radar_discoveries').select('*').eq('status', 'new').in('via', ['match', 'featured']).order('score', { ascending: false }).limit(60)]);
+  const [pool, disc] = await Promise.all([loadPool(30), discoveryRead(C.sb.from('radar_discoveries').select('*').eq('status', 'new').in('via', ['match', 'featured']).order('score', { ascending: false }).limit(60))]);
   const dna = mc ? await loadDna(pool) : null;
   if (!alive()) return;
   const items = (disc.data || []).filter((d) => !(chans || []).some((c) => c.id === d.channel_id))
@@ -426,8 +446,9 @@ export async function vRefs(v, r, alive) {
       <button type="button" class="dk-btn" id="mtRun" ${mc ? '' : 'disabled'}>${ic('search', 16)}<span>${e(items.length ? tt('a_mtAgain') : tt('a_mtRun'))}</span></button></div>
     <span class="dk-sub">${e(tt('a_mtCost'))}</span>
     <div id="mtMsg" aria-live="polite"></div>
-    <div id="mtList">${mc ? matchGridHtml(items, 0) : `<div class="dk-empty">${e(tt('a_mtNeedMine'))}</div>`}</div>
+    <div id="mtList">${disc.error ? discoveryFailureHtml() : mc ? matchGridHtml(items, 0) : `<div class="dk-empty">${e(tt('a_mtNeedMine'))}</div>`}</div>
   </section>`;
+  bindDiscoveryRetry(v);
   const reload = () => { A.kwEdit = null; C.render(); };
   bindMatchGrid(v.querySelector('#mtList'), reload);
   // 키워드 고치기

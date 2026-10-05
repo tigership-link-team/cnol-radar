@@ -62,6 +62,7 @@ function cleanUp() {
   const focusTarget = returnFocus;
   returnFocus = undefined;
   if (focusTarget?.isConnected) focusTarget.focus({ preventScroll: true });
+  document.dispatchEvent(new Event('radar:video-close'));
 }
 
 function closeVideo() {
@@ -101,6 +102,7 @@ function openVideo(card) {
   const title = card.dataset.title || copy.title;
 
   if (modal.open) closeVideo();
+  document.dispatchEvent(new Event('radar:video-open'));
   modal.replaceChildren();
   modal.classList.toggle('is-shorts', shorts);
 
@@ -130,10 +132,7 @@ function openVideo(card) {
   heading.id = 'media-video-title';
   const channel = card.dataset.channel;
   if (channel) caption.append(element('p', 'media-channel', channel));
-  const source = element('a', 'media-source', copy.source);
-  source.href = `https://www.youtube.com/watch?v=${videoId}`;
-  source.target = '_blank';
-  source.rel = 'noopener noreferrer';
+  const source = element('span', 'media-source', 'YouTube');
   const reference = element('p', 'media-reference', copy.reference);
   reference.id = 'media-video-reference';
   caption.prepend(heading);
@@ -160,6 +159,6 @@ document.addEventListener('click', (event) => {
   if (typeof HTMLDialogElement === 'undefined'
     || typeof HTMLDialogElement.prototype.showModal !== 'function') return;
   const card = event.target instanceof Element
-    ? event.target.closest('a.creator-video[data-video]') : null;
+    ? event.target.closest('.creator-video[data-video]') : null;
   if (card && openVideo(card)) event.preventDefault();
 });

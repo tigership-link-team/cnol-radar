@@ -14,8 +14,10 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="/landing.css">
+<link rel="stylesheet" href="/home-media.css">
+<link rel="stylesheet" href="/home-discovery.css">
 <script src="/early.js"></script>
 </head>
 <body class="md">
@@ -58,19 +60,50 @@
       </ul>
     </div>
 
-    <div class="hero-art">
-      <figure class="shot hero-shot rv" style="--d:.2s"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>cnol-radar.vercel.app/app</span></div><img data-shot="app-home" src="/img/app-home-ko.jpg" width="2040" height="1290" fetchpriority="high" decoding="async" alt="CNOL RADAR 에이전트 보고 화면" data-i18n-alt="v8.alt.home"></figure>
-      <div class="md-card e3 art-msg rv" style="--d:.5s" aria-hidden="true">
-        <span class="av"><img src="/logo.png" alt="" width="18" height="16"></span>
-        <p><b data-i18n="v6.c.name">내 소재 에이전트</b><span data-i18n="v7.art.msg">‘편의점 신상 비교’가 평소의 6.8배예요. 내 채널 버전으로 바꿔뒀어요.</span></p>
+    <div class="hero-art media-art">
+      <div class="creator-collage">
+        <figure class="creator-card">
+          <button type="button" class="creator-video" data-video="t7lSKjV5y14" data-format="shorts" data-title="New features coming to YouTube! #madeonyoutube" data-channel="Vanessa Lau" aria-label="Vanessa Lau — YouTube">
+            <img src="https://i.ytimg.com/vi/t7lSKjV5y14/frame0.jpg" alt="Vanessa Lau의 실제 유튜브 영상" width="480" height="360" fetchpriority="high" decoding="async">
+            <span class="creator-play" aria-hidden="true"><svg viewBox="0 0 12 14"><path d="M0 0v14l12-7z"/></svg></span>
+          </button>
+        </figure>
+        <figure class="creator-card">
+          <button type="button" class="creator-video" data-video="JXLGIRJGd6w" data-format="shorts" data-title="totally did NOT take 1 hour 😅" data-channel="Jenny Hoyos" aria-label="Jenny Hoyos — YouTube">
+            <img src="https://i.ytimg.com/vi/JXLGIRJGd6w/frame0.jpg" alt="Jenny Hoyos의 실제 유튜브 영상" width="480" height="360" fetchpriority="high" decoding="async">
+            <span class="creator-play" aria-hidden="true"><svg viewBox="0 0 12 14"><path d="M0 0v14l12-7z"/></svg></span>
+          </button>
+        </figure>
+        <figure class="creator-card">
+          <button type="button" class="creator-video" data-video="Wv16XUVrBhE" data-format="long" data-title="How I Keep Burning Fat with the Most BORING Lunches" data-channel="Mark Stache" aria-label="Mark Stache — YouTube">
+            <img src="https://i.ytimg.com/vi/Wv16XUVrBhE/hqdefault.jpg" alt="Mark Stache의 실제 유튜브 요리 영상" width="480" height="360" decoding="async">
+            <span class="creator-play" aria-hidden="true"><svg viewBox="0 0 12 14"><path d="M0 0v14l12-7z"/></svg></span>
+          </button>
+        </figure>
+        <figure class="creator-card">
+          <button type="button" class="creator-video" data-video="tEcHSila0oI" data-format="shorts" data-title="The Hack That Instantly Boosts Online Course Sales 🤑" data-channel="Danie Jay" aria-label="Danie Jay — YouTube">
+            <img src="https://i.ytimg.com/vi/tEcHSila0oI/frame0.jpg" alt="Danie Jay의 실제 유튜브 영상" width="480" height="360" decoding="async">
+            <span class="creator-play" aria-hidden="true"><svg viewBox="0 0 12 14"><path d="M0 0v14l12-7z"/></svg></span>
+          </button>
+        </figure>
+        <figure class="creator-card">
+          <button type="button" class="creator-video" data-video="vf5gr8cOQ3c" data-format="shorts" data-title="World's Best Jump Roper!" data-channel="devinsupertramp" aria-label="devinsupertramp — YouTube">
+            <img src="https://i.ytimg.com/vi/vf5gr8cOQ3c/frame0.jpg" alt="devinsupertramp 채널의 실제 인물 출연 영상" width="480" height="360" decoding="async">
+            <span class="creator-play" aria-hidden="true"><svg viewBox="0 0 12 14"><path d="M0 0v14l12-7z"/></svg></span>
+          </button>
+        </figure>
+        <div class="creator-mark" aria-hidden="true"><img src="/logo.png" alt="" width="42" height="36"></div>
       </div>
-      <div class="md-card e3 art-try rv" style="--d:.7s" aria-hidden="true">
-        <b data-i18n="v6.f.tq">‘편의점 신상 비교’ 소재 해볼래?</b>
-        <div class="btns"><span class="on" data-i18n="v6.c.r1">해볼게</span><span data-i18n="v6.f.skip">다른 거</span></div>
-      </div>
+      <p class="media-reference" data-media-reference>공개 영상 레퍼런스 · CNOL 이용 후기와 무관</p>
+
+      <div class="motion-controls"><button type="button" data-motion-toggle aria-pressed="true">모션 일시정지</button><span data-motion-note>무음 반복 재생</span><button type="button" class="creator-video motion-full" data-motion-full data-video="JXLGIRJGd6w" data-format="shorts" data-title="totally did NOT take 1 hour 😅" data-channel="Jenny Hoyos">영상 크게 보기</button></div>
+      <figure class="shot hero-shot rv" style="--d:.2s"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>cnol-radar.vercel.app/app</span></div><div class="live-panel" data-live-panel="mini" role="group" aria-label="CNOL RADAR 에이전트 보고 화면" data-i18n-aria="v8.alt.home"></div></figure>
+
     </div>
   </div>
 </section>
+
+<section id="discovery" aria-label="실제 유튜브 데이터 둘러보기"></section>
 
 <!-- 이게 다 돼요: 눌러서 바로 그 설명으로 -->
 <section class="md-capab" id="feats" aria-labelledby="capH">
@@ -106,7 +139,7 @@
       <div class="rv"><b data-i18n="v7.n.1v">매시간</b><span data-i18n="v7.n.1t">쇼츠·롱폼을 자동으로 다시 수집해요</span></div>
       <div class="rv" style="--d:.08s"><b><span data-count="48">48</span><small data-i18n="v7.n.h">시간</small></b><span data-i18n="v7.n.2t">채널 전부 합친 흐름을 한눈에</span></div>
       <div class="rv" style="--d:.16s"><b><span data-count="30">30</span><small data-i18n="v7.n.ea">개</small></b><span data-i18n="v7.n.3t">채널 링크를 한 번에 넣어요</span></div>
-      <div class="rv" style="--d:.24s"><b><span data-count="70">70</span><small data-i18n="v7.n.ea">개</small></b><span data-i18n="v7.n.4t">쇼츠 채널을 직접 운영하는 팀이 만들었어요</span></div>
+      <div class="rv" style="--d:.24s"><b><span data-count="51">51</span><small data-i18n="v7.n.ea">개</small></b><span data-home-label="observedChannelsText">허브에서 확인한 실제 운영 채널</span></div>
     </div>
   </div>
 </section>
@@ -120,7 +153,7 @@
       <p class="lead" data-i18n="v8.p.sub">내 채널에 맞는 레퍼런스 찾기부터 소재 점수, 올리기 전 예측, 매일 아침 보고까지. 소재를 고르는 모든 단계를 데이터로 바꿔요.</p>
     </div>
     <div id="fb1" class="md-pillar">
-      <div class="pv rv"><figure class="shot"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>cnol-radar.vercel.app</span></div><img data-shot="app-refs" src="/img/app-refs-ko.jpg" width="1602" height="960" loading="lazy" decoding="async" alt="" data-i18n-alt="v8.alt.app-refs"></figure></div>
+      <div class="pv rv"><figure class="shot"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>cnol-radar.vercel.app</span></div><div class="live-panel" data-live-panel="refs" role="group" aria-label="" data-i18n-aria="v8.alt.app-refs"></div></figure></div>
       <div class="pt rv" style="--d:.1s">
         <p class="over" data-i18n="v8.fb1.over">01 — 레퍼런스 발굴</p>
         <h3 data-i18n="v8.fb1.t">내 채널에 맞는 레퍼런스, 자동으로 쫙</h3>
@@ -131,7 +164,7 @@
       </div>
     </div>
     <div id="fb2" class="md-pillar flip">
-      <div class="pv rv"><figure class="shot"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>cnol-radar.vercel.app</span></div><img data-shot="app-topic" src="/img/app-topic-ko.jpg" width="1602" height="1002" loading="lazy" decoding="async" alt="" data-i18n-alt="v8.alt.app-topic"></figure></div>
+      <div class="pv rv"><figure class="shot"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>cnol-radar.vercel.app</span></div><div class="live-panel" data-live-panel="topic" role="group" aria-label="" data-i18n-aria="v8.alt.app-topic"></div></figure></div>
       <div class="pt rv" style="--d:.1s">
         <p class="over" data-i18n="v8.fb2.over">02 — 소재 분석</p>
         <h3 data-i18n="v8.fb2.t">해볼 만한 소재인지, 점수로 먼저</h3>
@@ -142,7 +175,7 @@
       </div>
     </div>
     <div id="fb3" class="md-pillar">
-      <div class="pv rv"><figure class="shot"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>cnol-radar.vercel.app</span></div><img data-shot="app-predict" src="/img/app-predict-ko.jpg" width="1602" height="1002" loading="lazy" decoding="async" alt="" data-i18n-alt="v8.alt.app-predict"></figure></div>
+      <div class="pv rv"><figure class="shot"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>cnol-radar.vercel.app</span></div><div class="live-panel" data-live-panel="predict" role="group" aria-label="" data-i18n-aria="v8.alt.app-predict"></div></figure></div>
       <div class="pt rv" style="--d:.1s">
         <p class="over" data-i18n="v8.fb3.over">03 — 올리기 전 예측</p>
         <h3 data-i18n="v8.fb3.t">올리기 전에, 평소의 몇 배 나올지 먼저</h3>
@@ -153,7 +186,7 @@
       </div>
     </div>
     <div id="fb4" class="md-pillar flip">
-      <div class="pv rv"><figure class="shot"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>cnol-radar.vercel.app</span></div><img data-shot="app-title" src="/img/app-title-ko.jpg" width="1602" height="1002" loading="lazy" decoding="async" alt="" data-i18n-alt="v8.alt.app-title"></figure></div>
+      <div class="pv rv"><figure class="shot"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>cnol-radar.vercel.app</span></div><div class="live-panel" data-live-panel="title" role="group" aria-label="" data-i18n-aria="v8.alt.app-title"></div></figure></div>
       <div class="pt rv" style="--d:.1s">
         <p class="over" data-i18n="v8.fb4.over">04 — 내 버전 만들기</p>
         <h3 data-i18n="v8.fb4.t">터진 제목, 구조는 그대로 소재만 내 것으로</h3>
@@ -164,16 +197,7 @@
       </div>
     </div>
     <div id="fb5" class="md-pillar">
-      <div class="pv rv"><div class="md-card e2 tilt yt-ov">
-        <p class="ov-h" data-i18n="v7.ov.h">지난 28일 동안 채널 10개 조회수 4,120,553회</p>
-        <div class="tabs">
-          <div class="tb on"><span data-i18n="v7.ov.views">조회수</span><b data-i18n="v7.ov.v1">412만</b><small><i>↑</i><span data-i18n="v7.ov.d1">평소보다 29% 많아요</span></small></div>
-          <div class="tb"><span data-i18n="v7.ov.subs">구독자</span><b data-i18n="v7.ov.v2">+1.2만</b><small><i>↑</i><span data-i18n="v7.ov.d2">평소보다 19% 많아요</span></small></div>
-          <div class="tb"><span data-i18n="v7.ov.new">새 영상</span><b data-i18n="v7.ov.v3">33개</b><small><i class="dn">↓</i><span data-i18n="v7.ov.d3">평소보다 11% 적어요</span></small></div>
-        </div>
-        <div class="plot" id="ovPlot"></div>
-        <p class="key"><i class="ln"></i><span data-i18n="v7.ov.views">조회수</span><i class="bd"></i><span data-i18n="v7.ov.band">평소 범위</span></p>
-      </div></div>
+      <div class="pv rv"><div class="agent-visual"><figure class="ai-agent-portrait"><img src="/radar-ai-agent-v1.webp" width="1024" height="1536" loading="lazy" decoding="async" alt="CNOL RADAR AI 생성 에이전트 안내 모델"><figcaption data-home-label="aiAgent">AI 생성 이미지 · 에이전트 안내 모델</figcaption></figure><div class="live-panel" data-live-panel="overview"></div></div></div>
       <div class="pt rv" style="--d:.1s">
         <p class="over" data-i18n="v8.fb5.over">05 — 성과 추적</p>
         <h3 data-i18n="v8.fb5.t">아침마다 에이전트가 먼저 보고해요</h3>
@@ -186,43 +210,24 @@
   </div>
 </section>
 
-<!-- 채널 12개 · 48시간을 한 화면에 (유튜브 스튜디오 '실시간'처럼) -->
+<!-- 실제 회사 채널 · 실제 수집값 -->
 <section class="md-sec yt-band" id="multi" aria-labelledby="mtH">
   <div class="md-wrap">
-    <div class="md-head c rv">
-      <p class="over" data-i18n="v9.mt.over">채널 여러 개 · 한 화면</p>
-      <h2 class="md-h2 pre" id="mtH" data-i18n="v9.mt.h2">채널 12개의 48시간 조회수를,
-유튜브 실시간처럼 한 화면에</h2>
-      <p class="lead" data-i18n="v9.mt.sub">내 채널과 레퍼런스 채널이 몇 개든 매시간 모아 합쳐요. 합산으로 전체 흐름을 보고, 채널별로 쌓아 어디서 조회수가 나오는지, 채널 하나하나는 작은 그래프로 바로 봐요.</p>
+    <div class="md-head c rv"><p class="over" data-i18n="v9.mt.over">채널 여러 개 · 한 화면</p><h2 class="md-h2" id="mtH" data-home-label="multiHeading">실제 운영 채널의 48시간을, 한 화면에</h2><p class="lead" data-home-label="multiLead">타이거쉽 허브에서 확인한 실제 합산 조회수와 운영 채널입니다. 확인 시각을 표시하고, 수집되지 않은 채널별 수치는 만들지 않습니다.</p></div>
+    <div class="live-panel" data-live-panel="multi"></div>
+    <div class="md-cta c"><a class="md-btn filled" href="#start"><span data-i18n="v9.mt.cta">내 채널로 받아 보기</span><span aria-hidden="true">→</span></a></div>
+  </div>
+</section>
+
+<section class="md-sec ecosystem" id="ecosystem">
+  <div class="md-wrap">
+    <div class="md-head"><p class="over">CNOL ECOSYSTEM</p><h2 class="md-h2" data-home-label="ecoTitle">채널 운영에서 음원·광고까지</h2><p class="lead" data-home-label="ecoLead">실제 채널을 운영하는 팀의 수집·분석 경험을, 크리에이터의 다음 소재와 연결합니다.</p></div>
+    <div class="ecosystem-grid">
+      <details class="ecosystem-item"><summary><span class="ecosystem-icon">♫</span><b>CNOL MUSIC</b><small data-home-label="preparing">연동 준비</small></summary><p data-home-label="ecoMusic">소재에 맞는 음원, 후크 구간과 사용 조건을 확인하는 협업 흐름을 준비합니다.</p><div class="ecosystem-flow" data-home-label="flowMusic">소재 선택 → 음원 검토 → 사용 조건 확인 → 협업 요청</div></details>
+      <details class="ecosystem-item"><summary><span class="ecosystem-icon">↗</span><b>CNOL AD</b><small data-home-label="preparing">연동 준비</small></summary><p data-home-label="ecoAd">내 채널의 소재와 시청자에 맞는 광고·브랜드 협업 흐름을 준비합니다.</p><div class="ecosystem-flow" data-home-label="flowAd">채널·소재 정리 → 브랜드 적합성 검토 → 캠페인 협의</div></details>
+      <details class="ecosystem-item"><summary><span class="ecosystem-icon">◇</span><b>PPL</b><small data-home-label="preparing">연동 준비</small></summary><p data-home-label="ecoPpl">영상 기획에서 제품 노출과 광고 표시까지, 제작 단계의 협업 흐름을 준비합니다.</p><div class="ecosystem-flow" data-home-label="flowPpl">기획안 → 제품·노출 방식 협의 → 조건 확인 → 제작</div></details>
     </div>
-    <div class="mt-row">
-      <div class="yt-card mt-rt rv">
-        <div class="mt-hd">
-          <div class="t"><b data-i18n="v9.mt.rt">실시간</b><span class="live"><i></i><span data-i18n="v9.mt.live">업데이트 중</span></span></div>
-          <div class="yt-chips" role="group" aria-label="View" id="mtMode"><button type="button" data-mt="sum" aria-pressed="true" data-i18n="v9.mt.sum">합산</button><button type="button" data-mt="ch" aria-pressed="false" data-i18n="v9.mt.by">채널별</button></div>
-        </div>
-        <p class="mt-sub" id="mtSumN">채널 12개 합산</p>
-        <div class="mt-k">
-          <div><small data-i18n="v9.mt.views">조회수 · 지난 48시간</small><b id="mtTotal">1,284,310</b><em><i aria-hidden="true">↑</i><span id="mtDelta">직전 48시간보다 23% 많아요</span></em></div>
-          <div class="r"><small data-i18n="v9.mt.hour">지난 60분</small><b id="mtHour">–</b></div>
-        </div>
-        <div class="mt-plot" id="mtPlot" role="img" aria-label=""></div>
-        <div class="mt-ax"><span data-i18n="v6.f.ago">48시간 전</span><span data-i18n="v9.mt.ago24">24시간 전</span><span data-i18n="v6.f.now">지금</span></div>
-        <div class="mt-legend" id="mtLegend" hidden></div>
-        <p class="mt-ex" data-i18n="v9.mt.ex">예시 데이터예요. 실제 화면은 내 채널과 레퍼런스로 채워져요.</p>
-      </div>
-      <div class="yt-card mt-top rv" style="--d:.08s">
-        <div class="mt-hd"><div class="t"><b data-i18n="v9.mt.top">인기 채널</b></div><small data-i18n="v9.mt.topSub">지난 48시간 · 조회수</small></div>
-        <ol class="mt-list" id="mtTop"></ol>
-      </div>
-    </div>
-    <div class="mt-tiles-hd rv"><b data-i18n="v9.mt.tiles">채널 하나하나 · 48시간</b><small data-i18n="v9.mt.tilesSub">12개 채널을 작은 그래프로 한 번에 · 조회수 순</small></div>
-    <div class="mt-tiles" id="mtTiles"></div>
-    <table class="sr-only" id="mtTable"><caption data-i18n="v9.mt.tableCap">채널별 지난 48시간 조회수 (예시)</caption><thead><tr><th scope="col" data-i18n="v9.mt.colCh">채널</th><th scope="col" data-i18n="v9.mt.colV">조회수</th><th scope="col" data-i18n="v9.mt.colS">비중</th></tr></thead><tbody></tbody></table>
-    <div class="mt-foot rv">
-      <ul class="md-checks"><li data-i18n="v9.mt.c1">채널 수 상관없이 합산 (실험 기간 100개까지)</li><li data-i18n="v9.mt.c2">채널마다 정해진 색 · 합산 ↔ 채널별</li><li data-i18n="v9.mt.c3">매시간 자동 수집 · 쇼츠와 롱폼 따로</li></ul>
-      <a class="md-btn filled" href="#start"><span data-i18n="v9.mt.cta">내 채널로 받아 보기</span><span aria-hidden="true">→</span></a>
-    </div>
+    <p class="ecosystem-note" data-home-label="ecoNote">외부 서비스의 계정·음원·광고·정산 연결은 아직 활성화하지 않았습니다.</p>
   </div>
 </section>
 
@@ -248,47 +253,9 @@
   </div>
 </section>
 
-<!-- 60초 둘러보기 -->
+<!-- 실제 영상 둘러보기 -->
 <section class="md-sec" id="demo">
-  <div class="md-wrap">
-    <div class="md-head c rv">
-      <p class="over" data-i18n="v7.demo.over">60초 둘러보기</p>
-      <h2 class="md-h2" data-i18n="v7.demo.h2">60초 만에 보는, 다음 소재가 오는 과정</h2>
-    </div>
-    <div class="md-card e3 md-player rv" id="player">
-      <div class="chrome"><i></i><i></i><i></i><span>cnol-radar.vercel.app/app</span><button type="button" class="pp" id="pp" aria-pressed="false" aria-label="일시정지" data-i18n-aria="v7.demo.pause"><svg class="ps" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg><svg class="pl" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
-      <div class="stage" aria-live="polite">
-        <div class="scene s1 on">
-          <p class="lab" data-i18n="v7.demo.l1">채널 주소 · @핸들 · 영상 링크 (한 줄에 하나)</p>
-          <div class="ta"><span style="--i:0">https://www.youtube.com/@channel-a</span><span style="--i:1">@channel-b</span><span style="--i:2">https://www.youtube.com/@channel-c</span></div>
-          <div class="row"><span class="go" data-i18n="v7.demo.btn">수집하기</span><span class="ok" data-i18n="v7.demo.ok">채널 3개 · 쇼츠 150개 · 롱폼 42개 수집했어요</span></div>
-        </div>
-        <div class="scene s2 yt-rt">
-          <div class="rt-h"><b data-i18n="v7.rt.t">실시간</b><span class="live"><i></i><span data-i18n="v7.rt.live">업데이트 중</span></span></div>
-          <div class="rt-k"><small data-i18n="v7.rt.views">조회수 · 지난 48시간</small><b data-i18n="v7.rt.v">1,284,310</b></div>
-          <div class="rt-bars" id="demoBars"></div>
-          <div class="rt-ax"><span data-i18n="v6.f.ago">48시간 전</span><span data-i18n="v6.f.now">지금</span></div>
-        </div>
-        <div class="scene s3">
-          <p class="lab" data-i18n="v7.demo.l3">에이전트가 고른 다음 소재</p>
-          <div class="row2" style="--i:0"><span class="th a"></span><span class="tx"><b data-i18n="v6.f.r1t">편의점 신상 3개 비교</b><small data-i18n="v6.f.r1s">쇼츠 · 평소의 6.8배</small><em data-i18n="v6.f.r1m">내 채널 버전</em></span><span class="fit" data-i18n="v6.f.r1f">맞춤 93</span></div>
-          <div class="row2" style="--i:1"><span class="th b wide"></span><span class="tx"><b data-i18n="v6.f.r2t">10분 만에 끝내는 자취 요리 5가지</b><small data-i18n="v6.f.r2s">롱폼 · 평소의 2.4배</small><em data-i18n="v6.f.r2m">내 채널 버전</em></span><span class="fit" data-i18n="v6.f.r2f">맞춤 88</span></div>
-        </div>
-        <div class="scene s4">
-          <b class="q" data-i18n="v6.f.tq">‘편의점 신상 비교’ 소재 해볼래?</b>
-          <small data-i18n="v6.f.tl">레퍼런스 3곳에서 평소의 6.8배 · 내 채널 맞춤 92점</small>
-          <div class="btns"><span class="on" data-i18n="v6.c.r1">해볼게</span><span data-i18n="v6.f.skip">다른 거</span></div>
-          <p class="toast"><span class="tag" data-i18n="v6.c.learnTag">학습</span> <span data-i18n="v7.demo.toast">기억했어요. 다음엔 시간 제안을 먼저 보여 드릴게요.</span></p>
-        </div>
-      </div>
-      <div class="steps" id="steps">
-        <button type="button" data-step="0" aria-current="true"><i><b></b></i><span data-i18n="v7.demo.s1">링크 붙여 넣기</span></button>
-        <button type="button" data-step="1"><i><b></b></i><span data-i18n="v7.demo.s2">매시간 수집</span></button>
-        <button type="button" data-step="2"><i><b></b></i><span data-i18n="v7.demo.s3">다음 소재 추천</span></button>
-        <button type="button" data-step="3"><i><b></b></i><span data-i18n="v7.demo.s4">이거 해볼래?</span></button>
-      </div>
-    </div>
-  </div>
+  <div class="md-wrap"><div class="md-head c rv"><p class="over" data-i18n="v7.nav.demo">둘러보기</p><h2 class="md-h2" data-home-label="demoHeading">실제 영상으로 먼저 둘러보세요</h2><p class="lead" data-home-label="demoLead">운영 채널과 공개 레퍼런스의 쇼츠를 한곳에서 확인하세요. 영상을 누르면 이 페이지 안에서 재생됩니다.</p></div><div class="live-panel" data-live-panel="showcase"></div></div>
 </section>
 
 <!-- 누구를 위한 -->
@@ -306,37 +273,14 @@
   </div>
 </section>
 
-<!-- 사용 예시 (실제 후기가 아니에요) -->
+<!-- 실제 채널 · 이용 후기 접수 -->
 <section class="md-sec" id="cases">
   <div class="md-wrap">
-    <div class="md-head c rv">
-      <p class="over" data-i18n="v7.case.over">사용 예시</p>
-      <h2 class="md-h2" data-i18n="v7.case.h2">이렇게 써요</h2>
-      <p class="lead" data-i18n="v7.case.sub">실제 후기가 아니라, 기능을 이렇게 쓰면 된다는 예시예요.</p>
-    </div>
-    <div class="md-cases">
-      <article class="md-card e1 tilt case rv">
-        <div class="ill" aria-hidden="true"><svg viewBox="0 0 220 120"><circle cx="110" cy="64" r="52" fill="#EDE3FF"/><rect x="72" y="62" width="76" height="34" rx="10" fill="#6200EE"/><rect x="64" y="56" width="92" height="12" rx="6" fill="#3700B3"/><path d="M92 46c-4-6 4-10 0-16M110 46c-4-6 4-10 0-16M128 46c-4-6 4-10 0-16" fill="none" stroke="#03DAC6" stroke-width="4" stroke-linecap="round"/><circle cx="168" cy="34" r="16" fill="#fff" stroke="#E7E0EC"/><path d="M164 27v14l11-7z" fill="#e53935"/></svg></div>
-        <span class="md-chip tonal" data-i18n="v7.case.tag">예시</span>
-        <h3 data-i18n="v7.case.1t">요리 쇼츠 채널</h3>
-        <p data-i18n="v7.case.1d">레퍼런스 채널 25개를 넣어 두고 아침 보고만 확인해요.</p>
-      </article>
-      <article class="md-card e1 tilt case rv" style="--d:.08s">
-        <div class="ill" aria-hidden="true"><svg viewBox="0 0 220 120"><circle cx="110" cy="64" r="52" fill="#D3F8F4"/><rect x="58" y="30" width="104" height="62" rx="8" fill="#1C1B1F"/><rect x="64" y="36" width="92" height="50" rx="4" fill="#3700B3"/><path d="M104 52v18l14-9z" fill="#fff"/><rect x="96" y="94" width="28" height="6" rx="3" fill="#79747E"/><rect x="150" y="70" width="44" height="26" rx="13" fill="#6200EE"/><circle cx="162" cy="83" r="4" fill="#fff"/><circle cx="182" cy="80" r="3" fill="#03DAC6"/><circle cx="187" cy="86" r="3" fill="#03DAC6"/></svg></div>
-        <span class="md-chip tonal" data-i18n="v7.case.tag">예시</span>
-        <h3 data-i18n="v7.case.2t">게임 롱폼 채널</h3>
-        <p data-i18n="v7.case.2d">롱폼 레퍼런스 10개의 48시간 흐름을 봐요.</p>
-      </article>
-      <article class="md-card e1 tilt case rv" style="--d:.16s">
-        <div class="ill" aria-hidden="true"><svg viewBox="0 0 220 120"><circle cx="110" cy="64" r="52" fill="#EDE3FF"/><g fill="#fff" stroke="#CAC4D0"><rect x="64" y="30" width="28" height="20" rx="4"/><rect x="96" y="30" width="28" height="20" rx="4"/><rect x="128" y="30" width="28" height="20" rx="4"/><rect x="64" y="54" width="28" height="20" rx="4"/><rect x="128" y="54" width="28" height="20" rx="4"/><rect x="64" y="78" width="28" height="20" rx="4"/><rect x="96" y="78" width="28" height="20" rx="4"/><rect x="128" y="78" width="28" height="20" rx="4"/></g><rect x="96" y="54" width="28" height="20" rx="4" fill="#6200EE"/><path d="M103 68l5-5 4 3 6-7" fill="none" stroke="#03DAC6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <span class="md-chip tonal" data-i18n="v7.case.tag">예시</span>
-        <h3 data-i18n="v7.case.3t">채널 30개를 맡은 에이전시</h3>
-        <p data-i18n="v7.case.3d">담당 채널과 레퍼런스를 한 화면에 모아 둬요.</p>
-      </article>
-    </div>
+    <div class="md-head c rv"><p class="over">CNOL RADAR</p><h2 class="md-h2" data-home-label="caseHeading">실제 채널과 영상으로 확인하세요</h2><p class="lead" data-home-label="caseLead">직접 운영하는 채널과 실제 공개 영상으로 소재를 비교합니다.</p></div>
+    <div class="live-panel" data-live-panel="refs"></div>
     <div class="md-card e1 review rv">
       <div><h3 data-i18n="v7.case.rvT">첫 후기를 들려주세요</h3><p data-i18n="v7.case.rvD">써 보신 이야기를 보내 주시면 동의를 받아 이 자리에 실어요.</p></div>
-      <a class="md-btn filled" href="mailto:support@whrcompany.com?subject=CNOL%20RADAR" data-i18n="v7.case.rvB">후기 보내기</a>
+      <div class="review-rating" role="group" aria-label="별점 선택"><span data-home-label="rate">사용해 보셨나요? 별점을 남겨 주세요.</span><div class="rating-stars"><button type="button" data-rating="1" aria-label="1점" aria-pressed="false">☆</button><button type="button" data-rating="2" aria-label="2점" aria-pressed="false">☆</button><button type="button" data-rating="3" aria-label="3점" aria-pressed="false">☆</button><button type="button" data-rating="4" aria-label="4점" aria-pressed="false">☆</button><button type="button" data-rating="5" aria-label="5점" aria-pressed="false">☆</button></div><p data-rating-status data-home-label="rateEmpty">아직 공개된 이용 후기가 없어요.</p></div><a class="md-btn filled" href="mailto:support@whrcompany.com?subject=CNOL%20RADAR" data-review-link data-i18n="v7.case.rvB">후기 보내기</a>
     </div>
   </div>
 </section>
@@ -445,5 +389,9 @@
 </footer>
 
 <script type="module" src="/landing.js"></script>
+<script type="module" src="/media.js"></script>
+<script type="module" src="/home-discovery.js"></script>
+<script type="module" src="/home-enhancements.js"></script>
+<script type="module" src="/home-motion.js"></script>
 </body>
 </html>

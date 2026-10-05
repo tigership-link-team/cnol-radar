@@ -1,6 +1,6 @@
 // CNOL RADAR — 관리자 콘솔 (개요 · 회원 · 협업 요청 · 문의)
 // 화면은 누구나 열 수 있지만, 데이터는 Supabase RLS와 is_admin() 검사로 관리자에게만 내려와요.
-import { sb, getLang, esc, snack, requireSession } from '/common.js';
+import { sb, SUPABASE_URL, SUPABASE_KEY, getLang, esc, snack, requireSession } from '/common.js';
 
 const D = {
   ko: {
@@ -56,18 +56,56 @@ const D = {
   }
 };
 
+const OPERATIONS = {
+  ko: {
+    operations: '운영 준비', intro: '현재 설정과 공개 데이터의 수집 상태를 확인해요.',
+    auth: '회원 가입 · 로그인', service: '서비스', state: '현재 상태', enabled: '활성 설정', disabled: '비활성 설정',
+    pending: '연결 준비', unknown: '확인하지 못했어요', retry: '상태 다시 확인', failed: '일부 상태를 불러오지 못했어요.',
+    publicData: '공개 데이터 수집 현황', channels: '수집 채널', shorts: '수집 쇼츠', longs: '수집 롱폼',
+    first: '수집 시작', last: '마지막 수집', observed: '확인된 관측 기간', minutes: '{n}분',
+    coverage: '첫 수집부터 마지막 수집까지의 기간이에요. 48시간에 못 미치면 전체 48시간의 실측 자료가 아니에요.',
+    external: '음원 · 광고 · 외부 플랫폼', deferred: 'MCP 연결 준비 · 자동 연결 보류',
+    externalNote: '외부 계정 인증과 자동 연결은 보류 상태예요.',
+    authNote: '로그인 제공자의 설정 상태예요. 로그인 완료나 YouTube 채널 권한 연결을 의미하지 않아요.'
+  },
+  en: {
+    operations: 'Launch readiness', intro: 'Check current settings and public-data collection status.',
+    auth: 'Sign-up & sign-in', service: 'Service', state: 'Current status', enabled: 'Enabled in settings', disabled: 'Disabled in settings',
+    pending: 'Connection pending', unknown: 'Could not verify', retry: 'Check status again', failed: 'Some status information could not be loaded.',
+    publicData: 'Public-data collection', channels: 'Tracked channels', shorts: 'Collected Shorts', longs: 'Collected long videos',
+    first: 'Collection started', last: 'Last collected', observed: 'Observed coverage', minutes: '{n} minutes',
+    coverage: 'This span runs from the first to the last collection. A span shorter than 48 hours is not a complete 48-hour observation period.',
+    external: 'Music, ads & external platforms', deferred: 'MCP connection pending · Automatic connection on hold',
+    externalNote: 'External account authorization and automatic linking remain on hold.',
+    authNote: 'These are provider settings. They do not confirm a completed sign-in or authorized YouTube channel connection.'
+  },
+  ja: {
+    operations: '運用準備', intro: '現在の設定と公開データの収集状況を確認します。',
+    auth: '会員登録・ログイン', service: 'サービス', state: '現在の状態', enabled: '設定で有効', disabled: '設定で無効',
+    pending: '連携準備中', unknown: '確認できませんでした', retry: '状態を再確認', failed: '一部の状態を読み込めませんでした。',
+    publicData: '公開データの収集状況', channels: '収集チャンネル', shorts: '収集ショート', longs: '収集長尺動画',
+    first: '収集開始', last: '最終収集', observed: '確認できた観測期間', minutes: '{n}分',
+    coverage: '最初の収集から最終収集までの期間です。48時間未満の場合、48時間全体の実測データではありません。',
+    external: '音源・広告・外部プラットフォーム', deferred: 'MCP連携準備中・自動連携は保留',
+    externalNote: '外部アカウントの認証と自動連携は保留中です。',
+    authNote: 'ログインプロバイダーの設定状況です。ログイン完了やYouTubeチャンネル権限の連携を意味しません。'
+  }
+};
+for (const language of Object.keys(OPERATIONS)) D[language].operations = OPERATIONS[language].operations;
+
 const PLAN = { free: { ko: '무료', en: 'Free', ja: '無料' }, solo: { ko: '솔로', en: 'Solo', ja: 'ソロ' }, plus: { ko: '플러스', en: 'Plus', ja: 'プラス' }, team: { ko: '팀', en: 'Team', ja: 'チーム' }, agency: { ko: '에이전시', en: 'Agency', ja: 'エージェンシー' }, enterprise: { ko: '엔터프라이즈', en: 'Enterprise', ja: 'エンタープライズ' } };
 const PROVIDER = { kakao: { ko: '카카오', en: 'Kakao', ja: 'カカオ' }, google: { ko: 'Google', en: 'Google', ja: 'Google' }, naver: { ko: '네이버', en: 'Naver', ja: 'NAVER' }, email: { ko: '이메일', en: 'Email', ja: 'メール' } };
 const LANG_NAME = { ko: { ko: '한국어', en: 'Korean', ja: '韓国語' }, en: { ko: '영어', en: 'English', ja: '英語' }, ja: { ko: '일본어', en: 'Japanese', ja: '日本語' } };
 const PRICE = { free: 0, solo: 19000, plus: 29000, team: 39000, agency: 99000, enterprise: 0 };
 const STATUSES = ['pending', 'reviewing', 'accepted', 'declined'];
-const ROUTES = ['overview', 'members', 'requests', 'inquiries'];
+const ROUTES = ['overview', 'members', 'requests', 'inquiries', 'operations'];
 
 const I = {
   overview: '<path d="M5 20V11M12 20V5M19 20v-6M3 20h18"/>',
   members: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6"/>',
   requests: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
   inquiries: '<path d="M4 5h16v11H8l-4 4z"/>',
+  operations: '<path d="M9 3h6l1 3 3 1v6l-3 1-1 3H9l-1-3-3-1V7l3-1z"/><path d="M9 10l2 2 4-4"/>',
   app: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 12l6-6"/>',
   logout: '<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/>'
 };
@@ -130,7 +168,7 @@ function route() {
   const r = currentRoute();
   setTitle(tx(r));
   const v = document.getElementById('view');
-  ({ overview: viewOverview, members: viewMembers, requests: viewRequests, inquiries: viewInquiries })[r](v);
+  ({ overview: viewOverview, members: viewMembers, requests: viewRequests, inquiries: viewInquiries, operations: viewOperations })[r](v);
   v.focus({ preventScroll: true });
 }
 
@@ -372,6 +410,67 @@ function deny() {
       <p style="margin:0;color:var(--ink-2);line-height:1.7">${esc(tx('denyP'))}</p>
       <a class="btn rip" href="/app" style="align-self:flex-start">${esc(tx('back'))}</a>
     </section>`;
+}
+
+// ---------- 운영 준비: 관리자 권한 확인 뒤에 읽기 요청만 실행 ----------
+async function viewOperations(v) {
+  v.innerHTML = loading();
+  const [authResult, overviewResult] = await Promise.allSettled([
+    fetch(SUPABASE_URL + '/auth/v1/settings', { headers: { apikey: SUPABASE_KEY } })
+      .then((response) => {
+        if (!response.ok) throw new Error('Auth settings unavailable');
+        return response.json();
+      }),
+    sb.rpc('radar_overview').then(({ data, error }) => {
+      if (error) throw error;
+      return data;
+    })
+  ]);
+  if (currentRoute() !== 'operations') return;
+  const copy = OPERATIONS[lang] || OPERATIONS.ko;
+  const auth = authResult.status === 'fulfilled' ? authResult.value : null;
+  const overview = overviewResult.status === 'fulfilled' ? overviewResult.value : null;
+  const count = (value) => typeof value === 'number' && Number.isFinite(value) && value >= 0 ? fmtNum(value) : '—';
+  const time = (value) => value && Number.isFinite(Date.parse(value))
+    ? new Date(value).toLocaleString(locale(), { dateStyle: 'medium', timeStyle: 'short' }) : '—';
+  const firstAt = Date.parse(overview?.first_at || '');
+  const lastAt = Date.parse(overview?.last_at || '');
+  const minutes = Number.isFinite(firstAt) && Number.isFinite(lastAt) && lastAt >= firstAt
+    ? Math.floor((lastAt - firstAt) / 60000) : null;
+  const providerState = (name) => {
+    if (!auth?.external) return [copy.unknown, 'tag gray'];
+    if (auth.external[name] === true) return [copy.enabled, 'tag teal'];
+    if (auth.external[name] === false) return [copy.disabled, 'tag gray'];
+    return [copy.pending, 'tag gray'];
+  };
+  const providers = ['google', 'kakao', 'naver', 'email'].map((name) => {
+    const [state, cls] = providerState(name);
+    return `<tr><td>${esc(lbl(PROVIDER, name))}</td><td><span class="${cls}">${esc(state)}</span></td></tr>`;
+  }).join('');
+  const collection = [
+    [copy.channels, count(overview?.channels?.total)], [copy.shorts, count(overview?.shorts)],
+    [copy.longs, count(overview?.longs)], [copy.first, time(overview?.first_at)],
+    [copy.last, time(overview?.last_at)], [copy.observed, minutes == null ? '—' : copy.minutes.replace('{n}', fmtNum(minutes))]
+  ];
+  const integrations = ['CNOL Music', 'CNOL AD', 'PPL', 'Instagram', 'TikTok'];
+  v.innerHTML = `<div class="stack" style="gap:20px">
+    <p style="margin:0;color:var(--ink-2)">${esc(copy.intro)}</p>
+    ${(authResult.status === 'rejected' || overviewResult.status === 'rejected') ? `<div class="empty" role="alert">${esc(copy.failed)}</div>` : ''}
+    <section class="card stack" style="gap:12px;padding:20px"><h2 style="margin:0;font-size:18px">${esc(copy.auth)}</h2>
+      <div class="scroll-x"><table class="data"><thead><tr><th>${esc(copy.service)}</th><th>${esc(copy.state)}</th></tr></thead><tbody>${providers}</tbody></table></div>
+      <p style="margin:0;color:var(--ink-2);font-size:13px">${esc(copy.authNote)}</p>
+    </section>
+    <section class="card stack" style="gap:12px;padding:20px"><h2 style="margin:0;font-size:18px">${esc(copy.publicData)}</h2>
+      <div class="scroll-x"><table class="data"><tbody>${collection.map(([label, value]) => `<tr><th>${esc(label)}</th><td class="num">${esc(value)}</td></tr>`).join('')}</tbody></table></div>
+      <p style="margin:0;color:var(--ink-2);font-size:13px">${esc(copy.coverage)}</p>
+    </section>
+    <section class="card stack" style="gap:12px;padding:20px"><h2 style="margin:0;font-size:18px">${esc(copy.external)}</h2>
+      <div class="scroll-x"><table class="data"><thead><tr><th>${esc(copy.service)}</th><th>${esc(copy.state)}</th></tr></thead><tbody>${integrations.map((name) => `<tr><td>${esc(name)}</td><td><span class="tag gray">${esc(copy.deferred)}</span></td></tr>`).join('')}</tbody></table></div>
+      <p style="margin:0;color:var(--ink-2);font-size:13px">${esc(copy.externalNote)}</p>
+    </section>
+    <button type="button" class="btn outline rip" id="readinessRetry" style="align-self:flex-start">${esc(copy.retry)}</button>
+  </div>`;
+  v.querySelector('#readinessRetry').addEventListener('click', () => { viewOperations(v); });
 }
 
 async function init() {
