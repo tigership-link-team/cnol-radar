@@ -69,7 +69,7 @@ body.lp :focus-visible{outline:2px solid var(--lp-vio2);outline-offset:3px;borde
 .lp-pill i{width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:lpPing 2s ease-out infinite}
 @keyframes lpPing{0%{box-shadow:0 0 0 0 rgba(52,211,153,.55)}80%,100%{box-shadow:0 0 0 10px rgba(52,211,153,0)}}
 .lp-h1{margin:22px 0 0;font-size:clamp(46px,6.4vw,82px);line-height:1.06;font-weight:800;letter-spacing:-.045em}
-.lp-h1 span{display:block}
+.lp-h1 span{display:block;text-wrap:balance}
 html:lang(en) .lp-h1{font-size:clamp(40px,5vw,66px);letter-spacing:-.04em}
 html:lang(ja) .lp-h1{font-size:clamp(34px,4.8vw,64px);letter-spacing:-.03em}
 html:lang(ja) .lp-h2{font-size:clamp(26px,3.4vw,44px)}
@@ -273,7 +273,7 @@ html:lang(ja) .lp-h2{font-size:clamp(26px,3.4vw,44px)}
 .lp-tbl tr:last-child th,.lp-tbl tr:last-child td{border-bottom:0}
 .lp-tbl th{color:var(--lp-ink3);font-weight:500}
 .lp-tbl td.us{color:#fff;font-weight:700}
-.lp-plans{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-top:40px;align-items:stretch}
+.lp-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:40px;align-items:stretch}
 .lp-plan{position:relative;display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:24px;background:var(--lp-glass);border:1px solid var(--lp-line);transition:transform .7s var(--lp-ease),border-color .5s var(--lp-ease)}
 .lp-plan:hover{transform:translateY(-6px);border-color:var(--lp-line2)}
 .lp-plan.rec{background:linear-gradient(180deg,rgba(124,58,237,.22),rgba(79,70,229,.08));border-color:rgba(167,139,250,.55);box-shadow:0 30px 70px -30px rgba(124,58,237,.7)}
@@ -320,12 +320,13 @@ footer.lp-foot a{color:var(--lp-ink2)}
 @keyframes lpUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 
 @media (max-width:1080px){
-  .lp-plans{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lp-plans{grid-template-columns:repeat(3,minmax(0,1fr))}
   .lp-why{grid-template-columns:repeat(2,minmax(0,1fr))}
   .b-l,.b-m,.b-s{grid-column:span 3}
 }
 @media (max-width:900px){
   .lp-hero .lp-wrap,.lp-mc{grid-template-columns:1fr}
+  .lp-plans{grid-template-columns:1fr}
   .lp-mc .lp-flow{margin-top:8px}
   .lp-radar{margin:0 auto;max-width:440px}
   .lp-stats{grid-template-columns:repeat(2,minmax(0,1fr))}

@@ -1,3 +1,4 @@
+import '/landing-copy.js';
 import { sb, getLang, setLang, t, applyI18n, fmtViews, esc, snack } from '/common.js';
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -26,31 +27,19 @@ document.querySelectorAll('.lp-card').forEach((c) => c.addEventListener('pointer
 }));
 
 let lang = getLang();
-let cur = lang === 'ko' ? 'krw' : 'usd';
-let per = 'month';
 const L = (k, v) => esc(t(k, lang, v));
 const loc = () => (lang === 'ko' ? 'ko-KR' : lang === 'ja' ? 'ja-JP' : 'en-US');
 
 // ---- 요금 ----
-const PRICES = { free: [0, 0], solo: [19000, 15], plus: [29000, 25], team: [39000, 35], agency: [99000, 79] };
+// Proposed launch pricing only; these cards open the current free experiment.
+const PRICES = { free: 0, solo: 29000, team: 99000 };
 function renderPrices() {
-  document.querySelectorAll('[data-cur]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cur === cur)));
-  document.querySelectorAll('[data-per]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.per === per)));
-  for (const [id, [krw, usd]] of Object.entries(PRICES)) {
+  for (const [id, krw] of Object.entries(PRICES)) {
     const p = document.querySelector(`[data-price="${id}"]`);
     const s = document.querySelector(`[data-sub="${id}"]`);
     if (!p || !s) continue;
-    if ((cur === 'krw' && krw === 0) || (cur === 'usd' && usd === 0)) {
-      p.textContent = cur === 'krw' ? '0원' : '$0';
-      s.textContent = t('price.noCard', lang);
-      continue;
-    }
-    if (cur === 'krw') {
-      const won = (n) => n.toLocaleString('ko-KR') + '원';
-      if (per === 'month') { p.textContent = won(krw); s.textContent = t('price.perMonth', lang); }
-      else { p.textContent = won(Math.round((krw * 10) / 12)); s.textContent = t('price.perYear', lang, { x: won(krw * 10) }); }
-    } else if (per === 'month') { p.textContent = '$' + usd; s.textContent = t('price.perMonth', lang); }
-    else { p.textContent = '$' + ((usd * 10) / 12).toFixed(2); s.textContent = t('price.perYear', lang, { x: '$' + usd * 10 }); }
+    p.textContent = lang === 'ko' ? krw.toLocaleString('ko-KR') + '원' : 'KRW ' + krw.toLocaleString('en-US');
+    s.textContent = t(krw === 0 ? 'price.noCard' : 'price.perMonth', lang);
   }
 }
 
@@ -58,7 +47,7 @@ function renderFaq() {
   const box = document.getElementById('faq');
   if (!box) return;
   const chev = '<svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
-  box.innerHTML = [1, 2, 3, 4, 5].map((i) => `<details><summary>${L('faq.q' + i)}${chev}</summary><p>${L('faq.a' + i)}</p></details>`).join('');
+  box.innerHTML = [1, 2, 3, 4, 5, 6, 7].map((i) => `<details><summary>${L('faq.q' + i)}${chev}</summary><p>${L('faq.a' + i)}</p></details>`).join('');
 }
 
 // ---- 예시 데이터: 채널 5개 (내 채널 2 · 레퍼런스 3) ----
@@ -614,6 +603,12 @@ function renderCmp() {
 
 function renderAll() {
   applyI18n(document, lang);
+  document.title = t('meta.title', lang);
+  for (const [selector, key] of [
+    ['meta[name="description"]', 'meta.description'],
+    ['meta[property="og:title"]', 'meta.ogTitle'],
+    ['meta[property="og:description"]', 'meta.ogDescription']
+  ]) document.querySelector(selector)?.setAttribute('content', t(key, lang));
   document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   renderPrices();
   renderFaq();
@@ -629,11 +624,8 @@ document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('clic
   if (lang === b.dataset.lang) return;
   lang = b.dataset.lang;
   setLang(lang);
-  cur = lang === 'ko' ? 'krw' : 'usd';
   renderAll();
 }));
-document.querySelectorAll('[data-cur]').forEach((b) => b.addEventListener('click', () => { cur = b.dataset.cur; renderPrices(); }));
-document.querySelectorAll('[data-per]').forEach((b) => b.addEventListener('click', () => { per = b.dataset.per; renderPrices(); }));
 
 renderAll();
 bindFlow();
