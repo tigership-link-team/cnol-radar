@@ -1226,3 +1226,47 @@ const LANDING9 = {
   }
 };
 for (const l of Object.keys(LANDING9)) Object.assign(DICT[l], LANDING9[l]);
+
+// ---------- v10: 소개 페이지 중복 정리 · 요금(출시 예정 가격) · 데이터 30일 보관 ----------
+const LANDING10 = {
+  ko: {
+    'v10.nav.multi': '48시간', 'v10.nav.faq': '질문', 'v10.hero.aria': '운영 채널 48시간 조회수',
+    'v10.tools.less': '전체 도구 접기', 'v10.shot.note': '예시 데이터로 찍은 실제 대시보드 화면', 'v10.review.q': '써 보셨나요?',
+    'v10.pl.solo': '솔로', 'v10.pl.soloW': '내 채널 1개 · 매시간', 'v10.pl.s1': '맞춤 레퍼런스 자동 매칭', 'v10.pl.s2': '터진 소재 · 채널 이슈 알림', 'v10.pl.s3': '레퍼런스 30개',
+    'v10.pl.p1': '솔로의 모든 기능',
+    'v6.pl.f2': '레퍼런스 10개 · 3시간마다 수집', 'v6.pl.p3': '레퍼런스 100개', 'v6.pl.t3': '레퍼런스 200개',
+    'v6.pr.now': '출시 예정 가격이에요 · 지금은 사용 신청을 받고 있어요',
+    'v6.pr.sub': '요금은 연결한 내 채널 수로 정해요. 레퍼런스 채널은 요금제마다 넉넉하게 들어 있어요.',
+    'v6.pr.note': '채널 30개까지는 에이전시 {agency} · 연간 결제는 2개월 무료 · 부가세 포함 · 결제는 아직 열리지 않았어요',
+    'v7.faq.a1': '지금은 사용 신청을 받는 중이에요. 열리면 실험 기간 동안 모든 기능을 무료로 써 볼 수 있어요. 정식 요금은 위 요금표(출시 예정 가격)를 참고해 주세요.',
+    'v7.faq.a4': '링크는 한 번에 30개까지 넣을 수 있어요. 지켜보는 레퍼런스 수는 요금제마다 달라요(무료 10개 · 솔로 30개 · 플러스 100개 · 팀 200개).',
+    'v7.faq.a5': '유튜브 공식 API로 공개된 데이터만 모아요. 영상 파일은 내려받지 않고, 유튜브 정책에 맞춰 모은 데이터는 30일까지만 보관해요.'
+  },
+  en: {
+    'v10.nav.multi': '48 hours', 'v10.nav.faq': 'FAQ', 'v10.hero.aria': '48-hour views across managed channels',
+    'v10.tools.less': 'Hide all tools', 'v10.shot.note': 'Real dashboard screen with example data', 'v10.review.q': 'Tried it?',
+    'v10.pl.solo': 'Solo', 'v10.pl.soloW': '1 channel · hourly', 'v10.pl.s1': 'Auto-matched references', 'v10.pl.s2': 'Breakout & channel issue alerts', 'v10.pl.s3': '30 reference channels',
+    'v10.pl.p1': 'Everything in Solo',
+    'v6.pl.f2': '10 reference channels · every 3 hours', 'v6.pl.p3': '100 reference channels', 'v6.pl.t3': '200 reference channels',
+    'v6.pr.now': 'Launch pricing · We’re taking early-access requests now',
+    'v6.pr.sub': 'Pricing is based on your own connected channels. Every plan includes plenty of reference channels.',
+    'v6.pr.note': 'Agency {agency} for up to 30 channels · 2 months free on yearly billing · Payments are not open yet',
+    'v7.faq.a1': 'We’re taking early-access requests right now. Once you’re in, every feature is free during the trial period. See the pricing table above for launch prices.',
+    'v7.faq.a4': 'You can paste up to 30 links at once. The number of reference channels depends on your plan (Free 10 · Solo 30 · Plus 100 · Team 200).',
+    'v7.faq.a5': 'We only collect public data through the official YouTube API. We never download video files, and collected data is kept for no longer than 30 days, in line with YouTube’s policies.'
+  },
+  ja: {
+    'v10.nav.multi': '48時間', 'v10.nav.faq': 'よくある質問', 'v10.hero.aria': '運営チャンネルの48時間再生数',
+    'v10.tools.less': 'ツール一覧を閉じる', 'v10.shot.note': 'サンプルデータで撮影した実際のダッシュボード画面', 'v10.review.q': 'お使いになりましたか？',
+    'v10.pl.solo': 'ソロ', 'v10.pl.soloW': '1チャンネル · 毎時', 'v10.pl.s1': 'おすすめリファレンスの自動マッチング', 'v10.pl.s2': 'バズ動画 · チャンネル問題アラート', 'v10.pl.s3': 'リファレンス30件',
+    'v10.pl.p1': 'ソロの全機能',
+    'v6.pl.f2': 'リファレンス10件 · 3時間ごとに収集', 'v6.pl.p3': 'リファレンス100件', 'v6.pl.t3': 'リファレンス200件',
+    'v6.pr.now': 'リリース予定の料金です · 現在は利用申請を受け付けています',
+    'v6.pr.sub': '料金は連携した自分のチャンネル数で決まります。リファレンスはどのプランにもたっぷり含まれます。',
+    'v6.pr.note': '30チャンネルまではエージェンシー {agency} · 年払いは2か月無料 · 決済はまだ開始していません',
+    'v7.faq.a1': '現在は利用申請を受け付けています。開始後はテスト期間中すべての機能を無料でお試しいただけます。正式料金は上の料金表（リリース予定）をご覧ください。',
+    'v7.faq.a4': 'リンクは一度に30件まで入力できます。リファレンスの数はプランによって異なります（無料10件 · ソロ30件 · プラス100件 · チーム200件）。',
+    'v7.faq.a5': 'YouTube公式APIで公開データだけを集めます。動画ファイルはダウンロードせず、YouTubeのポリシーに沿って集めたデータは30日までしか保管しません。'
+  }
+};
+for (const l of Object.keys(LANDING10)) Object.assign(DICT[l], LANDING10[l]);

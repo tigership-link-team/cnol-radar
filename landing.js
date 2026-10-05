@@ -24,7 +24,8 @@ const t = (k, vars) => {
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // ---------- 요금 (한국어는 원화, 영어·일본어는 달러) ----------
-const PRICES = { free: [0, 0], solo: [19000, 15], plus: [29000, 25], team: [39000, 35], agency: [99000, 79] };
+// 출시 예정 가격 (부가세 포함 · 연간 결제는 2개월 무료) — 관리자 콘솔(admin.js PRICE)과 같아요
+const PRICES = { free: [0, 0], solo: [19000, 15], plus: [39000, 29], team: [69000, 49], agency: [149000, 109] };
 const money = (id) => (lang === 'ko' ? '₩' + PRICES[id][0].toLocaleString('ko-KR') : '$' + PRICES[id][1]);
 
 // ---------- 전체 도구 ----------
@@ -144,6 +145,7 @@ function apply() {
   requestAnimationFrame(moveInd);
   if (typeof renderMulti === 'function' && document.getElementById('mtTiles')?.childElementCount) renderMulti();
   document.querySelectorAll('[data-i18n-ph]').forEach((el) => el.setAttribute('placeholder', t(el.dataset.i18nPh)));
+  if (typeof toolsLabel === 'function') toolsLabel();
 }
 apply();
 document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('click', () => {
@@ -151,6 +153,23 @@ document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('clic
   try { localStorage.setItem(KEY, lang); } catch (e) { /* 무시 */ }
   apply();
 }));
+// 전체 도구 24개: '이게 다 돼요' 안에서 펼쳐요 (같은 내용을 두 번 보여 주지 않게)
+const toolsBtn = document.getElementById('toolsToggle');
+const toolsBox = document.getElementById('tools');
+function toolsLabel() {
+  const btn = document.getElementById('toolsToggle'); // apply()가 먼저 불러도 되게 여기서 찾아요
+  if (!btn) return;
+  const on = btn.getAttribute('aria-expanded') === 'true';
+  const b = btn.querySelector('.tx b');
+  if (b) b.textContent = t(on ? 'v10.tools.less' : 'v9.cap.all');
+}
+toolsBtn?.addEventListener('click', () => {
+  const on = toolsBtn.getAttribute('aria-expanded') !== 'true';
+  toolsBtn.setAttribute('aria-expanded', String(on));
+  toolsBox.hidden = !on;
+  toolsLabel();
+  if (on) { renderTools(true); requestAnimationFrame(moveInd); toolsBox.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'nearest' }); }
+});
 document.getElementById('toolTabs')?.addEventListener('click', (e) => {
   const b = e.target.closest('[data-tab]');
   if (!b || b.dataset.tab === tab) return;

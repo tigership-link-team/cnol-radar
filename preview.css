@@ -21,7 +21,7 @@
 @media(max-width:680px){.preview-managed-grid{gap:10px}.preview-managed-card{padding:12px}.preview-managed-value strong{font-size:18px}.preview-managed-head{gap:6px}.preview-managed-head .preview-avatar{width:23px;height:23px}.preview-managed-name h3{font-size:10px}.preview-managed-value{gap:5px}.preview-managed-value span{font-size:7px}.preview-kpis{grid-template-columns:1fr 1fr}.preview-managed-tools{flex-wrap:wrap}.preview-managed-tools .preview-search{flex:1}.preview-managed-tools select{max-width:100%}.preview-scope select{max-width:145px;font-size:10px}.preview-time-bars{gap:2px}.preview-time-chart{height:150px}.preview-time-labels{font-size:9px}.preview-realtime-layout{gap:22px}}
 @media(max-width:400px){.preview-nav button{flex:1;min-width:0;justify-content:center;padding:9px 5px;font-size:11px}.preview-nav button>span:first-child{display:none}.preview-managed-card{padding:10px}.preview-managed-value{flex-wrap:wrap}.preview-scope select{max-width:125px}.preview-panel-heading{flex-wrap:wrap}.preview-time-labels{font-size:8px}}
 
-.preview-managed-head .preview-managed-avatar{width:32px;height:32px;background-image:url('/creator-avatars-v2.png');background-size:600% 500%;background-repeat:no-repeat;border:1px solid #e0e6ef;box-shadow:0 2px 5px #1e365c0a}
+.preview-managed-head .preview-managed-avatar{width:32px;height:32px;background-image:url('/img/ai-avatars.webp');background-size:600% 500%;background-repeat:no-repeat;border:1px solid #e0e6ef;box-shadow:0 2px 5px #1e365c0a}
 @media(max-width:680px){.preview-managed-head .preview-managed-avatar{width:28px;height:28px}}
 
 .preview-managed-head .preview-managed-mark{display:grid;place-items:center;width:32px;height:32px;font-family:Inter,sans-serif;font-weight:800;font-size:15px;letter-spacing:-.5px;flex:none;background-image:none;border:1px solid #15223208}
@@ -33,3 +33,13 @@
 .preview-kpi>span{font-size:16px;line-height:1.45}.preview-kpi strong{font-size:48px;line-height:1.08;letter-spacing:-1.6px;white-space:nowrap;overflow-wrap:normal}.preview-kpi.featured strong{font-size:52px}.preview-panel h2,.preview-video-heading h2{font-size:20px;line-height:1.4}.preview-panel-heading p{font-size:12px}.preview-time-heading{font-size:16px;line-height:1.4}.preview-time-heading strong{font-size:27px}.preview-managed-subtitle{font-size:12px;line-height:1.6}
 @media(max-width:1050px){.preview-kpis{grid-template-columns:1.3fr .7fr}.preview-kpi.featured{grid-column:1/-1}.preview-kpi strong{font-size:36px}.preview-kpi.featured strong{font-size:48px}}
 @media(max-width:680px){.preview-kpis{grid-template-columns:1.3fr .7fr}.preview-kpi{padding:18px 14px}.preview-kpi strong{font-size:32px;letter-spacing:-.8px}.preview-kpi.featured strong{font-size:36px}.preview-kpi>span{font-size:16px}.preview-panel h2,.preview-video-heading h2{font-size:18px}.preview-time-heading{font-size:14px}.preview-time-heading strong{font-size:24px}}
+/* v10: 전체 채널 48시간 조회수를 아주 크게 — 한 줄을 다 쓰는 첫 카드 */
+.preview-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+.preview-kpi.featured{grid-column:1/-1;padding:28px 32px}
+.preview-kpi.featured>span{font-size:18px;font-weight:700;color:#3c4a5c}
+.preview-kpi.featured strong{font-size:clamp(56px,8.6vw,128px);line-height:1;letter-spacing:-.045em;font-weight:900}
+@media(max-width:1050px){.preview-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.preview-kpi.featured strong{font-size:clamp(52px,10vw,104px)}}
+@media(max-width:680px){.preview-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.preview-kpi.featured{padding:20px 16px}.preview-kpi.featured strong{font-size:clamp(44px,13vw,64px)}}
+.preview-apply{display:flex;align-items:center;justify-content:center;min-height:40px;border-radius:10px;background:#2f6fed;color:#fff!important;font-weight:700;font-size:13px}
+.preview-apply:hover{background:#1d4fd8}
+@media(max-width:680px){.preview-sidebar-bottom{display:none}}

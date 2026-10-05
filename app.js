@@ -628,6 +628,31 @@ Object.assign(T.ja, {
   err_FULL: 'チャンネルは100件まで追加できます。',
   testTitle: '運用方法', test1: '現在は管理者アカウントでログインしたときだけ閲覧・変更できます。会員登録と決済は準備中です。自動収集はサーバーが秘密鍵で毎時実行します。'
 });
+// ---------- v10: 할당량(검색 따로) · 30일 보관 · 계산값 안내 ----------
+Object.assign(T.ko, {
+  err_FULL: '채널은 200개까지 넣을 수 있어요.',
+  err_QUOTA: '오늘 유튜브 API 사용량을 다 썼어요. 한국 시간 오후 4~5시에 다시 채워져요.',
+  err_QUOTA_BUDGET: '오늘 쓸 수 있는 API 포인트가 부족해요. 한국 시간 오후 4~5시에 다시 채워져요.',
+  err_QUOTA_SEARCH: '오늘 검색 한도(하루 100번)를 거의 다 썼어요. 한국 시간 오후 4~5시에 다시 채워져요. 이미 찾아 둔 소재는 그대로 볼 수 있어요.',
+  qUnits: 'API 포인트 (검색 제외)', qSearch: '검색 (하루 100번 따로)', qReset: '다시 채워지는 때: {at}', qKeep: '유튜브 정책에 따라 수집한 데이터는 {d}일까지만 보관해요.',
+  qShow: '소개 페이지 공개 영상: {at} 새로 받음', derived: '48시간 조회수 · 평소 대비 · 점수 · 예측은 CNOL RADAR가 YouTube 공개 데이터로 계산한 값이에요. YouTube가 제공하는 지표가 아니에요.'
+});
+Object.assign(T.en, {
+  err_FULL: 'You can add up to 200 channels.',
+  err_QUOTA: "Today's YouTube API quota is used up. It refills around 4–5 PM Korea time.",
+  err_QUOTA_BUDGET: 'Not enough API points left today. They refill around 4–5 PM Korea time.',
+  err_QUOTA_SEARCH: "Today's search limit (100 per day) is almost used up. It refills around 4–5 PM Korea time. Ideas you already found are still here.",
+  qUnits: 'API points (excluding search)', qSearch: 'Searches (separate 100/day)', qReset: 'Refills at: {at}', qKeep: 'In line with YouTube policy, collected data is kept for {d} days at most.',
+  qShow: 'Public videos on the homepage refreshed: {at}', derived: '48-hour views, “vs usual”, scores and predictions are calculated by CNOL RADAR from public YouTube data. They are not metrics provided by YouTube.'
+});
+Object.assign(T.ja, {
+  err_FULL: 'チャンネルは200件まで追加できます。',
+  err_QUOTA: '今日のYouTube API使用量を使い切りました。韓国時間の午後4〜5時に回復します。',
+  err_QUOTA_BUDGET: '今日使えるAPIポイントが足りません。韓国時間の午後4〜5時に回復します。',
+  err_QUOTA_SEARCH: '今日の検索上限（1日100回）をほぼ使い切りました。韓国時間の午後4〜5時に回復します。見つけたネタはそのまま見られます。',
+  qUnits: 'APIポイント（検索を除く）', qSearch: '検索（別枠で1日100回）', qReset: '回復する時刻：{at}', qKeep: 'YouTubeのポリシーに沿って、収集したデータは{d}日まで保管します。',
+  qShow: '紹介ページの公開動画：{at}に更新', derived: '48時間の再生数・いつもとの比較・スコア・予測は、CNOL RADARがYouTubeの公開データから計算した値です。YouTubeが提供する指標ではありません。'
+});
 const t = (k, v) => {
   let s = (T[lang] && T[lang][k]) ?? T.ko[k] ?? k;
   if (v) for (const x of Object.keys(v)) s = s.split('{' + x + '}').join(v[x]);
@@ -1539,6 +1564,10 @@ function renderNav() {
   document.getElementById('nav').innerHTML = GROUPS.filter((g) => !g.minor).map((g) => item(g)).join('')
     + `<span class="dk-div" aria-hidden="true"></span>` + GROUPS.filter((g) => g.minor).map((g) => item(g, ' sub')).join('')
     + `<a class="dk-nav sub" href="/">${svg(IC.landing, 16)}${esc(t('landing'))}</a>`;
+  const cr = document.getElementById('crumb');
+  if (cr) cr.innerHTML = `CNOL RADAR <span aria-hidden="true">/</span> <b>${esc(g0 ? t('g_' + g0.k) : t('home'))}</b>`;
+  const dv = document.querySelector('#derived span');
+  if (dv) dv.textContent = t('derived');
   const bn = document.getElementById('bellN');
   bn.hidden = !S.unread;
   bn.textContent = S.unread > 99 ? '99+' : String(S.unread || '');
@@ -1875,7 +1904,7 @@ async function vOverview(v, r, alive) {
     <section class="dk-card f2 dk-fade">
       <div class="dk-ch"><span class="dk-live"><i></i>${esc(t('live48all'))} · ${esc(t('chCount', { n: ov.channels.total }))}</span>${stackSeg || `<span class="dk-sub">${esc(t('kNextSub'))}</span>`}</div>
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px">
-        <div><div class="dk-sub" style="font-weight:600">${esc(t('ytRtViews'))}</div><div class="dk-big yt-num">${esc(fmtFull(ov.views48))}</div><div class="dk-sub">${change}</div></div>
+        <div><div class="dk-sub" style="font-weight:600">${esc(t('ytRtViews'))}</div><div class="dk-big huge yt-num">${esc(fmtFull(ov.views48))}</div><div class="dk-sub">${change}</div></div>
         <div style="text-align:right"><div class="dk-sub">${esc(t('last1h'))}</div><div class="dk-mid yt-num">${esc(fmtFull(last1h))}</div></div>
       </div>
       ${ins.length ? `<p class="ov-ins">${agAv(true)}<span>${ins.map(esc).join(' ')}</span></p>` : ''}
@@ -2333,7 +2362,7 @@ async function vChannel(v, r, alive) {
     <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="dk-hbtn ghost" href="#channels">← ${esc(t('chBack'))}</a><a class="dk-hbtn ghost" href="https://www.youtube.com/channel/${esc(c.id)}" target="_blank" rel="noopener">${svg(IC.yt, 17)}${esc(t('chOpenYt'))}</a><button type="button" class="dk-hbtn ghost" id="chSim">${svg(IC.collect, 17)}${esc(t('similar'))}</button><button type="button" class="dk-hbtn" id="chRf">${svg(IC.refresh, 17)}${esc(t('refresh'))}</button></div></div>
   <div class="dk-row">
     <section class="dk-card f1 dk-fade"><div class="dk-ch"><span class="dk-live"><i></i>${esc(t('chHourly'))}</span></div>
-      <div><div class="dk-sub" style="font-weight:600">${esc(t('ytRtViews'))}</div><div class="dk-mid">${esc(fmtN(sum48))}${esc(t('unitViews'))}</div></div>
+      <div><div class="dk-sub" style="font-weight:600">${esc(t('ytRtViews'))}</div><div class="dk-big huge yt-num">${esc(fmtFull(sum48))}</div></div>
       ${barsHtml('cb48', hv, t('chHourly'), 150)}<div class="dk-axis"><span>${esc(t('ago48'))}</span><span>${esc(t('ago24'))}</span><span>${esc(t('now'))}</span></div></section>
     <section class="dk-card f2 dk-fade">
       <div class="yt-head"><div><h2>${esc(t('ytHead', { v: sd.M.views.sum != null ? fmtFull(sd.M.views.sum) : '–' }))}</h2><p>${esc(t('ytHeadCh'))}</p></div></div>
@@ -2486,16 +2515,21 @@ async function vStatus(v, r, alive) {
   const st = await act({ action: 'status' });
   if (!alive()) return;
   if (!st.ok) throw new Error(st.error || 'status');
-  const pctUsed = Math.min(100, Math.round((st.units_today / st.budget) * 100));
+  const meter = (label, used, max) => {
+    const pct = Math.min(100, Math.round(((Number(used) || 0) / Math.max(1, Number(max) || 1)) * 100));
+    return `<div class="dk-meter"><div class="lb"><span>${esc(label)}</span><b>${esc(fmtFull(used || 0))}<small> / ${esc(fmtFull(max))}</small></b></div><div class="bar" role="img" aria-label="${pct}%"><i style="width:${pct}%" class="${pct >= 90 ? 'hot' : ''}"></i></div></div>`;
+  };
   v.innerHTML = head(t('status'), esc(t('statusSub'))) + `
   <div class="dk-row">
     <section class="dk-card f1 dk-fade">
       <div class="dk-banner ${st.key ? 'good' : 'warn'}">${esc(st.key ? t('keyOk') : t('keyNo'))}</div>
       <h2>${esc(t('unitsTitle'))}</h2>
-      <div class="dk-big">${esc(fmtFull(st.units_today))}<span style="font-size:16px;color:#64748b;font-weight:700"> / ${esc(fmtFull(st.budget))}</span></div>
-      <div style="height:12px;border-radius:6px;background:#ede9fe;overflow:hidden" role="img" aria-label="${pctUsed}%"><div style="height:100%;width:${pctUsed}%;background:#7c3aed;border-radius:6px"></div></div>
-      <p class="dk-sub" style="margin:0">${esc(t('unitsHelp'))}</p>
+      ${meter(t('qUnits'), st.units_today, st.budget)}
+      ${meter(t('qSearch'), st.searches_today ?? 0, st.search_budget ?? 95)}
+      <p class="dk-sub" style="margin:0">${esc(t('qReset', { at: st.reset_at ? new Date(st.reset_at).toLocaleString(loc(), { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '–' }))}</p>
       <p class="dk-sub" style="margin:0">${esc(t('kChannels'))}: <b>${esc(fmtFull(st.channels))}</b> / ${esc(fmtFull(st.max_channels))}</p>
+      <p class="dk-sub" style="margin:0">${esc(t('qKeep', { d: st.keep_days ?? 30 }))}</p>
+      ${st.showcase_at ? `<p class="dk-sub" style="margin:0">${esc(t('qShow', { at: agoTxt(st.showcase_at) }))}</p>` : ''}
     </section>
     <section class="dk-card f1 dk-fade">
       <h2>${esc(t('schedTitle'))}</h2><ul style="margin:0;padding-left:18px;line-height:1.9;font-size:14.5px"><li>${esc(t('sched1'))}</li><li>${esc(t('sched2'))}</li></ul>

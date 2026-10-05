@@ -96,7 +96,7 @@ for (const language of Object.keys(OPERATIONS)) D[language].operations = OPERATI
 const PLAN = { free: { ko: '무료', en: 'Free', ja: '無料' }, solo: { ko: '솔로', en: 'Solo', ja: 'ソロ' }, plus: { ko: '플러스', en: 'Plus', ja: 'プラス' }, team: { ko: '팀', en: 'Team', ja: 'チーム' }, agency: { ko: '에이전시', en: 'Agency', ja: 'エージェンシー' }, enterprise: { ko: '엔터프라이즈', en: 'Enterprise', ja: 'エンタープライズ' } };
 const PROVIDER = { kakao: { ko: '카카오', en: 'Kakao', ja: 'カカオ' }, google: { ko: 'Google', en: 'Google', ja: 'Google' }, naver: { ko: '네이버', en: 'Naver', ja: 'NAVER' }, email: { ko: '이메일', en: 'Email', ja: 'メール' } };
 const LANG_NAME = { ko: { ko: '한국어', en: 'Korean', ja: '韓国語' }, en: { ko: '영어', en: 'English', ja: '英語' }, ja: { ko: '일본어', en: 'Japanese', ja: '日本語' } };
-const PRICE = { free: 0, solo: 19000, plus: 29000, team: 39000, agency: 99000, enterprise: 0 };
+const PRICE = { free: 0, solo: 19000, plus: 39000, team: 69000, agency: 149000, enterprise: 0 }; // 출시 예정 가격 (소개 페이지 landing.js PRICES와 같아요)
 const STATUSES = ['pending', 'reviewing', 'accepted', 'declined'];
 const ROUTES = ['overview', 'members', 'requests', 'inquiries', 'operations'];
 
