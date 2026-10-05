@@ -92,7 +92,7 @@ function renderFaq() {
   const box = document.getElementById('faqList');
   if (!box) return;
   const open = new Set([...box.querySelectorAll('.qa.open')].map((x) => x.dataset.q));
-  box.innerHTML = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => `<div class="qa${open.has(String(n)) ? ' open' : ''}" data-q="${n}"><button type="button" aria-expanded="${open.has(String(n))}" aria-controls="qa${n}">${esc(t('v7.faq.q' + n))}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="a" id="qa${n}" role="region"><div><p>${esc(t('v7.faq.a' + n))}</p></div></div></div>`).join('');
+  box.innerHTML = [9, 1, 2, 10, 3, 4, 5, 6, 7, 8].map((n) => `<div class="qa${open.has(String(n)) ? ' open' : ''}" data-q="${n}"><button type="button" aria-expanded="${open.has(String(n))}" aria-controls="qa${n}">${esc(t('v7.faq.q' + n))}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="a" id="qa${n}" role="region"><div><p>${esc(t('v7.faq.a' + n))}</p></div></div></div>`).join('');
 }
 document.getElementById('faqList')?.addEventListener('click', (e) => {
   const b = e.target.closest('.qa button');
@@ -142,6 +142,8 @@ function apply() {
   renderFaq();
   if (typeof drawOv === 'function' && document.getElementById('ovPlot')?.childElementCount) drawOv();
   requestAnimationFrame(moveInd);
+  if (typeof renderMulti === 'function' && document.getElementById('mtTiles')?.childElementCount) renderMulti();
+  document.querySelectorAll('[data-i18n-ph]').forEach((el) => el.setAttribute('placeholder', t(el.dataset.i18nPh)));
 }
 apply();
 document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('click', () => {
@@ -362,3 +364,201 @@ if (player) {
   }, { threshold: 0.35 }).observe(player);
   if (calm) { player.classList.add('paused'); pp.setAttribute('aria-pressed', 'true'); }
 }
+
+// ---------- v9: 이게 다 돼요 아이콘 · 눌러서 바로 그 설명으로 ----------
+Object.assign(P, {
+  quote: '<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.5h5"/>',
+  play: '<rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><path d="M17.5 14v7M14 17.5h7"/>'
+});
+document.querySelectorAll('[data-ic]').forEach((el) => { if (P[el.dataset.ic]) el.innerHTML = svg(P[el.dataset.ic], 21); });
+const flash = (el) => { el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 2000); };
+document.querySelectorAll('.cap[href^="#"]').forEach((a) => a.addEventListener('click', () => {
+  const el = document.querySelector(a.getAttribute('href'));
+  if (el) setTimeout(() => flash(el), calm ? 0 : 520);
+}));
+
+// ---------- v9: 채널 12개 · 48시간 — 유튜브 스튜디오 '실시간' 카드처럼 ----------
+// 색: 검증된 순서 그대로 7색(채널에 붙어요, 순위가 아니라) · 8번째 채널부터는 '그 외'로 묶어요
+const MT_COL = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#4a3aa7'];
+const MT_OTHER = '#b5b0c6';
+const MT_TOTAL = 1284310;
+const MT = (() => {
+  let seed = 11;
+  const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  const W = [1.0, 1.2, 0.92, 0.78, 0.7, 0.62, 0.55, 0.42, 0.36, 0.3, 0.24, 0.18];
+  const kstNow = (new Date().getUTCHours() + 9) % 24;
+  const raw = W.map((w, c) => Array.from({ length: 48 }, (_, i) => {
+    const h = (kstNow - 47 + i + 96) % 24; // 그 칸의 한국 시각
+    const day = 0.22 + 0.78 * Math.pow(0.5 - 0.5 * Math.cos(((h - 6 + 24) % 24) / 24 * Math.PI * 2), 0.85) + 0.18 * Math.exp(-Math.pow(h - 21, 2) / 6);
+    const boom = c === 1 && i >= 36 ? 1 + (i - 35) * 0.24 : 1; // 한 채널은 최근 12시간 급상승
+    return w * day * boom * (0.84 + rnd() * 0.32);
+  }));
+  const sum = raw.flat().reduce((a, v) => a + v, 0);
+  const vals = raw.map((a) => a.map((v) => Math.round((v / sum) * MT_TOTAL)));
+  const tot = vals.map((a) => a.reduce((p, q) => p + q, 0));
+  const hours = Array.from({ length: 48 }, (_, i) => vals.reduce((p, a) => p + a[i], 0));
+  const usual = vals.map((a) => a.slice(0, 36).reduce((p, q) => p + q, 0) / 36);
+  const recent = vals.map((a) => a.slice(-6).reduce((p, q) => p + q, 0) / 6);
+  return { vals, tot, hours, x: recent.map((r, c) => r / Math.max(1, usual[c])) };
+})();
+let mtMode = 'sum';
+const mtName = (c) => t('v9.ch.' + (c + 1));
+const mtRank = () => [...MT.tot.keys()].sort((a, b) => MT.tot[b] - MT.tot[a]);
+const mtKey = (c) => (c < 7 ? String(c) : 'o');
+const mtColor = (c) => (c < 7 ? MT_COL[c] : MT_OTHER);
+const mtAv = (c) => `<span class="yt-av" style="--av:${c < 7 ? MT_COL[c] : '#909090'}" aria-hidden="true">${esc(Array.from(mtName(c).replace(/^[^·・]*[·・]\s*/, ''))[0] || '?')}</span>`;
+const mtAgo = (i) => (i === 47 ? t('v7.tip.now') : t('v7.tip.hago', { h: 47 - i }));
+function mtParts(i) {
+  const p = [...Array(7).keys()].map((c) => ({ k: String(c), c, v: MT.vals[c][i], color: MT_COL[c], label: mtName(c) }));
+  p.push({ k: 'o', c: -1, v: [7, 8, 9, 10, 11].reduce((a, c) => a + MT.vals[c][i], 0), color: MT_OTHER, label: t('v9.mt.others', { n: 5 }) });
+  return p;
+}
+function mtSpark(a) {
+  const W = 120, H = 44, n = a.length, max = Math.max(1, ...a);
+  const pts = a.map((v, i) => [(i / (n - 1)) * W, H - 3 - (v / max) * (H - 8)]);
+  const d = pts.map((q, i) => `${i ? 'L' : 'M'}${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path class="ar" d="${d}L${W} ${H}L0 ${H}Z"/><path class="ln" d="${d}"/></svg><i class="dot" style="top:${((pts[n - 1][1] / H) * 100).toFixed(1)}%"></i>`;
+}
+function mtHighlight(k) {
+  const plot = document.getElementById('mtPlot');
+  const lg = document.getElementById('mtLegend');
+  if (!plot) return;
+  const on = k != null && mtMode === 'ch';
+  plot.classList.toggle('hl', on);
+  plot.querySelectorAll('[data-s]').forEach((s) => s.classList.toggle('hs', on && s.dataset.s === k));
+  if (lg) { lg.classList.toggle('dim', on); lg.querySelectorAll('.lg').forEach((x) => x.classList.toggle('on', on && x.dataset.s === k)); }
+}
+function drawMulti(animate) {
+  const plot = document.getElementById('mtPlot');
+  if (!plot) return;
+  const H = plot.clientHeight || 160;
+  const max = Math.max(...MT.hours);
+  plot.className = 'mt-plot ' + mtMode;
+  plot.innerHTML = MT.hours.map((v, i) => {
+    const h = Math.max(2, (v / max) * (H - 6));
+    let inner;
+    if (mtMode === 'sum') inner = `<i style="height:${h.toFixed(1)}px"></i>`;
+    else {
+      const parts = mtParts(i).filter((p) => p.v > 0);
+      const avail = Math.max(h - 2 * (parts.length - 1), parts.length);
+      inner = parts.map((p) => `<i data-s="${p.k}" style="height:${Math.max(1, (p.v / v) * avail).toFixed(1)}px;background:${p.color}"></i>`).join('');
+    }
+    return `<div class="c" data-i="${i}" style="--i:${i}">${inner}</div>`;
+  }).join('') + '<span class="lp-tip" role="status"></span>';
+  if (animate && !calm) { void plot.offsetWidth; plot.classList.add('grow'); }
+  plot.setAttribute('aria-label', t('v9.mt.aria', { n: fmtNum(MT_TOTAL), c: mtName(mtRank()[0]) }));
+  const tip = plot.querySelector('.lp-tip');
+  const showTip = (el) => {
+    const i = Number(el.dataset.i);
+    let html = `<b>${esc(mtAgo(i))}</b><span>${esc(t('v7.tip.views', { n: fmtNum(MT.hours[i]) }))}</span>`;
+    if (mtMode === 'ch') html += mtParts(i).sort((a, b) => b.v - a.v).slice(0, 5).map((p) => `<div class="rw"><i style="background:${p.color}"></i><b>${esc(fmtNum(p.v))}</b><span>${esc(p.label)}</span></div>`).join('');
+    tip.innerHTML = html;
+    tip.classList.add('on');
+    const hb = el.firstElementChild ? el.getBoundingClientRect().bottom - Math.min(...[...el.children].map((x) => x.getBoundingClientRect().top)) : 0;
+    tip.style.left = Math.min(Math.max(el.offsetLeft + el.offsetWidth / 2, tip.offsetWidth / 2 + 4), plot.clientWidth - tip.offsetWidth / 2 - 4) + 'px';
+    tip.style.top = Math.max(-8, plot.clientHeight - hb) + 'px';
+    plot.querySelectorAll('.c.on').forEach((x) => x.classList.remove('on'));
+    el.classList.add('on');
+  };
+  plot.querySelectorAll('.c').forEach((el) => {
+    el.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'touch') showTip(el); });
+    el.addEventListener('pointerleave', (e) => { if (e.pointerType !== 'touch') { tip.classList.remove('on'); el.classList.remove('on'); } });
+    el.addEventListener('click', () => showTip(el));
+  });
+  // 채널별일 때만 범례 (색 + 이름 + 비중) — 범례에 올리면 그 채널만 또렷하게
+  const lg = document.getElementById('mtLegend');
+  if (lg) {
+    lg.hidden = mtMode !== 'ch';
+    if (mtMode === 'ch') {
+      const sums = {};
+      for (let i = 0; i < 48; i++) for (const p of mtParts(i)) sums[p.k] = (sums[p.k] || 0) + p.v;
+      lg.innerHTML = mtParts(0).map((p) => `<span class="lg" tabindex="0" data-s="${p.k}"><i style="background:${p.color}"></i><span>${esc(p.label)}</span><em>${Math.round((sums[p.k] / MT_TOTAL) * 100)}%</em></span>`).join('');
+      lg.querySelectorAll('.lg').forEach((x) => {
+        x.addEventListener('pointerenter', () => mtHighlight(x.dataset.s));
+        x.addEventListener('pointerleave', () => mtHighlight(null));
+        x.addEventListener('focus', () => mtHighlight(x.dataset.s));
+        x.addEventListener('blur', () => mtHighlight(null));
+      });
+    }
+  }
+}
+function renderMulti() {
+  if (!document.getElementById('mtPlot')) return;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('mtSumN', t('v9.mt.sumN', { n: 12 }));
+  set('mtTotal', fmtNum(MT_TOTAL));
+  set('mtDelta', t('v9.mt.delta', { p: 23 }));
+  set('mtHour', fmtNum(MT.hours[47]));
+  document.querySelectorAll('#mtMode [data-mt]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mt === mtMode)));
+  const rank = mtRank();
+  const mine = (c) => (c === 0 ? `<span class="yt-mine">${esc(t('v9.mt.mine'))}</span>` : '');
+  const top = rank.filter((c) => c < 7); // 색이 있는 7개 채널 (차트 범례와 같은 묶음)
+  const rest = rank.filter((c) => c >= 7);
+  const restSum = rest.reduce((a, c) => a + MT.tot[c], 0);
+  const list = document.getElementById('mtTop');
+  if (list) {
+    list.innerHTML = top.map((c) => `<li data-c="${c}">${mtAv(c)}<span class="n">${esc(mtName(c))}</span>${mine(c)}<b>${esc(fmtNum(MT.tot[c]))}</b></li>`).join('')
+      + `<li class="more"><span class="yt-av" style="--av:#c6c6c6" aria-hidden="true">+${rest.length}</span><span class="n">${esc(t('v9.mt.others', { n: rest.length }))}</span><b>${esc(fmtNum(restSum))}</b></li>`;
+  }
+  const tiles = document.getElementById('mtTiles');
+  if (tiles) {
+    tiles.innerHTML = rank.map((c) => {
+      const share = Math.round((MT.tot[c] / MT_TOTAL) * 100);
+      const hot = MT.x[c] >= 1.8 ? `<span class="hot"><i aria-hidden="true">↑</i>${esc(t('v9.mt.hot', { x: MT.x[c].toFixed(1) }))}</span>` : `<span class="hot" style="visibility:hidden"><i></i>-</span>`;
+      return `<div class="yt-card mt-tile" data-c="${c}"><div class="tp">${mtAv(c)}<span class="n">${esc(mtName(c))}</span>${mine(c)}</div><div class="nb"><b>${esc(fmtNum(MT.tot[c]))}</b><small>${esc(t('v9.mt.share', { p: share < 1 ? '<1' : share }))}</small></div>${hot}<div class="mt-sp">${mtSpark(MT.vals[c])}</div></div>`;
+    }).join('');
+  }
+  // 채널 카드·인기 채널에 올리면 그 채널을 차트에서 또렷하게 (채널별일 때)
+  document.querySelectorAll('#mtTiles [data-c], #mtTop [data-c]').forEach((el) => {
+    el.addEventListener('pointerenter', () => mtHighlight(mtKey(Number(el.dataset.c))));
+    el.addEventListener('pointerleave', () => mtHighlight(null));
+  });
+  const tb = document.querySelector('#mtTable tbody');
+  if (tb) tb.innerHTML = rank.map((c) => `<tr><th scope="row">${esc(mtName(c))}</th><td>${esc(fmtNum(MT.tot[c]))}</td><td>${Math.round((MT.tot[c] / MT_TOTAL) * 100)}%</td></tr>`).join('');
+  drawMulti(false);
+}
+document.getElementById('mtMode')?.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-mt]');
+  if (!b || b.dataset.mt === mtMode) return;
+  mtMode = b.dataset.mt;
+  document.querySelectorAll('#mtMode [data-mt]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  drawMulti(true);
+});
+renderMulti();
+{
+  const mp = document.getElementById('mtPlot');
+  if (mp) new IntersectionObserver(([en], ob) => { if (en.isIntersecting) { drawMulti(true); ob.disconnect(); } }, { threshold: 0.3 }).observe(mp);
+  let rw = 0;
+  addEventListener('resize', () => { clearTimeout(rw); rw = setTimeout(() => drawMulti(false), 150); });
+}
+
+// ---------- v9: 사용 신청 (이메일만 · 가입이 열리면 알려 드려요) ----------
+const SB_URL = 'https://gbgcoxjnjlrzbwclevul.supabase.co';
+const SB_KEY = 'sb_publishable_u1HixC_2hyoQi9Sd_mnaWQ_0nHSrQ8b'; // 공개용 키 — 행 단위 보안(RLS)으로 '넣기'만 돼요
+document.getElementById('wlForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = e.currentTarget;
+  const inp = f.querySelector('#wlMail');
+  const btn = f.querySelector('#wlBtn');
+  const msg = document.getElementById('wlMsg');
+  const say = (k, cls, vars) => { msg.className = 'wl-msg ' + cls; msg.textContent = t(k, vars); };
+  const email = inp.value.trim();
+  if (f.querySelector('#wlHp').value) { say('v9.wl.ok', 'ok', { e: email }); return; } // 자동 입력 봇
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 200) { say('v9.wl.bad', 'err'); inp.focus(); return; }
+  btn.disabled = true;
+  try {
+    const r = await fetch(SB_URL + '/rest/v1/inquiries', {
+      method: 'POST',
+      headers: { apikey: SB_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify({ email, language: lang, message: '[가입 알림] 소개 페이지에서 신청' })
+    });
+    if (!r.ok) throw new Error(String(r.status));
+    say('v9.wl.ok', 'ok', { e: email });
+    inp.value = '';
+    inp.disabled = true;
+  } catch (er) {
+    btn.disabled = false;
+    say('v9.wl.fail', 'err');
+  }
+});

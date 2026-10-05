@@ -1,6 +1,6 @@
 // CNOL RADAR 대시보드 — 실험 모드 (로그인 없이 열린 공용 공간)
 // 읽기: Supabase RPC(공개 읽기 전용) · 수집·편집: Edge Function `radar` (유튜브 키는 서버에만)
-import { sb, getLang, setLang, esc } from '/common.js';
+import { sb, getLang, setLang, esc, loginUrl, emailToId } from '/common.js';
 import { mountAgent, vHome as aHome, vRefs, vWave, vTools, vTool, dropPool } from '/agent.js';
 
 const LANGS = ['ko', 'en', 'ja'];
@@ -582,6 +582,52 @@ Object.assign(T.ja, {
   err_NO_MINE: '先に自分のチャンネルを追加してください。', err_BAD_ID: '動画やチャンネルが見つかりませんでした。',
   brandSub: '専属ネタエージェント', tools_icon: ''
 });
+// ---------- v9: 관리자 로그인 · 한눈에(채널 전부 48시간 합산) ----------
+Object.assign(T.ko, {
+  g_ovG: '한눈에', tab_overview: '48시간 합산', tab_ranking: '영상 랭킹', overview: '한눈에',
+  ovSub: '내 채널과 레퍼런스 채널 전부의 48시간 조회수를 합쳐서 한 화면에 보여줘요. 채널별로 쌓아 보거나 합산으로 볼 수 있어요.',
+  smTitle: '채널별 48시간', smSub: '채널 {n}개를 하나씩 · 48시간 조회수 순', smShare: '전체의 {p}%', smNone: '아직 48시간 조회수가 없어요', smMine: '내 채널',
+  ovInsTop: '지난 48시간 조회수의 {p}%가 {c}에서 나왔어요.', ovInsRise: '지난 6시간 가장 빨리 오르는 채널은 {c}예요 (+{p}%).', ovInsN: '채널 {n}개를 매시간 모아 합쳤어요.',
+  csv: 'CSV 받기', csvDone: 'CSV 파일을 내려받았어요', csvRole: '구분', csvShare: '비중', csvKind: '형식', csvPublished: '올린 때 (한국 시각)',
+  toOverview: '채널 전부 한눈에 보기', homeStack: '채널별로 쌓은 48시간', rtTitle: '실시간', rtLive: '업데이트 중', rtSum: '모두 합산', rtTopCh: '인기 채널 · 지난 48시간',
+  acct: '계정', acctRole: '관리자', logout: '로그아웃', loggingOut: '로그아웃하는 중…',
+  pwTitle: '비밀번호 바꾸기', pwNew: '새 비밀번호', pwNew2: '새 비밀번호 한 번 더', pwSave: '바꾸기', pwSaved: '비밀번호를 바꿨어요.',
+  pwShort: '8자 이상으로 정해 주세요.', pwWeak: '너무 쉬운 비밀번호예요.', pwDiff: '두 칸이 달라요.', pwFail: '바꾸지 못했어요. 다시 로그인한 뒤 해 주세요.',
+  deniedH: '관리자만 쓸 수 있어요', deniedP: '지금 로그인한 계정은 관리자가 아니에요. 관리자 계정으로 다시 로그인해 주세요.',
+  err_UNAUTHORIZED: '로그인이 풀렸어요. 다시 로그인해 주세요.', err_FORBIDDEN: '이 작업은 할 수 없어요.',
+  err_FULL: '채널은 100개까지 넣을 수 있어요.',
+  testTitle: '운영 방식', test1: '지금은 관리자 계정으로 로그인해야 보고 바꿀 수 있어요. 회원가입과 결제는 준비 중이에요. 자동 수집은 서버가 비밀키로 매시간 돌려요.'
+});
+Object.assign(T.en, {
+  g_ovG: 'At a glance', tab_overview: '48-hour total', tab_ranking: 'Video ranking', overview: 'At a glance',
+  ovSub: 'Views from your channel and every reference channel over the last 48 hours, combined on one screen. Stack them by channel or see the total.',
+  smTitle: '48 hours by channel', smSub: '{n} channels, one by one · sorted by 48-hour views', smShare: '{p}% of total', smNone: 'No views in the last 48 hours yet', smMine: 'My channel',
+  ovInsTop: '{p}% of the last 48 hours of views came from {c}.', ovInsRise: '{c} is rising fastest over the last 6 hours (+{p}%).', ovInsN: '{n} channels collected every hour and combined.',
+  csv: 'Download CSV', csvDone: 'CSV downloaded', csvRole: 'Type', csvShare: 'Share', csvKind: 'Format', csvPublished: 'Published (KST)',
+  toOverview: 'See every channel at a glance', homeStack: '48 hours, stacked by channel', rtTitle: 'Realtime', rtLive: 'Updating live', rtSum: 'all combined', rtTopCh: 'Top channels · Last 48 hours',
+  acct: 'Account', acctRole: 'Admin', logout: 'Sign out', loggingOut: 'Signing out…',
+  pwTitle: 'Change password', pwNew: 'New password', pwNew2: 'New password again', pwSave: 'Change', pwSaved: 'Password changed.',
+  pwShort: 'Use at least 8 characters.', pwWeak: 'That password is too easy.', pwDiff: 'The two fields don’t match.', pwFail: "Couldn't change it. Sign in again and retry.",
+  deniedH: 'Admins only', deniedP: 'This account is not an admin. Please sign in again with the admin account.',
+  err_UNAUTHORIZED: 'You were signed out. Please sign in again.', err_FORBIDDEN: 'This action isn’t allowed.',
+  err_FULL: 'You can add up to 100 channels.',
+  testTitle: 'How it runs', test1: 'Right now you need the admin account to view or change anything. Sign-ups and payments are coming. Hourly collection runs on the server with a secret key.'
+});
+Object.assign(T.ja, {
+  g_ovG: 'ひと目で', tab_overview: '48時間の合計', tab_ranking: '動画ランキング', overview: 'ひと目で',
+  ovSub: '自分のチャンネルとリファレンス全部の直近48時間の再生数を合計して1画面に表示します。チャンネル別に積み上げても、合計でも見られます。',
+  smTitle: 'チャンネル別の48時間', smSub: '{n}チャンネルをひとつずつ・48時間の再生数順', smShare: '全体の{p}%', smNone: '直近48時間の再生数はまだありません', smMine: '自分のチャンネル',
+  ovInsTop: '直近48時間の再生数の{p}%は{c}からでした。', ovInsRise: '直近6時間でいちばん伸びているのは{c}です（+{p}%）。', ovInsN: '{n}チャンネルを毎時集めて合計しました。',
+  csv: 'CSVをダウンロード', csvDone: 'CSVをダウンロードしました', csvRole: '区分', csvShare: '割合', csvKind: '形式', csvPublished: '投稿日時（韓国時間）',
+  toOverview: '全チャンネルをひと目で見る', homeStack: 'チャンネル別に積み上げた48時間', rtTitle: 'リアルタイム', rtLive: '更新中', rtSum: 'すべて合計', rtTopCh: '人気チャンネル・直近48時間',
+  acct: 'アカウント', acctRole: '管理者', logout: 'ログアウト', loggingOut: 'ログアウトしています…',
+  pwTitle: 'パスワードを変更', pwNew: '新しいパスワード', pwNew2: '新しいパスワード（確認）', pwSave: '変更', pwSaved: 'パスワードを変更しました。',
+  pwShort: '8文字以上にしてください。', pwWeak: '簡単すぎるパスワードです。', pwDiff: '2つの欄が一致しません。', pwFail: '変更できませんでした。もう一度ログインしてからお試しください。',
+  deniedH: '管理者専用です', deniedP: 'このアカウントは管理者ではありません。管理者アカウントでログインし直してください。',
+  err_UNAUTHORIZED: 'ログインが切れました。もう一度ログインしてください。', err_FORBIDDEN: 'この操作はできません。',
+  err_FULL: 'チャンネルは100件まで追加できます。',
+  testTitle: '運用方法', test1: '現在は管理者アカウントでログインしたときだけ閲覧・変更できます。会員登録と決済は準備中です。自動収集はサーバーが秘密鍵で毎時実行します。'
+});
 const t = (k, v) => {
   let s = (T[lang] && T[lang][k]) ?? T.ko[k] ?? k;
   if (v) for (const x of Object.keys(v)) s = s.split('{' + x + '}').join(v[x]);
@@ -684,6 +730,7 @@ async function act(body) {
     if (error) {
       let msg = error.message;
       try { const j = await error.context?.json?.(); if (j?.error) msg = j.error; } catch (e) { /* 무시 */ }
+      if (msg === 'UNAUTHORIZED') toLogin(1200);
       return { ok: false, error: msg };
     }
     return data || { ok: false, error: 'EMPTY_RESPONSE' };
@@ -691,12 +738,19 @@ async function act(body) {
     return { ok: false, error: e.message || String(e) };
   }
 }
+// 로그인이 풀리면 로그인 화면으로 (보던 화면으로 돌아오게)
+let leaving = false;
+function toLogin(delay = 0) {
+  if (leaving) return;
+  leaving = true;
+  setTimeout(() => location.replace(loginUrl('/app' + location.hash)), delay);
+}
 // 쇼츠·롱폼 목록: 지금 고른 형식으로 (p_kind 'short' | 'long' | 'all')
 const vids = (args) => rpc('radar_videos_list', { p_kind: S.kind, ...args });
 const errText = (code) => (T.ko['err_' + code] ? t('err_' + code) : t('err_default', { e: code }));
 
 // ---------- 상태 ----------
-const S = { unread: 0, chans: null, chansAt: 0, period: 7, scope: 'all', kw: '', rankSort: 'v48', rankDays: 7, rankRole: 'all', rankQ: '', chQ: '', chRole: 'all', alertF: 'all', addRole: null, prefKw: '', chSort: 'new', insRole: 'all', insCh: '', stack: 'ch', pickSort: 'fit', prof: null, profAt: 0, same: false, board: new Set() };
+const S = { unread: 0, chans: null, chansAt: 0, period: 7, scope: 'all', kw: '', rankSort: 'v48', rankDays: 7, rankRole: 'all', rankQ: '', chQ: '', chRole: 'all', alertF: 'all', addRole: null, prefKw: '', chSort: 'new', insRole: 'all', insCh: '', stack: 'sum', pickSort: 'fit', prof: null, profAt: 0, same: false, board: new Set() };
 
 S.kind = (() => { try { return localStorage.getItem('radar.kind') === 'long' ? 'long' : 'short'; } catch (e) { return 'short'; } })();
 
@@ -738,6 +792,9 @@ const IC = {
 };
 IC.tools = '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><path d="M17.5 14v7M14 17.5h7"/>';
 IC.agent = '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M12 8.2l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/>';
+IC.overview = '<path d="M3 20h18"/><path d="M6 20v-5M6 12V9"/><path d="M12 20v-8M12 9V5"/><path d="M18 20v-3M18 14v-4"/>';
+IC.logout = '<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/>';
+IC.dl = '<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>';
 const svg = (p, s = 19) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 const avatar = (url, sq) => (url ? `<img class="dk-av${sq ? ' sq' : ''}" src="${esc(url)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="dk-av${sq ? ' sq' : ''}"></span>`);
 const ratioTag = (x) => (x == null ? '' : `<span class="dk-tag ${x >= 3 ? 'red' : x >= 1.5 ? 'amber' : 'gray'}">${esc(t('ratio', { x: Number(x).toFixed(1) }))}</span>`);
@@ -888,7 +945,7 @@ function bindLegend(root, id) {
 }
 // 채널 색: 검증된 8색을 순서대로(순위가 아니라 채널에 붙여요) · 9개부터는 '그 외 채널'로 묶어요
 const SERIES_COLORS = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#4a3aa7', '#e34948'];
-const OTHER_COLOR = '#c9c5d8';
+const OTHER_COLOR = '#b5b0c6';
 function buildSeries(bc, chans) {
   const tot = new Map();
   for (const x of bc.daily || []) tot.set(x.c, (tot.get(x.c) || 0) + Number(x.v || 0));
@@ -919,6 +976,72 @@ function stackCols(base, rows, keyOf, kOf, rowKey) {
     return { ...b, parts, v: b.pre ? 0 : (sum || 0) };
   });
   return { cols, totals };
+}
+// CSV 내려받기 (엑셀에서 한글이 깨지지 않게 BOM을 붙여요)
+function csvDownload(name, rows) {
+  // 숫자는 그대로, 글자는 수식으로 읽히지 않게(=,+,-,@로 시작하면 ' 붙이기) 감싸요
+  const cell = (v) => { if (typeof v === 'number') return Number.isFinite(v) ? String(v) : ''; const x = v == null ? '' : String(v); return /[",\n\r]/.test(x) || /^[=+\-@\t]/.test(x) ? '"' + x.replace(/^([=+\-@\t])/, "'$1").replace(/"/g, '""') + '"' : x; };
+  const csv = rows.map((r) => r.map(cell).join(',')).join('\r\n');
+  const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+  snack(t('csvDone'));
+}
+const stamp = () => { const d = new Date(Date.now() + 9 * 3600e3).toISOString(); return d.slice(0, 10).replace(/-/g, '') + '-' + d.slice(11, 16).replace(':', ''); };
+// 채널마다 48칸 (base: radar_overview.hourly의 시간 축)
+function perChannel48(base, rows) {
+  const idx = new Map(base.map((b, i) => [Date.parse(b.h), i]));
+  const out = new Map();
+  for (const x of rows || []) {
+    const i = idx.get(Date.parse(x.h));
+    if (i == null) continue;
+    const a = out.get(x.c) || new Array(base.length).fill(0);
+    a[i] += Number(x.v || 0);
+    out.set(x.c, a);
+  }
+  return out;
+}
+// 에이전트 한 줄: 어디서 조회수가 나왔는지 · 지금 가장 빨리 오르는 채널
+function ovInsights(chs) {
+  const out = [];
+  const tot = chs.reduce((a, x) => a + x.v, 0);
+  if (!tot || chs.length < 2) return out;
+  const top = chs[0];
+  out.push(t('ovInsTop', { p: Math.round((top.v / tot) * 100), c: top.c.title }));
+  const last6 = chs.reduce((a, x) => a + x.a.slice(-6).reduce((p, q) => p + q, 0), 0);
+  let best = null;
+  for (const x of chs) {
+    const now6 = x.a.slice(-6).reduce((p, q) => p + q, 0), prev6 = x.a.slice(-12, -6).reduce((p, q) => p + q, 0);
+    if (prev6 < 300 || now6 < Math.max(500, last6 * 0.03)) continue;
+    const g = now6 / prev6 - 1;
+    if (g >= 0.15 && (!best || g > best.g)) best = { c: x.c, g };
+  }
+  if (best && best.c.id !== top.c.id) out.push(t('ovInsRise', { c: best.c.title, p: Math.round(best.g * 100) }));
+  return out;
+}
+// 작은 그래프: 옅은 선 + 최근 6시간만 진하게 + 끝점 (채널마다 자기 눈금)
+function sparkSvg(a) {
+  const W = 120, H = 36, n = a.length;
+  if (n < 2) return '';
+  const max = Math.max(1, ...a);
+  const pts = a.map((v, i) => [(i / (n - 1)) * W, H - 3 - (v / max) * (H - 7)]);
+  const d = (list) => list.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join('');
+  const last = pts[n - 1];
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path class="ar" d="${d(pts)}L${W} ${H}L0 ${H}Z"/><path class="ln" d="${d(pts)}"/></svg><i class="dot" style="top:${((last[1] / H) * 100).toFixed(1)}%"></i>`;
+}
+function smTile(x, all) {
+  const share = all > 0 ? Math.round((x.v / all) * 100) : 0;
+  const mine = x.c.role === 'mine';
+  return `<a class="sm-tile" href="#ch/${esc(x.c.id)}" style="--sw:${x.color}">
+    <span class="sm-top">${avatar(x.c.thumb)}<span class="txt"><b>${esc(x.c.title)}</b><small><i class="sw" aria-hidden="true"></i>${esc(mine ? t('smMine') : t('reference'))}</small></span></span>
+    <span class="sm-num"><b>${x.v > 0 ? esc(fmtN(x.v)) : '–'}</b><small>${x.v > 0 ? esc(t('smShare', { p: share < 1 && x.v > 0 ? '<1' : share })) : esc(t('smNone'))}</small></span>
+    <span class="sm-plot">${x.v > 0 ? sparkSvg(x.a) : '<span class="flat"></span>'}</span>
+  </a>`;
 }
 // 가로 막대 (값을 옆에 바로 적어요 · 점선 = 평소 1배)
 function hbarsHtml(rows) {
@@ -1390,9 +1513,10 @@ function tryRunsHtml(runs, own) {
 // ---------- 틀: 메뉴 5개 · 메뉴마다 안쪽 탭 ----------
 const GROUPS = [
   { k: 'agent', ic: 'agent', tabs: ['home'], hidden: ['alerts'] },
+  { k: 'ovG', ic: 'overview', tabs: ['overview', 'ranking'] },
   { k: 'refsG', ic: 'channels', tabs: ['refs', 'channels'], hidden: ['ch', 'collect'] },
   { k: 'ideasG', ic: 'picks', tabs: ['picks', 'try', 'wave', 'ideas'] },
-  { k: 'toolsG', ic: 'tools', tabs: ['tools'], hidden: ['tool', 'overview', 'insights', 'ranking'] },
+  { k: 'toolsG', ic: 'tools', tabs: ['tools'], hidden: ['tool', 'insights'] },
   { k: 'setG', ic: 'status', tabs: ['status', 'partners'], minor: true }
 ];
 const ROUTES = GROUPS.flatMap((g) => [...g.tabs, ...(g.hidden || [])]);
@@ -1423,7 +1547,8 @@ function renderNav() {
 function renderChrome() {
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-a]').forEach((el) => { el.textContent = t(el.dataset.a); });
-  document.getElementById('testNote').innerHTML = t('testNote');
+  const ac = document.getElementById('acct');
+  if (ac) ac.innerHTML = S.user ? `<span class="who"><span class="dk-av sq me" aria-hidden="true">${esc((S.user.id || '?').slice(0, 1).toUpperCase())}</span><span class="txt"><b>${esc(S.user.id)}</b><small>${esc(t('acctRole'))}</small></span></span><button type="button" class="dk-out" data-logout>${svg(IC.logout, 16)}<span>${esc(t('logout'))}</span></button>` : '';
   document.getElementById('refreshAll').innerHTML = `${svg(IC.refresh, 16)}<span>${esc(t('refreshAll'))}</span>`;
   document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   const ks = document.getElementById('kindSeg');
@@ -1442,6 +1567,7 @@ async function updateUnread() {
 let seq = 0;
 let lastKey = '';
 async function render() {
+  if (!S.user || !S.user.admin) return; // 관리자 확인 전에는 그리지 않아요
   const my = ++seq;
   const alive = () => my === seq;
   renderChrome();
@@ -1737,15 +1863,22 @@ async function vOverview(v, r, alive) {
   const multiTot = multi ? Object.fromEntries(multi.map((x) => [x.key, x.vals.reduce((a, y) => a + (y || 0), 0)])) : null;
   const ovChart = () => studioChart('ovl', sd, S.ytTab, multi);
   const oc = ovChart();
-  const stackSeg = canStack ? `<div class="dk-seg" role="group" aria-label="${esc(t('byCh'))}"><button type="button" data-stack="ch" aria-pressed="${String(S.stack === 'ch')}">${esc(t('byCh'))}</button><button type="button" data-stack="sum" aria-pressed="${String(S.stack !== 'ch')}">${esc(t('sumAll'))}</button></div>` : '';
+  const stackSeg = canStack ? `<div class="yt-chips" role="group" aria-label="${esc(t('byCh'))}"><button type="button" data-stack="sum" aria-pressed="${String(S.stack !== 'ch')}">${esc(t('sumAll'))}</button><button type="button" data-stack="ch" aria-pressed="${String(S.stack === 'ch')}">${esc(t('byCh'))}</button></div>` : '';
+  // 채널마다 48칸 (작은 그래프용) · 에이전트 한 줄 해석
+  const per = perChannel48(hv, bc?.hourly);
+  const colorOf = new Map(ser.series.map((x) => [x.key, x.color]));
+  const chs = (S.chans || []).map((c) => { const a = per.get(c.id) || new Array(hv.length).fill(0); return { c, a, v: a.reduce((p, q) => p + q, 0), color: colorOf.get(c.id) || OTHER_COLOR }; })
+    .sort((p, q) => q.v - p.v || String(p.c.title).localeCompare(String(q.c.title)));
+  const ins = ovInsights(chs);
   v.innerHTML = head(t('overview'), esc(t('ovSub'))) + `
   <div class="dk-row">
     <section class="dk-card f2 dk-fade">
       <div class="dk-ch"><span class="dk-live"><i></i>${esc(t('live48all'))} · ${esc(t('chCount', { n: ov.channels.total }))}</span>${stackSeg || `<span class="dk-sub">${esc(t('kNextSub'))}</span>`}</div>
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px">
-        <div><div class="dk-sub" style="font-weight:600">${esc(t('ytRtViews'))}</div><div class="dk-big">${esc(fmtN(ov.views48))}<span style="font-size:20px;font-weight:800">${esc(t('unitViews'))}</span></div><div class="dk-sub">${change}</div></div>
-        <div style="text-align:right"><div class="dk-sub">${esc(t('last1h'))}</div><div class="dk-mid">${esc(fmtN(last1h))}</div></div>
+        <div><div class="dk-sub" style="font-weight:600">${esc(t('ytRtViews'))}</div><div class="dk-big yt-num">${esc(fmtFull(ov.views48))}</div><div class="dk-sub">${change}</div></div>
+        <div style="text-align:right"><div class="dk-sub">${esc(t('last1h'))}</div><div class="dk-mid yt-num">${esc(fmtFull(last1h))}</div></div>
       </div>
+      ${ins.length ? `<p class="ov-ins">${agAv(true)}<span>${ins.map(esc).join(' ')}</span></p>` : ''}
       ${stacked ? stackHtml('b48', hs.cols, ser.series, t('live48all')) : barsHtml('b48', hv, t('live48all'))}
       <div class="dk-axis"><span>${esc(t('ago48'))}</span><span>${esc(t('ago24'))}</span><span>${esc(t('now'))}</span></div>
       ${stacked ? legendHtml(ser.series, hs.totals, 'b48') : ''}
@@ -1756,6 +1889,10 @@ async function vOverview(v, r, alive) {
       <span class="dk-sub" style="margin-top:auto">${esc(t('ownMetric'))}</span>
     </section>
   </div>
+  ${chs.length >= 2 ? `<section class="dk-card full dk-fade">
+    <div class="dk-ch"><h2>${esc(t('smTitle'))}</h2><span class="dk-ch-r"><span class="dk-sub">${esc(t('smSub', { n: chs.length }))}</span><button type="button" class="dk-btn sm line" id="csvCh">${svg(IC.dl, 15)}<span>${esc(t('csv'))}</span></button></span></div>
+    <div class="sm-grid">${chs.map((x) => smTile(x, chs.reduce((a, y) => a + y.v, 0))).join('')}</div>
+  </section>` : ''}
   <div class="dk-row">
     <section class="dk-card f2 dk-fade">
       <div class="yt-head"><div><h2>${esc(t('ytHead', { v: sd.M.views.sum != null ? fmtFull(sd.M.views.sum) : '–' }))}</h2><p>${esc(t('ytHeadSub'))}</p></div></div>
@@ -1786,6 +1923,14 @@ async function vOverview(v, r, alive) {
     if (multi && S.ytTab === 'views') bindLegend(v, 'ovl');
   }));
   v.querySelectorAll('[data-stack]').forEach((b) => b.addEventListener('click', () => { S.stack = b.dataset.stack; render(); }));
+  v.querySelector('#csvCh')?.addEventListener('click', () => {
+    const tot = chs.reduce((a, x) => a + x.v, 0) || 1;
+    const hours = hv.map((x) => new Date(Date.parse(x.h) + 9 * 3600e3).toISOString().slice(5, 13).replace('T', ' ') + ':00');
+    csvDownload(`cnol-radar-48h-${stamp()}.csv`, [
+      [t('cChannel'), t('csvRole'), 'URL', t('c48'), t('csvShare'), ...hours],
+      ...chs.map((x) => [x.c.title, x.c.role === 'mine' ? t('mine') : t('reference'), 'https://www.youtube.com/channel/' + x.c.id, Math.round(x.v), (Math.round((x.v / tot) * 1000) / 10) + '%', ...x.a.map((n) => Math.round(n))])
+    ]);
+  });
 }
 
 // ---------- 알고리즘 분석 (수집한 쇼츠로 계산) ----------
@@ -2000,6 +2145,7 @@ async function vRanking(v, r, alive) {
       <select class="dk-select" id="rSort" style="min-height:40px">${['v48', 'ratio', 'vph', 'views', 'new'].map((k) => `<option value="${k}" ${S.rankSort === k ? 'selected' : ''}>${esc(t('sort_' + k))}</option>`).join('')}</select>
       <label class="sr" for="rQ">${esc(t('search'))}</label>
       <input class="dk-input" id="rQ" type="search" placeholder="${esc(t('search'))}" value="${esc(S.rankQ)}" style="min-height:40px;flex:1 1 200px">
+      ${rows.length ? `<button type="button" class="dk-btn sm line" id="csvRank">${svg(IC.dl, 15)}<span>${esc(t('csv'))}</span></button>` : ''}
     </div>
     ${rows.length ? `<div class="dk-tablewrap"><table class="dk-t"><thead><tr><th>#</th><th>${esc(t('cTitle'))}</th><th>${esc(t('cChannel'))}</th><th class="r">${esc(t('cAge'))}</th><th class="r">${esc(t('cViews'))}</th><th class="r">${esc(t('c48'))}</th><th class="r">${esc(t('cVph'))}</th><th class="r">${esc(t('cRatio'))}</th></tr></thead><tbody>
     ${rows.map((s, i) => `<tr><td class="dk-rank">${i + 1}</td>
@@ -2011,6 +2157,10 @@ async function vRanking(v, r, alive) {
   v.querySelectorAll('[data-days]').forEach((b) => b.addEventListener('click', () => { S.rankDays = Number(b.dataset.days); render(); }));
   v.querySelectorAll('[data-role]').forEach((b) => b.addEventListener('click', () => { S.rankRole = b.dataset.role; render(); }));
   v.querySelector('#rSort').addEventListener('change', (e) => { S.rankSort = e.target.value; render(); });
+  v.querySelector('#csvRank')?.addEventListener('click', () => csvDownload(`cnol-radar-videos-${S.rankDays}d-${stamp()}.csv`, [
+    ['#', t('cTitle'), t('cChannel'), t('csvKind'), t('csvPublished'), t('cViews'), t('c48'), t('cVph'), t('cRatio'), 'URL'],
+    ...rows.map((x, i) => [i + 1, x.title, x.channel_title, x.kind === 'long' ? t('kindLong') : t('kindShort'), x.published_at ? new Date(Date.parse(x.published_at) + 9 * 3600e3).toISOString().slice(0, 16).replace('T', ' ') : '', x.views, x.v48 || 0, x.vph, x.ratio, ytShort(x.id)])
+  ]));
   let timer = null;
   v.querySelector('#rQ').addEventListener('input', (e) => {
     S.rankQ = e.target.value;
@@ -2353,9 +2503,41 @@ async function vStatus(v, r, alive) {
       <h2>${esc(t('testTitle'))}</h2><p class="dk-sub" style="margin:0;font-size:14px">${esc(t('test1'))}</p>
     </section>
   </div>
+  <div class="dk-row">
+    <section class="dk-card f1 dk-fade dk-acc">
+      <h2>${esc(t('acct'))}</h2>
+      <div class="who"><span class="dk-av sq me" aria-hidden="true">${esc((S.user?.id || '?').slice(0, 1).toUpperCase())}</span><span class="txt"><b>${esc(S.user?.id || '')}</b><small>${esc(t('acctRole'))}</small></span><button type="button" class="dk-btn sm line" data-logout>${svg(IC.logout, 15)}<span>${esc(t('logout'))}</span></button></div>
+    </section>
+    <form class="dk-card f1 dk-fade" id="pwForm" novalidate>
+      <h2>${esc(t('pwTitle'))}</h2>
+      <input class="dk-input" id="pwA" type="password" autocomplete="new-password" maxlength="72" placeholder="${esc(t('pwNew'))}" aria-label="${esc(t('pwNew'))}">
+      <input class="dk-input" id="pwB" type="password" autocomplete="new-password" maxlength="72" placeholder="${esc(t('pwNew2'))}" aria-label="${esc(t('pwNew2'))}">
+      <input type="text" autocomplete="username" value="${esc(S.user?.id || '')}" hidden readonly>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="dk-btn" type="submit" id="pwBtn">${esc(t('pwSave'))}</button><span id="pwMsg" class="dk-sub" role="status"></span></div>
+    </form>
+  </div>
   <section class="dk-card full dk-fade"><h2>${esc(t('runsTitle'))}</h2>
     ${(st.runs || []).length ? `<div class="dk-tablewrap"><table class="dk-t"><tbody>${st.runs.map((x) => `<tr><td style="white-space:nowrap">${esc(agoTxt(x.started_at))}</td><td>${esc(t('run_' + x.kind))}</td><td>${x.ok === false ? `<span class="dk-tag red">${esc(t('runFail'))}</span> <small style="color:#b91c1c">${esc(errText(x.error || ''))}</small>` : x.ok ? `<span class="dk-tag teal">${esc(t('runOk'))}</span>` : '<span class="dk-spin"></span>'}</td><td class="r dk-num">${x.channels != null ? esc(fmtFull(x.channels)) + ' ch' : ''}</td><td class="r dk-num">${esc(fmtFull(x.units))} pt</td></tr>`).join('')}</tbody></table></div>` : '<div class="dk-empty">–</div>'}
   </section>`;
+  // 비밀번호 바꾸기 (로그인한 관리자 본인)
+  const pf = v.querySelector('#pwForm');
+  pf.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const a = pf.querySelector('#pwA').value, b = pf.querySelector('#pwB').value;
+    const msg = pf.querySelector('#pwMsg');
+    const low = a.toLowerCase();
+    const weakPw = /^(.)\1+$/.test(a) || '01234567890123456789'.includes(low) || 'abcdefghijklmnopqrstuvwxyz'.includes(low) || low.includes(String(S.user?.id || '~').toLowerCase()) || ['password', 'password1', 'qwerty123', '1q2w3e4r', 'qwer1234', 'abcd1234', '12341234', '11111111'].includes(low);
+    const err = a.length < 8 ? 'pwShort' : weakPw ? 'pwWeak' : a !== b ? 'pwDiff' : null;
+    msg.style.color = err ? '#b91c1c' : '';
+    if (err) { msg.textContent = t(err); return; }
+    const btn = pf.querySelector('#pwBtn');
+    btn.disabled = true;
+    const { error } = await sb.auth.updateUser({ password: a });
+    btn.disabled = false;
+    msg.style.color = error ? '#b91c1c' : '#0f766e';
+    msg.textContent = t(error ? 'pwFail' : 'pwSaved');
+    if (!error) pf.reset();
+  });
 }
 
 // ---------- 시작 ----------
@@ -2393,6 +2575,45 @@ setInterval(() => {
 mountAgent({
   get lang() { return lang; }, t, esc, fmtN, fmtFull, ageTxt, agoTxt, durTxt, hourLabel, sb, rpc, act, vids, S, getChans, getProfile, remember, SHORTS,
   svg, IC, head, loading, snack, avatar, ratioTag, ytShort, vthumb, cssUrl, barsHtml, bindBars, trySuggest, tyCardHtml, bindTry, tryHidden, tryRuns,
-  learnStore, pickList, alertHtml, bindAlertButtons, bindBoardButtons, render, errText, renderNav, nextRunTxt, greet, agAv, agMsg
+  learnStore, pickList, alertHtml, bindAlertButtons, bindBoardButtons, render, errText, renderNav, nextRunTxt, greet, agAv, agMsg,
+  buildSeries, stackCols, stackHtml, bindStack, legendHtml, bindLegend
 });
-render();
+
+// ---------- 관리자 로그인 확인 (로그인 안 했으면 로그인 화면으로) ----------
+async function signOut(btn) {
+  if (btn) btn.disabled = true;
+  leaving = true;
+  snack(t('loggingOut'));
+  try { await sb.auth.signOut(); } catch (e) { /* 그래도 나가요 */ }
+  location.replace('/login');
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest && e.target.closest('[data-logout]');
+  if (b) signOut(b);
+  if (e.target.closest && e.target.closest('[data-reload]')) location.reload();
+});
+function gateCard(title, text, btns) {
+  document.getElementById('nav').innerHTML = '';
+  document.getElementById('view').innerHTML = `<section class="dk-card dk-fade dk-gate"><div class="gh">${svg(IC.lock, 24)}<h2>${esc(title)}</h2></div><p class="dk-sub">${esc(text)}</p><div class="gb">${btns}</div></section>`;
+}
+async function gate() {
+  let s = null;
+  try { s = (await sb.auth.getSession()).data.session; } catch (e) { s = null; }
+  if (!s) { toLogin(); return false; }
+  S.user = { uid: s.user.id, id: emailToId(s.user.email) || 'admin', admin: false };
+  let admin;
+  try { admin = !!(await rpc('is_admin')); } catch (e) {
+    renderChrome();
+    gateCard(t('loadFail'), String(e.message || e), `<button type="button" class="dk-btn" data-reload>${esc(t('refreshAll'))}</button>`);
+    return false;
+  }
+  S.user.admin = admin;
+  if (!admin) {
+    renderChrome();
+    gateCard(t('deniedH'), t('deniedP'), `<button type="button" class="dk-btn" data-logout>${svg(IC.logout, 17)}<span>${esc(t('logout'))}</span></button>`);
+    return false;
+  }
+  sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') toLogin(); });
+  return true;
+}
+gate().then((ok) => { if (ok) render(); });

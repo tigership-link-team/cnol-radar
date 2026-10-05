@@ -7,7 +7,7 @@
   --dk-card-shadow:0 24px 50px -28px rgba(30,16,110,.55);
   --dk-font:'Pretendard Variable',Pretendard,'Noto Sans KR','Noto Sans JP',system-ui,-apple-system,sans-serif;
   --dk-ease:cubic-bezier(.22,1,.36,1); --dk-spring:cubic-bezier(.3,1.35,.55,1);
-  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#4a3aa7; --s8:#e34948; --s-other:#c9c5d8;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#4a3aa7; --s8:#e34948; --s-other:#b5b0c6;
 }
 body.dk{margin:0;font-family:var(--dk-font);color:#fff;background:linear-gradient(90deg,#8B2CF5 0%,#6E35F3 30%,#4F46EE 62%,#2F5BEA 100%) fixed;-webkit-font-smoothing:antialiased;word-break:keep-all}
 html:lang(ja) body.dk,html:lang(ja) .dk-demo{word-break:normal;line-break:strict}
@@ -831,3 +831,82 @@ a.dk-li:hover{transform:none}
 #tpOut .tp-h,#tiOut .tp-h{margin-top:10px}
 .cm+.cm{margin-top:0}
 @media (max-width:640px){.bp-act .dk-btn{min-height:30px;padding:0 10px;font-size:12px}.bp-t{font-size:14.5px}.ag-b{padding:14px}.ag-b>p{font-size:14.5px}}
+
+/* ---------- v9: 관리자 계정 · 로그인 확인 · 채널별 48시간 작은 그래프 ---------- */
+.dk-acct{margin:auto 2px 0;padding:10px;border-radius:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);display:flex;flex-direction:column;gap:8px}
+.dk-acct:empty{display:none}
+.dk-acct .who{display:flex;align-items:center;gap:10px;min-width:0}
+.dk-acct .txt{display:flex;flex-direction:column;min-width:0;line-height:1.3}
+.dk-acct .txt b{font-size:14px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dk-acct .txt small{font-size:12px;color:rgba(255,255,255,.75)}
+.dk-av.me{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;font-size:15px;font-weight:900;color:var(--dk-vio2);background:#fff}
+.dk-out{display:flex;align-items:center;justify-content:center;gap:7px;min-height:36px;border:1px solid rgba(255,255,255,.3);border-radius:11px;background:transparent;color:#fff;font:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:background-color .4s var(--dk-ease)}
+.dk-out:hover{background:rgba(255,255,255,.16)}
+.dk-out[disabled]{opacity:.6;cursor:wait}
+.dk-gate{max-width:560px}
+.dk-gate .gh{display:flex;align-items:center;gap:12px;color:var(--dk-vio)}
+.dk-gate .gh h2{margin:0;color:var(--dk-ink)}
+.dk-gate .dk-sub{margin:0;font-size:15px}
+.dk-gate .gb{display:flex;gap:10px;flex-wrap:wrap}
+.dk-acc .who{display:flex;align-items:center;gap:12px}
+.dk-acc .who .txt{display:flex;flex-direction:column;flex:1 1 auto;min-width:0;line-height:1.35}
+.dk-acc .who .txt b{font-size:16px}
+.dk-acc .who .txt small{font-size:12.5px;color:var(--dk-ink2)}
+.dk-acc .dk-av.me{background:var(--dk-vio-soft)}
+#pwForm .dk-input{width:100%}
+/* 에이전트 한 줄 해석 */
+.ov-ins{display:flex;align-items:flex-start;gap:10px;margin:0;padding:10px 12px;border-radius:14px;background:var(--dk-vio-soft);font-size:13.5px;line-height:1.55;color:#3b0764}
+.ov-ins .ag-av{flex-shrink:0}
+/* 홈 48시간 카드 머리 */
+.ag-48h{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:6px 12px}
+.ag-48h .ag-link{align-self:flex-end}
+/* 채널별 48시간: 작은 그래프 여러 개 (채널이 10개를 넘어도 한 화면에) */
+.sm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(212px,1fr));gap:10px}
+.sm-tile{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"top top" "num plot";align-items:end;gap:8px 10px;padding:12px 12px 10px;border-radius:16px;background:var(--dk-soft);border:1px solid var(--dk-line);text-decoration:none;color:var(--dk-ink);transition:transform .5s var(--dk-ease),box-shadow .5s var(--dk-ease),border-color .4s var(--dk-ease),background-color .4s var(--dk-ease)}
+.sm-tile:hover{transform:translateY(-2px);background:#fff;border-color:#ddd6fe;box-shadow:0 14px 28px -18px rgba(30,16,110,.45)}
+.sm-top{grid-area:top;display:flex;align-items:center;gap:9px;min-width:0}
+.sm-top .dk-av{width:30px;height:30px}
+.sm-top .txt{display:flex;flex-direction:column;min-width:0;line-height:1.3}
+.sm-top .txt b{font-size:13.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sm-top .txt small{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--dk-ink2)}
+.sm-top .sw{width:8px;height:8px;border-radius:2px;background:var(--sw)}
+.sm-num{grid-area:num;display:flex;flex-direction:column;min-width:0}
+.sm-num b{font-size:19px;font-weight:900;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+.sm-num small{font-size:11.5px;color:var(--dk-ink2);white-space:nowrap}
+.sm-plot{grid-area:plot;position:relative;width:104px;height:36px}
+.sm-plot svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.sm-plot .ar{fill:var(--yt-blue);opacity:.08}
+.sm-plot .ln{fill:none;stroke:var(--yt-blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.sm-plot .dot{position:absolute;right:-4px;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:var(--yt-blue);box-shadow:0 0 0 2px var(--dk-soft)}
+.sm-tile:hover .sm-plot .dot{box-shadow:0 0 0 2px #fff}
+.sm-plot .flat{position:absolute;left:0;right:0;bottom:3px;height:2px;border-radius:2px;background:#e4e1ec}
+@media (max-width:900px){.dk-acct{display:none}}
+@media (max-width:520px){.sm-grid{grid-template-columns:minmax(0,1fr)}.sm-plot{width:120px}}
+@media (hover:none){.sm-tile:hover{transform:none}}
+.sm-num b,.sm-top .txt b{font-family:Roboto,var(--dk-font)}
+.sm-num b{font-weight:700;letter-spacing:0;color:var(--yt-ink0)}
+.sm-num small,.sm-top .txt small{color:var(--yt-ink)}
+/* 홈 48시간: 유튜브 스튜디오 '실시간' 카드 */
+.yt-rtc{background:#fff;border-color:#e5e5e5;font-family:Roboto,var(--dk-font)}
+.yt-rtc .rt-t{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;color:var(--yt-ink0)}
+.rt-live{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:400;color:var(--yt-ink)}
+.rt-live i{width:8px;height:8px;border-radius:50%;background:var(--yt-blue);animation:rtPulse 2.2s var(--dk-ease) infinite}
+@keyframes rtPulse{0%{box-shadow:0 0 0 0 rgba(6,95,212,.45)}70%{box-shadow:0 0 0 7px rgba(6,95,212,0)}100%{box-shadow:0 0 0 0 rgba(6,95,212,0)}}
+.yt-rtc .dk-mid{font-family:Roboto,var(--dk-font);font-weight:700;color:var(--yt-ink0)}
+.yt-rtc .dk-sub{color:var(--yt-ink)}
+.ag-rt-top{margin-top:4px;padding-top:8px;border-top:1px solid #e5e5e5;display:flex;flex-direction:column}
+.ag-rt-top p{margin:0 0 4px;font-size:12.5px;font-weight:500;color:var(--yt-ink)}
+.ag-rt-top .r{display:flex;align-items:center;gap:10px;padding:5px 4px;border-radius:8px;font-size:13px;color:var(--yt-ink0);text-decoration:none;transition:background-color .3s var(--dk-ease)}
+.ag-rt-top .r:hover{background:#f2f2f2}
+.ag-rt-top .dk-av{width:24px;height:24px}
+.ag-rt-top .n{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ag-rt-top b{font-weight:500;font-variant-numeric:tabular-nums}
+/* 유튜브식 칩 (합산 · 채널별) · 실시간 점은 유튜브 파랑 */
+.yt-chips{display:inline-flex;gap:8px;flex-shrink:0}
+.yt-chips button{height:32px;padding:0 12px;border:0;border-radius:8px;background:#f2f2f2;color:var(--yt-ink0);font:500 14px/1 Roboto,var(--dk-font);cursor:pointer;transition:background-color .25s var(--dk-ease),color .25s var(--dk-ease)}
+.yt-chips button:hover{background:#e5e5e5}
+.yt-chips button[aria-pressed="true"]{background:var(--yt-ink0);color:#fff}
+.dk-live i{border-radius:50%;background:var(--yt-blue);animation:rtPulse 2.2s var(--dk-ease) infinite}
+.yt-num{font-family:Roboto,var(--dk-font);font-weight:500;letter-spacing:0;color:var(--yt-ink0);font-variant-numeric:tabular-nums}
+.dk-big.yt-num{font-size:34px;line-height:1.2}
+.dk-ch-r{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap}

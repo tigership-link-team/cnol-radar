@@ -340,9 +340,11 @@ export async function vHome(v, r, alive) {
   const firstH = ov.first_at ? Date.parse(ov.first_at) : null;
   const hv = ov.hourly.map((x) => ({ v: x.v, h: x.h, pre: !x.v && (!firstH || Date.parse(x.h) + 3600e3 <= firstH) }));
   const msgs = [];
-  // 1) 요약 + 48시간
+  // 1) 요약 + 48시간 — 유튜브 스튜디오 '실시간' 카드처럼: 한 색 막대 + 인기 채널
+  const topCh = (ov.ranking || []).filter((c) => c.v48 > 0).slice(0, 3);
+  const rtTop = topCh.length >= 2 ? `<div class="ag-rt-top"><p>${e(C.t('rtTopCh'))}</p>${topCh.map((c) => `<a class="r" href="#ch/${e(c.id)}">${C.avatar(c.thumb)}<span class="n">${e(c.title)}</span><b>${e(C.fmtFull(c.v48))}</b></a>`).join('')}</div>` : '';
   msgs.push(C.agMsg(`${C.greet()}${L() === 'ja' ? '' : ' '}${tt('a_sum', { r: C.fmtFull(nRef), n: C.fmtFull(refs.length), v: C.fmtFull(ov.views48) })}`,
-    `<div class="ag-card"><div class="dk-sub" style="font-weight:600">${e(C.t('ytRtViews'))}</div><div class="dk-mid">${e(C.fmtFull(ov.views48))}</div>${C.barsHtml('agb', hv, C.t('live48all'), 72)}<div class="dk-axis"><span>${e(C.t('ago48'))}</span><span>${e(C.t('ago24'))}</span><span>${e(C.t('now'))}</span></div></div>`));
+    `<div class="ag-card yt-rtc"><div class="ag-48h"><div><div class="rt-t">${e(C.t('rtTitle'))} <span class="rt-live"><i></i>${e(C.t('rtLive'))}</span></div><div class="dk-sub">${e(C.t('chCount', { n: total }))} · ${e(C.t('rtSum'))}</div></div><a class="ag-link" href="#overview">${e(C.t('toOverview'))} →</a></div><div><div class="dk-sub" style="font-weight:600">${e(C.t('ytRtViews'))}</div><div class="dk-mid">${e(C.fmtFull(ov.views48))}</div></div>${C.barsHtml('agb', hv, C.t('live48all'), 72)}<div class="dk-axis"><span>${e(C.t('ago48'))}</span><span>${e(C.t('now'))}</span></div>${rtTop}</div>`));
   // 2) 오늘의 소재 — 큰 썸네일로
   const picks = C.pickList(refs.filter((x) => (x.age_h || 0) <= 7 * 24), 'all', prof).slice(0, 3);
   if (picks.length) msgs.push(C.agMsg(tt('a_hotMsg'), `<div class="bp-list">${picks.map((s) => bigPick(s, s._fit)).join('')}</div><a class="ag-link" href="#picks">${e(C.t('toPicks'))} →</a>`));

@@ -77,10 +77,29 @@ export async function getSession() {
   return data.session;
 }
 
+// 로그인 ID → 내부 이메일. ID만 쓰는 계정(예: hrcompany)은 ID@이 도메인으로 저장돼요.
+export const LOGIN_DOMAIN = 'cnol-radar.vercel.app';
+export function idToEmail(id) {
+  const s = String(id || '').trim().toLowerCase();
+  return s.includes('@') ? s : s + '@' + LOGIN_DOMAIN;
+}
+export function emailToId(email) {
+  const s = String(email || '');
+  return s.endsWith('@' + LOGIN_DOMAIN) ? s.slice(0, -(LOGIN_DOMAIN.length + 1)) : s;
+}
+// 로그인 뒤 돌아갈 곳: 우리 사이트 안의 경로만 (다른 사이트로 튕기지 않게)
+export function safeNext(raw, fallback = '/app') {
+  const s = String(raw || '');
+  return /^\/(?!\/)[\w\-./#?=&%]*$/.test(s) && !s.includes('\\') ? s : fallback;
+}
+export function loginUrl(next) {
+  return '/login?next=' + encodeURIComponent(safeNext(next || location.pathname + location.hash));
+}
+
 export async function requireSession() {
   const s = await getSession();
   if (!s) {
-    location.replace('/login');
+    location.replace(loginUrl());
     return null;
   }
   return s;
