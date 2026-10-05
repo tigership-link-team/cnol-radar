@@ -449,3 +449,40 @@ html.js .rv.in,html.rv-all .rv{opacity:1;transform:none}
 .md-feats li{padding:7px 12px;border-radius:999px;font-size:13px;font-weight:700;color:var(--ink);background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(16,12,40,.06)}
 .md-feats li:nth-child(-n+4){color:#3700B3;background:var(--p-cont);border-color:transparent}
 @media (max-width:640px){.md-feats li{font-size:12.5px;padding:6px 10px}}
+
+/* v8 · 실제 화면 (브라우저 창 틀) */
+.shot{position:relative;margin:0;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 34px 70px -30px rgba(40,20,120,.45),0 0 0 1px rgba(28,27,31,.07)}
+.shot .bar{display:flex;align-items:center;gap:6px;height:32px;padding:0 14px;background:#f5f1fb;border-bottom:1px solid var(--line)}
+.shot .bar i{width:10px;height:10px;border-radius:50%;background:#ddd}
+.shot .bar i:nth-child(1){background:#ff5f57}.shot .bar i:nth-child(2){background:#febc2e}.shot .bar i:nth-child(3){background:#28c840}
+.shot .bar span{margin-left:10px;padding:3px 12px;border-radius:999px;background:#fff;font-size:11.5px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shot img{display:block;width:100%;height:auto;background:linear-gradient(135deg,#efe7ff,#e6f0ff)}
+.md-pillar .pv .shot{transition:transform .25s cubic-bezier(.2,0,0,1)}
+@media (hover:hover){.md-pillar .pv .shot:hover{transform:translateY(-4px)}}
+.hero-art .hero-shot{position:relative;z-index:1}
+.hero-art .art-msg{z-index:3}
+.hero-art .art-try{z-index:3}
+.md-links{display:flex;flex-direction:column;gap:6px;margin:14px 0 18px;padding:0;list-style:none}
+.md-links a{font-size:15px;font-weight:700;color:var(--p);text-decoration:none}
+.md-links a:hover{text-decoration:underline}
+.tools-cta{margin-top:26px;align-items:center}
+.md-more{font-size:15px;font-weight:700;color:var(--p);text-decoration:none}
+.md-more:hover{text-decoration:underline}
+.md-who .pain{margin:0 0 6px;font-size:15px;font-weight:700;font-style:italic;color:var(--p2);line-height:1.5}
+
+/* v8 · 첫 화면: 실제 화면을 크게 */
+.hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:44px}
+.md-h1{font-size:clamp(32px,3.3vw,48px)}
+.md-h1>span{text-wrap:balance}
+.hero-art{padding:58px 0 70px 10px}
+@media (min-width:1200px){.hero-art .hero-shot{width:calc(100% + 110px)}}
+.art-try{right:-6px;top:6px}
+.art-msg{left:-18px;bottom:-6px}
+@media (max-width:1000px){.hero-art .hero-shot{width:100%}.hero-art{padding:10px 0 0}}
+
+.md-pillar .pt .d2{margin-top:-4px;font-size:15px;color:var(--ink2)}
+.tl-desc{max-width:760px;margin:18px auto 0;text-align:center;font-size:15.5px;line-height:1.7;color:var(--ink2)}
+.tl-note{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;margin:22px 0 0;font-size:15px}
+.tl-note b{color:var(--ink)}
+.tl-note span{color:var(--ink2)}
+.end .end-sub{margin:10px auto 0;max-width:640px;font-size:16px;line-height:1.65;color:rgba(255,255,255,.88)}

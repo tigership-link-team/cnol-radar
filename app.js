@@ -572,7 +572,7 @@ Object.assign(T.en, {
   refs: 'References', wave: 'Idea waves', tools: 'Tools', tool: 'Tools', collect: 'References',
   run_match: 'Match references', run_topic: 'Topic search', run_comments: 'Comment ideas',
   err_NO_MINE: 'Add your channel first.', err_BAD_ID: 'Couldn’t find that video or channel.',
-  brandSub: 'Your personal idea agent', tools_icon: ''
+  brandSub: 'Your idea agent', tools_icon: ''
 });
 Object.assign(T.ja, {
   g_agent: 'エージェント', g_refsG: 'リファレンス', g_ideasG: 'ネタ', g_toolsG: 'ツール', g_setG: '設定',

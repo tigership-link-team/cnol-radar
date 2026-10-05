@@ -504,7 +504,7 @@ export async function vWave(v, r, alive) {
 // ---------- 도구 모음 ----------
 const TOOLS = [
   { g: 'find', items: [['topic', 'search'], ['comments', 'chat'], ['wave', 'wave', '#wave'], ['refs', 'plus', '#refs']] },
-  { g: 'make', items: [['predict', 'target'], ['title', 'wand'], ['thumb', 'image']] },
+  { g: 'make', items: [['predict', 'target'], ['title', 'wand']] },
   { g: 'ana', items: [['dna', 'dna'], ['overview', 'insights', '#overview'], ['insights', 'bolt', '#insights'], ['ranking', 'ranking', '#ranking']] },
   { g: 'soon', items: [['ab', 'ab'], ['bulk', 'layers'], ['reply', 'reply'], ['ret', 'eye']] }
 ];

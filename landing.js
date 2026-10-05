@@ -55,7 +55,7 @@ const P = {
 };
 const TOOLS = {
   find: [['target', 'f1'], ['search', 'f2'], ['chat', 'f3'], ['wave', 'f4'], ['up', 'f5'], ['link', 'f6']],
-  make: [['brain', 'm1'], ['duel', 'm2'], ['spark', 'm3'], ['hash', 'm4'], ['image', 'm5'], ['flask', 'm6']],
+  make: [['brain', 'm1'], ['duel', 'm2'], ['spark', 'm3'], ['hash', 'm4'], ['board', 'm5'], ['flask', 'm6']],
   watch: [['bars', 'w1'], ['bell', 'w2'], ['trophy', 'w3'], ['curve', 'w4'], ['gone', 'w5'], ['multi', 'w6']],
   agent: [['sun', 'g1'], ['board', 'g2'], ['chat', 'g3'], ['learn', 'g4'], ['dna', 'g5'], ['again', 'g6']]
 };
@@ -71,6 +71,9 @@ const svg = (p, s = 22) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" 
 function renderTools(animate) {
   const g = document.getElementById('toolGrid');
   if (!g) return;
+  const d = document.getElementById('toolDesc');
+  if (d) d.textContent = t('v8.tools.d.' + tab);
+  document.querySelectorAll('#toolTabs [data-tab]').forEach((b) => { b.textContent = `${t('v8.tools.' + { find: 'f', make: 'm', watch: 'w', agent: 'g' }[b.dataset.tab])} ${TOOLS[b.dataset.tab].length}`; });
   g.classList.remove('cascade');
   g.innerHTML = TOOLS[tab].map(([ic, k], i) => `<div class="tool" style="--i:${i}"><span class="ic">${svg(P[ic])}</span><div><b>${esc(t('v8.tl.' + k + 'n'))}</b><span>${esc(t('v8.tl.' + k + 'd'))}</span></div></div>`).join('');
   if (animate && !calm) { void g.offsetWidth; g.classList.add('cascade'); }
@@ -89,7 +92,7 @@ function renderFaq() {
   const box = document.getElementById('faqList');
   if (!box) return;
   const open = new Set([...box.querySelectorAll('.qa.open')].map((x) => x.dataset.q));
-  box.innerHTML = [1, 2, 3, 4, 5, 6].map((n) => `<div class="qa${open.has(String(n)) ? ' open' : ''}" data-q="${n}"><button type="button" aria-expanded="${open.has(String(n))}" aria-controls="qa${n}">${esc(t('v7.faq.q' + n))}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="a" id="qa${n}" role="region"><div><p>${esc(t('v7.faq.a' + n))}</p></div></div></div>`).join('');
+  box.innerHTML = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => `<div class="qa${open.has(String(n)) ? ' open' : ''}" data-q="${n}"><button type="button" aria-expanded="${open.has(String(n))}" aria-controls="qa${n}">${esc(t('v7.faq.q' + n))}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="a" id="qa${n}" role="region"><div><p>${esc(t('v7.faq.a' + n))}</p></div></div></div>`).join('');
 }
 document.getElementById('faqList')?.addEventListener('click', (e) => {
   const b = e.target.closest('.qa button');
@@ -117,6 +120,9 @@ function apply() {
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll('[data-i18n-aria]').forEach((el) => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
+  document.querySelectorAll('[data-i18n-alt]').forEach((el) => el.setAttribute('alt', t(el.dataset.i18nAlt)));
+  // 실제 대시보드 화면 — 언어마다 그 언어로 찍은 화면
+  document.querySelectorAll('img[data-shot]').forEach((img) => { const src = `/img/${img.dataset.shot}-${lang}.jpg`; if (img.getAttribute('src') !== src) img.setAttribute('src', src); });
   document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   document.querySelectorAll('[data-price]').forEach((el) => {
     const id = el.dataset.price;
