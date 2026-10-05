@@ -481,3 +481,59 @@ const LANDING4 = {
   }
 };
 for (const l of Object.keys(LANDING4)) Object.assign(DICT[l], LANDING4[l]);
+
+// 유튜브 스튜디오식 차트 · 이거 해볼래? (2026-10)
+const LANDING5 = {
+  ko: {
+    'dash.tryT': '이거 해볼래?', 'dash.trySub': '내 채널 데이터로 에이전트가 고른 실험 · 해보면 결과를 비교해 드려요',
+    'dash.ty1q': '오후 7시에 올려볼래?', 'dash.ty1l': '이 시간에 올린 쇼츠 9개가 평소의 2.1배였어요 · 지금은 주로 오후 1시에 올려요',
+    'dash.ty2q': '16–30초 길이로 만들어볼래?', 'dash.ty2l': '16–30초 쇼츠 14개가 평소의 1.6배였어요 · 내 쇼츠는 보통 38초',
+    'dash.ty3q': '“전자레인지 3분 계란밥” 같은 소재 해볼래?', 'dash.ty3l': '자취요리 1분 · 평소의 6.2배 · 맞춤 93',
+    'dash.ty4q': '토요일에 올려볼래?', 'dash.ty4l': '토요일에 올린 쇼츠 7개가 평소의 1.7배였어요 · 지금은 주로 화요일에 올려요',
+    'dash.ty5q': '‘질문형’ 제목 써볼래?', 'dash.ty5l': '‘질문형’ 제목 쇼츠 11개가 평소의 1.8배 · 내 쇼츠는 12%만 이렇게 써요',
+    'dash.x': '{x}배', 'dash.tyN': '근거 쇼츠 {n}개', 'dash.tyFit': '맞춤 {n}', 'dash.tyHi': '믿을만해요', 'dash.tyMid': '꽤 믿을만해요', 'dash.tyMine': '내 쇼츠 기준', 'dash.tyRef': '레퍼런스 기준',
+    'dash.tyDo': '해볼게', 'dash.tyDoing': '해보는 중', 'dash.tySkip': '다른 거', 'dash.tyRec': '추천', 'dash.tyCur': '지금', 'dash.tyUsual': '평소 1×', 'dash.tyThis': '이 쇼츠',
+    'dash.dur0': '15초 이하', 'dash.dur1': '16–30초', 'dash.dur2': '31–45초', 'dash.dur3': '46–60초',
+    'dash.ytHead': '지난 28일 동안 조회수 {v}회', 'dash.ytHeadSub': '모든 채널 합산 · 어제까지 · 하루 단위',
+    'dash.ytViews': '조회수', 'dash.ytSubs': '구독자', 'dash.ytUploads': '새 영상', 'dash.ytMore': '평소보다 {p}% 많아요', 'dash.ytLess': '평소보다 {p}% 적어요',
+    'dash.ytBand': '평소 범위', 'dash.ytBandNote': '직전 28일 중 가운데 50%', 'dash.ytCount': '{n}개', 'dash.ytRt': '조회수 · 지난 48시간',
+    'bt.try.t': '이거 해볼래?', 'bt.try.d': '채널 데이터로 에이전트가 실험을 먼저 제안해요. 올릴 시간·길이·제목·소재까지 근거 차트와 함께 보여 주고, 해보면 결과를 비교해 드려요.',
+    'bt.try.n1': '근거 쇼츠 9개', 'bt.try.n2': '근거 쇼츠 14개', 'bt.try.n3': '맞춤 93 · 평소의 6.2배',
+    'mc.b4': '유튜브 스튜디오처럼 조회수·구독자·새 영상 탭과 평소 범위까지'
+  },
+  en: {
+    'dash.tryT': 'Try this?', 'dash.trySub': 'Experiments the agent picked from your channel data · we compare results after you try',
+    'dash.ty1q': 'Try posting at 7 PM?', 'dash.ty1l': '9 Shorts posted at this hour hit 2.1× usual · you mostly post at 1 PM',
+    'dash.ty2q': 'Try a 16–30s length?', 'dash.ty2l': '14 Shorts at 16–30s hit 1.6× usual · yours usually run 38s',
+    'dash.ty3q': 'Try a topic like “3-minute microwave egg rice”?', 'dash.ty3l': '1-Min Cooking · 6.2× usual · fit 93',
+    'dash.ty4q': 'Try posting on Saturday?', 'dash.ty4l': '7 Shorts posted on Saturday hit 1.7× usual · you mostly post on Tuesday',
+    'dash.ty5q': 'Try a “Question” title?', 'dash.ty5l': '11 question titles hit 1.8× usual · only 12% of yours use it',
+    'dash.x': '{x}×', 'dash.tyN': 'Based on {n} Shorts', 'dash.tyFit': 'Fit {n}', 'dash.tyHi': 'Reliable', 'dash.tyMid': 'Fairly reliable', 'dash.tyMine': 'From your Shorts', 'dash.tyRef': 'From references',
+    'dash.tyDo': 'I’ll try', 'dash.tyDoing': 'Trying', 'dash.tySkip': 'Not now', 'dash.tyRec': 'Suggested', 'dash.tyCur': 'Now', 'dash.tyUsual': 'usual 1×', 'dash.tyThis': 'This Short',
+    'dash.dur0': '≤15s', 'dash.dur1': '16–30s', 'dash.dur2': '31–45s', 'dash.dur3': '46–60s',
+    'dash.ytHead': '{v} views in the last 28 days', 'dash.ytHeadSub': 'All channels combined · through yesterday · daily',
+    'dash.ytViews': 'Views', 'dash.ytSubs': 'Subscribers', 'dash.ytUploads': 'New videos', 'dash.ytMore': '{p}% more than usual', 'dash.ytLess': '{p}% less than usual',
+    'dash.ytBand': 'Typical range', 'dash.ytBandNote': 'middle 50% of the previous 28 days', 'dash.ytCount': '{n}', 'dash.ytRt': 'Views · last 48 hours',
+    'bt.try.t': 'Try this?', 'bt.try.d': 'The agent proposes experiments from your channel data — upload time, length, title and topic — with the chart behind each one, then compares the results after you try.',
+    'bt.try.n1': 'Based on 9 Shorts', 'bt.try.n2': 'Based on 14 Shorts', 'bt.try.n3': 'Fit 93 · 6.2× usual',
+    'mc.b4': 'YouTube Studio-style tabs for views, subscribers and new videos, with the typical range'
+  },
+  ja: {
+    'dash.tryT': 'これ試してみる？', 'dash.trySub': 'チャンネルのデータからエージェントが選んだ実験・試すと結果を比較します',
+    'dash.ty1q': '19時に投稿してみる？', 'dash.ty1l': 'この時間に投稿したショート9本が普段の2.1倍でした・今は主に13時に投稿しています',
+    'dash.ty2q': '16–30秒の長さで作ってみる？', 'dash.ty2l': '16–30秒のショート14本が普段の1.6倍でした・あなたのショートは普段38秒',
+    'dash.ty3q': '「レンジで3分たまごご飯」みたいなネタを試してみる？', 'dash.ty3l': '1分自炊・普段の6.2倍・適合 93',
+    'dash.ty4q': '土曜日に投稿してみる？', 'dash.ty4l': '土曜日に投稿したショート7本が普段の1.7倍でした・今は主に火曜日に投稿しています',
+    'dash.ty5q': '「質問型」のタイトルを試してみる？', 'dash.ty5l': '「質問型」タイトルのショート11本が普段の1.8倍・あなたは12%しか使っていません',
+    'dash.x': '{x}倍', 'dash.tyN': '根拠のショート{n}本', 'dash.tyFit': '適合 {n}', 'dash.tyHi': '信頼できる', 'dash.tyMid': 'まあまあ信頼できる', 'dash.tyMine': '自分のショート基準', 'dash.tyRef': 'リファレンス基準',
+    'dash.tyDo': 'やってみる', 'dash.tyDoing': '試し中', 'dash.tySkip': '別のにする', 'dash.tyRec': 'おすすめ', 'dash.tyCur': '今', 'dash.tyUsual': '普段 1×', 'dash.tyThis': 'このショート',
+    'dash.dur0': '15秒以下', 'dash.dur1': '16–30秒', 'dash.dur2': '31–45秒', 'dash.dur3': '46–60秒',
+    'dash.ytHead': '直近28日間の再生数 {v}回', 'dash.ytHeadSub': '全チャンネル合計・昨日まで・日別',
+    'dash.ytViews': '再生数', 'dash.ytSubs': '登録者', 'dash.ytUploads': '新しい動画', 'dash.ytMore': '普段より{p}%多い', 'dash.ytLess': '普段より{p}%少ない',
+    'dash.ytBand': '普段の範囲', 'dash.ytBandNote': '直前28日の中央50%', 'dash.ytCount': '{n}本', 'dash.ytRt': '再生数・直近48時間',
+    'bt.try.t': 'これ試してみる？', 'bt.try.d': 'チャンネルのデータからエージェントが実験を先に提案します。投稿時間・長さ・タイトル・ネタまで根拠のグラフ付きで見せ、試したら結果を比較します。',
+    'bt.try.n1': '根拠のショート9本', 'bt.try.n2': '根拠のショート14本', 'bt.try.n3': '適合 93・普段の6.2倍',
+    'mc.b4': 'YouTube Studioのように再生数・登録者・新しい動画のタブと普段の範囲まで'
+  }
+};
+for (const l of Object.keys(LANDING5)) Object.assign(DICT[l], LANDING5[l]);

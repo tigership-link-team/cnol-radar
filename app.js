@@ -251,7 +251,7 @@ Object.assign(T.ko, {
   insHit: '터진 비율', insHitSub: '평소의 2배 이상 · {n}개', insDur: '보통 길이', insDurSub: '중앙값', insFreq: '주간 업로드', insFreqSub: '최근 4주 평균 · 채널 {c}개 합계',
   insAgent: '에이전트 요약', insAgentSub: '수집한 데이터로 찾은 패턴이에요. 표본이 쌓일수록 정확해져요.',
   insHour: '올린 시간대별 · 평소 대비', insHourSub: '한국 시간 기준 · 빗금은 쇼츠 3개 미만', insDay: '요일별 · 평소 대비', insDurT: '길이별 · 평소 대비', insFmt: '제목 유형별 · 평소 대비',
-  insMonth: '월별 성과 · 올린 달 기준', insMonthSub: '그 달에 올린 쇼츠의 조회수 합계예요 · 막대에 마우스를 올리면 개수와 중앙값이 보여요',
+  insMonth: '월별 성과 · 올린 달 기준', insMonthSub: '그 달에 올린 쇼츠의 조회수 합계예요 · 그래프에 마우스를 올리면 개수와 중앙값이 보여요',
   insUsual: '평소', insLow: '표본 부족', insTipN: '쇼츠 {n}개', insTipMed: '중앙값 {v}', insX: '{x}배',
   insL_hour: '{h}에 올린 쇼츠가 평소의 {x}배로 가장 잘 됐어요 · {n}개', insL_day: '{d} 업로드가 평소의 {x}배로 가장 좋아요',
   insL_dur: '{b} 길이가 평소의 {x}배로 가장 잘 돼요 · {n}개', insL_fmt: '{f} 제목이 평소의 {x}배 — 가장 잘 먹히는 유형이에요',
@@ -270,7 +270,7 @@ Object.assign(T.en, {
   insHit: 'Breakout rate', insHitSub: '2× usual or more · {n}', insDur: 'Typical length', insDurSub: 'median', insFreq: 'Uploads per week', insFreqSub: 'last 4 weeks · {c} channels combined',
   insAgent: 'Agent summary', insAgentSub: 'Patterns found in your collected data. More Shorts, sharper answers.',
   insHour: 'By upload hour · vs usual', insHourSub: 'Korea time · hatched = fewer than 3 Shorts', insDay: 'By weekday · vs usual', insDurT: 'By length · vs usual', insFmt: 'By title type · vs usual',
-  insMonth: 'Monthly · by upload month', insMonthSub: 'Total views of Shorts uploaded that month · hover a bar for count and median',
+  insMonth: 'Monthly · by upload month', insMonthSub: 'Total views of Shorts uploaded that month · hover the chart for count and median',
   insUsual: 'usual', insLow: 'Too few', insTipN: '{n} Shorts', insTipMed: 'median {v}', insX: '{x}×',
   insL_hour: 'Shorts posted at {h} did best — {x}× usual · {n} Shorts', insL_day: '{d} uploads do best — {x}× usual',
   insL_dur: '{b} works best — {x}× usual · {n} Shorts', insL_fmt: '{f} titles hit {x}× usual — your strongest type',
@@ -289,7 +289,7 @@ Object.assign(T.ja, {
   insHit: 'ヒット率', insHitSub: '普段の2倍以上・{n}本', insDur: '標準的な長さ', insDurSub: '中央値', insFreq: '週の投稿数', insFreqSub: '直近4週の平均・{c}チャンネル合計',
   insAgent: 'エージェントのまとめ', insAgentSub: '収集データから見つけたパターンです。本数が増えるほど正確になります。',
   insHour: '投稿時間帯別・普段比', insHourSub: '韓国時間・斜線は3本未満', insDay: '曜日別・普段比', insDurT: '長さ別・普段比', insFmt: 'タイトル型別・普段比',
-  insMonth: '月別の成果・投稿月基準', insMonthSub: 'その月に投稿したショートの再生数合計・棒にカーソルを合わせると本数と中央値',
+  insMonth: '月別の成果・投稿月基準', insMonthSub: 'その月に投稿したショートの再生数合計・グラフにカーソルを合わせると本数と中央値',
   insUsual: '普段', insLow: '本数不足', insTipN: 'ショート{n}本', insTipMed: '中央値 {v}', insX: '{x}倍',
   insL_hour: '{h}に投稿したショートが普段の{x}倍で最も伸びました・{n}本', insL_day: '{d}の投稿が普段の{x}倍で最も好調です',
   insL_dur: '{b}が普段の{x}倍で最も伸びます・{n}本', insL_fmt: '{f}のタイトルが普段の{x}倍 — 最も効くタイプです',
@@ -337,6 +337,89 @@ Object.assign(T.ja, {
   tdTitle: '今日やること', tdSub: 'エージェントがデータから選びました・チェックはこのブラウザだけに保存されます',
   td_addMine: 'マイチャンネルを入れてパーソナライズ提案をオン', td_gap: '{ch}に今日ショートを1本投稿・{d}日間の空白', td_pick: '「{title}」の形式で自分版を作る',
   td_breaks: 'リファレンスのヒット{n}件を確認', td_refs: 'リファレンスをあと{n}件入れて提案の精度を上げる', td_go: '開く', td_issue: '確認：{title}'
+});
+
+// 유튜브 스튜디오식 차트 · 이거 해볼래?
+Object.assign(T.ko, {
+  try: '이거 해볼래?', trySub: '에이전트가 내 채널 데이터로 고른 실험이에요. ‘해볼게’를 누르면 소재 보드에 담고, 올린 뒤 결과를 비교해 드려요.',
+  tryHomeSub: '내 채널 데이터로 고른 실험 · 해보면 결과를 비교해 드려요', tryAllMine: '내 채널 전체',
+  tryNoMine: '내 채널을 넣으면 내 채널에 맞춰 골라 드려요. 지금은 레퍼런스 기준이에요.', tryEmpty: '지금은 뚜렷하게 차이 나는 조건이 없어요. 쇼츠가 더 쌓이면 다시 찾아볼게요.',
+  tryHourQ: '{h}에 올려볼래?', tryHourL: '이 시간에 올린 쇼츠 {n}개가 평소의 {x}배였어요 · 지금은 주로 {u}에 올려요', tryHourL0: '이 시간에 올린 쇼츠 {n}개가 평소의 {x}배였어요',
+  tryDayQ: '{d}에 올려볼래?', tryDayL: '{d}에 올린 쇼츠 {n}개가 평소의 {x}배였어요 · 지금은 주로 {u}에 올려요',
+  tryDurQ: '{b} 길이로 만들어볼래?', tryDurL: '{b} 쇼츠 {n}개가 평소의 {x}배였어요 · 내 쇼츠는 보통 {m}초',
+  tryFmtQ: '‘{f}’ 제목 써볼래?', tryFmtL: '‘{f}’ 제목 쇼츠 {n}개가 평소의 {x}배 · 내 쇼츠는 {p}%만 이렇게 써요', tryEx: '예: “{t}” · 평소의 {x}배',
+  tryTopicQ: '“{t}” 같은 소재 해볼래?', tryTopicL: '{c} · 평소의 {x}배 · 맞춤 {f}', tryTopicL0: '{c} · 평소의 {x}배',
+  tryKwQ: '‘#{k}’ 소재 해볼래?', tryKwL: '요즘 레퍼런스에서 #{k} 쇼츠 {n}개가 터졌어요 · 가운데값 평소의 {x}배', kwBreak: '터진 쇼츠 {n}개',
+  tryCadQ: '일주일에 {n}개씩 올려볼래?', tryCadL: '지금은 주 {m}개 · 같은 분야 레퍼런스는 주 {r}개 올려요',
+  tryGapQ: '오늘 하나 올려볼래?', tryGapL: '마지막 업로드가 {d}일 전이에요 · 최근 4주엔 {g}일에 1개꼴로 올렸어요', tryGapL0: '마지막 업로드가 {d}일 전이에요',
+  tryReviveQ: '“{t}” 2탄 만들어볼래?', tryReviveL: '올린 지 {d}일 됐는데 지난 48시간 동안 {v}회 더 늘었어요 · 다른 옛날 쇼츠는 보통 {u}회',
+  tryDo: '해볼게', tryDoing: '해보는 중', trySkip: '다른 거', tryStop: '그만할래', tryN: '근거 쇼츠 {n}개',
+  tryConf_hi: '믿을만해요', tryConf_mid: '꽤 믿을만해요', tryConf_lo: '참고만 하세요', tryBasisMine: '내 쇼츠 기준', tryBasisRef: '레퍼런스 기준',
+  tryRec: '추천', tryCur: '지금', tryRunTitle: '해보는 중', tryRunSub: '‘해볼게’를 누른 뒤 올린 쇼츠로 결과를 비교해요 · 이 브라우저에 저장돼요',
+  tryRunNone: '아직 해보는 실험이 없어요. 위에서 ‘해볼게’를 눌러 보세요.', tryWait: '아직 해당 쇼츠가 없어요 · 올리면 여기서 결과를 보여드려요',
+  tryYoung: '해당 쇼츠 {n}개 집계 중 · 올리고 하루가 지나면 비교해요', tryGood: '효과 있어요', trySame: '비슷해요', tryBad: '아직 별로예요',
+  tryResA: '해본 쇼츠 {n}개', tryResB: '그 전 4주', tryCadRes: '해본 뒤 주 {x}개 올렸어요 (목표 {n}개)', tryGapRes: '올렸어요 · {d}',
+  tryAdded: '소재 보드에 담고 실험을 시작했어요', trySince: '{d}부터', tryMore: '모두 보기', tryStrip: '올린 날 · 최근 28일', tryToday: '오늘',
+  tryTarget: '목표 {n}개', tryWeekly: '주별 업로드', tryOldAvg: '다른 옛날 쇼츠 보통', tryThis: '이 쇼츠',
+  ytHead: '지난 28일 동안 조회수 {v}회', ytHeadSub: '모든 채널 합산 · 어제까지 · 하루 단위', ytHeadCh: '이 채널 · 어제까지 · 하루 단위',
+  ytViews: '조회수', ytSubs: '구독자', ytUploads: '새 영상', ytMore: '평소보다 {p}% 많아요', ytLess: '평소보다 {p}% 적어요', ytSame: '평소와 비슷해요',
+  ytCover: '수집 {n}일째 · 4주가 지나면 평소와 비교해요', ytNoData: '하루치가 모이면 선이 그려져요 (매일 자정 기준)', ytBand: '평소 범위', ytBandNote: '직전 28일 중 가운데 50%',
+  ytSubsNote: '구독자 수는 유튜브가 반올림해서 공개해 하루 변화가 거칠 수 있어요', ytUpNote: '새 영상 = 채널 영상 수가 늘어난 만큼 (롱폼 포함)', ytCount: '{n}개',
+  ytTypical: '평소 범위 · 같은 채널 쇼츠의 같은 시점', ytMedLine: '평소 쇼츠 조회수(가운데값)', ytRtViews: '조회수 · 지난 48시간', ytLine: '조회수'
+});
+Object.assign(T.en, {
+  try: 'Try this?', trySub: 'Experiments the agent picked from your channel data. Hit “I’ll try” to save it to your idea board — we compare the results after you post.',
+  tryHomeSub: 'Experiments picked from your channel data · we compare results after you try', tryAllMine: 'All my channels',
+  tryNoMine: 'Add your own channel and we tailor these to it. For now they’re based on your references.', tryEmpty: 'No condition stands out yet. We’ll look again as more Shorts come in.',
+  tryHourQ: 'Try posting at {h}?', tryHourL: '{n} Shorts posted at this hour hit {x}× usual · you mostly post at {u}', tryHourL0: '{n} Shorts posted at this hour hit {x}× usual',
+  tryDayQ: 'Try posting on {d}?', tryDayL: '{n} Shorts posted on {d} hit {x}× usual · you mostly post on {u}',
+  tryDurQ: 'Try a {b} length?', tryDurL: '{n} Shorts at {b} hit {x}× usual · yours usually run {m}s',
+  tryFmtQ: 'Try a “{f}” title?', tryFmtL: '{n} “{f}” titles hit {x}× usual · only {p}% of yours use it', tryEx: 'e.g. “{t}” · {x}× usual',
+  tryTopicQ: 'Try a topic like “{t}”?', tryTopicL: '{c} · {x}× usual · fit {f}', tryTopicL0: '{c} · {x}× usual',
+  tryKwQ: 'Try a “#{k}” topic?', tryKwL: '{n} #{k} Shorts broke out across your references lately · median {x}× usual', kwBreak: '{n} breakouts',
+  tryCadQ: 'Try {n} uploads a week?', tryCadL: 'You post {m} a week now · references in your niche post {r}',
+  tryGapQ: 'Post one today?', tryGapL: 'Your last upload was {d} days ago · over the last 4 weeks you posted every {g} days', tryGapL0: 'Your last upload was {d} days ago',
+  tryReviveQ: 'Make a part 2 of “{t}”?', tryReviveL: 'Posted {d} days ago, it gained {v} views in the last 48h · your other older Shorts usually gain {u}',
+  tryDo: 'I’ll try', tryDoing: 'Trying', trySkip: 'Not now', tryStop: 'Stop', tryN: 'Based on {n} Shorts',
+  tryConf_hi: 'Reliable', tryConf_mid: 'Fairly reliable', tryConf_lo: 'Just a hint', tryBasisMine: 'From your Shorts', tryBasisRef: 'From references',
+  tryRec: 'Suggested', tryCur: 'Now', tryRunTitle: 'Trying now', tryRunSub: 'We compare the Shorts you post after “I’ll try” · saved in this browser',
+  tryRunNone: 'No experiments yet. Hit “I’ll try” above.', tryWait: 'No matching Short yet · results show here once you post one',
+  tryYoung: '{n} matching Shorts still counting · we compare a day after posting', tryGood: 'Working', trySame: 'About the same', tryBad: 'Not yet',
+  tryResA: '{n} tried Shorts', tryResB: 'Previous 4 weeks', tryCadRes: '{x} uploads a week since (goal {n})', tryGapRes: 'Posted · {d}',
+  tryAdded: 'Saved to your idea board — experiment started', trySince: 'since {d}', tryMore: 'See all', tryStrip: 'Upload days · last 28 days', tryToday: 'Today',
+  tryTarget: 'Goal {n}', tryWeekly: 'Uploads per week', tryOldAvg: 'Your other older Shorts', tryThis: 'This Short',
+  ytHead: '{v} views in the last 28 days', ytHeadSub: 'All channels combined · through yesterday · daily', ytHeadCh: 'This channel · through yesterday · daily',
+  ytViews: 'Views', ytSubs: 'Subscribers', ytUploads: 'New videos', ytMore: '{p}% more than usual', ytLess: '{p}% less than usual', ytSame: 'About the same as usual',
+  ytCover: 'Day {n} of tracking · compared with usual after 4 weeks', ytNoData: 'The line appears once a full day is collected (resets at midnight KST)', ytBand: 'Typical range', ytBandNote: 'middle 50% of the previous 28 days',
+  ytSubsNote: 'YouTube rounds public subscriber counts, so daily changes can look coarse', ytUpNote: 'New videos = growth in the channel’s video count (incl. long-form)', ytCount: '{n}',
+  ytTypical: 'Typical range · this channel’s Shorts at the same age', ytMedLine: 'Typical Short views (median)', ytRtViews: 'Views · last 48 hours', ytLine: 'Views'
+});
+Object.assign(T.ja, {
+  try: 'これ試してみる？', trySub: 'エージェントがチャンネルのデータから選んだ実験です。「やってみる」を押すとネタボードに入り、投稿後に結果を比較します。',
+  tryHomeSub: 'チャンネルのデータから選んだ実験・試すと結果を比較します', tryAllMine: 'マイチャンネル全体',
+  tryNoMine: 'マイチャンネルを入れると、そのチャンネルに合わせて選びます。今はリファレンス基準です。', tryEmpty: '今ははっきり差が出る条件がありません。ショートがたまったらまた探します。',
+  tryHourQ: '{h}に投稿してみる？', tryHourL: 'この時間に投稿したショート{n}本が普段の{x}倍でした・今は主に{u}に投稿しています', tryHourL0: 'この時間に投稿したショート{n}本が普段の{x}倍でした',
+  tryDayQ: '{d}に投稿してみる？', tryDayL: '{d}に投稿したショート{n}本が普段の{x}倍でした・今は主に{u}に投稿しています',
+  tryDurQ: '{b}の長さで作ってみる？', tryDurL: '{b}のショート{n}本が普段の{x}倍でした・あなたのショートは普段{m}秒',
+  tryFmtQ: '「{f}」のタイトルを試してみる？', tryFmtL: '「{f}」タイトルのショート{n}本が普段の{x}倍・あなたは{p}%しか使っていません', tryEx: '例：「{t}」・普段の{x}倍',
+  tryTopicQ: '「{t}」みたいなネタを試してみる？', tryTopicL: '{c}・普段の{x}倍・適合 {f}', tryTopicL0: '{c}・普段の{x}倍',
+  tryKwQ: '「#{k}」のネタを試してみる？', tryKwL: '最近リファレンスで#{k}のショート{n}本がヒット・中央値は普段の{x}倍', kwBreak: 'ヒット{n}本',
+  tryCadQ: '週{n}本ずつ投稿してみる？', tryCadL: '今は週{m}本・同じ分野のリファレンスは週{r}本投稿しています',
+  tryGapQ: '今日1本投稿してみる？', tryGapL: '最後の投稿は{d}日前です・直近4週は{g}日に1本のペースでした', tryGapL0: '最後の投稿は{d}日前です',
+  tryReviveQ: '「{t}」の第2弾を作ってみる？', tryReviveL: '投稿から{d}日たっても直近48時間で{v}回伸びました・ほかの古いショートは普段{u}回',
+  tryDo: 'やってみる', tryDoing: '試し中', trySkip: '別のにする', tryStop: 'やめる', tryN: '根拠のショート{n}本',
+  tryConf_hi: '信頼できる', tryConf_mid: 'まあまあ信頼できる', tryConf_lo: '参考程度', tryBasisMine: '自分のショート基準', tryBasisRef: 'リファレンス基準',
+  tryRec: 'おすすめ', tryCur: '今', tryRunTitle: '試し中', tryRunSub: '「やってみる」を押した後に投稿したショートで結果を比較します・このブラウザに保存されます',
+  tryRunNone: 'まだ試している実験はありません。上の「やってみる」を押してみてください。', tryWait: 'まだ該当するショートがありません・投稿するとここに結果が出ます',
+  tryYoung: '該当ショート{n}本を集計中・投稿から1日たつと比較します', tryGood: '効果あり', trySame: '変わらない', tryBad: 'まだいまいち',
+  tryResA: '試したショート{n}本', tryResB: 'その前の4週', tryCadRes: '試してから週{x}本投稿（目標{n}本）', tryGapRes: '投稿しました・{d}',
+  tryAdded: 'ネタボードに入れて実験を始めました', trySince: '{d}から', tryMore: 'すべて見る', tryStrip: '投稿した日・直近28日', tryToday: '今日',
+  tryTarget: '目標{n}本', tryWeekly: '週ごとの投稿', tryOldAvg: 'ほかの古いショートの普段', tryThis: 'このショート',
+  ytHead: '直近28日間の再生数 {v}回', ytHeadSub: '全チャンネル合計・昨日まで・日別', ytHeadCh: 'このチャンネル・昨日まで・日別',
+  ytViews: '再生数', ytSubs: '登録者', ytUploads: '新しい動画', ytMore: '普段より{p}%多い', ytLess: '普段より{p}%少ない', ytSame: '普段とほぼ同じ',
+  ytCover: '収集{n}日目・4週たつと普段と比較します', ytNoData: '1日分たまると線が描かれます（毎日0時基準）', ytBand: '普段の範囲', ytBandNote: '直前28日の中央50%',
+  ytSubsNote: '登録者数はYouTubeが丸めて公開するため、日ごとの変化が粗く見えることがあります', ytUpNote: '新しい動画＝チャンネルの動画数が増えた分（長尺を含む）', ytCount: '{n}本',
+  ytTypical: '普段の範囲・同じチャンネルのショートの同じ時点', ytMedLine: '普段のショート再生数（中央値）', ytRtViews: '再生数・直近48時間', ytLine: '再生数'
 });
 
 const t = (k, v) => {
@@ -480,6 +563,7 @@ const IC = {
   insights: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
   x: '<path d="M6 6l12 12M18 6L6 18"/>', compare: '<path d="M8 4v16M16 4v16M4 8h8M12 16h8"/>', todo: '<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  try: '<path d="M9 3h6M10 3v6.5L4.6 18.4A1.8 1.8 0 0 0 6.2 21h11.6a1.8 1.8 0 0 0 1.6-2.6L14 9.5V3"/><path d="M7.3 15h9.4"/>',
   cal: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',
   refresh: '<path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/>',
@@ -518,7 +602,7 @@ const barMax = (vals, ref) => Math.max(ref ? ref.v * 1.15 : 1, ...vals.map((x) =
 function barsHtml(id, vals, aria, h = 170, ref = null) {
   const max = barMax(vals, ref);
   return `<div class="dk-chart" id="${id}"><div class="dk-bars" style="height:${h}px" role="img" aria-label="${esc(aria)}">${vals.map((x, i) => {
-    const cls = x.pre || x.low ? ' pre' : x.v ? (x.hot ? ' hot' : '') : ' z';
+    const cls = x.pre || x.low ? ' pre' : x.v ? (x.hot ? ' hot' : x.cur ? ' cur' : '') : ' z';
     return `<div class="c" data-i="${i}"><i class="dk-rise${cls}" style="height:${barH(x, max)}%;animation-delay:${Math.min(i, 60) * 9}ms"></i></div>`;
   }).join('')}${ref ? `<span class="ref" style="bottom:${((ref.v / max) * 100).toFixed(1)}%"><em>${esc(ref.label)}</em></span>` : ''}</div><div class="dk-tip" role="status"></div></div>`;
 }
@@ -541,6 +625,12 @@ function fillTip(tip, content) {
     sp.textContent = r.label;
     row.append(k, b, sp);
     tip.appendChild(row);
+  }
+  if (content.note) {
+    const nt = document.createElement('div');
+    nt.className = 'note';
+    nt.textContent = content.note;
+    tip.appendChild(nt);
   }
 }
 function placeTip(box, tip, c, topPx) {
@@ -604,11 +694,12 @@ function legendHtml(series, totals, id) {
 }
 // 범례에 마우스를 올리거나 포커스하면 그 채널 조각만 또렷하게
 function bindLegend(root, id) {
-  const bars = root.querySelector('#' + id + ' .dk-bars');
+  const box = root.querySelector('#' + id);
+  const bars = box && (box.querySelector('.dk-bars') || box);
   const lg = root.querySelector(`[data-lg="${id}"]`);
   if (!bars || !lg) return;
   const items = [...lg.querySelectorAll('.lg')];
-  const segs = [...bars.querySelectorAll('i[data-s]')];
+  const segs = [...bars.querySelectorAll('[data-s]')];
   const set = (k) => {
     bars.classList.toggle('hl', k != null);
     for (const i of segs) i.classList.toggle('hs', i.dataset.s === k);
@@ -661,15 +752,448 @@ function hbarsHtml(rows) {
   return `<div class="dk-hbars">${rows.map((r) => `<div class="dk-hb${r.low ? ' low' : ''}"><span class="l">${esc(r.label)}</span><span class="track"><i class="${r.hot ? 'hot' : ''}" style="width:${r.low ? 6 : Math.max(2, ((r.v || 0) / max) * 100).toFixed(1)}%"></i><span class="one" style="left:${((1 / max) * 100).toFixed(1)}%" title="${esc(t('insUsual'))}"></span></span><span class="v">${r.low ? esc(t('insLow')) : esc(t('insX', { x: (r.v || 0).toFixed(1) }))}<small>${esc(t('insTipN', { n: r.n }))}</small></span></div>`).join('')}</div>`;
 }
 
+// ---------- 유튜브 스튜디오식 선 차트 ----------
+// 오른쪽 눈금 · 옅은 가로선 · 회색 '평소 범위' 띠 · 마우스를 따라 세로선 + 점 + 흰 툴팁
+const YT_LINE = '#065fd4';
+function niceStep(range, n = 4) {
+  if (!(range > 0)) return 1;
+  const raw = range / n, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p;
+  return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+}
+function yScale(vals, extra, int) {
+  const all = vals.concat(extra || []).filter((v) => v != null && Number.isFinite(v));
+  let lo = Math.min(0, ...all), hi = Math.max(0, ...all);
+  if (hi === lo) hi = lo + (int ? 4 : 1);
+  let step = niceStep(hi - lo);
+  if (int) step = Math.max(1, Math.round(step));
+  lo = Math.floor(lo / step) * step;
+  hi = Math.max(lo + step, Math.ceil(hi / step) * step);
+  const ticks = [];
+  for (let v = lo; v <= hi + step / 2 && ticks.length < 9; v += step) ticks.push(Math.round(v * 1e6) / 1e6);
+  return { lo, hi, ticks, y: (v) => (1 - (v - lo) / (hi - lo)) * 100 };
+}
+function xTicks(n, k = 5) {
+  if (n <= 1) return [0];
+  const out = new Set([0, n - 1]);
+  for (let i = 1; i < k - 1; i++) out.add(Math.round((i * (n - 1)) / (k - 1)));
+  return [...out].sort((a, b) => a - b);
+}
+const quant = (a, q) => { const x = [...a].sort((p, r) => p - r); if (!x.length) return null; const i = (x.length - 1) * q, lo = Math.floor(i), hi = Math.ceil(i); return x[lo] + (x[hi] - x[lo]) * (i - lo); };
+const fmtSigned = (v) => (v > 0 ? '+' : '') + fmtN(v);
+const fullSigned = (v) => (v > 0 ? '+' : '') + fmtFull(v);
+// o: { xs, series:[{key,label,color,vals}], band:{lo,hi,label}, bands:{lo:[],hi:[],label}, ref:{v,label}, h, aria, yFmt, valFmt, tipTitle(i), int, empty, ticks }
+function ytLine(id, o) {
+  const n = o.xs.length;
+  const vals = o.series.flatMap((s) => s.vals);
+  const has = vals.some((v) => v != null);
+  const extra = [];
+  if (o.band) extra.push(o.band.lo, o.band.hi);
+  if (o.bands) extra.push(...o.bands.hi.filter((v) => v != null));
+  if (o.ref) extra.push(o.ref.v);
+  const sc = yScale(vals, extra, o.int);
+  const X = (i) => (n <= 1 ? 50 : (i / (n - 1)) * 100);
+  const Y = (v) => sc.y(v).toFixed(2);
+  const yFmt = o.yFmt || fmtN;
+  const grid = sc.ticks.map((v) => `<line class="g${v === 0 ? ' z' : ''}" x1="0" x2="1000" y1="${Y(v)}" y2="${Y(v)}"/>`).join('');
+  let band = '';
+  if (has && o.band) band = `<rect class="band" x="0" width="1000" y="${Y(o.band.hi)}" height="${Math.max(0.8, sc.y(o.band.lo) - sc.y(o.band.hi)).toFixed(2)}"/>`;
+  if (has && o.bands) {
+    const idx = o.bands.lo.map((v, i) => (v != null && o.bands.hi[i] != null ? i : -1)).filter((i) => i >= 0);
+    if (idx.length >= 2) band = `<path class="band" d="M${idx.map((i) => `${(X(i) * 10).toFixed(2)} ${Y(o.bands.hi[i])}`).join('L')}L${[...idx].reverse().map((i) => `${(X(i) * 10).toFixed(2)} ${Y(o.bands.lo[i])}`).join('L')}Z"/>`;
+  }
+  const ref = has && o.ref ? `<line x1="0" x2="1000" y1="${Y(o.ref.v)}" y2="${Y(o.ref.v)}" stroke="rgba(15,15,15,.5)" stroke-width="1.5" stroke-dasharray="5 5"/>` : '';
+  let pts = '';
+  const paths = o.series.map((s, k) => {
+    let d = '';
+    s.vals.forEach((v, i) => {
+      if (v == null) return;
+      const prev = i > 0 ? s.vals[i - 1] : null, next = i < n - 1 ? s.vals[i + 1] : null;
+      d += `${prev == null ? 'M' : 'L'}${(X(i) * 10).toFixed(2)} ${Y(v)}`;
+      if (prev == null && next == null) pts += `<i class="pt" style="left:${X(i)}%;top:${Y(v)}%;background:${s.color}"></i>`;
+    });
+    return d ? `<path class="ln" data-s="${k}" d="${d}" stroke="${s.color}"/>` : '';
+  }).join('');
+  const yl = sc.ticks.map((v) => `<span class="yl" style="top:${Y(v)}%">${esc(yFmt(v))}</span>`).join('');
+  const tk = o.ticks || xTicks(n);
+  const xl = tk.map((i, j) => `<span class="xl${n > 1 && i === 0 ? ' first' : n > 1 && i === n - 1 ? ' last' : ''}${j % 2 && tk.length > 3 ? ' od' : ''}" style="left:${X(i)}%">${esc(o.xs[i])}</span>`).join('');
+  const bl = has && o.band && o.band.label ? `<span class="bl" style="top:${Y(o.band.hi)}%">${esc(o.band.label)}</span>` : has && o.ref && o.ref.label ? `<span class="bl" style="top:${Y(o.ref.v)}%">${esc(o.ref.label)}</span>` : '';
+  const html = `<div class="yt-plot" id="${id}" role="img" aria-label="${esc(o.aria || '')}"><div class="area" style="height:${o.h || 220}px">
+    <svg viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">${grid}${band}${ref}${paths}</svg>${pts}${bl}
+    ${yl}${xl}<i class="vl"></i>${o.series.map((s, k) => `<i class="dot" data-k="${k}" style="background:${s.color}"></i>`).join('')}
+    ${has ? '<div class="hit"></div>' : `<div class="empty">${esc(o.empty || t('ytNoData'))}</div>`}</div><div class="yt-tip" role="status"></div></div>`;
+  const bind = (root) => {
+    const box = root.querySelector('#' + id);
+    if (!box || !has) return;
+    const area = box.querySelector('.area'), tip = box.querySelector('.yt-tip'), vl = box.querySelector('.vl');
+    const dots = [...box.querySelectorAll('.dot')];
+    const valFmt = o.valFmt || fmtFull;
+    const move = (e) => {
+      const r = area.getBoundingClientRect();
+      const i = Math.max(0, Math.min(n - 1, Math.round(((e.clientX - r.left) / Math.max(1, r.width)) * (n - 1))));
+      const xp = X(i);
+      vl.style.left = xp + '%';
+      o.series.forEach((s, k) => {
+        const v = s.vals[i], d = dots[k];
+        if (v == null) { d.style.visibility = 'hidden'; return; }
+        d.style.visibility = '';
+        d.style.left = xp + '%';
+        d.style.top = sc.y(v) + '%';
+      });
+      const rows = o.series.map((s) => ({ color: s.color, v: s.vals[i], label: s.label })).filter((x) => x.v != null)
+        .sort((a, b) => b.v - a.v).slice(0, 8).map((x) => ({ color: x.color, value: valFmt(x.v), label: x.label }));
+      let note = '';
+      const R = Math.round;
+      if (o.band) note = `${o.band.label} ${valFmt(R(o.band.lo))} – ${valFmt(R(o.band.hi))}`;
+      else if (o.bands && o.bands.lo[i] != null) note = `${o.bands.label} ${valFmt(R(o.bands.lo[i]))} – ${valFmt(R(o.bands.hi[i]))}`;
+      else if (o.ref) note = `${o.ref.label} ${valFmt(R(o.ref.v))}`;
+      fillTip(tip, { title: o.tipTitle ? o.tipTitle(i) : o.xs[i], rows: rows.length ? rows : [{ color: '#c4c4c4', value: '–', label: t('preCollect') }], note });
+      box.classList.add('on');
+      tip.classList.add('on');
+      const px = (xp / 100) * r.width, w = tip.offsetWidth, bw = box.clientWidth;
+      let left = px + 14;
+      if (left + w > bw) left = px - w - 14;
+      tip.style.left = Math.max(0, Math.min(bw - w, left)) + 'px';
+      tip.style.top = '0px';
+    };
+    const hit = box.querySelector('.hit');
+    hit.addEventListener('pointermove', move);
+    hit.addEventListener('pointerdown', move);
+    hit.addEventListener('pointerleave', () => { box.classList.remove('on'); tip.classList.remove('on'); });
+  };
+  return { html, bind };
+}
+
+// ---------- 유튜브 스튜디오 '개요'처럼: 지표 탭(조회수·구독자·새 영상) + 선 차트 ----------
+function studioData(trend) {
+  const days = (trend || []).slice(0, -1); // 오늘(집계 중)은 빼요
+  const cur = days.slice(-28), prev = days.slice(-56, -28);
+  const pick = (arr, k) => arr.map((d) => (d.n > 0 && d[k] != null ? Number(d[k]) : null));
+  const sum = (a) => a.reduce((x, y) => x + y, 0);
+  const M = {};
+  for (const k of ['views', 'subs', 'uploads']) {
+    const c = pick(cur, k), p = pick(prev, k);
+    const cn = c.filter((v) => v != null), pn = p.filter((v) => v != null);
+    M[k] = { cur: c, prev: p, sum: cn.length ? sum(cn) : null, prevSum: sum(pn), curN: cn.length, prevN: pn.length };
+  }
+  return { cur, prev, M };
+}
+function deltaOf(m) {
+  if (m.prevN < 21 || !(m.prevSum > 0) || m.sum == null) return null;
+  const p = Math.round(((m.sum - m.prevSum) / m.prevSum) * 100);
+  if (Math.abs(p) < 5) return { dir: 'eq', text: t('ytSame') };
+  return p > 0 ? { dir: 'up', text: t('ytMore', { p }) } : { dir: 'dn', text: t('ytLess', { p: -p }) };
+}
+function ytTabsHtml(sd, sel) {
+  const tabs = [
+    { k: 'views', label: t('ytViews'), value: sd.M.views.sum != null ? fmtN(sd.M.views.sum) : '–' },
+    { k: 'subs', label: t('ytSubs'), value: sd.M.subs.sum != null ? fmtSigned(sd.M.subs.sum) : '–' },
+    { k: 'uploads', label: t('ytUploads'), value: sd.M.uploads.sum != null ? t('ytCount', { n: fmtFull(sd.M.uploads.sum) }) : '–' }
+  ];
+  return `<div class="yt-tabs" role="tablist">${tabs.map((tb) => {
+    const m = sd.M[tb.k], d = deltaOf(m);
+    const small = d ? `<i class="${d.dir}" aria-hidden="true">${d.dir === 'up' ? '↑' : d.dir === 'dn' ? '↓' : '–'}</i>${esc(d.text)}` : esc(m.curN ? t('ytCover', { n: m.curN }) : t('ytNoData'));
+    return `<button type="button" role="tab" class="yt-tab" data-ytab="${tb.k}" aria-selected="${String(tb.k === sel)}"><span>${esc(tb.label)}</span><b>${esc(tb.value)}</b><small>${small}</small></button>`;
+  }).join('')}</div>`;
+}
+// 채널별 선: radar_by_channel 일별 → 같은 날짜 축 (수집 전 = 빈칸)
+function multiDaily(bc, ser, curDays) {
+  const by = new Map();
+  for (const x of (bc && bc.daily) || []) {
+    const k = ser.keyOf(x.c);
+    if (!by.has(k)) by.set(k, new Map());
+    const m = by.get(k);
+    m.set(x.d, (m.get(x.d) || 0) + Number(x.v || 0));
+  }
+  return ser.series.map((sr) => {
+    const m = by.get(sr.key) || new Map();
+    let started = false;
+    const vals = curDays.map((d) => { if (m.has(d.d)) { started = true; return m.get(d.d); } return started && d.n > 0 ? 0 : null; });
+    return { key: sr.key, label: sr.label, color: sr.color, vals };
+  });
+}
+function studioChart(id, sd, tab, multi) {
+  const m = sd.M[tab];
+  const xs = sd.cur.map((d) => dayLabel(d.d));
+  const tipTitle = (i) => new Date(sd.cur[i].d + 'T12:00:00+09:00').toLocaleDateString(loc(), { month: 'short', day: 'numeric', weekday: 'short', timeZone: 'Asia/Seoul' });
+  const name = t(tab === 'views' ? 'ytViews' : tab === 'subs' ? 'ytSubs' : 'ytUploads');
+  let series, band = null;
+  if (multi && tab === 'views') series = multi;
+  else {
+    series = [{ key: tab, label: name, color: YT_LINE, vals: m.cur }];
+    const pv = m.prev.filter((v) => v != null);
+    if (pv.length >= 14) band = { lo: quant(pv, 0.25), hi: quant(pv, 0.75), label: t('ytBand') };
+  }
+  const L = ytLine(id, { xs, series, band, h: 230, aria: name, yFmt: tab === 'subs' ? fmtSigned : fmtN, valFmt: tab === 'subs' ? fullSigned : fmtFull, tipTitle, int: tab !== 'views' });
+  const note = [];
+  if (band) note.push(`<span><i class="ln"></i>${esc(name)}</span><span><i class="sw"></i>${esc(t('ytBand'))} · ${esc(t('ytBandNote'))}</span>`);
+  if (tab === 'subs') note.push(`<span>${esc(t('ytSubsNote'))}</span>`);
+  if (tab === 'uploads') note.push(`<span>${esc(t('ytUpNote'))}</span>`);
+  return { html: L.html + (note.length ? `<div class="yt-note">${note.join('')}</div>` : ''), bind: L.bind, series };
+}
+
+// ---------- 이거 해볼래? (채널 데이터로 고른 실험 제안) ----------
+const confOf = (n) => (n >= 10 ? 'hi' : n >= 5 ? 'mid' : 'lo');
+const CONFW = { hi: 1, mid: 0.8, lo: 0.6 };
+const modeOf = (arr) => { const m = new Map(); let best = null, bn = 0; for (const x of arr) { const c = (m.get(x) || 0) + 1; m.set(x, c); if (c > bn) { best = x; bn = c; } } return best; };
+const durIdx = (sec) => DUR.findIndex(([a, b]) => (sec || 0) >= a && (sec || 0) <= b);
+const shortT = (s, n = 24) => { const x = String(s || '').trim(); return x.length > n ? x.slice(0, n - 1) + '…' : x; };
+const kstDay = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+function tryStore(k, def) { try { const v = JSON.parse(localStorage.getItem(k) || 'null'); return v == null ? def : v; } catch (e) { return def; } }
+function trySave(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* 저장 못 해도 화면은 그대로 */ } }
+const tryHidden = () => new Set(tryStore('radar.tryHide.' + kstDay(), []));
+const tryRuns = () => tryStore('radar.try', []);
+const keyTok = (s) => [...new Set([...tokens(s.title), ...(s.tags || []).map((x) => String(x).toLowerCase().trim()).filter((x) => x.length >= 2 && x.length <= 20 && !STOPW.has(x))])];
+const axisHours = () => `<div class="dk-axis"><span>${esc(hourName(0))}</span><span>${esc(hourName(6))}</span><span>${esc(hourName(12))}</span><span>${esc(hourName(18))}</span><span>${esc(hourName(23))}</span></div>`;
+function keyHtml(withCur, refLabel) {
+  return `<div class="ty-key"><span><i style="background:${YT_LINE}"></i>${esc(t('tryRec'))}</span>${withCur ? `<span><i style="background:#909090"></i>${esc(t('tryCur'))}</span>` : ''}<span><i style="height:0;width:14px;border-radius:0;border-top:2px dashed rgba(15,15,15,.45)"></i>${esc(refLabel || t('insUsual') + ' 1×')}</span></div>`;
+}
+// 유튜브 '트래픽 소스'처럼: 이름 · 얇은 막대 · 값
+function ytRowsHtml(rows) {
+  const max = Math.max(1e-9, ...rows.map((r) => r.v || 0));
+  return `<div class="dk-hbars">${rows.map((r) => `<div class="dk-hb${r.low ? ' low' : ''}${r.cur ? ' cur' : ''}"><span class="l" data-cur="${esc(t('tryCur'))}">${esc(r.label)}</span><span class="track"><i class="${r.hot ? 'hot' : ''}" style="width:${Math.max(2, ((r.v || 0) / max) * 100).toFixed(1)}%"></i></span><span class="v">${esc(r.text)}${r.sub ? `<small>${esc(r.sub)}</small>` : ''}</span></div>`).join('')}</div>`;
+}
+function trySuggest(own, refs, prof, opt = {}) {
+  const out = [];
+  const liveOwn = own.filter((s) => s.status === 'live' && s.published_at);
+  const aOwn = analyze(own);
+  const cats = prof ? prof.cats : new Set();
+  const refsLive = refs.filter((s) => s.status === 'live');
+  const refsCat = cats.size ? refsLive.filter((s) => cats.has(catOf(s))) : [];
+  const refBase = refsCat.length >= 20 ? refsCat : refsLive;
+  const useRefs = aOwn.used < 12;
+  const A = useRefs ? analyze(refBase) : aOwn;
+  const basis = useRefs ? 'ref' : 'mine';
+  const basisList = (useRefs ? refBase : own).filter((s) => s.status === 'live' && s.ratio != null);
+  const push = (sg) => { sg.conf = sg.conf || confOf(sg.n); sg.score = (sg.lift - 1) * CONFW[sg.conf] + (sg.bonus || 0); out.push(sg); };
+  // 1) 올리는 시간
+  const usualH = liveOwn.length >= 3 ? modeOf(liveOwn.map((s) => kstOf(s.published_at).h)) : null;
+  const bh = bestOf(A.hours);
+  if (bh && bh.v >= 1.2 && bh.k !== usualH) {
+    const cur = usualH != null ? A.hours.find((r) => r.k === usualH) : null;
+    const base = cur && cur.n >= MIN_N && cur.v ? cur.v : 1;
+    const lift = bh.v / Math.max(base, 0.4);
+    if (lift >= 1.15) {
+      const rows = A.hours.map((r) => ({ v: r.v || 0, n: r.n, k: r.k, low: r.n < MIN_N, hot: r.k === bh.k, cur: r.k === usualH }));
+      push({ id: 'hour:' + bh.k, kind: 'hour', key: bh.k, ic: IC.clock, n: bh.n, lift, basis, base,
+        q: t('tryHourQ', { h: hourName(bh.k) }),
+        lead: usualH != null ? t('tryHourL', { n: bh.n, x: bh.v.toFixed(1), u: hourName(usualH) }) : t('tryHourL0', { n: bh.n, x: bh.v.toFixed(1) }),
+        viz: (id) => ({ html: barsHtml(id, rows, t('insHour'), 96, { v: 1, label: t('insUsual') }) + axisHours() + keyHtml(usualH != null), bind: (root) => bindBars(root, id, rows, (x) => ratioTip(hourName(x.k), x), { v: 1 }) }) });
+    }
+  }
+  // 2) 올리는 요일
+  const usualD = liveOwn.length >= 3 ? modeOf(liveOwn.map((s) => kstOf(s.published_at).wd)) : null;
+  const bd = bestOf(A.days);
+  if (bd && bd.v >= 1.2 && bd.k !== usualD) {
+    const cur = usualD != null ? A.days.find((r) => r.k === usualD) : null;
+    const base = cur && cur.n >= MIN_N && cur.v ? cur.v : 1;
+    const lift = bd.v / Math.max(base, 0.4);
+    if (lift >= 1.15) {
+      const rows = A.days.map((r) => ({ v: r.v || 0, n: r.n, k: r.k, low: r.n < MIN_N, hot: r.k === bd.k, cur: r.k === usualD }));
+      push({ id: 'day:' + bd.k, kind: 'day', key: bd.k, ic: IC.cal, n: bd.n, lift, basis, base,
+        q: t('tryDayQ', { d: dayName(bd.k) }),
+        lead: usualD != null ? t('tryDayL', { d: dayName(bd.k), n: bd.n, x: bd.v.toFixed(1), u: dayName(usualD) }) : t('tryHourL0', { n: bd.n, x: bd.v.toFixed(1) }),
+        viz: (id) => ({ html: barsHtml(id, rows, t('insDay'), 96, { v: 1, label: t('insUsual') }) + `<div class="dk-axis">${rows.map((x) => `<span>${esc(dayName(x.k, 'short'))}</span>`).join('')}</div>` + keyHtml(usualD != null), bind: (root) => bindBars(root, id, rows, (x) => ratioTip(dayName(x.k), x), { v: 1 }) }) });
+    }
+  }
+  // 3) 길이
+  const myDur = median(liveOwn.map((s) => s.dur || 0).filter(Boolean));
+  const myB = myDur ? durIdx(myDur) : -1;
+  const bdur = bestOf(A.durs);
+  if (bdur && bdur.v >= 1.2 && bdur.k !== myB) {
+    const cur = A.durs.find((r) => r.k === myB);
+    const base = cur && cur.n >= MIN_N && cur.v ? cur.v : 1;
+    const lift = bdur.v / Math.max(base, 0.4);
+    if (lift >= 1.15) {
+      const rows = A.durs.map((r) => ({ label: t('dur' + r.k), v: r.v || 0, low: r.n < MIN_N, hot: r.k === bdur.k, cur: r.k === myB, text: r.n < MIN_N ? t('insLow') : t('insX', { x: (r.v || 0).toFixed(1) }), sub: t('insTipN', { n: r.n }) }));
+      push({ id: 'dur:' + bdur.k, kind: 'dur', key: bdur.k, ic: IC.timer, n: bdur.n, lift, basis, base,
+        q: t('tryDurQ', { b: t('dur' + bdur.k) }),
+        lead: t('tryDurL', { b: t('dur' + bdur.k), n: bdur.n, x: bdur.v.toFixed(1), m: myDur ? Math.round(myDur) : '–' }),
+        viz: () => ({ html: ytRowsHtml(rows) }) });
+    }
+  }
+  // 4) 제목 유형
+  const bf = bestOf(A.fmts.filter((r) => r.k !== 'none'));
+  if (bf && bf.v >= 1.2) {
+    const share = liveOwn.length ? liveOwn.filter((s) => formatsOf(s.title).includes(bf.k)).length / liveOwn.length : 0;
+    if (!liveOwn.length || share < 0.4) {
+      const restV = median(basisList.filter((s) => !formatsOf(s.title).includes(bf.k)).map((s) => Number(s.ratio))) || 1;
+      const lift = bf.v / Math.max(restV, 0.4);
+      if (lift >= 1.15) {
+        const exS = basisList.filter((s) => formatsOf(s.title).includes(bf.k)).sort((a, b) => b.ratio - a.ratio)[0];
+        const rows = A.fmts.filter((r) => r.n > 0 && r.k !== 'none').sort((a, b) => (b.n >= MIN_N) - (a.n >= MIN_N) || (b.v || 0) - (a.v || 0)).slice(0, 5)
+          .map((r) => ({ label: t('fmt_' + r.k), v: r.v || 0, low: r.n < MIN_N, hot: r.k === bf.k, text: r.n < MIN_N ? t('insLow') : t('insX', { x: (r.v || 0).toFixed(1) }), sub: t('insTipN', { n: r.n }) }));
+        push({ id: 'fmt:' + bf.k, kind: 'fmt', key: bf.k, ic: IC.picks, n: bf.n, lift, basis, base: restV,
+          q: t('tryFmtQ', { f: t('fmt_' + bf.k) }),
+          lead: t('tryFmtL', { f: t('fmt_' + bf.k), n: bf.n, x: bf.v.toFixed(1), p: Math.round(share * 100) }),
+          ex: exS ? t('tryEx', { t: shortT(exS.title, 40), x: Number(exS.ratio).toFixed(1) }) : '',
+          viz: () => ({ html: ytRowsHtml(rows) }) });
+      }
+    }
+  }
+  // 5) 소재: 레퍼런스에서 터진 쇼츠 중 내 채널과 잘 맞는 것
+  if (!opt.noRefs) {
+    const seenT = new Set();
+    const picks = pickList(refsLive, 'all', prof).filter((s) => {
+      const k = String(s.title || '').toLowerCase().replace(/\s+/g, '');
+      if (s.ratio < 2 || (s._fit && s._fit.score < 45) || seenT.has(k)) return false;
+      seenT.add(k);
+      return true;
+    }).slice(0, 2);
+    for (const s of picks) {
+      const x = Number(s.ratio);
+      push({ id: 'topic:' + s.id, kind: 'topic', key: keyTok(s).slice(0, 3), vid: s.id, ic: IC.up, n: 1, conf: x >= 5 ? 'mid' : 'lo', lift: Math.min(x / 2, 3) + (s._fit ? s._fit.score / 200 : 0), basis: 'ref',
+        nText: s._fit ? t('fit', { n: s._fit.score }) : t('ratio', { x: x.toFixed(1) }),
+        q: t('tryTopicQ', { t: shortT(s.title, 24) }),
+        lead: s._fit ? t('tryTopicL', { c: s.channel_title, x: x.toFixed(1), f: s._fit.score }) : t('tryTopicL0', { c: s.channel_title, x: x.toFixed(1) }),
+        viz: () => ({ html: `<div class="ty-top"><a class="dk-thumb" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}" style="background-image:url('${cssUrl(vthumb(s.thumb))}')" aria-label="${esc(t('sxCurve'))}"><span class="v">${esc(fmtN(s.views))}</span></a><div><a class="tt" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}">${esc(s.title)}</a><div class="mm">${esc(s.channel_title)} · ${esc(ageTxt(s.age_h))}</div></div></div>` + ytRowsHtml([{ label: t('tryThis'), v: x, hot: true, text: t('insX', { x: x.toFixed(1) }) }, { label: t('insUsual'), v: 1, text: t('insX', { x: '1.0' }) }]) }) });
+    }
+    // 6) 키워드: 요즘 레퍼런스에서 터진 소재 중 내가 안 써 본 것
+    const kws = trendKeywords(refsLive).filter((k) => !(prof && prof.kwTop.has(k)));
+    const stat = (k) => { const xs = refsLive.filter((s) => s.ratio >= 2 && keyTok(s).includes(k)); return { k, n: xs.length, x: median(xs.map((s) => Number(s.ratio))) || 0 }; };
+    const ks = kws.slice(0, 6).map(stat).filter((r) => r.n >= 2);
+    if (ks.length) {
+      const top = ks[0];
+      push({ id: 'kw:' + top.k, kind: 'kw', key: [top.k], ic: IC.collect, n: top.n, conf: top.n >= 5 ? 'mid' : 'lo', lift: Math.min(top.x / 2, 2.5), basis: 'ref',
+        nText: t('kwBreak', { n: top.n }),
+        q: t('tryKwQ', { k: top.k }), lead: t('tryKwL', { k: top.k, n: top.n, x: top.x.toFixed(1) }),
+        viz: () => ({ html: ytRowsHtml(ks.slice(0, 5).map((r) => ({ label: '#' + r.k, v: r.n, hot: r.k === top.k, text: t('kwBreak', { n: r.n }) }))) }) });
+    }
+  }
+  // 7) 업로드 주기 (같은 분야 레퍼런스와 비교)
+  if (!opt.noRefs && liveOwn.length >= 3) {
+    const myWk = liveOwn.filter((s) => s.age_h <= 28 * 24).length / 4;
+    const perCh = new Map();
+    for (const s of refBase) if (s.age_h <= 28 * 24) perCh.set(s.channel_id, (perCh.get(s.channel_id) || 0) + 1);
+    const refWk = median([...perCh.values()].map((c) => c / 4));
+    if (refWk != null && refWk >= 2 && myWk < refWk * 0.6) {
+      const goal = Math.max(Math.ceil(myWk + 1), Math.round(Math.min(refWk, myWk * 2 + 1)));
+      const weeks = Array.from({ length: 8 }, (_, w) => {
+        const hi = Date.now() - w * 7 * 864e5, lo = hi - 7 * 864e5;
+        return { v: liveOwn.filter((s) => { const p = Date.parse(s.published_at); return p > lo && p <= hi; }).length, w };
+      }).reverse();
+      const rows = weeks.map((x) => ({ v: x.v, w: x.w, hot: false }));
+      const nCh = perCh.size;
+      push({ id: 'cad:' + goal, kind: 'cad', key: goal, ic: IC.ideas, n: nCh, conf: nCh >= 5 ? 'hi' : nCh >= 3 ? 'mid' : 'lo', lift: 1.3, basis: 'ref',
+        nText: t('chCount', { n: nCh }),
+        q: t('tryCadQ', { n: goal }), lead: t('tryCadL', { m: Math.round(myWk * 10) / 10, r: Math.round(refWk * 10) / 10 }),
+        viz: (id) => ({ html: barsHtml(id, rows, t('tryWeekly'), 96, { v: goal, label: t('tryTarget', { n: goal }) }) + `<div class="dk-axis"><span>${esc(t('tryWeekly'))} · 8</span><span>${esc(t('now'))}</span></div>`, bind: (root) => bindBars(root, id, rows, (x) => `${x.w ? t('dAgo', { n: x.w * 7 }) : t('now')}\n${t('ytCount', { n: x.v })}`, { v: goal }) }) });
+    }
+  }
+  // 8) 업로드 공백
+  if (liveOwn.length) {
+    const last = Math.max(...liveOwn.map((s) => Date.parse(s.published_at)));
+    const days = Math.floor((Date.now() - last) / 864e5);
+    if (days >= 3) {
+      const n28 = liveOwn.filter((s) => s.age_h <= 28 * 24).length;
+      const onDays = new Set(liveOwn.map((s) => new Date(Date.parse(s.published_at) + 9 * 3600e3).toISOString().slice(0, 10)));
+      const today = kstDay();
+      const cells = Array.from({ length: 28 }, (_, i) => { const d = new Date(Date.now() + 9 * 3600e3 - (27 - i) * 864e5).toISOString().slice(0, 10); return `<i class="${onDays.has(d) ? 'on' : ''}${d === today ? ' today' : ''}" title="${esc(dayLabel(d))}"></i>`; }).join('');
+      push({ id: 'gap', kind: 'gap', key: null, ic: IC.warn, n: liveOwn.length, conf: 'hi', lift: days >= 5 ? 1.6 : 1.3, bonus: 0.4, basis: 'mine',
+        nText: t('tryN', { n: liveOwn.length }),
+        q: t('tryGapQ'), lead: n28 ? t('tryGapL', { d: days, g: Math.max(1, Math.round(28 / n28)) }) : t('tryGapL0', { d: days }),
+        viz: () => ({ html: `<div class="ty-strip" role="img" aria-label="${esc(t('tryStrip'))}">${cells}</div><div class="dk-axis"><span>${esc(t('dAgo', { n: 27 }))}</span><span>${esc(t('tryStrip'))}</span><span>${esc(t('tryToday'))}</span></div>` }) });
+    }
+  }
+  // 9) 다시 뜨는 옛날 쇼츠 → 2탄
+  const olds = liveOwn.filter((s) => s.age_h >= 7 * 24);
+  if (olds.length >= 3) {
+    const typ = median(olds.map((s) => Number(s.v48) || 0)) || 0;
+    const hot = olds.filter((s) => (s.v48 || 0) >= Math.max(1000, typ * 3)).sort((a, b) => b.v48 - a.v48)[0];
+    if (hot) {
+      push({ id: 'revive:' + hot.id, kind: 'revive', key: keyTok(hot).slice(0, 3), vid: hot.id, ic: IC.refresh, n: olds.length, lift: 1.4, basis: 'mine',
+        q: t('tryReviveQ', { t: shortT(hot.title, 22) }), lead: t('tryReviveL', { d: Math.round(hot.age_h / 24), v: fmtN(hot.v48), u: fmtN(typ) }),
+        viz: () => ({ html: ytRowsHtml([{ label: t('tryThis'), v: hot.v48, hot: true, text: fmtN(hot.v48) }, { label: t('tryOldAvg'), v: typ, text: fmtN(typ) }]) }) });
+    }
+  }
+  return out.sort((a, b) => b.score - a.score);
+}
+function tyCardHtml(sg, idx, idp, ch) {
+  const vid = `${idp}${idx}`;
+  const v = sg.viz ? sg.viz(vid) : null;
+  sg._bind = v && v.bind;
+  const running = tryRuns().some((r) => r.id === sg.id && (r.ch || '') === (ch || ''));
+  return `<article class="ty-card dk-fade${running ? ' done' : ''}" data-tid="${esc(sg.id)}">
+    <div class="ty-h"><span class="ic">${svg(sg.ic, 19)}</span><div><b class="q">${esc(sg.q)}</b><span class="lead">${esc(sg.lead)}</span></div></div>
+    ${sg.ex ? `<p class="ty-ex">${esc(sg.ex)}</p>` : ''}
+    ${v ? `<div class="ty-viz">${v.html}</div>` : ''}
+    <div class="ty-f"><span class="conf ${sg.conf}" title="${esc(t('tryConf_' + sg.conf))}"><i aria-hidden="true"><b></b><b></b><b></b></i>${esc(sg.nText || t('tryN', { n: sg.n }))} · ${esc(t('tryConf_' + sg.conf))}</span><span class="basis">${esc(t(sg.basis === 'ref' ? 'tryBasisRef' : 'tryBasisMine'))}</span>
+      <div class="acts">${running ? `<span class="dk-tag teal">${esc(t('tryDoing'))}</span>` : `<button type="button" class="dk-btn sm" data-try="${esc(sg.id)}">${esc(t('tryDo'))}</button><button type="button" class="dk-btn sm line" data-skip="${esc(sg.id)}">${esc(t('trySkip'))}</button>`}</div></div>
+  </article>`;
+}
+function bindTry(root, list, ch, onChange) {
+  for (const sg of list) if (sg._bind) sg._bind(root);
+  root.querySelectorAll('[data-try]').forEach((b) => b.addEventListener('click', async () => {
+    const sg = list.find((x) => x.id === b.dataset.try);
+    if (!sg) return;
+    b.disabled = true;
+    const out = await act({ action: 'idea', op: 'add', title: sg.q.slice(0, 200), note: `${sg.lead}${sg.ex ? ' · ' + sg.ex : ''}`.slice(0, 2000), source_video_id: sg.vid || null });
+    if (!out.ok) { b.disabled = false; snack(errText(out.error)); return; }
+    const runs = tryRuns().filter((r) => !(r.id === sg.id && (r.ch || '') === (ch || '')));
+    runs.unshift({ id: sg.id, kind: sg.kind, key: sg.key, q: sg.q, ch: ch || '', at: Date.now() });
+    trySave('radar.try', runs.slice(0, 30));
+    if (sg.vid) S.board.add(sg.vid);
+    snack(t('tryAdded'));
+    if (onChange) onChange();
+  }));
+  root.querySelectorAll('[data-skip]').forEach((b) => b.addEventListener('click', () => {
+    const k = 'radar.tryHide.' + kstDay();
+    trySave(k, [...tryStore(k, []), b.dataset.skip]);
+    const card = b.closest('.ty-card');
+    card.style.transition = 'opacity .45s var(--dk-ease), transform .45s var(--dk-ease)';
+    card.style.opacity = '0';
+    card.style.transform = 'scale(.97)';
+    setTimeout(() => { if (onChange) onChange(); }, 380);
+  }));
+}
+function tryMatch(r, s) {
+  switch (r.kind) {
+    case 'hour': return kstOf(s.published_at).h === r.key;
+    case 'day': return kstOf(s.published_at).wd === r.key;
+    case 'dur': return durIdx(s.dur) === r.key;
+    case 'fmt': return formatsOf(s.title).includes(r.key);
+    case 'kw': case 'topic': case 'revive': { const toks = new Set(keyTok(s)); return (Array.isArray(r.key) ? r.key : [r.key]).some((w) => toks.has(w)); }
+    default: return true;
+  }
+}
+function tryResult(r, own) {
+  const mine = own.filter((s) => s.status === 'live' && s.published_at && (!r.ch || s.channel_id === r.ch));
+  const after = mine.filter((s) => Date.parse(s.published_at) >= r.at);
+  if (r.kind === 'gap') { const f = after.sort((a, b) => Date.parse(a.published_at) - Date.parse(b.published_at))[0]; return f ? { v: t('tryGood'), cls: 'good', text: t('tryGapRes', { d: agoTxt(f.published_at) }) } : { text: t('tryWait') }; }
+  if (r.kind === 'cad') {
+    const weeks = Math.max(1, (Date.now() - r.at) / (7 * 864e5));
+    const x = Math.round((after.length / weeks) * 10) / 10;
+    return after.length ? { v: x >= r.key ? t('tryGood') : t('trySame'), cls: x >= r.key ? 'good' : '', text: t('tryCadRes', { x, n: r.key }) } : { text: t('tryWait') };
+  }
+  const hit = after.filter((s) => tryMatch(r, s));
+  if (!hit.length) return { text: t('tryWait') };
+  const mature = hit.filter((s) => s.age_h >= 24 && s.ratio != null);
+  if (!mature.length) return { text: t('tryYoung', { n: hit.length }) };
+  const before = mine.filter((s) => { const p = Date.parse(s.published_at); return p < r.at && p >= r.at - 28 * 864e5 && s.ratio != null && s.age_h >= 24; });
+  const x = median(mature.map((s) => Number(s.ratio)));
+  const y = before.length ? median(before.map((s) => Number(s.ratio))) : 1;
+  const cls = x >= y * 1.15 ? 'good' : x <= y * 0.87 ? 'bad' : '';
+  const mx = Math.max(x, y, 0.1);
+  const cmp = `<div class="cmp"><span>${esc(t('tryResA', { n: mature.length }))}</span><span class="bar"><i style="width:${((x / mx) * 100).toFixed(1)}%"></i></span><b>${esc(t('insX', { x: x.toFixed(1) }))}</b><span>${esc(t('tryResB'))}</span><span class="bar"><i class="b" style="width:${((y / mx) * 100).toFixed(1)}%"></i></span><b>${esc(t('insX', { x: y.toFixed(1) }))}</b></div>`;
+  return { v: cls === 'good' ? t('tryGood') : cls === 'bad' ? t('tryBad') : t('trySame'), cls, text: hit.length > mature.length ? t('tryYoung', { n: hit.length - mature.length }) : '', cmp };
+}
+function tryRunsHtml(runs, own) {
+  if (!runs.length) return `<div class="dk-empty">${esc(t('tryRunNone'))}</div>`;
+  return `<ul class="ty-run" style="margin:0;padding:0">${runs.map((r) => {
+    const res = tryResult(r, own);
+    const since = t('trySince', { d: new Date(r.at).toLocaleDateString(loc(), { month: 'short', day: 'numeric' }) });
+    return `<li><span class="q">${esc(r.q)}</span><span style="display:flex;gap:8px;align-items:center">${res.v ? `<span class="v ${res.cls || ''}">${esc(res.v)}</span>` : ''}<button type="button" class="dk-btn sm line" data-stop="${esc(r.id)}" data-ch="${esc(r.ch || '')}">${esc(t('tryStop'))}</button></span><span class="s">${esc(since)}${res.text ? ' · ' + esc(res.text) : ''}</span>${res.cmp || ''}</li>`;
+  }).join('')}</ul>`;
+}
+
 // ---------- 틀 ----------
 const NAV = [
   { k: 'home' },
-  { sec: 'secRadar' }, { k: 'picks' }, { k: 'insights' }, { k: 'ranking' }, { k: 'alerts', badge: true },
+  { sec: 'secRadar' }, { k: 'picks' }, { k: 'try' }, { k: 'insights' }, { k: 'ranking' }, { k: 'alerts', badge: true },
   { sec: 'secCollect' }, { k: 'collect' }, { k: 'channels' },
   { sec: 'secWork' }, { k: 'ideas' }, { k: 'partners' },
   { div: true }, { k: 'status' }, { k: 'landing', href: '/' }
 ];
-const ROUTES = ['home', 'picks', 'insights', 'ranking', 'alerts', 'collect', 'channels', 'ideas', 'partners', 'status'];
+const ROUTES = ['home', 'picks', 'try', 'insights', 'ranking', 'alerts', 'collect', 'channels', 'ideas', 'partners', 'status'];
 function route() {
   let h = (location.hash || '#home').slice(1);
   try { h = decodeURIComponent(h); } catch (e) { /* 그대로 */ }
@@ -716,7 +1240,7 @@ async function render() {
   S.same = key === lastKey && v.childElementCount > 0;
   lastKey = key;
   v.classList.toggle('dk-still', S.same);
-  const views = { home: vHome, picks: vPicks, insights: vInsights, ranking: vRanking, alerts: vAlerts, collect: vCollect, channels: vChannels, ch: vChannel, ideas: vIdeas, partners: vPartners, status: vStatus };
+  const views = { home: vHome, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, collect: vCollect, channels: vChannels, ch: vChannel, ideas: vIdeas, partners: vPartners, status: vStatus };
   document.title = t(r.name === 'ch' ? 'channels' : r.name) + ' · CNOL RADAR';
   try {
     await views[r.name](v, r, alive);
@@ -838,8 +1362,9 @@ async function getProfile(force) {
   const chans = await getChans();
   const mineCh = (chans || []).filter((c) => c.role === 'mine');
   S.profAt = Date.now();
-  if (!mineCh.length) { S.prof = null; return null; }
+  if (!mineCh.length) { S.prof = null; S.profList = []; return null; }
   const list = remember(await rpc('radar_shorts', { p_days: 120, p_channel: null, p_role: 'mine', p_limit: 400 }));
+  S.profList = list;
   const live = list.filter((x) => x.status === 'live');
   const kw = new Map();
   for (const x of live) {
@@ -959,51 +1484,47 @@ async function openShort(id) {
   box.querySelectorAll('[data-close]').forEach((a) => a.addEventListener('click', closeShort));
   bindBoardButtons(box, [x]);
   box.querySelector('[data-similar]').addEventListener('click', () => { S.prefKw = similarKw([x]).join(', '); closeShort(); location.hash = '#collect'; });
-  const { data } = await sb.from('radar_video_stats').select('at,view_count').eq('video_id', id).order('at', { ascending: true }).limit(500);
+  let data = null;
+  try { data = await rpc('radar_curve', { p_video: id }); } catch (e) { data = null; }
   if (m.dataset.id !== id) return;
-  drawCurve(box.querySelector('#sxCurve'), box.querySelector('#sxSub'), data || [], x);
+  drawCurve(box.querySelector('#sxCurve'), box.querySelector('#sxSub'), data || { me: [], peers: [] }, x);
 }
-// 성장 곡선: 올린 시각(0회)부터 수집한 조회수까지 — 마우스를 따라 세로선이 가장 가까운 시점을 잡아요
-function drawCurve(el, sub, rows, x) {
-  const pts = rows.map((r) => ({ t: Date.parse(r.at), v: Number(r.view_count) || 0 })).filter((p) => p.t);
+// 성장 곡선 (유튜브 '동영상 분석'처럼): 파란 선 = 이 쇼츠, 회색 띠 = 같은 채널 쇼츠가 같은 시점에 보통 받은 조회수
+function interpAt(pts, x) {
+  if (x <= pts[0][0]) return pts[0][1];
+  for (let i = 1; i < pts.length; i++) {
+    if (x <= pts[i][0]) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; return x1 === x0 ? y1 : y0 + ((y1 - y0) * (x - x0)) / (x1 - x0); }
+  }
+  return pts[pts.length - 1][1];
+}
+function drawCurve(el, sub, data, x) {
+  const raw = (data.me || []).map(([at, v]) => [Date.parse(at), Number(v) || 0]).filter((p) => p[0]);
   const t0 = Date.parse(x.published_at);
-  if (t0 && pts.length && t0 < pts[0].t) pts.unshift({ t: t0, v: 0, pub: true });
+  // 올린 지 48시간 안에 수집을 시작했으면 올린 시각(0회)부터 그려요
+  const fromPub = t0 && raw.length && raw[0][0] - t0 <= 48 * 3600e3;
+  const pts = fromPub && t0 < raw[0][0] ? [[t0, 0], ...raw] : raw;
   if (pts.length < 2) { el.innerHTML = `<div class="dk-empty" style="padding:18px">${esc(t('sxOne'))}</div>`; sub.textContent = ''; return; }
-  sub.textContent = t('sxSnaps', { n: rows.length, t: agoTxt(rows[0].at) });
-  const W = 640, H = 170, L = 44, R = 10, T = 10, B = 24;
-  const tmin = pts[0].t, tmax = pts[pts.length - 1].t, vmax = Math.max(1, ...pts.map((p) => p.v));
-  const X = (tt) => L + ((tt - tmin) / Math.max(1, tmax - tmin)) * (W - L - R);
-  const Y = (v) => T + (1 - v / vmax) * (H - T - B);
-  const line = pts.map((p, i) => `${i ? 'L' : 'M'}${X(p.t).toFixed(1)},${Y(p.v).toFixed(1)}`).join('');
-  const area = `${line}L${X(tmax).toFixed(1)},${Y(0)}L${X(tmin).toFixed(1)},${Y(0)}Z`;
+  sub.textContent = t('sxSnaps', { n: raw.length, t: agoTxt(new Date(raw[0][0]).toISOString()) });
+  const tmin = pts[0][0], tmax = pts[pts.length - 1][0];
+  const N = Math.max(2, Math.min(97, Math.ceil((tmax - tmin) / 3600e3) + 1));
+  const grid = Array.from({ length: N }, (_, i) => tmin + (i / (N - 1)) * (tmax - tmin));
+  const vals = grid.map((tt) => Math.round(interpAt(pts, tt)));
+  // 같은 채널 또래 쇼츠의 나이별 조회수 → 시점마다 가운데 50%
+  let bands = null;
+  const peers = (data.peers || []).map((p) => [[0, 0], ...p.map(([a, v]) => [Number(a), Number(v) || 0])]);
+  if (fromPub && peers.length >= 3) {
+    const lo = [], hi = [];
+    for (const tt of grid) {
+      const age = (tt - t0) / 3600e3;
+      const vs = peers.filter((p) => p[p.length - 1][0] >= age).map((p) => interpAt(p, age));
+      if (vs.length >= 3) { lo.push(quant(vs, 0.25)); hi.push(quant(vs, 0.75)); } else { lo.push(null); hi.push(null); }
+    }
+    if (lo.filter((v) => v != null).length >= 2) bands = { lo, hi, label: t('ytBand') };
+  }
   const lab = (tt) => new Date(tt).toLocaleString(loc(), { month: 'short', day: 'numeric', hour: 'numeric', timeZone: 'Asia/Seoul' });
-  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('sxCurve'))}">
-    <defs><linearGradient id="sxg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#7c3aed" stop-opacity=".28"/><stop offset="1" stop-color="#7c3aed" stop-opacity="0"/></linearGradient></defs>
-    <line x1="${L}" x2="${W - R}" y1="${Y(vmax)}" y2="${Y(vmax)}" stroke="#eef2f7"/><line x1="${L}" x2="${W - R}" y1="${Y(vmax / 2)}" y2="${Y(vmax / 2)}" stroke="#eef2f7"/><line x1="${L}" x2="${W - R}" y1="${Y(0)}" y2="${Y(0)}" stroke="#cbd5e1"/>
-    <text x="${L - 6}" y="${Y(vmax) + 4}" text-anchor="end" font-size="11" fill="#64748b">${esc(fmtN(vmax))}</text><text x="${L - 6}" y="${Y(0) + 4}" text-anchor="end" font-size="11" fill="#64748b">0</text>
-    <text x="${L}" y="${H - 6}" font-size="11" fill="#64748b">${esc(lab(tmin))}</text><text x="${W - R}" y="${H - 6}" text-anchor="end" font-size="11" fill="#64748b">${esc(lab(tmax))}</text>
-    <path d="${area}" fill="url(#sxg)"/><path d="${line}" fill="none" stroke="#6d28d9" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-    <g id="sxHover" style="opacity:0;transition:opacity .25s"><line id="sxL" y1="${T}" y2="${Y(0)}" stroke="#334155" stroke-dasharray="3 3"/><circle id="sxD" r="5" fill="#6d28d9" stroke="#fff" stroke-width="2"/></g>
-    <rect class="hit" x="${L}" y="${T}" width="${W - L - R}" height="${H - T - B}" fill="transparent"/>
-  </svg><div class="dk-tip" role="status"></div>`;
-  const svgEl = el.querySelector('svg'), tip = el.querySelector('.dk-tip'), g = el.querySelector('#sxHover');
-  const move = (e) => {
-    const r = svgEl.getBoundingClientRect();
-    const tx = tmin + (((e.clientX - r.left) / r.width) * W - L) / (W - L - R) * (tmax - tmin);
-    let best = pts[0];
-    for (const p of pts) if (Math.abs(p.t - tx) < Math.abs(best.t - tx)) best = p;
-    const px = X(best.t), py = Y(best.v);
-    el.querySelector('#sxL').setAttribute('x1', px); el.querySelector('#sxL').setAttribute('x2', px);
-    el.querySelector('#sxD').setAttribute('cx', px); el.querySelector('#sxD').setAttribute('cy', py);
-    g.style.opacity = 1;
-    fillTip(tip, `${lab(best.t)}\n${fmtFull(best.v)}${t('unitViews')}`);
-    tip.classList.add('on');
-    tip.style.left = Math.min(Math.max((px / W) * r.width, 70), r.width - 70) + 'px';
-    tip.style.top = Math.max(-10, (py / H) * r.height - tip.offsetHeight - 12) + 'px';
-  };
-  const hit = el.querySelector('.hit');
-  hit.addEventListener('pointermove', move);
-  hit.addEventListener('pointerleave', () => { g.style.opacity = 0; tip.classList.remove('on'); });
+  const L = ytLine('sxLine', { xs: grid.map(lab), series: [{ key: 'v', label: t('sxViews'), color: YT_LINE, vals }], bands, ref: !bands && x.base ? { v: Number(x.base), label: t('ytMedLine') } : null, h: 180, aria: t('sxCurve'), ticks: xTicks(N, 4) });
+  el.innerHTML = L.html + `<div class="yt-note"><span><i class="ln"></i>${esc(t('tryThis'))}</span>${bands ? `<span><i class="sw"></i>${esc(t('ytTypical'))}</span>` : x.base ? `<span><i class="ln" style="border-top:2px dashed rgba(15,15,15,.5)"></i>${esc(t('ytMedLine'))}</span>` : ''}</div>`;
+  L.bind(el);
 }
 // 어디서든 data-short를 누르면 분석 창 (Ctrl/⌘·가운데 클릭은 유튜브 새 탭)
 document.addEventListener('click', (e) => {
@@ -1017,13 +1538,14 @@ document.addEventListener('click', (e) => {
 // ---------- 대시보드 ----------
 async function vHome(v, r, alive) {
   loading(v, t('home'), esc(t('loading')));
-  const [ov, sh, al, , bc, prof] = await Promise.all([
+  const [ov, sh, al, , bc, prof, trend] = await Promise.all([
     rpc('radar_overview'),
     rpc('radar_shorts', { p_days: 7, p_channel: null, p_role: null, p_limit: 600 }),
     sb.from('radar_alerts').select('*').order('created_at', { ascending: false }).limit(60),
     getChans(),
-    rpc('radar_by_channel', { p_hours: 48, p_days: 28 }).catch(() => ({ hourly: [], daily: [] })),
-    getProfile().catch(() => null)
+    rpc('radar_by_channel', { p_hours: 48, p_days: 29 }).catch(() => ({ hourly: [], daily: [] })),
+    getProfile().catch(() => null),
+    rpc('radar_trend', { p_days: 57, p_channel: null }).catch(() => [])
   ]);
   if (!alive()) return;
   remember(sh);
@@ -1046,16 +1568,6 @@ async function vHome(v, r, alive) {
   const last1h = ov.hourly.length >= 2 ? ov.hourly[ov.hourly.length - 2].v : 0;
 
   const rank = (ov.ranking || []).slice(0, 6);
-  const days = ov.daily || [];
-  const cur = days.slice(-28), prev = days.slice(0, Math.max(0, days.length - 28));
-  const curSum = cur.reduce((a, d) => a + d.v, 0), prevSum = prev.reduce((a, d) => a + d.v, 0);
-  const prevDays = prev.filter((d) => d.n > 0).length;
-  const dv = cur.map((d) => ({ v: d.v, d: d.d, pre: d.n === 0 }));
-  let dchange = esc(t('dailyNote'));
-  if (prevDays >= 21 && prevSum > 0) {
-    const p = pct(curSum, prevSum);
-    dchange = `<span class="${p >= 0 ? 'dk-up' : 'dk-down'}" style="font-weight:700">${esc(t('prev28', { p: Math.abs(p), dir: t(p >= 0 ? 'more' : 'less') }))}</span>`;
-  }
   const tops = sh.filter((s) => s.v48 > 0).sort((a, b) => b.v48 - a.v48).slice(0, 5);
   const topsList = tops.length ? tops : sh.filter((s) => s.age_h <= 48).sort((a, b) => b.views - a.views).slice(0, 5);
   const picks = pickList(sh, 'all', prof).slice(0, 3);
@@ -1065,17 +1577,31 @@ async function vHome(v, r, alive) {
   const canStack = ser.series.length >= 2;
   const stacked = canStack && S.stack === 'ch';
   const hs = stackCols(hv, bc?.hourly, ser.keyOf, (b) => Date.parse(b.h), (x) => Date.parse(x.h));
-  const ds = stackCols(dv, bc?.daily, ser.keyOf, (b) => b.d, (x) => x.d);
+  // 유튜브 스튜디오 '개요'처럼: 지표 탭 + 선 차트 (채널별 = 채널마다 선, 합산 = 파란 선 + 평소 범위)
+  const sd = studioData(trend);
+  if (!['views', 'subs', 'uploads'].includes(S.ytTab)) S.ytTab = 'views';
+  const multi = stacked ? multiDaily(bc, ser, sd.cur) : null;
+  const multiTot = multi ? Object.fromEntries(multi.map((x) => [x.key, x.vals.reduce((a, y) => a + (y || 0), 0)])) : null;
+  const ovChart = () => studioChart('ovl', sd, S.ytTab, multi);
+  const oc = ovChart();
+  // 이거 해볼래? (내 채널 데이터 · 레퍼런스에서 고른 실험 3개)
+  const hidden = tryHidden();
+  const tryList = trySuggest(S.profList || [], sh.filter((x) => x.role === 'reference'), prof).filter((x) => !hidden.has(x.id)).slice(0, 3);
+  const tryRow = `<section class="dk-card full dk-fade">
+    <div class="dk-ch"><h2 style="display:flex;align-items:center;gap:8px">${svg(IC.try, 20)}${esc(t('try'))}</h2><a class="dk-sub" href="#try" style="font-weight:700">${esc(t('tryMore'))} →</a></div>
+    <p class="dk-sub" style="margin:-6px 0 0">${esc(prof ? t('tryHomeSub') : t('tryNoMine'))}</p>
+    ${tryList.length ? `<div class="ty-grid home">${tryList.map((sg, i) => tyCardHtml(sg, i, 'th', '')).join('')}</div>` : `<div class="dk-empty">${esc(t('tryEmpty'))}</div>`}
+  </section>`;
   const stackSeg = canStack ? `<div class="dk-seg" role="group" aria-label="${esc(t('byCh'))}"><button type="button" data-stack="ch" aria-pressed="${String(S.stack === 'ch')}">${esc(t('byCh'))}</button><button type="button" data-stack="sum" aria-pressed="${String(S.stack !== 'ch')}">${esc(t('sumAll'))}</button></div>` : '';
   const alerts = allAlerts.slice(0, 5);
   const nextRun = (() => { const d = new Date(); d.setMinutes(5, 0, 0); if (d <= new Date()) d.setHours(d.getHours() + 1); return d.toLocaleTimeString(loc(), { hour: 'numeric', minute: '2-digit' }); })();
 
-  v.innerHTML = head(t('home'), sub, `<a class="dk-hbtn" href="#collect">${svg(IC.collect, 17)}${esc(t('addTitle'))}</a>`) + briefHtml(ov, allAlerts, picks, covH) + `
+  v.innerHTML = head(t('home'), sub, `<a class="dk-hbtn" href="#collect">${svg(IC.collect, 17)}${esc(t('addTitle'))}</a>`) + briefHtml(ov, allAlerts, picks, covH) + tryRow + `
   <div class="dk-row">
     <section class="dk-card f2 dk-fade">
       <div class="dk-ch"><span class="dk-live"><i></i>${esc(t('live48all'))} · ${esc(t('chCount', { n: ov.channels.total }))}</span>${stackSeg || `<span class="dk-sub">${esc(t('kNextSub'))}</span>`}</div>
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px">
-        <div><div class="dk-big">${esc(fmtN(ov.views48))}<span style="font-size:20px;font-weight:800">${esc(t('unitViews'))}</span></div><div class="dk-sub">${change}</div></div>
+        <div><div class="dk-sub" style="font-weight:600">${esc(t('ytRtViews'))}</div><div class="dk-big">${esc(fmtN(ov.views48))}<span style="font-size:20px;font-weight:800">${esc(t('unitViews'))}</span></div><div class="dk-sub">${change}</div></div>
         <div style="text-align:right"><div class="dk-sub">${esc(t('last1h'))}</div><div class="dk-mid">${esc(fmtN(last1h))}</div></div>
       </div>
       ${stacked ? stackHtml('b48', hs.cols, ser.series, t('live48all')) : barsHtml('b48', hv, t('live48all'))}
@@ -1090,11 +1616,9 @@ async function vHome(v, r, alive) {
   </div>
   <div class="dk-row">
     <section class="dk-card f2 dk-fade">
-      <div class="dk-ch"><h2>${esc(t('daily28all'))}</h2><span class="dk-mid" style="font-size:22px">${esc(fmtN(curSum))}${esc(t('unitViews'))}</span></div>
-      <div class="dk-sub" style="margin-top:-8px">${dchange}</div>
-      ${stacked ? stackHtml('bd', ds.cols, ser.series, t('daily28all'), 150) : barsHtml('bd', dv, t('daily28all'), 150)}
-      <div class="dk-axis"><span>${esc(cur[0] ? dayLabel(cur[0].d) : '')}</span><span>${esc(cur[14] ? dayLabel(cur[14].d) : '')}</span><span>${esc(cur.length ? dayLabel(cur[cur.length - 1].d) : '')}</span></div>
-      ${stacked ? legendHtml(ser.series, ds.totals, 'bd') : ''}
+      <div class="yt-head"><div><h2>${esc(t('ytHead', { v: sd.M.views.sum != null ? fmtFull(sd.M.views.sum) : '–' }))}</h2><p>${esc(t('ytHeadSub'))}</p></div></div>
+      ${ytTabsHtml(sd, S.ytTab)}
+      <div id="ovWrap" style="display:flex;flex-direction:column;gap:10px">${oc.html}${multi && S.ytTab === 'views' ? legendHtml(multi, multiTot, 'ovl') : ''}</div>
     </section>
     <section class="dk-card f1 dk-fade">
       <div class="dk-ch"><h2>${esc(t('tops48'))}</h2><a class="dk-sub" href="#ranking">${esc(t('seeAll'))}</a></div>
@@ -1120,13 +1644,23 @@ async function vHome(v, r, alive) {
   </div>`;
   if (stacked) {
     bindStack(v, 'b48', hs.cols, ser.series, (c) => `${hourLabel(c.h)} · ${c.pre ? t('preCollect') : fmtFull(c.v) + t('unitViews')}`);
-    bindStack(v, 'bd', ds.cols, ser.series, (c) => `${dayLabel(c.d)} · ${c.pre ? t('preCollect') : fmtFull(c.v) + t('unitViews')}`);
     bindLegend(v, 'b48');
-    bindLegend(v, 'bd');
   } else {
     bindBars(v, 'b48', hv, (x) => `${hourLabel(x.h)}\n${x.pre ? t('preCollect') : fmtFull(x.v) + t('unitViews')}`);
-    bindBars(v, 'bd', dv, (x) => `${dayLabel(x.d)}\n${x.pre ? t('preCollect') : fmtFull(x.v) + t('unitViews')}`);
   }
+  oc.bind(v);
+  if (multi && S.ytTab === 'views') bindLegend(v, 'ovl');
+  v.querySelectorAll('[data-ytab]').forEach((b) => b.addEventListener('click', () => {
+    if (S.ytTab === b.dataset.ytab) return;
+    S.ytTab = b.dataset.ytab;
+    v.querySelectorAll('[data-ytab]').forEach((x) => x.setAttribute('aria-selected', String(x.dataset.ytab === S.ytTab)));
+    const w = v.querySelector('#ovWrap');
+    const c2 = ovChart();
+    w.innerHTML = c2.html + (multi && S.ytTab === 'views' ? legendHtml(multi, multiTot, 'ovl') : '');
+    c2.bind(v);
+    if (multi && S.ytTab === 'views') bindLegend(v, 'ovl');
+  }));
+  bindTry(v, tryList, '', () => render());
   v.querySelectorAll('[data-stack]').forEach((b) => b.addEventListener('click', () => { S.stack = b.dataset.stack; render(); }));
   bindTodos(v);
   bindBoardButtons(v, picks);
@@ -1204,9 +1738,11 @@ function hoursChart(id, a, h = 170) {
   return { html: barsHtml(id, vals, t('insHour'), h, { v: 1, label: t('insUsual') }) + `<div class="dk-axis"><span>${esc(hourName(0))}</span><span>${esc(hourName(6))}</span><span>${esc(hourName(12))}</span><span>${esc(hourName(18))}</span><span>${esc(hourName(23))}</span></div>`, vals };
 }
 const ratioTip = (label, x) => `${label} · ${t('insTipN', { n: x.n })}\n${x.low ? t('insLow') : t('ratio', { x: (x.v || 0).toFixed(1) })}`;
-function monthsChart(id, a, h = 150) {
+function monthsChart(id, a, h = 170) {
   const vals = a.months.map((m) => ({ v: m.v, n: m.n, med: m.med, ym: m.ym }));
-  return { html: barsHtml(id, vals, t('insMonth'), h) + `<div class="dk-axis">${vals.length ? `<span>${esc(monthName(vals[0].ym))}</span>${vals.length > 2 ? `<span>${esc(monthName(vals[Math.floor(vals.length / 2)].ym))}</span>` : ''}<span>${esc(monthName(vals[vals.length - 1].ym))}</span>` : ''}</div>`, vals };
+  const L = ytLine(id, { xs: vals.map((x) => monthName(x.ym)), series: [{ key: 'm', label: t('ytViews'), color: YT_LINE, vals: vals.map((x) => x.v || 0) }], h, aria: t('insMonth'),
+    tipTitle: (i) => `${monthName(vals[i].ym)} · ${t('insTipN', { n: vals[i].n })}${vals[i].med != null ? ' · ' + t('insTipMed', { v: fmtN(vals[i].med) }) : ''}`, ticks: xTicks(vals.length, Math.min(vals.length, 6)) });
+  return { html: L.html, vals, bind: L.bind };
 }
 const monthTip = (x) => (x.n ? `${monthName(x.ym)} · ${t('insTipN', { n: x.n })}\n${fmtFull(x.v)}${t('unitViews')} · ${t('insTipMed', { v: fmtN(x.med) })}` : `${monthName(x.ym)} · ${t('insTipN', { n: 0 })}`);
 
@@ -1286,7 +1822,7 @@ async function vInsights(v, r, alive) {
   ${S.insCh ? '' : compareHtml(list, chans || [])}`;
   bindBars(v, 'ih', hc.vals, (x) => ratioTip(hourName(x.k), x), { v: 1 });
   bindBars(v, 'iw', dvals, (x) => ratioTip(dayName(x.k), x), { v: 1 });
-  bindBars(v, 'im', mc.vals, monthTip);
+  mc.bind(v);
   bind();
 }
 
@@ -1624,29 +2160,40 @@ async function vChannels(v, r, alive) {
 async function vChannel(v, r, alive) {
   loading(v, t('channels'), '');
   const id = r.id;
-  const [d, shorts] = await Promise.all([rpc('radar_channel', { p_id: id }), rpc('radar_shorts', { p_days: 400, p_channel: id, p_role: null, p_limit: 400 })]);
+  const [d, shorts, trend] = await Promise.all([rpc('radar_channel', { p_id: id }), rpc('radar_shorts', { p_days: 400, p_channel: id, p_role: null, p_limit: 400 }), rpc('radar_trend', { p_days: 57, p_channel: id }).catch(() => [])]);
   if (!alive()) return;
   remember(shorts);
   const c = d?.channel;
   if (!c) { v.innerHTML = head(t('channels'), '') + `<div class="dk-card"><div class="dk-empty">${esc(t('chNotFound'))}<br><a class="dk-btn" style="margin-top:12px" href="#channels">${esc(t('chBack'))}</a></div></div>`; return; }
   const firstH = (d.hourly || []).find((x) => x.v > 0);
   const hv = (d.hourly || []).map((x) => ({ v: x.v, h: x.h, pre: !x.v && (!firstH || Date.parse(x.h) < Date.parse(firstH.h)) }));
-  const dd = (d.daily || []).slice(-28).map((x) => ({ v: x.v, d: x.d, pre: x.n === 0 }));
   const sum48 = hv.reduce((a, x) => a + (x.v || 0), 0);
   const live = shorts.filter((s) => s.status === 'live');
   const usual = live.length ? live[0].base : null;
   const sorter = { new: (a, b) => Date.parse(b.published_at) - Date.parse(a.published_at), ratio: (a, b) => (b.ratio || 0) - (a.ratio || 0), views: (a, b) => (b.views || 0) - (a.views || 0) }[S.chSort];
   const sorted = [...live].sort(sorter).slice(0, 36);
   const an = analyze(shorts);
-  const mc = monthsChart('cbm', an, 150);
+  const mc = monthsChart('cbm', an, 170);
+  const sd = studioData(trend);
+  if (!['views', 'subs', 'uploads'].includes(S.ytTab)) S.ytTab = 'views';
+  const cChart = () => studioChart('cbl', sd, S.ytTab, null);
+  const cc = cChart();
+  // 내 채널이면: 이 채널 데이터로 고른 '이거 해볼래?'
+  const tryList = c.role === 'mine' ? trySuggest(shorts, [], null, { noRefs: true }).filter((x) => !tryHidden().has(x.id)).slice(0, 3) : [];
   const seg = (val, lab) => `<button type="button" data-csort="${val}" aria-pressed="${String(S.chSort === val)}">${esc(lab)}</button>`;
   v.innerHTML = `<div class="dk-head dk-fade"><div style="display:flex;align-items:center;gap:16px">${c.thumbnail_url ? `<img src="${esc(c.thumbnail_url)}" alt="" width="72" height="72" style="border-radius:50%;border:3px solid rgba(255,255,255,.7)" referrerpolicy="no-referrer">` : ''}<div><h1>${esc(c.title)}</h1><p>${esc(c.handle || '')} · ${esc(t(c.role === 'mine' ? 'mine' : 'reference'))}${catOf(c) ? ' · ' + esc(catOf(c)) : ''} · ${esc(c.subscribers_hidden ? t('hiddenSubs') : t('subs', { n: fmtN(c.subscriber_count) }))}</p></div></div>
     <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="dk-hbtn ghost" href="#channels">← ${esc(t('chBack'))}</a><a class="dk-hbtn ghost" href="https://www.youtube.com/channel/${esc(c.id)}" target="_blank" rel="noopener">${svg(IC.yt, 17)}${esc(t('chOpenYt'))}</a><button type="button" class="dk-hbtn ghost" id="chSim">${svg(IC.collect, 17)}${esc(t('similar'))}</button><button type="button" class="dk-hbtn" id="chRf">${svg(IC.refresh, 17)}${esc(t('refresh'))}</button></div></div>
   <div class="dk-row">
-    <section class="dk-card f2 dk-fade"><div class="dk-ch"><span class="dk-live"><i></i>${esc(t('chHourly'))}</span><span class="dk-mid">${esc(fmtN(sum48))}${esc(t('unitViews'))}</span></div>
+    <section class="dk-card f1 dk-fade"><div class="dk-ch"><span class="dk-live"><i></i>${esc(t('chHourly'))}</span></div>
+      <div><div class="dk-sub" style="font-weight:600">${esc(t('ytRtViews'))}</div><div class="dk-mid">${esc(fmtN(sum48))}${esc(t('unitViews'))}</div></div>
       ${barsHtml('cb48', hv, t('chHourly'), 150)}<div class="dk-axis"><span>${esc(t('ago48'))}</span><span>${esc(t('ago24'))}</span><span>${esc(t('now'))}</span></div></section>
-    <section class="dk-card f1 dk-fade"><div class="dk-ch"><h2>${esc(t('chDaily'))}</h2></div>${barsHtml('cbd', dd, t('chDaily'), 150)}<span class="dk-sub">${esc(t('dailyNote'))}</span></section>
+    <section class="dk-card f2 dk-fade">
+      <div class="yt-head"><div><h2>${esc(t('ytHead', { v: sd.M.views.sum != null ? fmtFull(sd.M.views.sum) : '–' }))}</h2><p>${esc(t('ytHeadCh'))}</p></div></div>
+      ${ytTabsHtml(sd, S.ytTab)}
+      <div id="cbWrap">${cc.html}</div>
+    </section>
   </div>
+  ${tryList.length ? `<section class="dk-card full dk-fade"><div class="dk-ch"><h2 style="display:flex;align-items:center;gap:8px">${svg(IC.try, 20)}${esc(t('try'))}</h2><a class="dk-sub" href="#try" id="toTry" style="font-weight:700">${esc(t('tryMore'))} →</a></div><div class="ty-grid home">${tryList.map((sg, i) => tyCardHtml(sg, i, 'tc', c.id)).join('')}</div></section>` : ''}
   <div class="dk-row">
     <section class="dk-card f1 dk-fade"><div class="dk-ch"><h2>${esc(t('chAlgo'))}</h2><a class="dk-sub" href="#insights" id="toIns">${esc(t('insights'))} →</a></div>${an.n >= 5 ? insListHtml(an) : `<div class="dk-empty">${esc(t('insFew'))}</div>`}</section>
     <section class="dk-card f2 dk-fade"><div class="dk-ch"><h2>${esc(t('chMonth'))}</h2><span class="dk-sub">${esc(t('insMonthSub'))}</span></div>${mc.vals.length ? mc.html : `<div class="dk-empty">${esc(t('noShorts'))}</div>`}</section>
@@ -1658,8 +2205,19 @@ async function vChannel(v, r, alive) {
   </section>
   <section class="dk-card full dk-fade"><h2>${esc(t('chAlerts'))}</h2><div style="display:flex;flex-direction:column;gap:10px">${(d.alerts || []).length ? d.alerts.map(alertHtml).join('') : `<div class="dk-empty">${esc(t('noAlerts'))}</div>`}</div></section>`;
   bindBars(v, 'cb48', hv, (x) => `${hourLabel(x.h)}\n${x.pre ? t('preCollect') : fmtFull(x.v) + t('unitViews')}`);
-  bindBars(v, 'cbd', dd, (x) => `${dayLabel(x.d)}\n${x.pre ? t('preCollect') : fmtFull(x.v) + t('unitViews')}`);
-  bindBars(v, 'cbm', mc.vals, monthTip);
+  cc.bind(v);
+  v.querySelectorAll('[data-ytab]').forEach((b) => b.addEventListener('click', () => {
+    if (S.ytTab === b.dataset.ytab) return;
+    S.ytTab = b.dataset.ytab;
+    v.querySelectorAll('[data-ytab]').forEach((x) => x.setAttribute('aria-selected', String(x.dataset.ytab === S.ytTab)));
+    const c2 = cChart();
+    v.querySelector('#cbWrap').innerHTML = c2.html;
+    c2.bind(v);
+  }));
+  bindTry(v, tryList, c.id, () => render());
+  const toTry = v.querySelector('#toTry');
+  if (toTry) toTry.addEventListener('click', () => { S.tryCh = c.id; });
+  mc.bind(v);
   v.querySelector('#chSim').addEventListener('click', () => {
     const top = [...live].sort((p, q) => (q.ratio || 0) - (p.ratio || 0)).slice(0, 12);
     let kws = similarKw(top);
@@ -1679,6 +2237,42 @@ async function vChannel(v, r, alive) {
   });
   bindBoardButtons(v, sorted);
   bindAlertButtons(v);
+}
+
+// ---------- 이거 해볼래? ----------
+async function vTry(v, r, alive) {
+  loading(v, t('try'), esc(t('trySub')));
+  const [chans, mineList, refs, prof] = await Promise.all([
+    getChans(),
+    rpc('radar_shorts', { p_days: 400, p_channel: null, p_role: 'mine', p_limit: 1000 }),
+    rpc('radar_shorts', { p_days: 21, p_channel: null, p_role: 'reference', p_limit: 1000 }),
+    getProfile().catch(() => null)
+  ]);
+  if (!alive()) return;
+  remember(mineList);
+  remember(refs);
+  const mineCh = (chans || []).filter((c) => c.role === 'mine');
+  if (mineCh.length === 1) S.tryCh = mineCh[0].id;
+  if (S.tryCh && !mineCh.some((c) => c.id === S.tryCh)) S.tryCh = '';
+  const ch = S.tryCh || '';
+  const own = ch ? mineList.filter((s) => s.channel_id === ch) : mineList;
+  const hidden = tryHidden();
+  const list = trySuggest(own, refs, prof).filter((x) => !hidden.has(x.id)).slice(0, 8);
+  const runs = tryRuns();
+  const pickBtn = (id, label, thumb) => `<button type="button" data-tch="${esc(id)}" aria-pressed="${String(ch === id)}">${id ? avatar(thumb) : `<span class="dk-av" style="display:inline-flex;align-items:center;justify-content:center;color:${YT_LINE};background:#e8f1fe">${svg(IC.home, 15)}</span>`}${esc(label)}</button>`;
+  v.innerHTML = head(t('try'), esc(t('trySub'))) + `
+  ${mineCh.length ? `<section class="dk-card full dk-fade"><div class="ty-pick" role="group" aria-label="${esc(t('cChannel'))}">${mineCh.length > 1 ? pickBtn('', t('tryAllMine')) : ''}${mineCh.map((c) => pickBtn(c.id, c.title, c.thumb)).join('')}</div></section>` : `<div class="dk-banner info dk-fade">${esc(t('tryNoMine'))} <a href="#collect" style="font-weight:700">${esc(t('goCollect'))} →</a></div>`}
+  <section class="dk-card full dk-fade">
+    <div class="dk-ch"><h2 style="display:flex;align-items:center;gap:8px">${svg(IC.try, 20)}${esc(t('try'))}</h2><span class="dk-sub">${esc(t('tryHomeSub'))}</span></div>
+    ${list.length ? `<div class="ty-grid">${list.map((sg, i) => tyCardHtml(sg, i, 'tp', ch)).join('')}</div>` : `<div class="dk-empty">${esc(t('tryEmpty'))}</div>`}
+  </section>
+  <section class="dk-card full dk-fade"><div class="dk-ch"><h2>${esc(t('tryRunTitle'))}</h2><span class="dk-sub">${esc(t('tryRunSub'))}</span></div>${tryRunsHtml(runs, mineList)}</section>`;
+  v.querySelectorAll('[data-tch]').forEach((b) => b.addEventListener('click', () => { S.tryCh = b.dataset.tch; render(); }));
+  bindTry(v, list, ch, () => render());
+  v.querySelectorAll('[data-stop]').forEach((b) => b.addEventListener('click', () => {
+    trySave('radar.try', tryRuns().filter((x) => !(x.id === b.dataset.stop && (x.ch || '') === b.dataset.ch)));
+    render();
+  }));
 }
 
 // ---------- 소재 보드 ----------

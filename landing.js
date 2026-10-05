@@ -166,6 +166,12 @@ function fillTip(tip, content) {
     row.append(k, b, sp);
     tip.appendChild(row);
   }
+  if (content.note) {
+    const nt = document.createElement('div');
+    nt.className = 'note';
+    nt.textContent = content.note;
+    tip.appendChild(nt);
+  }
 }
 function placeTip(box, tip, c, topPx) {
   const w = box.clientWidth;
@@ -196,11 +202,12 @@ function bindChart(root, id, M, labelFn, stacked) {
 }
 // 범례에 올리면 그 채널 조각만 또렷하게
 function bindLegend(root, id) {
-  const bars = root.querySelector('#' + id + ' .dk-bars');
+  const box = root.querySelector('#' + id);
+  const bars = box && (box.querySelector('.dk-bars') || box);
   const lg = root.querySelector(`[data-lg="${id}"]`);
   if (!bars || !lg) return;
   const items = [...lg.querySelectorAll('.lg')];
-  const segs = [...bars.querySelectorAll('i[data-s]')];
+  const segs = [...bars.querySelectorAll('[data-s]')];
   const set = (k) => {
     bars.classList.toggle('hl', k != null);
     for (const i of segs) i.classList.toggle('hs', i.dataset.s === k);
@@ -214,20 +221,190 @@ function bindLegend(root, id) {
   }
 }
 
+// ---- 유튜브 스튜디오식 선 차트 (대시보드와 같은 모양) ----
+const YT_LINE = '#065fd4';
+function niceStep(range, n = 4) {
+  if (!(range > 0)) return 1;
+  const raw = range / n, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p;
+  return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+}
+function yScale(vals, extra, int) {
+  const all = vals.concat(extra || []).filter((v) => v != null && Number.isFinite(v));
+  let lo = Math.min(0, ...all), hi = Math.max(0, ...all);
+  if (hi === lo) hi = lo + (int ? 4 : 1);
+  let step = niceStep(hi - lo);
+  if (int) step = Math.max(1, Math.round(step));
+  lo = Math.floor(lo / step) * step;
+  hi = Math.max(lo + step, Math.ceil(hi / step) * step);
+  const ticks = [];
+  for (let v = lo; v <= hi + step / 2 && ticks.length < 9; v += step) ticks.push(Math.round(v * 1e6) / 1e6);
+  return { lo, hi, ticks, y: (v) => (1 - (v - lo) / (hi - lo)) * 100 };
+}
+function xTicks(n, k = 5) {
+  if (n <= 1) return [0];
+  const out = new Set([0, n - 1]);
+  for (let i = 1; i < k - 1; i++) out.add(Math.round((i * (n - 1)) / (k - 1)));
+  return [...out].sort((a, b) => a - b);
+}
+const quant = (a, q) => { const x = [...a].sort((p, r) => p - r); const i = (x.length - 1) * q, lo = Math.floor(i), hi = Math.ceil(i); return x[lo] + (x[hi] - x[lo]) * (i - lo); };
+function ytLine(id, o) {
+  const n = o.xs.length;
+  const vals = o.series.flatMap((x) => x.vals);
+  const sc = yScale(vals, o.band ? [o.band.lo, o.band.hi] : [], o.int);
+  const X = (i) => (n <= 1 ? 50 : (i / (n - 1)) * 100);
+  const Y = (v) => sc.y(v).toFixed(2);
+  const yFmt = o.yFmt || ((v) => (v ? fmtMan(v / 1e4) : '0'));
+  const grid = sc.ticks.map((v) => `<line class="g${v === 0 ? ' z' : ''}" x1="0" x2="1000" y1="${Y(v)}" y2="${Y(v)}"/>`).join('');
+  const band = o.band ? `<rect class="band" x="0" width="1000" y="${Y(o.band.hi)}" height="${Math.max(0.8, sc.y(o.band.lo) - sc.y(o.band.hi)).toFixed(2)}"/>` : '';
+  const paths = o.series.map((x, k) => `<path class="ln" data-s="${k}" stroke="${x.color}" d="${x.vals.map((v, i) => `${i ? 'L' : 'M'}${(X(i) * 10).toFixed(2)} ${Y(v)}`).join('')}"/>`).join('');
+  const html = `<div class="yt-plot" id="${id}" role="img" aria-label="${esc(o.aria || '')}"><div class="area" style="height:${o.h || 220}px">
+    <svg viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">${grid}${band}${paths}</svg>
+    ${o.band ? `<span class="bl" style="top:${Y(o.band.hi)}%">${esc(o.band.label)}</span>` : ''}
+    ${sc.ticks.map((v) => `<span class="yl" style="top:${Y(v)}%">${esc(yFmt(v))}</span>`).join('')}
+    ${(o.ticks || xTicks(n)).map((i, j, a) => `<span class="xl${i === 0 ? ' first' : i === n - 1 ? ' last' : ''}${j % 2 && a.length > 3 ? ' od' : ''}" style="left:${X(i)}%">${esc(o.xs[i])}</span>`).join('')}
+    <i class="vl"></i>${o.series.map((x) => `<i class="dot" style="background:${x.color}"></i>`).join('')}<div class="hit"></div></div><div class="yt-tip" role="status"></div></div>`;
+  const bind = (root) => {
+    const box = root.querySelector('#' + id);
+    if (!box) return;
+    const area = box.querySelector('.area'), tip = box.querySelector('.yt-tip'), vl = box.querySelector('.vl');
+    const dots = [...box.querySelectorAll('.dot')];
+    const valFmt = o.valFmt || num;
+    const move = (e) => {
+      const r = area.getBoundingClientRect();
+      const i = Math.max(0, Math.min(n - 1, Math.round(((e.clientX - r.left) / Math.max(1, r.width)) * (n - 1))));
+      const xp = X(i);
+      vl.style.left = xp + '%';
+      o.series.forEach((x, k) => { dots[k].style.left = xp + '%'; dots[k].style.top = sc.y(x.vals[i]) + '%'; });
+      const rows = o.series.map((x) => ({ color: x.color, v: x.vals[i], label: x.label })).sort((a, b) => b.v - a.v).map((x) => ({ color: x.color, value: valFmt(x.v), label: x.label }));
+      fillTip(tip, { title: o.tipTitle ? o.tipTitle(i) : o.xs[i], rows, note: o.band ? `${o.band.label} ${valFmt(Math.round(o.band.lo))} – ${valFmt(Math.round(o.band.hi))}` : '' });
+      box.classList.add('on');
+      tip.classList.add('on');
+      const px = (xp / 100) * r.width, w = tip.offsetWidth, bw = box.clientWidth;
+      let left = px + 14;
+      if (left + w > bw) left = px - w - 14;
+      tip.style.left = Math.max(0, Math.min(bw - w, left)) + 'px';
+      tip.style.top = '0px';
+    };
+    const hit = box.querySelector('.hit');
+    hit.addEventListener('pointermove', move);
+    hit.addEventListener('pointerdown', move);
+    hit.addEventListener('pointerleave', () => { box.classList.remove('on'); tip.classList.remove('on'); });
+  };
+  return { html, bind };
+}
+
+// ---- 데모: 유튜브 스튜디오 '개요' (조회수 · 구독자 · 새 영상 탭) ----
+const SUBS = [310, 340, 290, 360, 330, 350, 380, 340, 390, 360, 410, 420, 380, 400, 450, 430, 470, 440, 500, 460, 480, 520, 490, 510, 580, 560, 640, 610];
+const PREV_SUBS = SUBS.map((v, i) => Math.round(v * (0.84 + 0.06 * Math.sin(i))));
+const UPS = [2, 1, 1, 2, 0, 1, 2, 1, 1, 2, 1, 0, 1, 2, 1, 1, 2, 1, 0, 1, 2, 1, 1, 2, 1, 0, 1, 2];
+const PREV_UPS = [2, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 0, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1];
+let demoTab = 'views';
+function studioTabs() {
+  const tab = (k, label, value, cur, prev) => {
+    const p = Math.round(((rowSum(cur) - rowSum(prev)) / rowSum(prev)) * 100);
+    const up = p >= 0;
+    return `<button type="button" role="tab" class="yt-tab" data-dtab="${k}" aria-selected="${String(demoTab === k)}"><span>${L(label)}</span><b>${esc(value)}</b><small><i class="${up ? 'up' : 'dn'}" aria-hidden="true">${up ? '↑' : '↓'}</i>${L(up ? 'dash.ytMore' : 'dash.ytLess', { p: Math.abs(p) })}</small></button>`;
+  };
+  return `<div class="yt-tabs" role="tablist">${tab('views', 'dash.ytViews', fmtMan(rowSum(CUR)), CUR, PREV)}${tab('subs', 'dash.ytSubs', '+' + num(rowSum(SUBS)), SUBS, PREV_SUBS)}${tab('uploads', 'dash.ytUploads', t('dash.ytCount', lang, { n: rowSum(UPS) }), UPS, PREV_UPS)}</div>`;
+}
+function studioChart(stacked) {
+  const xs = CUR.map((_, i) => dayLabel(i));
+  const tipTitle = (i) => { const d = new Date(2026, 8, 7 + i); return d.toLocaleDateString(loc(), { month: 'short', day: 'numeric', weekday: 'short' }); };
+  let o;
+  if (demoTab === 'views' && stacked) o = { series: CH.map((c, k) => ({ label: t(c.k, lang), color: c.c, vals: D.map((row) => Math.round(row[k] * 1e4)) })) };
+  else {
+    const src = demoTab === 'views' ? [CUR.map((v) => v * 1e4), PREV.map((v) => v * 1e4)] : demoTab === 'subs' ? [SUBS, PREV_SUBS] : [UPS, PREV_UPS];
+    o = { series: [{ label: t(demoTab === 'views' ? 'dash.ytViews' : demoTab === 'subs' ? 'dash.ytSubs' : 'dash.ytUploads', lang), color: YT_LINE, vals: src[0] }], band: { lo: quant(src[1], 0.25), hi: quant(src[1], 0.75), label: t('dash.ytBand', lang) } };
+  }
+  const isViews = demoTab === 'views';
+  const L2 = ytLine('dmd', { xs, ...o, h: 210, aria: t('dash.daily2', lang), tipTitle, int: !isViews, yFmt: isViews ? (v) => (v ? fmtMan(v / 1e4) : '0') : (v) => num(v), valFmt: num });
+  const note = o.band ? `<div class="yt-note"><span><i class="ln"></i>${L(isViews ? 'dash.ytViews' : demoTab === 'subs' ? 'dash.ytSubs' : 'dash.ytUploads')}</span><span><i class="sw"></i>${L('dash.ytBand')} · ${L('dash.ytBandNote')}</span></div>` : '';
+  return { html: L2.html + (demoTab === 'views' && stacked ? legendHtml('dmd', TD) : note), bind: L2.bind };
+}
+
+// ---- 데모: 이거 해볼래? (예시 제안 5개 중 3개) ----
+const TRY = [
+  { k: 'ty1', ic: 'clock', n: 9, conf: 'dash.tyMid', basis: 'dash.tyMine', viz: 'hours' },
+  { k: 'ty2', ic: 'timer', n: 14, conf: 'dash.tyHi', basis: 'dash.tyMine', viz: 'durs' },
+  { k: 'ty3', ic: 'up', fit: 93, conf: 'dash.tyMid', basis: 'dash.tyRef', viz: 'topic' },
+  { k: 'ty4', ic: 'cal', n: 7, conf: 'dash.tyMid', basis: 'dash.tyMine', viz: 'days' },
+  { k: 'ty5', ic: 'picks', n: 11, conf: 'dash.tyHi', basis: 'dash.tyMine', viz: 'fmts' }
+];
+let tryShown = [0, 1, 2], tryNext = 3;
+const tryDoing = new Set();
+const DAYR = [0.9, 0.8, 1.0, 1.05, 0.95, 1.7, 1.2];
+function miniBars(id, vals, hot, curI, aria) {
+  const max = Math.max(...vals, 1.15);
+  return `<div class="dk-chart" id="${id}"><div class="dk-bars" style="height:96px" role="img" aria-label="${esc(aria)}">${vals.map((v, i) => `<div class="c" data-i="${i}"><i class="dk-rise${i === hot ? ' hot' : i === curI ? ' cur' : ''}" style="height:${Math.max(3, (v / max) * 100).toFixed(1)}%;animation-delay:${i * 12}ms"></i></div>`).join('')}<span class="ref" style="bottom:${((1 / max) * 100).toFixed(1)}%"><em>${L('dash.tyUsual')}</em></span></div><div class="dk-tip" role="status"></div></div>`;
+}
+const rowsHtml = (rows) => `<div class="dk-hbars">${rows.map((r) => `<div class="dk-hb${r.cur ? ' cur' : ''}"><span class="l" data-cur="${L('dash.tyCur')}">${esc(r.label)}</span><span class="track"><i class="${r.hot ? 'hot' : ''}" style="width:${Math.max(2, (r.v / Math.max(...rows.map((x) => x.v))) * 100).toFixed(1)}%"></i></span><span class="v">${esc(r.text)}</span></div>`).join('')}</div>`;
+const keyHtml = (withCur) => `<div class="ty-key"><span><i style="background:${YT_LINE}"></i>${L('dash.tyRec')}</span>${withCur ? `<span><i style="background:#909090"></i>${L('dash.tyCur')}</span>` : ''}<span><i style="height:0;width:14px;border-radius:0;border-top:2px dashed rgba(15,15,15,.45)"></i>${L('dash.tyUsual')}</span></div>`;
+const xLab = (x) => t('dash.x', lang, { x: x.toFixed(1) });
+function tryViz(sg, id) {
+  if (sg.viz === 'hours') return { html: miniBars(id, HR, 19, 13, t('dash.ty1q', lang)) + `<div class="dk-axis">${[0, 6, 12, 18, 23].map((h) => `<span>${esc(hourTxt(h))}</span>`).join('')}</div>` + keyHtml(true), bind: (root) => bindMini(root, id, HR, (i) => hourTxt(i)) };
+  if (sg.viz === 'days') {
+    const names = Array.from({ length: 7 }, (_, i) => new Date(2026, 9, 5 + i).toLocaleDateString(loc(), { weekday: 'short' }));
+    return { html: miniBars(id, DAYR, 5, 1, t('dash.ty4q', lang)) + `<div class="dk-axis">${names.map((d) => `<span>${esc(d)}</span>`).join('')}</div>` + keyHtml(true), bind: (root) => bindMini(root, id, DAYR, (i) => names[i]) };
+  }
+  if (sg.viz === 'durs') return { html: rowsHtml([[0, 0.9], [1, 1.6], [2, 1.0], [3, 0.7]].map(([k, v]) => ({ label: t('dash.dur' + k, lang), v, hot: k === 1, cur: k === 2, text: xLab(v) }))) };
+  if (sg.viz === 'fmts') return { html: `<p class="ty-ex">${L('bt.m.w2')}</p>` + rowsHtml([['dash.fmtQ', 1.8], ['dash.fmtHow', 1.3], ['dash.fmtNum', 1.1], ['dash.c4', 0.9]].map(([k, v], i) => ({ label: t(k, lang), v, hot: i === 0, text: xLab(v) }))) };
+  return { html: `<div class="ty-top"><span class="dk-thumb" style="background-image:${TH[1]}"><span class="v">${esc(fmtMan(27))}</span></span><div><b class="tt">${L('top.2')}</b><div class="mm">${L('ch.2')} · ${L('dash.hAgo', { n: 14 })}</div></div></div>` + rowsHtml([{ label: t('dash.tyThis', lang), v: 6.2, hot: true, text: xLab(6.2) }, { label: t('bt.m.usual', lang), v: 1, text: xLab(1) }]) };
+}
+function bindMini(root, id, vals, labFn) {
+  const box = root.querySelector('#' + id);
+  if (!box) return;
+  const tip = box.querySelector('.dk-tip');
+  const max = Math.max(...vals, 1.15);
+  box.querySelectorAll('.c').forEach((el) => {
+    el.addEventListener('pointerenter', () => {
+      const i = Number(el.dataset.i);
+      fillTip(tip, `${labFn(i)}\n${xLab(vals[i])}`);
+      tip.classList.add('on');
+      placeTip(box, tip, el, el.offsetTop + el.offsetHeight * (1 - vals[i] / max));
+      el.classList.add('on');
+    });
+    el.addEventListener('pointerleave', () => { tip.classList.remove('on'); el.classList.remove('on'); });
+  });
+}
+const ICX = { clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>', cal: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>' };
+function tryCard(idx, slot) {
+  const sg = TRY[idx];
+  const v = tryViz(sg, 'dty' + slot);
+  const doing = tryDoing.has(sg.k);
+  return { html: `<article class="ty-card${doing ? ' done' : ''}" data-slot="${slot}">
+    <div class="ty-h"><span class="ic">${svg(IC[sg.ic] || ICX[sg.ic], 19)}</span><div><b class="q">${L('dash.' + sg.k + 'q')}</b><span class="lead">${L('dash.' + sg.k + 'l')}</span></div></div>
+    <div class="ty-viz">${v.html}</div>
+    <div class="ty-f"><span class="conf ${sg.conf === 'dash.tyHi' ? 'hi' : 'mid'}"><i aria-hidden="true"><b></b><b></b><b></b></i>${sg.fit ? L('dash.tyFit', { n: sg.fit }) : L('dash.tyN', { n: sg.n })} · ${L(sg.conf)}</span><span class="basis">${L(sg.basis)}</span>
+      <div class="acts">${doing ? `<span class="dk-tag teal">${L('dash.tyDoing')}</span>` : `<button type="button" class="dk-btn sm" data-tdo="${slot}">${L('dash.tyDo')}</button><button type="button" class="dk-btn sm line" data-tskip="${slot}">${L('dash.tySkip')}</button>`}</div></div>
+  </article>`, bind: v.bind };
+}
+function renderTry(box) {
+  const wrap = box.querySelector('#dmTry');
+  if (!wrap) return;
+  const cards = tryShown.map((idx, slot) => tryCard(idx, slot));
+  wrap.innerHTML = cards.map((c) => c.html).join('');
+  cards.forEach((c) => c.bind && c.bind(wrap));
+  wrap.querySelectorAll('[data-tdo]').forEach((b) => b.addEventListener('click', () => { tryDoing.add(TRY[tryShown[Number(b.dataset.tdo)]].k); renderTry(box); }));
+  wrap.querySelectorAll('[data-tskip]').forEach((b) => b.addEventListener('click', () => {
+    const slot = Number(b.dataset.tskip);
+    const card = b.closest('.ty-card');
+    card.style.transition = 'opacity .4s var(--dk-ease), transform .4s var(--dk-ease)';
+    card.style.opacity = '0';
+    card.style.transform = 'scale(.97)';
+    setTimeout(() => {
+      let nx = tryNext % TRY.length;
+      while (tryShown.includes(nx)) nx = (nx + 1) % TRY.length;
+      tryShown[slot] = nx;
+      tryNext = nx + 1;
+      renderTry(box);
+    }, 360);
+  }));
+}
+
 // ---- 대시보드 데모 (실제 /app 대시보드와 같은 카드 · 예시 데이터) ----
 let demoStack = 'ch';
 const demoDone = new Set();
 const TOPS = [['top.2', 1, 21, 14], ['top.1', 0, 17, 20], ['top.3', 0, 9.4, 31], ['top.4', 3, 8.1, 26], ['top.5', 4, 4.6, 40]];
-const PICKS = [
-  { tk: 'top.2', ci: 1, h: 14, views: 27, fit: 93, x: '6.2', fmt: 'dash.fmtHow', why: 'bt.m.w1', th: TH[1], hot: 'red' },
-  { tk: 'top.4', ci: 3, h: 26, views: 12, fit: 81, x: '4.2', fmt: 'dash.fmtQ', why: 'bt.m.w2', th: TH[3], hot: 'red' },
-  { tk: 'top.5', ci: 4, h: 40, views: 6.3, fit: 58, x: '3.1', fmt: 'dash.fmtNum', why: 'dash.w3', th: TH[4], hot: 'red' }
-];
-const FEED = [
-  { ic: IC.up, sev: 'good', tt: 'bt.m.n1', bd: 'bt.m.n1s', h: 2, unread: true },
-  { ic: IC.warn, sev: 'warn', tt: 'bt.m.n2', bd: 'bt.m.n2s', h: 5, unread: true },
-  { ic: IC.sun, sev: 'info', tt: 'bt.m.n3', bd: 'bt.m.n3s', h: 9, unread: false }
-];
 
 function renderDemoCharts(box) {
   const stacked = demoStack === 'ch';
@@ -236,19 +413,19 @@ function renderDemoCharts(box) {
   w48.innerHTML = (stacked ? stackChart('dm48', H, 170, t('dash.live2', lang)) : sumChart('dm48', H, 170, t('dash.live2', lang)))
     + `<div class="dk-axis"><span>${L('dash.ago48')}</span><span>${L('dash.ago24')}</span><span>${L('dash.now')}</span></div>`
     + (stacked ? legendHtml('dm48', T48) : '');
-  wd.innerHTML = (stacked ? stackChart('dmd', D, 150, t('dash.daily2', lang)) : sumChart('dmd', D, 150, t('dash.daily2', lang)))
-    + `<div class="dk-axis"><span>${esc(dayLabel(0))}</span><span>${esc(dayLabel(14))}</span><span>${esc(dayLabel(27))}</span></div>`
-    + (stacked ? legendHtml('dmd', TD) : '');
+  const sc = studioChart(stacked);
+  wd.innerHTML = sc.html;
   bindChart(box, 'dm48', H, hourLabel, stacked);
-  bindChart(box, 'dmd', D, dayLabel, stacked);
-  if (stacked) { bindLegend(box, 'dm48'); bindLegend(box, 'dmd'); }
+  sc.bind(box);
+  if (stacked) bindLegend(box, 'dm48');
+  if (stacked && demoTab === 'views') bindLegend(box, 'dmd');
 }
 
 function renderDemo() {
   const box = document.getElementById('demoBody');
   if (!box) return;
   const unit = t('dash.views', lang);
-  const curSum = rowSum(CUR), prevSum = rowSum(PREV);
+  const curSum = rowSum(CUR);
   const tile = (ic, tone, label, big, small) => `<div class="dk-bi"><span class="ic ${tone}">${svg(ic)}</span><span class="tx"><b>${label}</b><strong>${big}</strong><span>${small}</span></span></div>`;
   const order = CH.map((_, k) => k).sort((a, b) => T48[b] - T48[a]);
   const seg = `<div class="dk-seg" role="group" aria-label="${L('dash.byCh')}"><button type="button" data-dstack="ch" aria-pressed="true">${L('dash.byCh')}</button><button type="button" data-dstack="sum" aria-pressed="false">${L('dash.sum')}</button></div>`;
@@ -264,11 +441,16 @@ function renderDemo() {
     <div class="dk-ch td-h" style="margin-top:4px"><h3 style="display:flex;align-items:center;gap:8px">${svg(IC.todo, 18)}${L('dash.tdTitle')}</h3><span class="dk-sub">${L('dash.tdSub')}</span></div>
     <ul class="dk-todo">${['dash.td1', 'dash.td2', 'dash.td3'].map((k, i) => `<li class="${demoDone.has(i) ? 'done' : ''}"><input type="checkbox" data-dtodo="${i}" ${demoDone.has(i) ? 'checked' : ''} aria-label="${L(k)}"><span>${L(k)}</span><a href="/app">${L('dash.tdGo')} →</a></li>`).join('')}</ul>
   </section>
+  <section class="dk-card full">
+    <div class="dk-ch"><h3 style="display:flex;align-items:center;gap:8px;font-size:18px">${svg('<path d="M9 3h6M10 3v6.5L4.6 18.4A1.8 1.8 0 0 0 6.2 21h11.6a1.8 1.8 0 0 0 1.6-2.6L14 9.5V3"/><path d="M7.3 15h9.4"/>', 20)}${L('dash.tryT')}</h3><span class="dk-sub">${L('dash.seeAll')} →</span></div>
+    <p class="dk-sub" style="margin:-6px 0 0">${L('dash.trySub')}</p>
+    <div class="ty-grid home" id="dmTry"></div>
+  </section>
   <div class="dk-row">
     <section class="dk-card f2">
       <div class="dk-ch"><span class="dk-live"><i></i>${L('dash.live2')}</span>${seg}</div>
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px">
-        <div><div class="dk-big">${esc(fmtMan(rowSum(T48)))}<span style="font-size:20px;font-weight:800">${esc(unit)}</span></div><div class="dk-sub"><span class="dk-up" style="font-weight:700">${L('dash.liveSub')}</span></div></div>
+        <div><div class="dk-sub" style="font-weight:600">${L('dash.ytRt')}</div><div class="dk-big">${esc(fmtMan(rowSum(T48)))}<span style="font-size:20px;font-weight:800">${esc(unit)}</span></div><div class="dk-sub"><span class="dk-up" style="font-weight:700">${L('dash.liveSub')}</span></div></div>
         <div style="text-align:right"><div class="dk-sub">${L('dash.last1h')}</div><div class="dk-mid">${esc(fmtMan(rowSum(H[46])))}</div></div>
       </div>
       <div id="dm48w" style="display:flex;flex-direction:column;gap:10px"></div>
@@ -281,25 +463,13 @@ function renderDemo() {
   </div>
   <div class="dk-row">
     <section class="dk-card f2">
-      <div class="dk-ch"><h3>${L('dash.daily2')}</h3><span class="dk-mid" style="font-size:22px">${esc(fmtMan(curSum))}${esc(unit)}</span></div>
-      <div class="dk-sub" style="margin-top:-8px"><span class="dk-up" style="font-weight:700">${L('dash.dailyUp', { p: Math.round(((curSum - prevSum) / prevSum) * 100) })}</span></div>
+      <div class="yt-head"><div><h3 style="font-size:20px">${L('dash.ytHead', { v: num(curSum * 1e4) })}</h3><p>${L('dash.ytHeadSub')}</p></div></div>
+      <div id="dmTabs">${studioTabs()}</div>
       <div id="dmdw" style="display:flex;flex-direction:column;gap:10px"></div>
-      <span class="dk-sub">${L('dash.confirmed')}</span>
     </section>
     <section class="dk-card f1">
       <div class="dk-ch"><h3>${L('dash.tops')}</h3><span class="dk-sub">${L('dash.seeAll')}</span></div>
       <ul class="dk-list">${TOPS.map(([tk, ci, v, h], i) => `<li class="dk-li"><span class="dk-av sq" style="background:${TH[i]}"></span><span class="dk-ttl"><b>${L(tk)}</b><small>${L(CH[ci].k)} · ${L('dash.hAgo', { n: h })}</small></span><span class="dk-num">${esc(fmtMan(v))}</span></li>`).join('')}</ul>
-    </section>
-  </div>
-  <div class="dk-row">
-    <section class="dk-card f2">
-      <div class="dk-ch"><h3>${L('dash.k3')}</h3><span class="dk-sub">${L('dash.seeAll')}</span></div>
-      <p class="dk-sub" style="margin:-6px 0 0">${L('dash.pkSub')}</p>
-      <div class="dk-grid compact">${PICKS.map((p) => `<article class="dk-pick"><span class="dk-thumb" style="background-image:${p.th}"><span class="v">${esc(fmtMan(p.views))}</span></span><div class="body"><span class="t">${L(p.tk)}</span><span class="m">${L(CH[p.ci].k)} · ${L('dash.hAgo', { n: p.h })}</span><div class="tags"><span class="dk-fit">${L('dash.fit', { n: p.fit })}</span><span class="dk-tag ${p.hot}">${L('dash.ratio', { x: p.x })}</span><span class="dk-tag gray">${L(p.fmt)}</span></div><p class="dk-why"><b>${L('dash.fitWhy')}</b> · ${L(p.why)}</p></div></article>`).join('')}</div>
-    </section>
-    <section class="dk-card f1">
-      <div class="dk-ch"><h3>${L('dash.m5')}</h3><span class="dk-sub">${L('dash.seeAll')}</span></div>
-      <div style="display:flex;flex-direction:column;gap:10px">${FEED.map((f) => `<div class="dk-alert${f.unread ? ' unread' : ''}"><span class="ic ${f.sev}">${svg(f.ic)}</span><div class="tx"><b>${L(f.tt)}</b><span>${L(f.bd)}</span><small>${L('dash.agoH', { n: f.h })}</small></div></div>`).join('')}</div>
     </section>
   </div>
   <div class="dk-kpis">
@@ -309,6 +479,15 @@ function renderDemo() {
     <div class="dk-kpi"><span>${L('dash.k4')}</span><b>${esc(nextRun())}</b><small>${L('dash.k4s')}</small></div>
   </div>`;
   renderDemoCharts(box);
+  renderTry(box);
+  const bindTabs = () => box.querySelectorAll('[data-dtab]').forEach((b) => b.addEventListener('click', () => {
+    if (demoTab === b.dataset.dtab) return;
+    demoTab = b.dataset.dtab;
+    box.querySelector('#dmTabs').innerHTML = studioTabs();
+    bindTabs();
+    renderDemoCharts(box);
+  }));
+  bindTabs();
   box.querySelectorAll('[data-dstack]').forEach((b) => b.addEventListener('click', () => {
     if (demoStack === b.dataset.dstack) return;
     demoStack = b.dataset.dstack;
@@ -397,7 +576,7 @@ function renderAlgo() {
   const x = (i) => i * (bw + gap);
   const bar = (i) => {
     const x0 = x(i), y0 = y(HR[i]), r = 3;
-    return `<path class="b" style="transition-delay:${i * 28}ms,0ms" d="M${x0.toFixed(1)} ${base}V${(y0 + r).toFixed(1)}Q${x0.toFixed(1)} ${y0.toFixed(1)} ${(x0 + r).toFixed(1)} ${y0.toFixed(1)}H${(x0 + bw - r).toFixed(1)}Q${(x0 + bw).toFixed(1)} ${y0.toFixed(1)} ${(x0 + bw).toFixed(1)} ${(y0 + r).toFixed(1)}V${base}Z" fill="${HR[i] >= 1.6 ? 'url(#agr)' : 'rgba(196,181,253,.34)'}"/>`;
+    return `<path class="b" style="transition-delay:${i * 28}ms,0ms" d="M${x0.toFixed(1)} ${base}V${(y0 + r).toFixed(1)}Q${x0.toFixed(1)} ${y0.toFixed(1)} ${(x0 + r).toFixed(1)} ${y0.toFixed(1)}H${(x0 + bw - r).toFixed(1)}Q${(x0 + bw).toFixed(1)} ${y0.toFixed(1)} ${(x0 + bw).toFixed(1)} ${(y0 + r).toFixed(1)}V${base}Z" fill="${HR[i] >= 1.6 ? '#3ea6ff' : 'rgba(62,166,255,.3)'}"/>`;
   };
   el.innerHTML = `<svg class="algo" viewBox="0 0 ${W} 136" aria-hidden="true"><defs><linearGradient id="agr" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#67e8f9"/></linearGradient></defs>
     ${HR.map((_, i) => bar(i)).join('')}
@@ -407,6 +586,21 @@ function renderAlgo() {
     <line x1="0" x2="${W}" y1="${base}" y2="${base}" stroke="rgba(255,255,255,.18)"/>
     ${[0, 6, 12, 18].map((h) => `<text x="${(x(h) + (h ? bw / 2 : 0)).toFixed(1)}" y="${base + 14}" text-anchor="${h ? 'middle' : 'start'}">${esc(hourTxt(h))}</text>`).join('')}
   </svg>`;
+}
+// 기능 카드: 이거 해볼래? (유튜브 다크 차트 느낌의 작은 근거 그림 3개)
+function renderBentoTry() {
+  const el = document.getElementById('btTry');
+  if (!el) return;
+  const W = 240, base = 64, top = 6, max = 2.3, bw = 7, gap = (W - 24 * bw) / 23;
+  const y = (v) => base - (v / max) * (base - top);
+  const bars = HR.map((v, i) => `<rect class="b" style="transition-delay:${i * 25}ms" x="${(i * (bw + gap)).toFixed(1)}" y="${y(v).toFixed(1)}" width="${bw}" height="${(base - y(v)).toFixed(1)}" rx="1.5" fill="${i === 19 ? '#3ea6ff' : i === 13 ? '#9aa0a6' : 'rgba(62,166,255,.3)'}"/>`).join('');
+  const hours = `<svg viewBox="0 0 ${W} 80" aria-hidden="true">${bars}<line x1="0" x2="${W}" y1="${y(1).toFixed(1)}" y2="${y(1).toFixed(1)}" stroke="rgba(255,255,255,.5)" stroke-dasharray="3 3"/><line x1="0" x2="${W}" y1="${base}" y2="${base}" stroke="rgba(255,255,255,.18)"/>${[0, 6, 12, 18].map((h) => `<text x="${(h * (bw + gap)).toFixed(1)}" y="77">${esc(hourTxt(h))}</text>`).join('')}</svg>`;
+  const key = `<div class="key"><span><i style="background:#3ea6ff"></i>${L('dash.tyRec')}</span><span><i style="background:#9aa0a6"></i>${L('dash.tyCur')}</span></div>`;
+  const rows = (list) => { const mx = Math.max(...list.map((r) => r[1])); return `<div class="rows">${list.map(([label, v, cls]) => `<div><em>${esc(label)}</em><span><i class="${cls || ''}" style="width:${Math.round((v / mx) * 100)}%"></i></span><b>${esc(xLab(v))}</b></div>`).join('')}</div>`; };
+  const tile = (ic, q, body, meta) => `<div class="tq"><div class="hd"><i>${svg(ic, 16)}</i><b>${q}</b></div>${body}<div class="meta"><span>${meta}</span><span class="go">${L('dash.tyDo')}</span></div></div>`;
+  el.innerHTML = tile(ICX.clock, L('dash.ty1q'), hours + key, L('bt.try.n1'))
+    + tile(ICX.timer, L('dash.ty2q'), rows([[t('dash.dur0', lang), 0.9], [t('dash.dur1', lang), 1.6, 'hot'], [t('dash.dur2', lang), 1.0, 'cur'], [t('dash.dur3', lang), 0.7]]) + key, L('bt.try.n2'))
+    + tile(IC.up, L('dash.ty3q'), `<div class="top"><span class="th" style="background:${TH[1]}"></span><div><b>${L('top.2')}</b><small>${L('ch.2')} · ${L('dash.hAgo', { n: 14 })}</small></div></div>` + rows([[t('dash.tyThis', lang), 6.2, 'hot'], [t('bt.m.usual', lang), 1]]), L('bt.try.n3'));
 }
 function renderCmp() {
   const el = document.getElementById('btCmp');
@@ -428,6 +622,7 @@ function renderAll() {
   renderHeroBars();
   renderAlgo();
   renderCmp();
+  renderBentoTry();
 }
 
 document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('click', () => {
