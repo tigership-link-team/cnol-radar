@@ -6,7 +6,8 @@
 
 - 사이트: https://cnol-radar.vercel.app
 - 저장소: `tigership-link-team/cnol-radar` — `main`에 커밋하면 Vercel(miami127-prog's projects · `cnol-radar`)이 자동 배포
-  - Vercel 무료(Hobby) 팀은 **비공개 저장소**에서 팀 소유자 외의 GitHub 계정이 만든 커밋을 배포하지 않아요. 저장소를 공개로 두거나, 소유자 계정으로 커밋하세요.
+  - 저장소는 **공개**예요(2026-10-05 전환). Vercel 팀은 비공개 저장소면 팀원(Vercel 계정이 연결된 GitHub 계정)이 만든 커밋만 배포해서, 공개로 두지 않으면 shortmoa7-cmyk 커밋이 막혀요.
+  - 코드에는 공개용 키만 있어요. 유튜브 API 키·서비스 키는 Supabase 비밀값에만 있어요.
 
 ## 페이지
 
