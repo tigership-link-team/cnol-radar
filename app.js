@@ -958,6 +958,7 @@ function trySuggest(own, refs, prof, opt = {}) {
   const aOwn = analyze(own);
   const cats = prof ? prof.cats : new Set();
   const refsLive = refs.filter((s) => s.status === 'live');
+  const refsNew = refsLive.filter((s) => s.age_h <= 21 * 24); // 소재·키워드는 최근 3주 것만
   const refsCat = cats.size ? refsLive.filter((s) => cats.has(catOf(s))) : [];
   const refBase = refsCat.length >= 20 ? refsCat : refsLive;
   const useRefs = aOwn.used < 12;
@@ -1033,7 +1034,7 @@ function trySuggest(own, refs, prof, opt = {}) {
   // 5) 소재: 레퍼런스에서 터진 쇼츠 중 내 채널과 잘 맞는 것
   if (!opt.noRefs) {
     const seenT = new Set();
-    const picks = pickList(refsLive, 'all', prof).filter((s) => {
+    const picks = pickList(refsNew, 'all', prof).filter((s) => {
       const k = String(s.title || '').toLowerCase().replace(/\s+/g, '');
       if (s.ratio < 2 || (s._fit && s._fit.score < 45) || seenT.has(k)) return false;
       seenT.add(k);
@@ -1048,8 +1049,8 @@ function trySuggest(own, refs, prof, opt = {}) {
         viz: () => ({ html: `<div class="ty-top"><a class="dk-thumb" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}" style="background-image:url('${cssUrl(vthumb(s.thumb))}')" aria-label="${esc(t('sxCurve'))}"><span class="v">${esc(fmtN(s.views))}</span></a><div><a class="tt" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}">${esc(s.title)}</a><div class="mm">${esc(s.channel_title)} · ${esc(ageTxt(s.age_h))}</div></div></div>` + ytRowsHtml([{ label: t('tryThis'), v: x, hot: true, text: t('insX', { x: x.toFixed(1) }) }, { label: t('insUsual'), v: 1, text: t('insX', { x: '1.0' }) }]) }) });
     }
     // 6) 키워드: 요즘 레퍼런스에서 터진 소재 중 내가 안 써 본 것
-    const kws = trendKeywords(refsLive).filter((k) => !(prof && prof.kwTop.has(k)));
-    const stat = (k) => { const xs = refsLive.filter((s) => s.ratio >= 2 && keyTok(s).includes(k)); return { k, n: xs.length, x: median(xs.map((s) => Number(s.ratio))) || 0 }; };
+    const kws = trendKeywords(refsNew).filter((k) => !(prof && prof.kwTop.has(k)));
+    const stat = (k) => { const xs = refsNew.filter((s) => s.ratio >= 2 && keyTok(s).includes(k)); return { k, n: xs.length, x: median(xs.map((s) => Number(s.ratio))) || 0 }; };
     const ks = kws.slice(0, 6).map(stat).filter((r) => r.n >= 2);
     if (ks.length) {
       const top = ks[0];
@@ -2245,7 +2246,7 @@ async function vTry(v, r, alive) {
   const [chans, mineList, refs, prof] = await Promise.all([
     getChans(),
     rpc('radar_shorts', { p_days: 400, p_channel: null, p_role: 'mine', p_limit: 1000 }),
-    rpc('radar_shorts', { p_days: 21, p_channel: null, p_role: 'reference', p_limit: 1000 }),
+    rpc('radar_shorts', { p_days: 400, p_channel: null, p_role: 'reference', p_limit: 1000 }),
     getProfile().catch(() => null)
   ]);
   if (!alive()) return;
