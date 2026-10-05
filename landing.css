@@ -441,3 +441,11 @@ html.js .rv.in,html.rv-all .rv{opacity:1;transform:none}
   *,*::before,*::after{animation:none!important;transition:none!important}
   html.js .rv{opacity:1;transform:none}
 }
+
+/* v8 · 맨 위 '이게 다 돼요' */
+.md-feats{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+.md-feats b{font-size:13px;font-weight:800;letter-spacing:.02em;color:var(--p)}
+.md-feats ul{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.md-feats li{padding:7px 12px;border-radius:999px;font-size:13px;font-weight:700;color:var(--ink);background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(16,12,40,.06)}
+.md-feats li:nth-child(-n+4){color:#3700B3;background:var(--p-cont);border-color:transparent}
+@media (max-width:640px){.md-feats li{font-size:12.5px;padding:6px 10px}}

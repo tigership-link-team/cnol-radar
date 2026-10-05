@@ -12,13 +12,11 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
 <link rel="stylesheet" href="/dash.css">
+<link rel="modulepreload" href="/agent.js">
+<link rel="modulepreload" href="/model.js">
+<link rel="modulepreload" href="/agent-i18n.js">
 </head>
 <body class="dk">
-<div class="dk-orbs" aria-hidden="true">
-  <i style="top:120px;left:-120px;width:520px;height:520px"></i>
-  <i style="top:40px;right:8%;width:300px;height:300px"></i>
-  <i style="bottom:-160px;right:-160px;width:600px;height:600px;background:radial-gradient(circle at 35% 35%,rgba(255,190,240,.22) 0%,rgba(255,255,255,0) 68%)"></i>
-</div>
 <div class="dk-shell">
   <aside class="dk-side" aria-label="CNOL RADAR menu">
     <div class="dk-brand">
@@ -30,6 +28,7 @@
   </aside>
   <main class="dk-main" id="main" tabindex="-1">
     <div class="dk-top">
+      <div class="dk-kind" role="group" id="kindSeg"></div>
       <button type="button" class="dk-hbtn ghost" id="refreshAll" style="height:40px;padding:0 16px;font-size:13.5px"></button>
       <div class="dk-lang" role="group" aria-label="Language">
         <button type="button" data-lang="ko">KOR</button><button type="button" data-lang="en">ENG</button><button type="button" data-lang="ja">日本語</button>

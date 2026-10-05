@@ -54,18 +54,25 @@ const P = {
   multi: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>'
 };
 const TOOLS = {
-  collect: [['link', 'c1'], ['clock', 'c2'], ['search', 'c3'], ['gone', 'c4'], ['globe', 'c5'], ['shield', 'c6']],
-  analyze: [['bars', 'a1'], ['line', 'a2'], ['brain', 'a3'], ['curve', 'a4'], ['trophy', 'a5'], ['cal', 'a6']],
-  ideas: [['spark', 'i1'], ['target', 'i2'], ['flask', 'i3'], ['board', 'i4'], ['hash', 'i5'], ['again', 'i6']],
-  agent: [['sun', 'g1'], ['bell', 'g2'], ['up', 'g3'], ['learn', 'g4'], ['search', 'g5'], ['multi', 'g6']]
+  find: [['target', 'f1'], ['search', 'f2'], ['chat', 'f3'], ['wave', 'f4'], ['up', 'f5'], ['link', 'f6']],
+  make: [['brain', 'm1'], ['duel', 'm2'], ['spark', 'm3'], ['hash', 'm4'], ['image', 'm5'], ['flask', 'm6']],
+  watch: [['bars', 'w1'], ['bell', 'w2'], ['trophy', 'w3'], ['curve', 'w4'], ['gone', 'w5'], ['multi', 'w6']],
+  agent: [['sun', 'g1'], ['board', 'g2'], ['chat', 'g3'], ['learn', 'g4'], ['dna', 'g5'], ['again', 'g6']]
 };
-let tab = 'collect';
+Object.assign(P, {
+  chat: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4"/>',
+  wave: '<path d="M2 12c2.5 0 2.5-4 5-4s2.5 4 5 4 2.5-4 5-4 2.5 4 5 4"/><path d="M2 18c2.5 0 2.5-4 5-4s2.5 4 5 4 2.5-4 5-4 2.5 4 5 4"/>',
+  duel: '<path d="M14.5 17.5L3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M9.5 6.5L14 2h3v3l-4.5 4.5"/>',
+  image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/>',
+  dna: '<path d="M7 3c0 6 10 6 10 12s-10 6-10 6M17 3c0 6-10 6-10 12"/><path d="M8.5 7h7M8.5 17h7M10 12h4"/>'
+});
+let tab = 'find';
 const svg = (p, s = 22) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 function renderTools(animate) {
   const g = document.getElementById('toolGrid');
   if (!g) return;
   g.classList.remove('cascade');
-  g.innerHTML = TOOLS[tab].map(([ic, k], i) => `<div class="tool" style="--i:${i}"><span class="ic">${svg(P[ic])}</span><div><b>${esc(t('v7.tl.' + k + 'n'))}</b><span>${esc(t('v7.tl.' + k + 'd'))}</span></div></div>`).join('');
+  g.innerHTML = TOOLS[tab].map(([ic, k], i) => `<div class="tool" style="--i:${i}"><span class="ic">${svg(P[ic])}</span><div><b>${esc(t('v8.tl.' + k + 'n'))}</b><span>${esc(t('v8.tl.' + k + 'd'))}</span></div></div>`).join('');
   if (animate && !calm) { void g.offsetWidth; g.classList.add('cascade'); }
 }
 function moveInd() {

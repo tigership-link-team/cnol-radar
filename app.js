@@ -1,6 +1,7 @@
 // CNOL RADAR 대시보드 — 실험 모드 (로그인 없이 열린 공용 공간)
 // 읽기: Supabase RPC(공개 읽기 전용) · 수집·편집: Edge Function `radar` (유튜브 키는 서버에만)
 import { sb, getLang, setLang, esc } from '/common.js';
+import { mountAgent, vHome as aHome, vRefs, vWave, vTools, vTool, dropPool } from '/agent.js';
 
 const LANGS = ['ko', 'en', 'ja'];
 let lang = getLang();
@@ -42,7 +43,7 @@ const T = {
     chBack: '채널 목록', chOpenYt: '유튜브 채널 열기', chShorts: '수집한 쇼츠', chUsual: '평소 조회수(중앙값) {v}', chAlerts: '이 채널 알림', chHourly: '이 채널 48시간', chDaily: '이 채널 일별 조회수', chNotFound: '채널을 찾지 못했어요.',
     ratio: '평소의 {x}배', sortNew: '최신순', sortRatio: '평소 대비', sortViews: '조회수',
     picksSub: '평소보다 크게 터진 쇼츠를 골라 왜 떴는지와 내 채널에 적용할 점을 정리했어요. 에이전트가 매시간 다시 골라요.',
-    scopeAll: '전체', scopeMine: '내 분야', scopeOther: '다른 분야', p2: '48시간', p7: '7일', p30: '30일', kwTitle: '요즘 터지는 키워드', kwFind: '이 키워드로 채널 찾기',
+    scopeAll: '전체', scopeMine: '내 분야', scopeOther: '다른 분야', p2: '48시간', p7: '7일', p30: '30일', kwTitle: '요즘 터지는 키워드', kwFind: '이 키워드로 소재 검색',
     whyTitle: '왜 떴나', applyTitle: '내 채널이라면', whyLine: '올린 지 {h} 만에 {v}회 · 채널 평소의 {x}배 · 시간당 {vph}회',
     picksEmpty: '아직 고를 쇼츠가 없어요. 레퍼런스 채널을 더 넣으면 바로 골라 드려요.', noMyCat: '내 채널에 분류를 넣으면 ‘내 분야’로 골라볼 수 있어요.',
     fmt_number: '숫자형', fmt_question: '질문형', fmt_compare: '비교형', fmt_challenge: '실험·도전형', fmt_twist: '반전형', fmt_howto: '정보·꿀팁형', fmt_review: '리뷰형', fmt_list: '순위형',
@@ -120,7 +121,7 @@ const T = {
     chBack: 'Channels', chOpenYt: 'Open on YouTube', chShorts: 'Collected Shorts', chUsual: 'Usual views (median) {v}', chAlerts: 'Alerts for this channel', chHourly: 'This channel · 48h', chDaily: 'This channel · daily views', chNotFound: 'Channel not found.',
     ratio: '{x}× usual', sortNew: 'Newest', sortRatio: 'vs usual', sortViews: 'Views',
     picksSub: 'Shorts that broke out well above their usual, with why they worked and how to apply it. The agent re-picks every hour.',
-    scopeAll: 'All', scopeMine: 'My niche', scopeOther: 'Other niches', p2: '48h', p7: '7 days', p30: '30 days', kwTitle: 'Breakout keywords', kwFind: 'Find channels for this keyword',
+    scopeAll: 'All', scopeMine: 'My niche', scopeOther: 'Other niches', p2: '48h', p7: '7 days', p30: '30 days', kwTitle: 'Breakout keywords', kwFind: 'Topic search for this keyword',
     whyTitle: 'Why it worked', applyTitle: 'For your channel', whyLine: '{v} views in {h} · {x}× the channel’s usual · {vph}/hr',
     picksEmpty: 'Nothing to pick yet. Add more reference channels and picks appear right away.', noMyCat: 'Give your channel a category to filter by your niche.',
     fmt_number: 'Numbers', fmt_question: 'Question', fmt_compare: 'Comparison', fmt_challenge: 'Experiment', fmt_twist: 'Twist', fmt_howto: 'How-to', fmt_review: 'Review', fmt_list: 'Ranking',
@@ -198,7 +199,7 @@ const T = {
     chBack: 'チャンネル一覧', chOpenYt: 'YouTubeで開く', chShorts: '収集したショート', chUsual: '普段の再生数（中央値）{v}', chAlerts: 'このチャンネルの通知', chHourly: 'このチャンネル・48時間', chDaily: 'このチャンネル・日別再生数', chNotFound: 'チャンネルが見つかりません。',
     ratio: '普段の{x}倍', sortNew: '新しい順', sortRatio: '普段比', sortViews: '再生数',
     picksSub: '普段より大きく伸びたショートを選び、なぜ伸びたか・自分のチャンネルへの活かし方をまとめました。エージェントが毎時選び直します。',
-    scopeAll: 'すべて', scopeMine: '自分の分野', scopeOther: '他の分野', p2: '48時間', p7: '7日', p30: '30日', kwTitle: '伸びているキーワード', kwFind: 'このキーワードでチャンネルを探す',
+    scopeAll: 'すべて', scopeMine: '自分の分野', scopeOther: '他の分野', p2: '48時間', p7: '7日', p30: '30日', kwTitle: '伸びているキーワード', kwFind: 'このキーワードでネタ検索',
     whyTitle: 'なぜ伸びた', applyTitle: '自分のチャンネルなら', whyLine: '投稿{h}で{v}回・チャンネルの普段の{x}倍・時速{vph}回',
     picksEmpty: 'まだ選べるショートがありません。リファレンスを追加するとすぐ選びます。', noMyCat: 'マイチャンネルに分類を入れると「自分の分野」で絞り込めます。',
     fmt_number: '数字型', fmt_question: '質問型', fmt_compare: '比較型', fmt_challenge: '検証・挑戦型', fmt_twist: 'どんでん返し型', fmt_howto: 'ハウツー型', fmt_review: 'レビュー型', fmt_list: 'ランキング型',
@@ -422,6 +423,165 @@ Object.assign(T.ja, {
   ytTypical: '普段の範囲・同じチャンネルのショートの同じ時点', ytMedLine: '普段のショート再生数（中央値）', ytRtViews: '再生数・直近48時間', ytLine: '再生数'
 });
 
+// ---------- v7: 메뉴 5개 · 에이전트 보고 · 쇼츠/롱폼 · 학습 (영상 = 쇼츠·롱폼 둘 다) ----------
+Object.assign(T.ko, {
+  home: '오늘 보고', overview: '한눈에', ranking: '영상 랭킹', landing: '소개 페이지', brandSub: '나만의 소재 수집기', addedN: '채널 {c}개를 넣었어요 · 쇼츠 {n}개 · 롱폼 {m}개 수집',
+  g_agent: '에이전트', g_ideasG: '소재', g_chansG: '채널', g_anaG: '분석', g_setG: '설정',
+  tab_home: '오늘 보고', tab_alerts: '알림 기록', tab_picks: '추천 소재', tab_try: '이거 해볼래?', tab_ideas: '소재 보드',
+  tab_channels: '채널 목록', tab_collect: '채널 추가', tab_overview: '한눈에', tab_insights: '알고리즘', tab_ranking: '영상 랭킹', tab_status: '상태', tab_partners: '음원·광고',
+  kindShort: '쇼츠', kindLong: '롱폼', kindAria: '영상 형식', cLongs: '롱폼',
+  durL0: '5분 이하', durL1: '5–10분', durL2: '10–20분', durL3: '20–40분', durL4: '40분 이상', durM: '{m}분',
+  agentName: '내 소재 에이전트', agentLive: '채널 {n}개 벤치마킹 중', agentIdle: '채널을 기다리는 중', agentNext: '다음 수집 {t}',
+  greet0: '좋은 아침이에요.', greet1: '안녕하세요.', greet2: '좋은 저녁이에요.',
+  msgSummary: '채널 {c}개에서 쇼츠 {s}개, 롱폼 {l}개를 지켜보고 있어요. 지난 48시간 조회수는 {v}회예요.',
+  msgHot: '레퍼런스에서 평소보다 크게 터진 영상이에요. 내 채널 버전으로 만들어 볼 만해요.', msgHotNone: '아직 크게 터진 영상은 없어요. 매시간 다시 볼게요.',
+  msgTry: '이거 해볼래요? 데이터로 고른 실험이에요.', msgIssue: '확인해 볼 이슈가 {n}건 있어요.', msgNoIssue: '내 채널에 걱정할 이슈는 없어요.', msgNoMine: '내 채널도 넣어 주시면 업로드 공백·영상 사라짐 같은 이슈까지 챙길게요.',
+  msgLearn: '지금까지 {n}번 골라 주셨어요. 앞으로 ‘{k}’ 제안을 먼저 보여 드릴게요.', msgLearn0: '‘해볼게’와 ‘다른 거’를 누를수록 내 채널에 맞춰 배워요.', msgRuns: '해보는 중인 실험이에요.',
+  agentHello: '안녕하세요, 내 소재 에이전트예요. 벤치마킹할 채널 링크를 붙여 넣어 주세요. 쇼츠와 롱폼을 매시간 지켜보고, 내일 아침부터 다음 소재를 보고할게요.',
+  composerPh: '채널 주소 · @핸들 · 영상 링크를 붙여 넣으세요 (한 줄에 하나, 최대 30개)', composerBtn: '보내기', moreAna: '분석에서 자세히', toPicks: '추천 소재 모두 보기', toTry: '실험 모두 보기', toAlerts: '알림 기록',
+  k_hour: '올리는 시간', k_day: '요일', k_dur: '길이', k_fmt: '제목 유형', k_topic: '소재', k_kw: '키워드', k_cad: '업로드 주기', k_gap: '업로드 공백', k_revive: '2탄', learned: '학습',
+  resOk: '쇼츠 {n}개 · 롱폼 {m}개 수집', ovSub: '채널 전부를 한 화면에서 · 쇼츠와 롱폼 조회수를 합친 48시간', tops48: '잘된 영상 · 48시간',
+  todayPicksSub: '레퍼런스에서 평소보다 크게 터진 영상이에요', kShorts: '추적 중인 영상',
+  obSub: '유튜브 채널 주소, @핸들, 영상 링크를 한 줄에 하나씩 넣어 주세요. 내 채널을 먼저 넣고, 벤치마킹할 레퍼런스 채널을 넣으면 맞춤 추천이 바로 잡혀요.',
+  addLabel: '채널 주소 · @핸들 · 영상 링크 (한 줄에 하나, 최대 30개)', collectSub: '최근 쇼츠 50개·롱폼 20개와 조회수를 바로 모으고, 그 뒤로는 매시간 자동으로 다시 재요.',
+  discSub: '키워드로 최근 7일 동안 크게 터진 영상을 찾아, 아직 수집하지 않은 채널을 골라 드려요. 작은 채널이 크게 터진 경우를 위로 올려요.',
+  viaSearch: '‘{k}’ 최근 7일 영상 상위', sample: '대표 영상', chShorts: '수집한 영상',
+  picksSub: '평소보다 크게 터진 영상을 골라 왜 떴는지와 내 채널에 적용할 점을 정리했어요. 에이전트가 매시간 다시 골라요.',
+  picksEmpty: '아직 고를 영상이 없어요. 레퍼런스 채널을 더 넣으면 바로 골라 드려요.',
+  rankingSub: '수집 중인 채널의 영상을 한 줄로 세웠어요. 48시간 조회수는 매시간 잰 공개 조회수 차이예요.', cTitle: '영상', noShorts: '조건에 맞는 영상이 없어요.',
+  alBreakMine: '내 영상이 터지고 있어요', alBreakRef: '레퍼런스 영상이 터졌어요', alGapBody: '{ch} 채널이 {d}일째 영상을 안 올렸어요. 오늘 하나 올려 흐름을 이어 가세요.',
+  alAgeBody: '{ch} · “{title}” — 연령 제한 영상은 추천 노출이 크게 줄어요.',
+  insSub: '수집한 영상을 올린 시간·요일·길이·제목 유형·월별로 나눠, 어떤 조건에서 평소보다 잘 됐는지 보여줘요. 채널마다 같은 형식의 평소 조회수(중앙값) 대비 배수로 비교해서 채널 크기가 달라도 공정해요.',
+  insFew: '분석하려면 영상이 10개 이상 필요해요. 채널을 더 수집해 보세요.', insN: '분석한 영상', insNSub: '채널 {c}개 · 올린 지 3일 지난 영상 기준', insNSubAll: '채널 {c}개 · 최근 영상 포함',
+  insHourSub: '한국 시간 기준 · 빗금은 영상 3개 미만', insMonthSub: '그 달에 올린 영상의 조회수 합계예요 · 그래프에 마우스를 올리면 개수와 중앙값이 보여요', insTipN: '영상 {n}개',
+  insL_hour: '{h}에 올린 영상이 평소의 {x}배로 가장 잘 됐어요 · {n}개', insL_none: '아직 뚜렷한 패턴이 없어요. 영상이 더 쌓이면 다시 찾아볼게요.',
+  profSub: '내 채널 영상 {n}개를 읽어서 이 기준으로 맞춤도를 매겨요', profNone: '내 채널을 넣으면 분야·길이·제목 유형을 읽어서 레퍼런스 영상마다 맞춤도를 매겨 드려요.',
+  td_gap: '{ch}에 오늘 영상 1개 올리기 · {d}일째 공백', tryEmpty: '지금은 뚜렷하게 차이 나는 조건이 없어요. 영상이 더 쌓이면 다시 찾아볼게요.',
+  tryHourL: '이 시간에 올린 영상 {n}개가 평소의 {x}배였어요 · 지금은 주로 {u}에 올려요', tryHourL0: '이 시간에 올린 영상 {n}개가 평소의 {x}배였어요',
+  tryDayL: '{d}에 올린 영상 {n}개가 평소의 {x}배였어요 · 지금은 주로 {u}에 올려요', tryDayL0: '{d}에 올린 영상 {n}개가 평소의 {x}배였어요',
+  tryDurL: '{b} 영상 {n}개가 평소의 {x}배였어요 · 내 영상은 보통 {m}', tryDurL0: '{b} 영상 {n}개가 평소의 {x}배였어요',
+  tryFmtL0: '‘{f}’ 제목 영상 {n}개가 평소의 {x}배였어요', tryFmtL: '‘{f}’ 제목 영상 {n}개가 평소의 {x}배 · 내 영상은 {p}%만 이렇게 써요',
+  tryKwL: '요즘 레퍼런스에서 #{k} 영상 {n}개가 터졌어요 · 가운데값 평소의 {x}배', kwBreak: '터진 영상 {n}개',
+  tryReviveL: '올린 지 {d}일 됐는데 지난 48시간 동안 {v}회 더 늘었어요 · 다른 옛날 영상은 보통 {u}회', tryN: '근거 영상 {n}개', tryBasisMine: '내 영상 기준',
+  tryRunSub: '‘해볼게’를 누른 뒤 올린 영상으로 결과를 비교해요 · 이 브라우저에 저장돼요', tryWait: '아직 해당 영상이 없어요 · 올리면 여기서 결과를 보여드려요',
+  tryYoung: '해당 영상 {n}개 집계 중 · 올리고 하루가 지나면 비교해요', tryResA: '해본 영상 {n}개', tryOldAvg: '다른 옛날 영상 보통', tryThis: '이 영상',
+  ytTypical: '평소 범위 · 같은 채널 같은 형식 영상의 같은 시점', ytMedLine: '평소 조회수(가운데값)',
+  testNote: '<b>실험 모드</b> · 로그인 없이 열린 공용 공간이에요. 링크가 있으면 누구나 같은 화면을 봐요.'
+});
+Object.assign(T.en, {
+  home: "Today's report", overview: 'At a glance', ranking: 'Video ranking', landing: 'About CNOL RADAR', brandSub: 'Your idea collector', addedN: 'Added {c} channels · {n} Shorts · {m} long-form collected',
+  g_agent: 'Agent', g_ideasG: 'Ideas', g_chansG: 'Channels', g_anaG: 'Analytics', g_setG: 'Settings',
+  tab_home: "Today's report", tab_alerts: 'Alert history', tab_picks: 'Idea picks', tab_try: 'Try this?', tab_ideas: 'Idea board',
+  tab_channels: 'Channel list', tab_collect: 'Add channels', tab_overview: 'At a glance', tab_insights: 'Algorithm', tab_ranking: 'Video ranking', tab_status: 'Status', tab_partners: 'Music & ads',
+  kindShort: 'Shorts', kindLong: 'Long-form', kindAria: 'Video format', cLongs: 'Long-form',
+  durL0: '≤5 min', durL1: '5–10 min', durL2: '10–20 min', durL3: '20–40 min', durL4: '40+ min', durM: '{m} min',
+  agentName: 'My idea agent', agentLive: 'Benchmarking {n} channels', agentIdle: 'Waiting for channels', agentNext: 'Next collection {t}',
+  greet0: 'Good morning.', greet1: 'Hello.', greet2: 'Good evening.',
+  msgSummary: "I'm watching {s} Shorts and {l} long-form videos across {c} channels. They got {v} views in the last 48 hours.",
+  msgHot: 'These broke out well above their usual across your references — worth a version for your channel.', msgHotNone: 'Nothing has broken out yet. I’ll look again every hour.',
+  msgTry: 'Want to try these? Experiments picked from your data.', msgIssue: '{n} issues worth a look.', msgNoIssue: 'No issues on your channels.', msgNoMine: 'Add your own channel and I’ll watch for upload gaps and removed videos too.',
+  msgLearn: "You've picked {n} times so far. I’ll show “{k}” ideas first.", msgLearn0: 'The more you hit “I’ll try” or “Not now”, the better I fit your channel.', msgRuns: 'Experiments in progress.',
+  agentHello: "Hi, I'm your idea agent. Paste the channels you want to benchmark — I’ll watch their Shorts and long-form every hour and report your next idea starting tomorrow morning.",
+  composerPh: 'Paste channel URLs · @handles · video links (one per line, up to 30)', composerBtn: 'Send', moreAna: 'More in Analytics', toPicks: 'All idea picks', toTry: 'All experiments', toAlerts: 'Alert history',
+  k_hour: 'posting time', k_day: 'weekday', k_dur: 'length', k_fmt: 'title type', k_topic: 'topic', k_kw: 'keyword', k_cad: 'upload pace', k_gap: 'upload gap', k_revive: 'part 2', learned: 'Learned',
+  resOk: '{n} Shorts · {m} long-form collected', ovSub: 'Every channel on one screen · Shorts and long-form views added up over 48 hours', tops48: 'Top videos · 48h',
+  todayPicksSub: 'Reference videos that broke out above their usual', kShorts: 'Videos tracked',
+  obSub: 'Add YouTube channel URLs, @handles or video links — one per line. Add your own channel first, then the references you want to benchmark, and picks tune themselves.',
+  addLabel: 'Channel URL · @handle · video link (one per line, up to 30)', collectSub: 'We collect the latest 50 Shorts and 20 long-form videos with their views right away, then re-measure every hour.',
+  discSub: "Search videos that broke out in the last 7 days and pick channels you don't track yet. Small channels with big hits rank higher.",
+  viaSearch: 'Top “{k}” videos, last 7 days', sample: 'Top video', chShorts: 'Collected videos',
+  picksSub: 'Videos that broke out well above their usual, with why they worked and how to apply it. The agent re-picks every hour.',
+  picksEmpty: 'Nothing to pick yet. Add more reference channels and picks appear right away.',
+  rankingSub: 'All videos from tracked channels in one list. 48-hour views come from hourly public view counts.', cTitle: 'Video', noShorts: 'No videos match.',
+  alBreakMine: 'Your video is breaking out', alBreakRef: 'A reference video broke out', alGapBody: "{ch} hasn't posted for {d} days. Post one today to keep momentum.",
+  alAgeBody: '{ch} · “{title}” — age-restricted videos get far less recommendation reach.',
+  insSub: "Collected videos split by upload hour, weekday, length, title type and month — showing what beat the usual. Each video is compared with its own channel's usual views for the same format, so channel size doesn't skew it.",
+  insFew: 'Insights need at least 10 videos. Collect more channels.', insN: 'Videos analyzed', insNSub: '{c} channels · videos older than 3 days', insNSubAll: '{c} channels · includes recent videos',
+  insHourSub: 'Korea time · hatched = fewer than 3 videos', insMonthSub: 'Total views of videos uploaded that month · hover the chart for count and median', insTipN: '{n} videos',
+  insL_hour: 'Videos posted at {h} did best — {x}× usual · {n} videos', insL_none: 'No clear pattern yet. The agent will look again as videos pile up.',
+  profSub: 'Built from {n} of your videos — every pick is scored against it', profNone: 'Add your own channel and we read its niche, length and title types to score every reference video for fit.',
+  td_gap: 'Post 1 video on {ch} today · {d}-day gap', tryEmpty: 'No condition stands out yet. We’ll look again as more videos come in.',
+  tryHourL: '{n} videos posted at this hour hit {x}× usual · you mostly post at {u}', tryHourL0: '{n} videos posted at this hour hit {x}× usual',
+  tryDayL: '{n} videos posted on {d} hit {x}× usual · you mostly post on {u}', tryDayL0: '{n} videos posted on {d} hit {x}× usual',
+  tryDurL: '{n} videos at {b} hit {x}× usual · yours usually run {m}', tryDurL0: '{n} videos at {b} hit {x}× usual',
+  tryFmtL0: '{n} “{f}” titles hit {x}× usual', tryFmtL: '{n} “{f}” titles hit {x}× usual · only {p}% of yours use it',
+  tryKwL: '{n} #{k} videos broke out across your references lately · median {x}× usual', kwBreak: '{n} breakouts',
+  tryReviveL: 'Posted {d} days ago, it gained {v} views in the last 48h · your other older videos usually gain {u}', tryN: 'Based on {n} videos', tryBasisMine: 'From your videos',
+  tryRunSub: 'We compare the videos you post after “I’ll try” · saved in this browser', tryWait: 'No matching video yet · results show here once you post one',
+  tryYoung: '{n} matching videos still counting · we compare a day after posting', tryResA: '{n} tried videos', tryOldAvg: 'Your other older videos', tryThis: 'This video',
+  ytTypical: 'Typical range · this channel’s videos of the same format at the same age', ytMedLine: 'Typical views (median)',
+  testNote: '<b>Test mode</b> · a shared space open without sign-in. Anyone with the link sees the same screen.'
+});
+Object.assign(T.ja, {
+  home: '今日の報告', overview: 'ひと目で', ranking: '動画ランキング', landing: '紹介ページ', brandSub: 'ネタ収集ツール', addedN: '{c}チャンネルを追加・ショート{n}本・長尺{m}本を収集',
+  g_agent: 'エージェント', g_ideasG: 'ネタ', g_chansG: 'チャンネル', g_anaG: '分析', g_setG: '設定',
+  tab_home: '今日の報告', tab_alerts: 'アラート履歴', tab_picks: 'おすすめのネタ', tab_try: 'これ試してみる？', tab_ideas: 'ネタボード',
+  tab_channels: 'チャンネル一覧', tab_collect: 'チャンネル追加', tab_overview: 'ひと目で', tab_insights: 'アルゴリズム', tab_ranking: '動画ランキング', tab_status: '状態', tab_partners: '音源・広告',
+  kindShort: 'ショート', kindLong: '長尺', kindAria: '動画の形式', cLongs: '長尺',
+  durL0: '5分以下', durL1: '5〜10分', durL2: '10〜20分', durL3: '20〜40分', durL4: '40分以上', durM: '{m}分',
+  agentName: 'マイネタエージェント', agentLive: '{n}チャンネルをベンチマーク中', agentIdle: 'チャンネル待ち', agentNext: '次の収集 {t}',
+  greet0: 'おはようございます。', greet1: 'こんにちは。', greet2: 'こんばんは。',
+  msgSummary: '{c}チャンネルのショート{s}本と長尺{l}本を見守っています。直近48時間の再生数は{v}回です。',
+  msgHot: 'リファレンスで普段より大きく伸びた動画です。あなたのチャンネル版を作る価値があります。', msgHotNone: 'まだ大きく伸びた動画はありません。毎時また見ます。',
+  msgTry: 'これ試してみますか？データから選んだ実験です。', msgIssue: '確認したい問題が{n}件あります。', msgNoIssue: 'マイチャンネルに心配な問題はありません。', msgNoMine: 'マイチャンネルも入れていただければ、投稿の空白や消えた動画も見守ります。',
+  msgLearn: 'これまで{n}回選んでいただきました。これからは「{k}」の提案を先にお見せします。', msgLearn0: '「やってみる」「別のにする」を押すほど、あなたのチャンネルに合わせて学習します。', msgRuns: '試している実験です。',
+  agentHello: 'こんにちは、マイネタエージェントです。ベンチマークしたいチャンネルのリンクを貼ってください。ショートと長尺を毎時見守り、明日の朝から次のネタを報告します。',
+  composerPh: 'チャンネルURL・@ハンドル・動画リンクを貼り付け（1行に1つ、最大30件）', composerBtn: '送る', moreAna: '分析で詳しく', toPicks: 'おすすめをすべて見る', toTry: '実験をすべて見る', toAlerts: 'アラート履歴',
+  k_hour: '投稿時間', k_day: '曜日', k_dur: '長さ', k_fmt: 'タイトルの型', k_topic: 'ネタ', k_kw: 'キーワード', k_cad: '投稿ペース', k_gap: '投稿の空白', k_revive: '第2弾', learned: '学習',
+  resOk: 'ショート{n}本・長尺{m}本を収集', ovSub: '全チャンネルをひとつの画面で・ショートと長尺の再生数を合わせた48時間', tops48: '伸びた動画・48時間',
+  todayPicksSub: 'リファレンスで普段より大きく伸びた動画です', kShorts: '追跡中の動画',
+  obSub: 'YouTubeチャンネルURL、@ハンドル、動画リンクを1行に1つずつ入れてください。まず自分のチャンネル、次にベンチマークしたいリファレンスを入れると、すぐに提案が始まります。',
+  addLabel: 'チャンネルURL・@ハンドル・動画リンク（1行に1つ、最大30件）', collectSub: '最新のショート50本・長尺20本と再生数をすぐ集め、その後は毎時自動で計測します。',
+  discSub: 'キーワードで直近7日に大きく伸びた動画を探し、まだ収集していないチャンネルを選びます。小さなチャンネルの大ヒットを上位にします。',
+  viaSearch: '「{k}」直近7日の動画上位', sample: '代表動画', chShorts: '収集した動画',
+  picksSub: '普段より大きく伸びた動画を選び、なぜ伸びたか・自分のチャンネルへの活かし方をまとめました。エージェントが毎時選び直します。',
+  picksEmpty: 'まだ選べる動画がありません。リファレンスを追加するとすぐ選びます。',
+  rankingSub: '収集中チャンネルの動画を一列に並べました。48時間再生数は毎時計測した公開再生数の差分です。', cTitle: '動画', noShorts: '条件に合う動画がありません。',
+  alBreakMine: 'あなたの動画が伸びています', alBreakRef: 'リファレンスの動画が伸びました', alGapBody: '{ch}が{d}日間動画を投稿していません。今日1本投稿して流れをつなぎましょう。',
+  alAgeBody: '{ch}・「{title}」— 年齢制限の動画はおすすめ表示が大きく減ります。',
+  insSub: '収集した動画を投稿時間・曜日・長さ・タイトル型・月別に分け、どんな条件で普段より伸びたかを表示します。チャンネルごと・形式ごとの普段の再生数（中央値）比で比べるので、規模が違っても公平です。',
+  insFew: '分析には動画が10本以上必要です。チャンネルをもっと収集してください。', insN: '分析した動画', insNSub: '{c}チャンネル・投稿から3日以上の動画', insNSubAll: '{c}チャンネル・最近の動画を含む',
+  insHourSub: '韓国時間・斜線は3本未満', insMonthSub: 'その月に投稿した動画の再生数合計・グラフにカーソルを合わせると本数と中央値', insTipN: '動画{n}本',
+  insL_hour: '{h}に投稿した動画が普段の{x}倍で最も伸びました・{n}本', insL_none: 'まだはっきりしたパターンはありません。動画がたまったら再度探します。',
+  profSub: 'マイチャンネルの動画{n}本から作り、この基準で適合度を付けます', profNone: 'マイチャンネルを入れると、分野・長さ・タイトル型を読み取り、リファレンスの動画ごとに適合度を付けます。',
+  td_gap: '{ch}に今日動画を1本投稿・{d}日間の空白', tryEmpty: '今ははっきり差が出る条件がありません。動画がたまったらまた探します。',
+  tryHourL: 'この時間に投稿した動画{n}本が普段の{x}倍でした・今は主に{u}に投稿しています', tryHourL0: 'この時間に投稿した動画{n}本が普段の{x}倍でした',
+  tryDayL: '{d}に投稿した動画{n}本が普段の{x}倍でした・今は主に{u}に投稿しています', tryDayL0: '{d}に投稿した動画{n}本が普段の{x}倍でした',
+  tryDurL: '{b}の動画{n}本が普段の{x}倍でした・あなたの動画は普段{m}', tryDurL0: '{b}の動画{n}本が普段の{x}倍でした',
+  tryFmtL0: '「{f}」タイトルの動画{n}本が普段の{x}倍でした', tryFmtL: '「{f}」タイトルの動画{n}本が普段の{x}倍・あなたは{p}%しか使っていません',
+  tryKwL: '最近リファレンスで#{k}の動画{n}本がヒット・中央値は普段の{x}倍', kwBreak: 'ヒット{n}本',
+  tryReviveL: '投稿から{d}日たっても直近48時間で{v}回伸びました・ほかの古い動画は普段{u}回', tryN: '根拠の動画{n}本', tryBasisMine: '自分の動画基準',
+  tryRunSub: '「やってみる」を押した後に投稿した動画で結果を比較します・このブラウザに保存されます', tryWait: 'まだ該当する動画がありません・投稿するとここに結果が出ます',
+  tryYoung: '該当動画{n}本を集計中・投稿から1日たつと比較します', tryResA: '試した動画{n}本', tryOldAvg: 'ほかの古い動画の普段', tryThis: 'この動画',
+  ytTypical: '普段の範囲・同じチャンネル・同じ形式の動画の同じ時点', ytMedLine: '普段の再生数（中央値）',
+  testNote: '<b>テストモード</b>・ログインなしで開かれた共有スペースです。リンクを知っている人は誰でも同じ画面を見られます。'
+});
+
+// ---------- v8: 메뉴 4개 (에이전트 · 레퍼런스 · 소재 · 도구) + 설정 ----------
+Object.assign(T.ko, {
+  g_agent: '에이전트', g_refsG: '레퍼런스', g_ideasG: '소재', g_toolsG: '도구', g_setG: '설정',
+  tab_home: '오늘 보고', tab_refs: '맞춤 레퍼런스', tab_channels: '지켜보는 채널', tab_picks: '오늘의 소재', tab_try: '이거 해볼래?', tab_wave: '소재 파도', tab_ideas: '소재 보드',
+  refs: '레퍼런스', wave: '소재 파도', tools: '도구', tool: '도구', collect: '레퍼런스',
+  run_match: '맞춤 레퍼런스 찾기', run_topic: '소재 검색', run_comments: '댓글 속 소재',
+  err_NO_MINE: '먼저 내 채널을 넣어 주세요.', err_BAD_ID: '영상이나 채널을 찾지 못했어요.',
+  brandSub: '1인 소재 에이전트', tools_icon: ''
+});
+Object.assign(T.en, {
+  g_agent: 'Agent', g_refsG: 'References', g_ideasG: 'Ideas', g_toolsG: 'Tools', g_setG: 'Settings',
+  tab_home: "Today's report", tab_refs: 'Matched references', tab_channels: 'Watched channels', tab_picks: "Today's ideas", tab_try: 'Try this?', tab_wave: 'Idea waves', tab_ideas: 'Idea board',
+  refs: 'References', wave: 'Idea waves', tools: 'Tools', tool: 'Tools', collect: 'References',
+  run_match: 'Match references', run_topic: 'Topic search', run_comments: 'Comment ideas',
+  err_NO_MINE: 'Add your channel first.', err_BAD_ID: 'Couldn’t find that video or channel.',
+  brandSub: 'Your personal idea agent', tools_icon: ''
+});
+Object.assign(T.ja, {
+  g_agent: 'エージェント', g_refsG: 'リファレンス', g_ideasG: 'ネタ', g_toolsG: 'ツール', g_setG: '設定',
+  tab_home: '今日の報告', tab_refs: '合うリファレンス', tab_channels: '見守るチャンネル', tab_picks: '今日のネタ', tab_try: 'これ試してみる？', tab_wave: 'ネタの波', tab_ideas: 'ネタボード',
+  refs: 'リファレンス', wave: 'ネタの波', tools: 'ツール', tool: 'ツール', collect: 'リファレンス',
+  run_match: 'リファレンス探し', run_topic: 'ネタ検索', run_comments: 'コメントのネタ',
+  err_NO_MINE: '先に自分のチャンネルを追加してください。', err_BAD_ID: '動画やチャンネルが見つかりませんでした。',
+  brandSub: '専属ネタエージェント', tools_icon: ''
+});
 const t = (k, v) => {
   let s = (T[lang] && T[lang][k]) ?? T.ko[k] ?? k;
   if (v) for (const x of Object.keys(v)) s = s.split('{' + x + '}').join(v[x]);
@@ -531,10 +691,14 @@ async function act(body) {
     return { ok: false, error: e.message || String(e) };
   }
 }
+// 쇼츠·롱폼 목록: 지금 고른 형식으로 (p_kind 'short' | 'long' | 'all')
+const vids = (args) => rpc('radar_videos_list', { p_kind: S.kind, ...args });
 const errText = (code) => (T.ko['err_' + code] ? t('err_' + code) : t('err_default', { e: code }));
 
 // ---------- 상태 ----------
 const S = { unread: 0, chans: null, chansAt: 0, period: 7, scope: 'all', kw: '', rankSort: 'v48', rankDays: 7, rankRole: 'all', rankQ: '', chQ: '', chRole: 'all', alertF: 'all', addRole: null, prefKw: '', chSort: 'new', insRole: 'all', insCh: '', stack: 'ch', pickSort: 'fit', prof: null, profAt: 0, same: false, board: new Set() };
+
+S.kind = (() => { try { return localStorage.getItem('radar.kind') === 'long' ? 'long' : 'short'; } catch (e) { return 'short'; } })();
 
 async function getChans(force) {
   if (!force && S.chans && Date.now() - S.chansAt < 60e3) return S.chans;
@@ -572,17 +736,27 @@ const IC = {
   gone: '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>', sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
   down: '<path d="M7 7l10 10M17 9v8H9"/>', lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>', globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'
 };
+IC.tools = '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><path d="M17.5 14v7M14 17.5h7"/>';
+IC.agent = '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M12 8.2l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/>';
 const svg = (p, s = 19) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 const avatar = (url, sq) => (url ? `<img class="dk-av${sq ? ' sq' : ''}" src="${esc(url)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="dk-av${sq ? ' sq' : ''}"></span>`);
 const ratioTag = (x) => (x == null ? '' : `<span class="dk-tag ${x >= 3 ? 'red' : x >= 1.5 ? 'amber' : 'gray'}">${esc(t('ratio', { x: Number(x).toFixed(1) }))}</span>`);
-const head = (title, sub, actions = '') => `<div class="dk-head dk-fade"><div><h1>${esc(title)}</h1>${sub ? `<p>${sub}</p>` : ''}</div>${actions}</div>`;
+// 제목: 묶인 화면이면 메뉴 이름 + 안쪽 탭, 설명은 탭 아래에
+function head(title, sub, actions = '') {
+  const name = route().name;
+  const g = groupOf(name);
+  if (!g || name === 'ch') return `<div class="dk-head dk-fade"><div>${g ? `<a class="ag-crumb" href="#${g.tabs[0]}">← ${esc(t('g_' + g.k))}</a>` : ''}<h1>${esc(title)}</h1>${sub ? `<p>${sub}</p>` : ''}</div>${actions}</div>`;
+  if ((g.hidden || []).includes(name)) return `<div class="dk-head dk-fade"><div><a class="ag-crumb" href="#${g.tabs[0]}">← ${esc(t('g_' + g.k))}</a><h1>${esc(title)}</h1></div>${actions}</div>${sub ? `<p class="dk-lead dk-fade">${sub}</p>` : ''}`;
+  const tabs = g.tabs.length > 1 ? `<nav class="dk-tabs dk-fade" aria-label="${esc(t('g_' + g.k))}">${g.tabs.map((k) => `<a href="#${k}" ${k === name ? 'aria-current="page"' : ''}>${esc(t('tab_' + k))}</a>`).join('')}</nav>` : '';
+  return `<div class="dk-head dk-fade"><div><h1>${esc(t('g_' + g.k))}</h1></div>${actions}</div>${tabs}${sub ? `<p class="dk-lead dk-fade">${sub}</p>` : ''}`;
+}
 const loadingCard = () => `<div class="dk-row" aria-busy="true" aria-label="${esc(t('loading'))}"><div class="dk-card f2"><div class="dk-sk" style="height:16px;width:38%"></div><div class="dk-sk" style="height:46px;width:30%"></div><div class="dk-sk" style="height:150px"></div></div><div class="dk-card f1"><div class="dk-sk" style="height:16px;width:55%"></div>${'<div class="dk-sk" style="height:38px"></div>'.repeat(4)}</div></div>`;
 // 같은 화면을 다시 그릴 때(필터·새로고침·언어)는 지금 화면을 흐리게 두고 바꿔요 — 깜빡임 없이
 function loading(v, title, sub) {
   if (S.same) { v.classList.add('dk-busy'); return; }
   v.innerHTML = head(title, sub) + loadingCard();
 }
-const ytShort = (id) => `https://www.youtube.com/shorts/${encodeURIComponent(id)}`;
+const ytShort = (id) => (SHORTS.get(id)?.kind === 'long' ? 'https://www.youtube.com/watch?v=' : 'https://www.youtube.com/shorts/') + encodeURIComponent(id);
 // 쇼츠 썸네일은 가로 틀 안에 세로 화면이 가운데 있어요 → 큰 해상도(hq)로 바꿔 9:16로 가운데만 보여줘요
 const vthumb = (u) => (u ? String(u).replace(/\/(mq|sd)?default\.jpg$/, '/hqdefault.jpg') : '');
 const cssUrl = (u) => (/^https:\/\//.test(u || '') ? String(u).replace(/["'()\\\s<>]/g, (c) => '%' + c.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')) : '');
@@ -935,13 +1109,28 @@ function studioChart(id, sd, tab, multi) {
 const confOf = (n) => (n >= 10 ? 'hi' : n >= 5 ? 'mid' : 'lo');
 const CONFW = { hi: 1, mid: 0.8, lo: 0.6 };
 const modeOf = (arr) => { const m = new Map(); let best = null, bn = 0; for (const x of arr) { const c = (m.get(x) || 0) + 1; m.set(x, c); if (c > bn) { best = x; bn = c; } } return best; };
-const durIdx = (sec) => DUR.findIndex(([a, b]) => (sec || 0) >= a && (sec || 0) <= b);
+const durIdx = (sec) => DURS().findIndex(([a, b]) => (sec || 0) >= a && (sec || 0) <= b);
 const shortT = (s, n = 24) => { const x = String(s || '').trim(); return x.length > n ? x.slice(0, n - 1) + '…' : x; };
 const kstDay = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
 function tryStore(k, def) { try { const v = JSON.parse(localStorage.getItem(k) || 'null'); return v == null ? def : v; } catch (e) { return def; } }
 function trySave(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* 저장 못 해도 화면은 그대로 */ } }
 const tryHidden = () => new Set(tryStore('radar.tryHide.' + kstDay(), []));
 const tryRuns = () => tryStore('radar.try', []);
+// 학습: '해볼게'·'다른 거'와 해본 결과를 기억해 다음 제안 순서를 맞춰요 (이 브라우저에 저장)
+const learnStore = () => tryStore('radar.tryLearn', { kinds: {}, n: 0 });
+function learnNote(kind, how) {
+  if (!kind) return;
+  const L = learnStore();
+  const k = L.kinds[kind] || { do: 0, skip: 0 };
+  k[how] = (k[how] || 0) + 1;
+  L.kinds[kind] = k;
+  L.n = (L.n || 0) + 1;
+  trySave('radar.tryLearn', L);
+}
+function learnFactor(kind, resAdj) {
+  const k = (learnStore().kinds || {})[kind] || { do: 0, skip: 0 };
+  return Math.max(0.4, Math.min(1.9, 1 + 0.25 * (k.do || 0) - 0.15 * (k.skip || 0) + (resAdj || 0)));
+}
 const keyTok = (s) => [...new Set([...tokens(s.title), ...(s.tags || []).map((x) => String(x).toLowerCase().trim()).filter((x) => x.length >= 2 && x.length <= 20 && !STOPW.has(x))])];
 const axisHours = () => `<div class="dk-axis"><span>${esc(hourName(0))}</span><span>${esc(hourName(6))}</span><span>${esc(hourName(12))}</span><span>${esc(hourName(18))}</span><span>${esc(hourName(23))}</span></div>`;
 function keyHtml(withCur, refLabel) {
@@ -952,6 +1141,7 @@ function ytRowsHtml(rows) {
   const max = Math.max(1e-9, ...rows.map((r) => r.v || 0));
   return `<div class="dk-hbars">${rows.map((r) => `<div class="dk-hb${r.low ? ' low' : ''}${r.cur ? ' cur' : ''}"><span class="l" data-cur="${esc(t('tryCur'))}">${esc(r.label)}</span><span class="track"><i class="${r.hot ? 'hot' : ''}" style="width:${Math.max(2, ((r.v || 0) / max) * 100).toFixed(1)}%"></i></span><span class="v">${esc(r.text)}${r.sub ? `<small>${esc(r.sub)}</small>` : ''}</span></div>`).join('')}</div>`;
 }
+const NOT_IDEA = new Set(['hour', 'day', 'cad', 'gap']);
 function trySuggest(own, refs, prof, opt = {}) {
   const out = [];
   const liveOwn = own.filter((s) => s.status === 'live' && s.published_at);
@@ -1005,10 +1195,10 @@ function trySuggest(own, refs, prof, opt = {}) {
     const base = cur && cur.n >= MIN_N && cur.v ? cur.v : 1;
     const lift = bdur.v / Math.max(base, 0.4);
     if (lift >= 1.15) {
-      const rows = A.durs.map((r) => ({ label: t('dur' + r.k), v: r.v || 0, low: r.n < MIN_N, hot: r.k === bdur.k, cur: r.k === myB, text: r.n < MIN_N ? t('insLow') : t('insX', { x: (r.v || 0).toFixed(1) }), sub: t('insTipN', { n: r.n }) }));
+      const rows = A.durs.map((r) => ({ label: durLabel(r.k), v: r.v || 0, low: r.n < MIN_N, hot: r.k === bdur.k, cur: r.k === myB, text: r.n < MIN_N ? t('insLow') : t('insX', { x: (r.v || 0).toFixed(1) }), sub: t('insTipN', { n: r.n }) }));
       push({ id: 'dur:' + bdur.k, kind: 'dur', key: bdur.k, ic: IC.timer, n: bdur.n, lift, basis, base,
-        q: t('tryDurQ', { b: t('dur' + bdur.k) }),
-        lead: myDur ? t('tryDurL', { b: t('dur' + bdur.k), n: bdur.n, x: bdur.v.toFixed(1), m: Math.round(myDur) }) : t('tryDurL0', { b: t('dur' + bdur.k), n: bdur.n, x: bdur.v.toFixed(1) }),
+        q: t('tryDurQ', { b: durLabel(bdur.k) }),
+        lead: myDur ? t('tryDurL', { b: durLabel(bdur.k), n: bdur.n, x: bdur.v.toFixed(1), m: durTxt(myDur) }) : t('tryDurL0', { b: durLabel(bdur.k), n: bdur.n, x: bdur.v.toFixed(1) }),
         viz: () => ({ html: ytRowsHtml(rows) }) });
     }
   }
@@ -1039,7 +1229,7 @@ function trySuggest(own, refs, prof, opt = {}) {
       if (s.ratio < 2 || (s._fit && s._fit.score < 45) || seenT.has(k)) return false;
       seenT.add(k);
       return true;
-    }).slice(0, 2);
+    }).slice(0, 3);
     for (const s of picks) {
       const x = Number(s.ratio);
       push({ id: 'topic:' + s.id, kind: 'topic', key: keyTok(s).slice(0, 3), vid: s.id, ic: IC.up, n: 1, conf: x >= 5 ? 'mid' : 'lo', lift: Math.min(x / 2, 3) + (s._fit ? s._fit.score / 200 : 0), basis: 'ref',
@@ -1106,7 +1296,16 @@ function trySuggest(own, refs, prof, opt = {}) {
         viz: () => ({ html: ytRowsHtml([{ label: t('tryThis'), v: hot.v48, hot: true, text: fmtN(hot.v48) }, { label: t('tryOldAvg'), v: typ, text: fmtN(typ) }]) }) });
     }
   }
-  return out.sort((a, b) => b.score - a.score);
+  // 학습: 고른 것 · 넘긴 것 · 해본 결과로 순서를 맞춰요
+  const adj = {};
+  for (const r of tryRuns()) {
+    const res = tryResult(r, own);
+    if (res.cls === 'good') adj[r.kind] = (adj[r.kind] || 0) + 0.3;
+    else if (res.cls === 'bad') adj[r.kind] = (adj[r.kind] || 0) - 0.3;
+  }
+  for (const sg of out) { sg.learn = learnFactor(sg.kind, adj[sg.kind]); sg.score *= sg.learn; }
+  // 올리는 시간·요일·주기·공백은 소재가 아니라서 빼요 (소재 벤치마킹에 집중)
+  return out.filter((sg) => !NOT_IDEA.has(sg.kind)).sort((a, b) => b.score - a.score);
 }
 function tyCardHtml(sg, idx, idp, ch) {
   const vid = `${idp}${idx}`;
@@ -1117,7 +1316,7 @@ function tyCardHtml(sg, idx, idp, ch) {
     <div class="ty-h"><span class="ic">${svg(sg.ic, 19)}</span><div><b class="q">${esc(sg.q)}</b><span class="lead">${esc(sg.lead)}</span></div></div>
     ${sg.ex ? `<p class="ty-ex">${esc(sg.ex)}</p>` : ''}
     ${v ? `<div class="ty-viz">${v.html}</div>` : ''}
-    <div class="ty-f"><span class="conf ${sg.conf}" title="${esc(t('tryConf_' + sg.conf))}"><i aria-hidden="true"><b></b><b></b><b></b></i>${esc(sg.nText || t('tryN', { n: sg.n }))} · ${esc(t('tryConf_' + sg.conf))}</span><span class="basis">${esc(t(sg.basis === 'ref' ? 'tryBasisRef' : 'tryBasisMine'))}</span>
+    <div class="ty-f"><span class="conf ${sg.conf}" title="${esc(t('tryConf_' + sg.conf))}"><i aria-hidden="true"><b></b><b></b><b></b></i>${esc(sg.nText || t('tryN', { n: sg.n }))} · ${esc(t('tryConf_' + sg.conf))}</span><span class="basis">${esc(t(sg.basis === 'ref' ? 'tryBasisRef' : 'tryBasisMine'))}</span>${sg.learn > 1.05 ? `<span class="dk-tag teal">${esc(t('learned'))}</span>` : ''}
       <div class="acts">${running ? `<span class="dk-tag teal">${esc(t('tryDoing'))}</span>` : `<button type="button" class="dk-btn sm" data-try="${esc(sg.id)}">${esc(t('tryDo'))}</button><button type="button" class="dk-btn sm line" data-skip="${esc(sg.id)}">${esc(t('trySkip'))}</button>`}</div></div>
   </article>`;
 }
@@ -1132,6 +1331,7 @@ function bindTry(root, list, ch, onChange) {
     const runs = tryRuns().filter((r) => !(r.id === sg.id && (r.ch || '') === (ch || '')));
     runs.unshift({ id: sg.id, kind: sg.kind, key: sg.key, q: sg.q, ch: ch || '', at: Date.now() });
     trySave('radar.try', runs.slice(0, 30));
+    learnNote(sg.kind, 'do');
     if (sg.vid) S.board.add(sg.vid);
     snack(t('tryAdded'));
     if (onChange) onChange();
@@ -1139,6 +1339,7 @@ function bindTry(root, list, ch, onChange) {
   root.querySelectorAll('[data-skip]').forEach((b) => b.addEventListener('click', () => {
     const k = 'radar.tryHide.' + kstDay();
     trySave(k, [...tryStore(k, []), b.dataset.skip]);
+    learnNote((list.find((x) => x.id === b.dataset.skip) || {}).kind, 'skip');
     const card = b.closest('.ty-card');
     card.style.transition = 'opacity .45s var(--dk-ease), transform .45s var(--dk-ease)';
     card.style.opacity = '0';
@@ -1186,30 +1387,34 @@ function tryRunsHtml(runs, own) {
   }).join('')}</ul>`;
 }
 
-// ---------- 틀 ----------
-const NAV = [
-  { k: 'home' },
-  { sec: 'secRadar' }, { k: 'picks' }, { k: 'try' }, { k: 'insights' }, { k: 'ranking' }, { k: 'alerts', badge: true },
-  { sec: 'secCollect' }, { k: 'collect' }, { k: 'channels' },
-  { sec: 'secWork' }, { k: 'ideas' }, { k: 'partners' },
-  { div: true }, { k: 'status' }, { k: 'landing', href: '/' }
+// ---------- 틀: 메뉴 5개 · 메뉴마다 안쪽 탭 ----------
+const GROUPS = [
+  { k: 'agent', ic: 'agent', tabs: ['home'], hidden: ['alerts'] },
+  { k: 'refsG', ic: 'channels', tabs: ['refs', 'channels'], hidden: ['ch', 'collect'] },
+  { k: 'ideasG', ic: 'picks', tabs: ['picks', 'try', 'wave', 'ideas'] },
+  { k: 'toolsG', ic: 'tools', tabs: ['tools'], hidden: ['tool', 'overview', 'insights', 'ranking'] },
+  { k: 'setG', ic: 'status', tabs: ['status', 'partners'], minor: true }
 ];
-const ROUTES = ['home', 'picks', 'try', 'insights', 'ranking', 'alerts', 'collect', 'channels', 'ideas', 'partners', 'status'];
+const ROUTES = GROUPS.flatMap((g) => [...g.tabs, ...(g.hidden || [])]);
+const groupOf = (name) => GROUPS.find((g) => g.tabs.includes(name) || (g.hidden || []).includes(name));
 function route() {
   let h = (location.hash || '#home').slice(1);
   try { h = decodeURIComponent(h); } catch (e) { /* 그대로 */ }
+  h = h.split('?')[0];
   if (h.startsWith('ch/')) return { name: 'ch', id: h.slice(3) };
-  return { name: ROUTES.includes(h) ? h : 'home' };
+  if (h.startsWith('tool/')) return { name: 'tool', id: h.slice(5) };
+  if (h === 'collect') return { name: 'refs' };
+  return { name: ROUTES.includes(h) && h !== 'ch' && h !== 'tool' ? h : 'home' };
 }
 function renderNav() {
-  const cur = route().name;
-  document.getElementById('nav').innerHTML = NAV.map((n) => {
-    if (n.sec) return `<p class="dk-sec">${esc(t(n.sec))}</p>`;
-    if (n.div) return '<span class="dk-div" aria-hidden="true"></span>';
-    const on = cur === n.k || (n.k === 'channels' && cur === 'ch');
-    const badge = n.badge && S.unread ? `<span class="n">${S.unread > 99 ? '99+' : S.unread}</span>` : '';
-    return `<a class="dk-nav" href="${n.href || '#' + n.k}" ${on ? 'aria-current="page"' : ''}>${svg(IC[n.k])}${esc(t(n.k))}${badge}</a>`;
-  }).join('');
+  const g0 = groupOf(route().name);
+  const item = (g, cls = '') => {
+    const badge = g.k === 'agent' && S.unread ? `<span class="n">${S.unread > 99 ? '99+' : S.unread}</span>` : '';
+    return `<a class="dk-nav${cls}" href="#${g.tabs[0]}" ${g0 === g ? 'aria-current="page"' : ''}>${svg(IC[g.ic], cls ? 16 : 19)}${esc(t('g_' + g.k))}${badge}</a>`;
+  };
+  document.getElementById('nav').innerHTML = GROUPS.filter((g) => !g.minor).map((g) => item(g)).join('')
+    + `<span class="dk-div" aria-hidden="true"></span>` + GROUPS.filter((g) => g.minor).map((g) => item(g, ' sub')).join('')
+    + `<a class="dk-nav sub" href="/">${svg(IC.landing, 16)}${esc(t('landing'))}</a>`;
   const bn = document.getElementById('bellN');
   bn.hidden = !S.unread;
   bn.textContent = S.unread > 99 ? '99+' : String(S.unread || '');
@@ -1221,6 +1426,11 @@ function renderChrome() {
   document.getElementById('testNote').innerHTML = t('testNote');
   document.getElementById('refreshAll').innerHTML = `${svg(IC.refresh, 16)}<span>${esc(t('refreshAll'))}</span>`;
   document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+  const ks = document.getElementById('kindSeg');
+  if (ks) {
+    ks.setAttribute('aria-label', t('kindAria'));
+    ks.innerHTML = ['short', 'long'].map((k) => `<button type="button" data-kind="${k}" aria-pressed="${String(S.kind === k)}">${esc(t(k === 'short' ? 'kindShort' : 'kindLong'))}</button>`).join('');
+  }
   renderNav();
 }
 async function updateUnread() {
@@ -1241,7 +1451,7 @@ async function render() {
   S.same = key === lastKey && v.childElementCount > 0;
   lastKey = key;
   v.classList.toggle('dk-still', S.same);
-  const views = { home: vHome, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, collect: vCollect, channels: vChannels, ch: vChannel, ideas: vIdeas, partners: vPartners, status: vStatus };
+  const views = { home: aHome, refs: vRefs, wave: vWave, tools: vTools, tool: vTool, overview: vOverview, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, channels: vChannels, ch: vChannel, ideas: vIdeas, partners: vPartners, status: vStatus };
   document.title = t(r.name === 'ch' ? 'channels' : r.name) + ' · CNOL RADAR';
   try {
     await views[r.name](v, r, alive);
@@ -1251,58 +1461,6 @@ async function render() {
   }
   if (alive()) v.classList.remove('dk-busy');
   updateUnread().catch(() => {});
-}
-
-// ---------- 채널 추가 폼 (대시보드 첫 화면 · 채널 수집에서 같이 씀) ----------
-function addFormHtml(first) {
-  const cats = [...new Set((S.chans || []).map((c) => c.category).filter(Boolean))];
-  const role = S.addRole || (first || !(S.chans || []).some((c) => c.role === 'mine') ? 'mine' : 'reference');
-  S.addRole = role;
-  return `<form class="dk-card ${first ? 'full' : 'f2'} dk-fade" id="addForm" novalidate>
-    <div class="dk-ch"><h2>${esc(first ? t('obTitle') : t('addTitle'))}</h2></div>
-    <p class="dk-sub" style="margin:-6px 0 0">${esc(first ? t('obSub') : t('collectSub'))}</p>
-    <div class="dk-field"><label for="addIn">${esc(t('addLabel'))}</label>
-      <textarea class="dk-textarea" id="addIn" spellcheck="false" placeholder="https://www.youtube.com/@channel&#10;@handle&#10;https://www.youtube.com/shorts/…"></textarea></div>
-    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end">
-      <div class="dk-field"><span style="font-size:13px;font-weight:700;color:#334155">${esc(t('roleQ'))}</span>
-        <div class="dk-seg" role="group" aria-label="${esc(t('roleQ'))}"><button type="button" data-role="mine" aria-pressed="${role === 'mine'}">${esc(t('mine'))}</button><button type="button" data-role="reference" aria-pressed="${role === 'reference'}">${esc(t('reference'))}</button></div></div>
-      <div class="dk-field" style="flex:1 1 200px"><label for="addCat">${esc(t('catLabel'))}</label>
-        <input class="dk-input" id="addCat" list="catList" maxlength="30" placeholder="${esc(t('catPh'))}"><datalist id="catList">${cats.map((c) => `<option value="${esc(c)}">`).join('')}</datalist></div>
-      <button class="dk-btn" type="submit" id="addBtn">${svg(IC.collect, 17)}${esc(t('collectBtn'))}</button>
-    </div>
-    <p class="dk-sub" style="margin:0">${esc(t('platNote'))}</p>
-    <p class="dk-sub" style="margin:0" id="mineNote" ${role === 'mine' ? '' : 'hidden'}>${esc(t('mineNote'))}</p>
-    <ul class="dk-list" id="addRes" aria-live="polite"></ul>
-  </form>`;
-}
-function bindAddForm(root, onDone) {
-  const form = root.querySelector('#addForm');
-  if (!form) return;
-  form.querySelectorAll('[data-role]').forEach((b) => b.addEventListener('click', () => {
-    S.addRole = b.dataset.role;
-    form.querySelectorAll('[data-role]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-    form.querySelector('#mineNote').hidden = S.addRole !== 'mine';
-  }));
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const inputs = form.querySelector('#addIn').value.split(/[\n,]+/).map((s) => s.trim()).filter(Boolean);
-    const res = form.querySelector('#addRes');
-    if (!inputs.length) { res.innerHTML = `<li class="dk-banner warn">${esc(t('err_EMPTY'))}</li>`; return; }
-    const btn = form.querySelector('#addBtn');
-    btn.disabled = true;
-    res.innerHTML = `<li class="dk-banner info"><span class="dk-spin"></span> ${esc(t('collecting'))}</li>`;
-    const out = await act({ action: 'add', inputs, role: S.addRole, category: form.querySelector('#addCat').value });
-    btn.disabled = false;
-    if (!out.ok) { res.innerHTML = `<li class="dk-banner bad">${esc(errText(out.error))}</li>`; return; }
-    res.innerHTML = out.results.map((r) => (r.ok
-      ? `<li class="dk-li">${avatar(r.thumb)}<span class="dk-ttl"><b>${esc(r.title)}</b><small>${esc(t('resOk', { n: r.shorts ?? 0 }))}${r.existed ? ' · ' + esc(t('resExisted')) : ''}</small></span><a class="dk-btn sm line" href="#ch/${esc(r.channel_id)}">${esc(t('chOpen'))}</a></li>`
-      : `<li class="dk-li"><span class="dk-tag red">!</span><span class="dk-ttl"><b>${esc(r.input)}</b><small>${esc(errText(r.error))}</small></span></li>`)).join('');
-    if (out.results.some((r) => r.ok)) {
-      form.querySelector('#addIn').value = '';
-      await getChans(true);
-      if (onDone) onDone(out);
-    }
-  });
 }
 
 // ---------- 쇼츠 카드 ----------
@@ -1364,7 +1522,7 @@ async function getProfile(force) {
   const mineCh = (chans || []).filter((c) => c.role === 'mine');
   S.profAt = Date.now();
   if (!mineCh.length) { S.prof = null; S.profList = []; return null; }
-  const list = remember(await rpc('radar_shorts', { p_days: 120, p_channel: null, p_role: 'mine', p_limit: 400 }));
+  const list = remember(await vids({ p_days: 120, p_channel: null, p_role: 'mine', p_limit: 400 }));
   S.profList = list;
   const live = list.filter((x) => x.status === 'live');
   const kw = new Map();
@@ -1407,7 +1565,7 @@ function profileHtml(p) {
   return `<div class="dk-ch"><h2>${esc(t('profTitle'))}</h2><span class="dk-sub">${esc(t('profSub', { n: p.n }))}</span></div>
   <div class="dk-prof">
     <div><span>${esc(t('profCat'))}</span><b>${esc(cats.join(' · ') || t('none'))}</b></div>
-    <div><span>${esc(t('profDur'))}</span><b>${p.durMed ? esc(t('durS', { s: Math.round(p.durMed) })) : '–'}</b></div>
+    <div><span>${esc(t('profDur'))}</span><b>${esc(durTxt(p.durMed))}</b></div>
     <div><span>${esc(t('profFmt'))}</span><b>${esc(p.fmtGood.slice(0, 3).map((k) => t('fmt_' + k)).join(' · ') || t('none'))}</b></div>
     <div><span>${esc(t('profKw'))}</span><b>${esc(p.kwList.slice(0, 5).map((k) => '#' + k).join(' ') || t('none'))}</b></div>
   </div>`;
@@ -1447,7 +1605,7 @@ function closeShort() {
   m.dataset.id = '';
   if (modalPrev && modalPrev.isConnected && modalPrev.focus) modalPrev.focus();
 }
-const durTxt = (sec) => (sec ? t('durS', { s: Math.round(sec) }) : '–');
+const durTxt = (sec) => (sec ? (sec >= 120 ? t('durM', { m: Math.round(sec / 60) }) : t('durS', { s: Math.round(sec) })) : '–');
 async function openShort(id) {
   const x = SHORTS.get(id);
   if (!x) return;
@@ -1484,7 +1642,7 @@ async function openShort(id) {
   setTimeout(() => xb.focus(), 60);
   box.querySelectorAll('[data-close]').forEach((a) => a.addEventListener('click', closeShort));
   bindBoardButtons(box, [x]);
-  box.querySelector('[data-similar]').addEventListener('click', () => { S.prefKw = similarKw([x]).join(', '); closeShort(); location.hash = '#collect'; });
+  box.querySelector('[data-similar]').addEventListener('click', () => { const k = similarKw([x])[0] || ''; closeShort(); location.hash = '#tool/topic' + (k ? '?q=' + encodeURIComponent(k) : ''); });
   let data = null;
   try { data = await rpc('radar_curve', { p_video: id }); } catch (e) { data = null; }
   if (m.dataset.id !== id) return;
@@ -1536,28 +1694,27 @@ document.addEventListener('click', (e) => {
   openShort(a.dataset.short);
 });
 
-// ---------- 대시보드 ----------
-async function vHome(v, r, alive) {
-  loading(v, t('home'), esc(t('loading')));
-  const [ov, sh, al, , bc, prof, trend] = await Promise.all([
+// ---------- 에이전트 · 오늘 보고 (에이전트가 말하듯 차례로 보고해요) ----------
+const nextRunTxt = () => { const d = new Date(); d.setMinutes(5, 0, 0); if (d <= new Date()) d.setHours(d.getHours() + 1); return d.toLocaleTimeString(loc(), { hour: 'numeric', minute: '2-digit' }); };
+const greet = () => { const h = new Date(Date.now() + 9 * 3600e3).getUTCHours(); return t(h < 11 ? 'greet0' : h < 18 ? 'greet1' : 'greet2'); };
+const agAv = (sm) => `<span class="ag-av${sm ? ' sm' : ''}"><img src="/logo.png" alt="" width="${sm ? 18 : 24}" height="${sm ? 16 : 21}"></span>`;
+const agMsg = (text, extra = '') => `<article class="ag-msg dk-fade">${agAv(true)}<div class="ag-b"><p>${esc(text)}</p>${extra}</div></article>`;
+// ---------- 분석 · 한눈에 (채널 전부를 한 화면에: 48시간 · 채널 순위 · 28일 개요 · 잘된 영상) ----------
+async function vOverview(v, r, alive) {
+  loading(v, t('overview'), esc(t('ovSub')));
+  const [ov, sh, , bc, trend] = await Promise.all([
     rpc('radar_overview'),
-    rpc('radar_shorts', { p_days: 7, p_channel: null, p_role: null, p_limit: 600 }),
-    sb.from('radar_alerts').select('*').order('created_at', { ascending: false }).limit(60),
+    vids({ p_days: 7, p_channel: null, p_role: null, p_limit: 600 }),
     getChans(),
     rpc('radar_by_channel', { p_hours: 48, p_days: 29 }).catch(() => ({ hourly: [], daily: [] })),
-    getProfile().catch(() => null),
     rpc('radar_trend', { p_days: 57, p_channel: null }).catch(() => [])
   ]);
   if (!alive()) return;
   remember(sh);
-  S.unread = ov.unread || 0;
-  renderNav();
   if (!ov.channels.total) {
-    v.innerHTML = head(t('home'), esc(t('homeSubNone'))) + `<div class="dk-row">${addFormHtml(true)}</div>`;
-    bindAddForm(v, () => render());
+    v.innerHTML = head(t('overview'), esc(t('ovSub'))) + `<section class="dk-card full dk-fade"><div class="dk-empty">${esc(t('noChannels'))}<br><a class="dk-btn" style="margin-top:12px" href="#collect">${esc(t('goCollect'))}</a></div></section>`;
     return;
   }
-  const sub = esc(t('homeSub', { n: fmtFull(ov.channels.total), t: ov.last_at ? agoTxt(ov.last_at) : '–' }));
   const firstH = ov.first_at ? Date.parse(ov.first_at) : null;
   const hv = ov.hourly.map((x) => ({ v: x.v, h: x.h, pre: !x.v && (!firstH || Date.parse(x.h) + 3600e3 <= firstH) }));
   const covH = firstH ? Math.floor((Date.now() - firstH) / 3600e3) : 0;
@@ -1567,37 +1724,21 @@ async function vHome(v, r, alive) {
     change = `<span class="${p >= 0 ? 'dk-up' : 'dk-down'}" style="font-weight:700">${esc(t('vsPrev', { p: Math.abs(p), dir: t(p >= 0 ? 'more' : 'less') }))}</span>`;
   } else change = esc(t('coverage', { h: Math.min(covH, 48) }));
   const last1h = ov.hourly.length >= 2 ? ov.hourly[ov.hourly.length - 2].v : 0;
-
-  const rank = (ov.ranking || []).slice(0, 6);
-  const tops = sh.filter((s) => s.v48 > 0).sort((a, b) => b.v48 - a.v48).slice(0, 5);
-  const topsList = tops.length ? tops : sh.filter((s) => s.age_h <= 48).sort((a, b) => b.views - a.views).slice(0, 5);
-  const picks = pickList(sh, 'all', prof).slice(0, 3);
-  const allAlerts = al.data || [];
-  // 채널별로 쌓기 (채널이 2개 이상 잡혔을 때)
+  const rank = (ov.ranking || []).slice(0, 10);
+  const tops = sh.filter((s) => s.v48 > 0).sort((a, b) => b.v48 - a.v48).slice(0, 6);
+  const topsList = tops.length ? tops : sh.filter((s) => s.age_h <= 48).sort((a, b) => b.views - a.views).slice(0, 6);
   const ser = buildSeries(bc || {}, S.chans);
   const canStack = ser.series.length >= 2;
   const stacked = canStack && S.stack === 'ch';
   const hs = stackCols(hv, bc?.hourly, ser.keyOf, (b) => Date.parse(b.h), (x) => Date.parse(x.h));
-  // 유튜브 스튜디오 '개요'처럼: 지표 탭 + 선 차트 (채널별 = 채널마다 선, 합산 = 파란 선 + 평소 범위)
   const sd = studioData(trend);
   if (!['views', 'subs', 'uploads'].includes(S.ytTab)) S.ytTab = 'views';
   const multi = stacked ? multiDaily(bc, ser, sd.cur) : null;
   const multiTot = multi ? Object.fromEntries(multi.map((x) => [x.key, x.vals.reduce((a, y) => a + (y || 0), 0)])) : null;
   const ovChart = () => studioChart('ovl', sd, S.ytTab, multi);
   const oc = ovChart();
-  // 이거 해볼래? (내 채널 데이터 · 레퍼런스에서 고른 실험 3개)
-  const hidden = tryHidden();
-  const tryList = trySuggest(S.profList || [], sh.filter((x) => x.role === 'reference'), prof).filter((x) => !hidden.has(x.id)).slice(0, 3);
-  const tryRow = `<section class="dk-card full dk-fade">
-    <div class="dk-ch"><h2 style="display:flex;align-items:center;gap:8px">${svg(IC.try, 20)}${esc(t('try'))}</h2><a class="dk-sub" href="#try" style="font-weight:700">${esc(t('tryMore'))} →</a></div>
-    <p class="dk-sub" style="margin:-6px 0 0">${esc(prof ? t('tryHomeSub') : t('tryNoMine'))}</p>
-    ${tryList.length ? `<div class="ty-grid home">${tryList.map((sg, i) => tyCardHtml(sg, i, 'th', '')).join('')}</div>` : `<div class="dk-empty">${esc(t('tryEmpty'))}</div>`}
-  </section>`;
   const stackSeg = canStack ? `<div class="dk-seg" role="group" aria-label="${esc(t('byCh'))}"><button type="button" data-stack="ch" aria-pressed="${String(S.stack === 'ch')}">${esc(t('byCh'))}</button><button type="button" data-stack="sum" aria-pressed="${String(S.stack !== 'ch')}">${esc(t('sumAll'))}</button></div>` : '';
-  const alerts = allAlerts.slice(0, 5);
-  const nextRun = (() => { const d = new Date(); d.setMinutes(5, 0, 0); if (d <= new Date()) d.setHours(d.getHours() + 1); return d.toLocaleTimeString(loc(), { hour: 'numeric', minute: '2-digit' }); })();
-
-  v.innerHTML = head(t('home'), sub, `<a class="dk-hbtn" href="#collect">${svg(IC.collect, 17)}${esc(t('addTitle'))}</a>`) + briefHtml(ov, allAlerts, picks, covH) + tryRow + `
+  v.innerHTML = head(t('overview'), esc(t('ovSub'))) + `
   <div class="dk-row">
     <section class="dk-card f2 dk-fade">
       <div class="dk-ch"><span class="dk-live"><i></i>${esc(t('live48all'))} · ${esc(t('chCount', { n: ov.channels.total }))}</span>${stackSeg || `<span class="dk-sub">${esc(t('kNextSub'))}</span>`}</div>
@@ -1625,23 +1766,6 @@ async function vHome(v, r, alive) {
       <div class="dk-ch"><h2>${esc(t('tops48'))}</h2><a class="dk-sub" href="#ranking">${esc(t('seeAll'))}</a></div>
       <ul class="dk-list">${topsList.length ? topsList.map((s) => `<li><a class="dk-li" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}">${avatar(s.thumb, true)}<span class="dk-ttl"><b>${esc(s.title)}</b><small>${esc(s.channel_title)} · ${esc(ageTxt(s.age_h))}</small></span><span class="dk-num">${esc(fmtN(s.v48 || s.views))}</span></a></li>`).join('') : `<li class="dk-empty">${esc(t('noShorts'))}</li>`}</ul>
     </section>
-  </div>
-  <div class="dk-row">
-    <section class="dk-card f2 dk-fade">
-      <div class="dk-ch"><h2>${esc(t('todayPicks'))}</h2><a class="dk-sub" href="#picks">${esc(t('seeAll'))}</a></div>
-      <p class="dk-sub" style="margin:-6px 0 0">${esc(t('todayPicksSub'))}</p>
-      ${picks.length ? `<div class="dk-grid compact">${picks.map(pickCard).join('')}</div>` : `<div class="dk-empty">${esc(t('picksEmpty'))}</div>`}
-    </section>
-    <section class="dk-card f1 dk-fade">
-      <div class="dk-ch"><h2>${esc(t('agentFeed'))}</h2><a class="dk-sub" href="#alerts">${esc(t('seeAll'))}</a></div>
-      <div style="display:flex;flex-direction:column;gap:10px">${alerts.length ? alerts.map(alertHtml).join('') : `<div class="dk-empty">${esc(t('noAlerts'))}</div>`}</div>
-    </section>
-  </div>
-  <div class="dk-kpis dk-fade">
-    <div class="dk-kpi"><span>${esc(t('kChannels'))}</span><b>${esc(fmtFull(ov.channels.total))}</b><small>${esc(t('kChannelsSub', { m: ov.channels.mine, r: ov.channels.reference }))}</small></div>
-    <div class="dk-kpi"><span>${esc(t('kShorts'))}</span><b>${esc(fmtFull(ov.shorts))}</b><small>${esc(t('kShortsSub'))}</small></div>
-    <div class="dk-kpi"><span>${esc(t('kUnits'))}</span><b>${esc(fmtFull(ov.units_today))}</b><small>${esc(t('kUnitsSub', { b: fmtFull(9000) }))}</small></div>
-    <div class="dk-kpi"><span>${esc(t('kNext'))}</span><b>${esc(nextRun)}</b><small>${esc(t('kNextSub'))}</small></div>
   </div>`;
   if (stacked) {
     bindStack(v, 'b48', hs.cols, ser.series, (c) => `${hourLabel(c.h)} · ${c.pre ? t('preCollect') : fmtFull(c.v) + t('unitViews')}`);
@@ -1661,18 +1785,17 @@ async function vHome(v, r, alive) {
     c2.bind(v);
     if (multi && S.ytTab === 'views') bindLegend(v, 'ovl');
   }));
-  bindTry(v, tryList, '', () => render());
   v.querySelectorAll('[data-stack]').forEach((b) => b.addEventListener('click', () => { S.stack = b.dataset.stack; render(); }));
-  bindTodos(v);
-  bindBoardButtons(v, picks);
-  bindAlertButtons(v);
 }
 
 // ---------- 알고리즘 분석 (수집한 쇼츠로 계산) ----------
 const KST = 9 * 3600e3;
 const kstOf = (iso) => { const d = new Date(Date.parse(iso) + KST); return { h: d.getUTCHours(), wd: d.getUTCDay(), ym: d.toISOString().slice(0, 7) }; };
 const median = (a) => { if (!a.length) return null; const x = [...a].sort((p, q) => p - q); const m = x.length >> 1; return x.length % 2 ? x[m] : (x[m - 1] + x[m]) / 2; };
-const DUR = [[0, 15], [16, 30], [31, 45], [46, 60], [61, 90], [91, 1e9]];
+const DUR_S = [[0, 15], [16, 30], [31, 45], [46, 60], [61, 90], [91, 1e9]];
+const DUR_L = [[0, 300], [301, 600], [601, 1200], [1201, 2400], [2401, 1e9]];
+const DURS = () => (S.kind === 'long' ? DUR_L : DUR_S);
+const durLabel = (k) => t((S.kind === 'long' ? 'durL' : 'dur') + k);
 const MIN_N = 3;
 const hourName = (h) => new Date(Date.UTC(2020, 0, 1, h) - KST).toLocaleTimeString(loc(), { hour: 'numeric', timeZone: 'Asia/Seoul' });
 const dayName = (wd, style = 'long') => new Date(Date.UTC(2020, 0, 5 + wd)).toLocaleDateString(loc(), { weekday: style, timeZone: 'UTC' });
@@ -1684,7 +1807,7 @@ function analyze(list) {
   const group = (keyOf, keys) => keys.map((k) => { const xs = base.filter((s) => keyOf(s) === k).map((s) => Number(s.ratio)); return { k, n: xs.length, v: median(xs) }; });
   const hours = group((s) => kstOf(s.published_at).h, [...Array(24).keys()]);
   const days = group((s) => kstOf(s.published_at).wd, [1, 2, 3, 4, 5, 6, 0]);
-  const durs = group((s) => DUR.findIndex(([a, b]) => (s.dur || 0) >= a && (s.dur || 0) <= b), DUR.map((_, i) => i));
+  const durs = group((s) => DURS().findIndex(([a, b]) => (s.dur || 0) >= a && (s.dur || 0) <= b), DURS().map((_, i) => i));
   const fmts = [...FMT.map(([k]) => k), 'none'].map((k) => {
     const xs = base.filter((s) => { const f = formatsOf(s.title); return k === 'none' ? !f.length : f.includes(k); }).map((s) => Number(s.ratio));
     return { k, n: xs.length, v: median(xs) };
@@ -1725,9 +1848,9 @@ function insightLines(a) {
   const x1 = (v) => v.toFixed(1);
   const bh = bestOf(a.hours); if (bh && bh.v >= 1.05) out.push({ ic: IC.clock, tone: 'good', tx: t('insL_hour', { h: hourName(bh.k), x: x1(bh.v), n: bh.n }) });
   const bf = bestOf(a.fmts.filter((r) => r.k !== 'none')); if (bf && bf.v >= 1.05) out.push({ ic: IC.picks, tone: 'good', tx: t('insL_fmt', { f: t('fmt_' + bf.k), x: x1(bf.v) }) });
-  const bd = bestOf(a.durs); if (bd && bd.v >= 1.05) out.push({ ic: IC.timer, tone: '', tx: t('insL_dur', { b: t('dur' + bd.k), x: x1(bd.v), n: bd.n }) });
+  const bd = bestOf(a.durs); if (bd && bd.v >= 1.05) out.push({ ic: IC.timer, tone: '', tx: t('insL_dur', { b: durLabel(bd.k), x: x1(bd.v), n: bd.n }) });
   const bw = bestOf(a.days); if (bw && bw.v >= 1.05) out.push({ ic: IC.cal, tone: '', tx: t('insL_day', { d: dayName(bw.k), x: x1(bw.v) }) });
-  if (a.shortHit != null && a.hits >= 3) out.push({ ic: IC.up, tone: '', tx: t('insL_short', { p: Math.round(a.shortHit * 100) }) });
+  if (S.kind !== 'long' && a.shortHit != null && a.hits >= 3) out.push({ ic: IC.up, tone: '', tx: t('insL_short', { p: Math.round(a.shortHit * 100) }) });
   if (!out.length) out.push({ ic: IC.insights, tone: '', tx: t('insL_none') });
   out.push({ ic: IC.ideas, tone: '', tx: t('insL_freq', { w: String(Math.round(a.perWeek * 10) / 10), c: a.chans }) });
   return out;
@@ -1775,7 +1898,7 @@ function compareHtml(list, chans) {
 async function vInsights(v, r, alive) {
   loading(v, t('insights'), esc(t('insSub')));
   const [list, chans] = await Promise.all([
-    rpc('radar_shorts', { p_days: 400, p_channel: S.insCh || null, p_role: S.insRole === 'all' ? null : S.insRole, p_limit: 1000 }),
+    vids({ p_days: 400, p_channel: S.insCh || null, p_role: S.insRole === 'all' ? null : S.insRole, p_limit: 1000 }),
     getChans()
   ]);
   if (!alive()) return;
@@ -1799,7 +1922,7 @@ async function vInsights(v, r, alive) {
   const hc = hoursChart('ih', a);
   const dvals = a.days.map((r) => ({ v: r.v || 0, n: r.n, k: r.k, low: r.n < MIN_N, hot: bestOf(a.days)?.k === r.k }));
   const bd = bestOf(a.durs), bf = bestOf(a.fmts);
-  const durRows = a.durs.map((r) => ({ label: t('dur' + r.k), v: r.v, n: r.n, low: r.n < MIN_N, hot: bd && bd.k === r.k }));
+  const durRows = a.durs.map((r) => ({ label: durLabel(r.k), v: r.v, n: r.n, low: r.n < MIN_N, hot: bd && bd.k === r.k }));
   const fmtRows = a.fmts.filter((r) => r.n > 0).sort((p, q) => (q.n >= MIN_N) - (p.n >= MIN_N) || (q.v || 0) - (p.v || 0))
     .map((r) => ({ label: t('fmt_' + r.k), v: r.v, n: r.n, low: r.n < MIN_N, hot: bf && bf.k === r.k }));
   const mc = monthsChart('im', a);
@@ -1827,56 +1950,10 @@ async function vInsights(v, r, alive) {
   bind();
 }
 
-// 에이전트 브리핑: 48시간 흐름 · 터진 레퍼런스 · 내 채널 이슈 · 오늘 만들 소재
-function briefHtml(ov, alerts, picks, covH) {
-  const now = Date.now();
-  const within = (a, h) => now - Date.parse(a.created_at) <= h * 3600e3;
-  const breaks = alerts.filter((a) => a.kind === 'breakout' && a.data?.role !== 'mine' && within(a, 24));
-  const issue = (a) => ['gap', 'age', 'region', 'drop'].includes(a.kind) || (a.kind === 'missing' && a.data?.role === 'mine');
-  const issues = alerts.filter((a) => issue(a) && !a.read_at && within(a, 72));
-  let flow;
-  if (covH >= 96 && ov.prev48 > 0) { const p = pct(ov.views48, ov.prev48); flow = t('vsPrev', { p: Math.abs(p), dir: t(p >= 0 ? 'more' : 'less') }); } else flow = t('coverage', { h: Math.min(covH, 48) });
-  const b0 = breaks[0]?.data, i0 = issues[0] ? alertParts(issues[0]) : null, p0 = picks[0];
-  const tile = (href, ic, tone, label, big, small) => `<a class="dk-bi" href="${href}"><span class="ic ${tone}">${svg(ic, 18)}</span><span class="tx"><b>${esc(label)}</b><strong>${esc(big)}</strong><span>${esc(small)}</span></span></a>`;
-  // 오늘 할 일 (데이터에서 고른 행동 3~4개)
-  const todos = [];
-  if (!ov.channels.mine) todos.push({ id: 'mine', tx: t('td_addMine'), href: '#collect' });
-  const gap = issues.find((a) => a.kind === 'gap');
-  if (gap) todos.push({ id: 'gap:' + gap.channel_id, tx: t('td_gap', { ch: gap.data?.channel || '', d: gap.data?.days || '' }), href: '#ch/' + gap.channel_id });
-  const iss = issues.find((a) => a.kind !== 'gap');
-  if (iss) { const pp = alertParts(iss); todos.push({ id: 'iss:' + iss.id, tx: t('td_issue', { title: pp.title }), href: '#alerts' }); }
-  if (p0) todos.push({ id: 'pick:' + p0.id, tx: t('td_pick', { title: String(p0.title || '').slice(0, 40) }), short: p0.id });
-  if (breaks.length) todos.push({ id: 'brk:' + new Date().toISOString().slice(0, 10), tx: t('td_breaks', { n: breaks.length }), href: '#alerts' });
-  if ((ov.channels.reference || 0) < 5) todos.push({ id: 'refs', tx: t('td_refs', { n: 5 - (ov.channels.reference || 0) }), href: '#collect' });
-  const done = todoDone();
-  const todoHtml = todos.slice(0, 4).map((x) => `<li class="${done.has(x.id) ? 'done' : ''}"><input type="checkbox" data-todo="${esc(x.id)}" ${done.has(x.id) ? 'checked' : ''} aria-label="${esc(x.tx)}"><span>${esc(x.tx)}</span>${x.short ? `<a href="${ytShort(x.short)}" data-short="${esc(x.short)}">${esc(t('td_go'))} →</a>` : `<a href="${esc(x.href)}">${esc(t('td_go'))} →</a>`}</li>`).join('');
-  return `<section class="dk-card full dk-fade">
-    <div class="dk-ch"><h2 style="display:flex;align-items:center;gap:10px">${svg(IC.sun, 20)}${esc(t('brTitle'))}</h2><span class="dk-live"><i></i>${esc(t('brSub'))}</span></div>
-    <div class="dk-brief">
-      ${tile('#home', IC.insights, '', t('br48'), fmtN(ov.views48) + t('unitViews'), flow)}
-      ${tile('#alerts', IC.up, breaks.length ? 'good' : '', t('brBreak'), breaks.length ? t('brCount', { n: breaks.length }) : '0', b0 ? `${b0.channel} · “${b0.title}” · ${t('ratio', { x: b0.ratio })}` : t('brBreakNone'))}
-      ${tile('#alerts', issues.length ? IC.warn : IC.lock, issues.length ? 'warn' : 'good', t('brIssue'), issues.length ? t('brCount', { n: issues.length }) : ov.channels.mine ? t('brIssueNone') : '–', i0 ? `${i0.title} · ${i0.body}` : (ov.channels.mine ? t('brIssueOk') : t('brIssueNoMine')))}
-      ${tile('#picks', IC.picks, p0 ? 'good' : '', t('brIdea'), p0 ? t('ratio', { x: Number(p0.ratio).toFixed(1) }) : '–', p0 ? `“${p0.title}” · ${formatsOf(p0.title).map((k) => t('fmt_' + k)).join(' · ') || p0.channel_title}` : t('brIdeaNone'))}
-    </div>
-    ${todoHtml ? `<div class="dk-ch" style="margin-top:4px"><h3 style="display:flex;align-items:center;gap:8px">${svg(IC.todo, 18)}${esc(t('tdTitle'))}</h3><span class="dk-sub">${esc(t('tdSub'))}</span></div><ul class="dk-todo">${todoHtml}</ul>` : ''}
-  </section>`;
-}
-// 오늘 할 일 체크는 이 브라우저에만 (날짜별)
-const todoKey = () => 'radar.todo.' + new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
-function todoDone() { try { return new Set(JSON.parse(localStorage.getItem(todoKey()) || '[]')); } catch (e) { return new Set(); } }
-function bindTodos(root) {
-  root.querySelectorAll('[data-todo]').forEach((cb) => cb.addEventListener('change', () => {
-    const d = todoDone();
-    if (cb.checked) d.add(cb.dataset.todo); else d.delete(cb.dataset.todo);
-    try { localStorage.setItem(todoKey(), JSON.stringify([...d])); } catch (e) { /* 저장 못 해도 화면은 그대로 */ }
-    cb.closest('li').classList.toggle('done', cb.checked);
-  }));
-}
-
 // ---------- 소재 추천 ----------
 async function vPicks(v, r, alive) {
   loading(v, t('picks'), esc(t('picksSub')));
-  const [list, , prof] = await Promise.all([rpc('radar_shorts', { p_days: S.period, p_channel: null, p_role: null, p_limit: 1000 }), getChans(), getProfile().catch(() => null)]);
+  const [list, , prof] = await Promise.all([vids({ p_days: S.period, p_channel: null, p_role: null, p_limit: 1000 }), getChans(), getProfile().catch(() => null)]);
   if (!alive()) return;
   remember(list);
   const cats = myCats();
@@ -1893,7 +1970,7 @@ async function vPicks(v, r, alive) {
       <div class="dk-seg" role="group">${seg('scope', 'all', t('scopeAll'))}${seg('scope', 'mine', t('scopeMine'))}${seg('scope', 'other', t('scopeOther'))}</div>
     </div>
     ${!cats.size && S.scope !== 'all' ? `<div class="dk-banner info">${esc(t('noMyCat'))}</div>` : ''}
-    ${kws.length ? `<div class="dk-ch"><h3>${esc(t('kwTitle'))}</h3>${S.kw ? `<a class="dk-sub" href="#collect" id="kwFind">${esc(t('kwFind'))}</a>` : ''}</div>
+    ${kws.length ? `<div class="dk-ch"><h3>${esc(t('kwTitle'))}</h3>${S.kw ? `<a class="dk-sub" href="#tool/topic?q=${encodeURIComponent(S.kw)}" id="kwFind">${esc(t('kwFind'))}</a>` : ''}</div>
     <div class="dk-chips">${kws.map((k) => `<button type="button" class="dk-chip" data-kw="${esc(k)}" aria-pressed="${String(S.kw === k)}">#${esc(k)}</button>`).join('')}</div>` : ''}
   </section>
   ${picks.length ? `<div class="dk-grid">${picks.slice(0, 60).map(pickCard).join('')}</div>` : `<section class="dk-card full"><div class="dk-empty">${esc(t('picksEmpty'))}<br><a class="dk-btn" style="margin-top:12px" href="#collect">${esc(t('goCollect'))}</a></div></section>`}`;
@@ -1901,15 +1978,13 @@ async function vPicks(v, r, alive) {
   v.querySelectorAll('[data-scope]').forEach((b) => b.addEventListener('click', () => { S.scope = b.dataset.scope; render(); }));
   v.querySelectorAll('[data-psort]').forEach((b) => b.addEventListener('click', () => { S.pickSort = b.dataset.psort; render(); }));
   v.querySelectorAll('[data-kw]').forEach((b) => b.addEventListener('click', () => { S.kw = S.kw === b.dataset.kw ? '' : b.dataset.kw; render(); }));
-  const kf = v.querySelector('#kwFind');
-  if (kf) kf.addEventListener('click', () => { S.prefKw = S.kw; });
   bindBoardButtons(v, picks);
 }
 
 // ---------- 쇼츠 랭킹 ----------
 async function vRanking(v, r, alive) {
   loading(v, t('ranking'), esc(t('rankingSub')));
-  const list = remember(await rpc('radar_shorts', { p_days: S.rankDays, p_channel: null, p_role: S.rankRole === 'all' ? null : S.rankRole, p_limit: 1000 }));
+  const list = remember(await vids({ p_days: S.rankDays, p_channel: null, p_role: S.rankRole === 'all' ? null : S.rankRole, p_limit: 1000 }));
   if (!alive()) return;
   const q = S.rankQ.trim().toLowerCase();
   const key = { v48: (s) => s.v48 || 0, ratio: (s) => s.ratio || 0, vph: (s) => s.vph || 0, views: (s) => s.views || 0, new: (s) => Date.parse(s.published_at) || 0 }[S.rankSort];
@@ -2001,84 +2076,6 @@ async function vAlerts(v, r, alive) {
 }
 
 // ---------- 채널 수집 + 추천 채널 찾기 ----------
-async function vCollect(v, r, alive) {
-  loading(v, t('collect'), esc(t('collectSub')));
-  const [, disc, sh] = await Promise.all([
-    getChans(),
-    sb.from('radar_discoveries').select('*').eq('status', 'new').order('score', { ascending: false }).limit(60),
-    rpc('radar_shorts', { p_days: 14, p_channel: null, p_role: null, p_limit: 600 })
-  ]);
-  if (!alive()) return;
-  const cats = [...new Set((S.chans || []).map((c) => c.category).filter(Boolean))];
-  const sugg = [...new Set([...cats, ...trendKeywords(sh)])].slice(0, 10);
-  const kwVal = S.prefKw || '';
-  S.prefKw = '';
-  v.innerHTML = head(t('collect'), esc(t('collectSub'))) + `
-  <div class="dk-row">${addFormHtml(false)}
-    <section class="dk-card f1 dk-fade">
-      <h2>${esc(t('discTitle'))}</h2>
-      <p class="dk-sub" style="margin:-6px 0 0">${esc(t('discSub'))}</p>
-      <form id="discForm" class="dk-field" novalidate>
-        <label for="discKw">${esc(t('discKw'))}</label>
-        <div style="display:flex;gap:8px"><input class="dk-input" id="discKw" style="flex:1 1 auto;min-width:0" maxlength="120" value="${esc(kwVal)}"><button class="dk-btn" type="submit" id="discBtn">${esc(t('discBtn'))}</button></div>
-      </form>
-      ${sugg.length ? `<div class="dk-sub">${esc(t('discSuggest'))}</div><div class="dk-chips">${sugg.map((k) => `<button type="button" class="dk-chip" data-sk="${esc(k)}">${esc(k)}</button>`).join('')}</div>` : ''}
-      <span class="dk-sub">${esc(t('discCost'))}</span>
-      <div id="discMsg" aria-live="polite"></div>
-    </section>
-  </div>
-  <section class="dk-card full dk-fade" id="discList">${discListHtml(disc.data || [])}</section>`;
-  bindAddForm(v, () => { S.chansAt = 0; });
-  v.querySelectorAll('[data-sk]').forEach((b) => b.addEventListener('click', () => {
-    const inp = v.querySelector('#discKw');
-    const curKw = inp.value.split(',').map((s) => s.trim()).filter(Boolean);
-    if (!curKw.includes(b.dataset.sk) && curKw.length < 3) curKw.push(b.dataset.sk);
-    inp.value = curKw.join(', ');
-  }));
-  v.querySelector('#discForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = v.querySelector('#discBtn'), msg = v.querySelector('#discMsg');
-    btn.disabled = true;
-    msg.innerHTML = `<div class="dk-banner info"><span class="dk-spin"></span> ${esc(t('loading'))}</div>`;
-    const out = await act({ action: 'discover', keywords: v.querySelector('#discKw').value, lang });
-    btn.disabled = false;
-    if (!out.ok) { msg.innerHTML = `<div class="dk-banner bad">${esc(errText(out.error))}</div>`; return; }
-    msg.innerHTML = `<div class="dk-banner good">${esc(t('discFound', { n: (out.items || []).length }))} · ${esc((out.keywords || []).join(', '))}</div>`;
-    const { data } = await sb.from('radar_discoveries').select('*').eq('status', 'new').order('score', { ascending: false }).limit(60);
-    v.querySelector('#discList').innerHTML = discListHtml(data || []);
-    bindDisc(v);
-  });
-  bindDisc(v);
-}
-function discListHtml(list) {
-  if (!list.length) return `<h2>${esc(t('discTitle'))}</h2><div class="dk-empty">${esc(t('discEmpty'))}</div>`;
-  return `<h2>${esc(t('discTitle'))} · ${list.length}</h2><div class="dk-tablewrap"><table class="dk-t"><thead><tr><th>${esc(t('cChannel'))}</th><th>${esc(t('sample'))}</th><th class="r">${esc(t('cViews'))}</th><th></th></tr></thead><tbody>
-  ${list.map((d) => `<tr>
-    <td><a href="https://www.youtube.com/channel/${esc(d.channel_id)}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;min-width:220px">${avatar(d.thumbnail_url)}<span class="dk-ttl"><b>${esc(d.title)}</b><small>${esc(d.subscriber_count == null ? t('hiddenSubs') : t('subs', { n: fmtN(d.subscriber_count) }))} · ${esc(d.via === 'featured' ? t('viaFeatured', { f: d.from_channel || '' }) : t('viaSearch', { k: d.keyword || '' }))}</small></span></a></td>
-    <td>${d.sample_video_id ? `<a href="${ytShort(d.sample_video_id)}" target="_blank" rel="noopener" style="color:#334155;font-size:13.5px;line-height:1.5">${esc(d.sample_title || '')}</a><br><small style="color:#94a3b8">${esc(d.sample_published_at ? agoTxt(d.sample_published_at) : '')}</small>` : '–'}</td>
-    <td class="r dk-num">${esc(d.sample_views != null ? fmtN(d.sample_views) : '–')}</td>
-    <td class="r" style="white-space:nowrap"><button type="button" class="dk-btn sm" data-dadd="${esc(d.channel_id)}">${esc(t('addRef'))}</button> <button type="button" class="dk-btn sm line" data-dhide="${esc(d.channel_id)}">${esc(t('hide'))}</button></td></tr>`).join('')}
-  </tbody></table></div>`;
-}
-function bindDisc(root) {
-  root.querySelectorAll('[data-dadd]').forEach((b) => b.addEventListener('click', async () => {
-    b.disabled = true;
-    b.innerHTML = '<span class="dk-spin"></span>';
-    const out = await act({ action: 'discovery', op: 'add', channel_id: b.dataset.dadd });
-    const r0 = (out.results || [])[0];
-    if (!out.ok || (r0 && !r0.ok)) { b.disabled = false; b.textContent = t('addRef'); snack(errText(out.ok ? r0.error : out.error)); return; }
-    snack(`${r0?.title || ''} · ${t('resOk', { n: r0?.shorts ?? 0 })}`);
-    b.closest('tr').remove();
-    S.chansAt = 0;
-  }));
-  root.querySelectorAll('[data-dhide]').forEach((b) => b.addEventListener('click', async () => {
-    b.disabled = true;
-    const out = await act({ action: 'discovery', op: 'dismiss', channel_id: b.dataset.dhide });
-    if (!out.ok) { b.disabled = false; snack(errText(out.error)); return; }
-    b.closest('tr').remove();
-  }));
-}
-
 // ---------- 채널 목록 ----------
 async function vChannels(v, r, alive) {
   loading(v, t('channels'), esc(t('channelsSub')));
@@ -2095,13 +2092,13 @@ async function vChannels(v, r, alive) {
       <label class="sr" for="cQ">${esc(t('search'))}</label><input class="dk-input" id="cQ" type="search" placeholder="${esc(t('search'))}" value="${esc(S.chQ)}" style="min-height:40px;flex:1 1 220px">
     </div>
     <datalist id="catList2">${cats.map((c) => `<option value="${esc(c)}">`).join('')}</datalist>
-    ${rows.length ? `<div class="dk-tablewrap"><table class="dk-t"><thead><tr><th>${esc(t('cChannel'))}</th><th>${esc(t('cRole'))}</th><th>${esc(t('cCat'))}</th><th class="r">${esc(t('cSubs'))}</th><th class="r">${esc(t('cShorts'))}</th><th class="r">${esc(t('cN7'))}</th><th class="r">${esc(t('cMedian'))}</th><th class="r">${esc(t('c48'))}</th><th class="r">${esc(t('cLast'))}</th><th></th></tr></thead><tbody>
+    ${rows.length ? `<div class="dk-tablewrap"><table class="dk-t"><thead><tr><th>${esc(t('cChannel'))}</th><th>${esc(t('cRole'))}</th><th>${esc(t('cCat'))}</th><th class="r">${esc(t('cSubs'))}</th><th class="r">${esc(t(S.kind === 'long' ? 'cLongs' : 'cShorts'))}</th><th class="r">${esc(t('cN7'))}</th><th class="r">${esc(t('cMedian'))}</th><th class="r">${esc(t('c48'))}</th><th class="r">${esc(t('cLast'))}</th><th></th></tr></thead><tbody>
     ${rows.map((c) => `<tr class="click" data-go="${esc(c.id)}">
       <td><span style="display:flex;align-items:center;gap:10px;min-width:200px">${avatar(c.thumb)}<span class="dk-ttl"><b>${esc(c.title)}</b><small>${esc(c.handle || '')}${c.error ? ` · <span style="color:#b91c1c">${esc(c.error)}</span>` : ''}</small></span></span></td>
       <td><button type="button" class="dk-chip" data-swap="${esc(c.id)}" data-cur="${esc(c.role)}" style="min-height:30px;padding:0 10px">${esc(t(c.role === 'mine' ? 'mine' : 'reference'))}</button></td>
       <td><input class="dk-input" data-cat="${esc(c.id)}" list="catList2" maxlength="30" value="${esc(c.category || '')}" placeholder="${esc(c.topics && c.topics[0] ? topicLabel(c.topics[0]) : '–')}" aria-label="${esc(t('cCat'))}" style="min-height:34px;width:130px;font-size:13px;padding:0 10px"></td>
-      <td class="r dk-num">${esc(c.subs_hidden ? '–' : fmtN(c.subs))}</td><td class="r dk-num">${esc(fmtFull(c.shorts))}</td><td class="r dk-num">${esc(fmtFull(c.n7))}</td>
-      <td class="r dk-num">${esc(fmtN(c.median))}</td><td class="r dk-num">${esc(fmtN(c.v48))}</td><td class="r" style="white-space:nowrap;font-size:13px;color:#64748b">${esc(agoTxt(c.last_collected_at))}</td>
+      <td class="r dk-num">${esc(c.subs_hidden ? '–' : fmtN(c.subs))}</td><td class="r dk-num">${esc(fmtFull(S.kind === 'long' ? c.longs : c.shorts))}</td><td class="r dk-num">${esc(fmtFull(S.kind === 'long' ? c.n7_long : c.n7))}</td>
+      <td class="r dk-num">${esc(fmtN(S.kind === 'long' ? c.median_long : c.median))}</td><td class="r dk-num">${esc(fmtN(c.v48))}</td><td class="r" style="white-space:nowrap;font-size:13px;color:#64748b">${esc(agoTxt(c.last_collected_at))}</td>
       <td class="r" style="white-space:nowrap"><button type="button" class="dk-btn sm line" data-rf="${esc(c.id)}" title="${esc(t('refresh'))}" aria-label="${esc(t('refresh'))}">${svg(IC.refresh, 15)}</button> <button type="button" class="dk-btn sm danger" data-rm="${esc(c.id)}">${esc(t('remove'))}</button></td></tr>`).join('')}
     </tbody></table></div>` : `<div class="dk-empty">${esc(t('noChannels'))}<br><a class="dk-btn" style="margin-top:12px" href="#collect">${esc(t('goCollect'))}</a></div>`}
   </section>`;
@@ -2161,7 +2158,7 @@ async function vChannels(v, r, alive) {
 async function vChannel(v, r, alive) {
   loading(v, t('channels'), '');
   const id = r.id;
-  const [d, shorts, trend] = await Promise.all([rpc('radar_channel', { p_id: id }), rpc('radar_shorts', { p_days: 400, p_channel: id, p_role: null, p_limit: 400 }), rpc('radar_trend', { p_days: 57, p_channel: id }).catch(() => [])]);
+  const [d, shorts, trend] = await Promise.all([rpc('radar_channel', { p_id: id }), vids({ p_days: 400, p_channel: id, p_role: null, p_limit: 400 }), rpc('radar_trend', { p_days: 57, p_channel: id }).catch(() => [])]);
   if (!alive()) return;
   remember(shorts);
   const c = d?.channel;
@@ -2245,8 +2242,8 @@ async function vTry(v, r, alive) {
   loading(v, t('try'), esc(t('trySub')));
   const [chans, mineList, refs, prof] = await Promise.all([
     getChans(),
-    rpc('radar_shorts', { p_days: 400, p_channel: null, p_role: 'mine', p_limit: 1000 }),
-    rpc('radar_shorts', { p_days: 400, p_channel: null, p_role: 'reference', p_limit: 1000 }),
+    vids({ p_days: 400, p_channel: null, p_role: 'mine', p_limit: 1000 }),
+    vids({ p_days: 400, p_channel: null, p_role: 'reference', p_limit: 1000 }),
     getProfile().catch(() => null)
   ]);
   if (!alive()) return;
@@ -2367,6 +2364,14 @@ document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('clic
   setLang(lang);
   render();
 }));
+document.getElementById('kindSeg')?.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-kind]');
+  if (!b || b.dataset.kind === S.kind) return;
+  S.kind = b.dataset.kind;
+  try { localStorage.setItem('radar.kind', S.kind); } catch (er) { /* 저장 못 해도 화면은 그대로 */ }
+  S.profAt = 0;
+  render();
+});
 document.getElementById('refreshAll').addEventListener('click', async (e) => {
   const b = e.currentTarget;
   b.disabled = true;
@@ -2376,12 +2381,18 @@ document.getElementById('refreshAll').addEventListener('click', async (e) => {
   if (!out.ok) snack(errText(out.error));
   else snack(out.skipped ? t('refreshSkip') : t('refreshed', { n: out.channels || 0 }));
   S.chansAt = 0;
+  dropPool();
   render();
 });
 window.addEventListener('hashchange', () => { render(); document.getElementById('main').scrollTo({ top: 0 }); });
 // 보고 있는 화면이면 5분마다 새로 불러와요 (매시 5분 자동 수집 반영)
 setInterval(() => {
   if (document.visibilityState !== 'visible') return;
-  if (['home', 'ranking', 'alerts'].includes(route().name)) render();
+  if (['home', 'overview', 'ranking', 'alerts', 'wave'].includes(route().name)) { dropPool(); render(); }
 }, 5 * 60e3);
+mountAgent({
+  get lang() { return lang; }, t, esc, fmtN, fmtFull, ageTxt, agoTxt, durTxt, hourLabel, sb, rpc, act, vids, S, getChans, getProfile, remember, SHORTS,
+  svg, IC, head, loading, snack, avatar, ratioTag, ytShort, vthumb, cssUrl, barsHtml, bindBars, trySuggest, tyCardHtml, bindTry, tryHidden, tryRuns,
+  learnStore, pickList, alertHtml, bindAlertButtons, bindBoardButtons, render, errText, renderNav, nextRunTxt, greet, agAv, agMsg
+});
 render();
