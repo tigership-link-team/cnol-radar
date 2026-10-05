@@ -1151,7 +1151,8 @@ async function vChannels(v, r, alive) {
     timer = setTimeout(() => render().then(() => { const el = document.getElementById('cQ'); if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); } }), 350);
   });
   v.querySelectorAll('tr[data-go]').forEach((tr) => tr.addEventListener('click', (e) => {
-    if (e.target.closest('button,input,a')) return;
+    // 버튼이 눌리는 순간 아이콘이 바뀌어(스피너) 클릭 대상이 화면에서 빠질 수 있어요 → 그때도 줄 이동은 막아요
+    if (!tr.contains(e.target) || e.target.closest('button,input,a,select,label')) return;
     location.hash = '#ch/' + tr.dataset.go;
   }));
   v.querySelectorAll('[data-swap]').forEach((b) => b.addEventListener('click', async () => {
