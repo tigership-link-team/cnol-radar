@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#17212d">
-  <title>CNOL RADAR · 공개 대시보드</title>
+  <title>CNOL RADAR · 다채널 대시보드</title>
   <link rel="icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,28 +18,42 @@
   <a class="skip-link" href="#previewMain" data-preview-label="skip">본문으로 이동</a>
   <aside class="preview-sidebar">
     <a class="preview-brand" href="/"><img src="/logo.png" width="31" height="27" alt=""><span>CNOL <b>RADAR</b></span></a>
-    <span class="preview-workspace" data-preview-label="workspace">크리에이터 리서치</span>
+    <span class="preview-workspace" data-preview-label="workspace">내 채널 관리</span>
     <nav class="preview-nav" aria-label="대시보드 메뉴" data-preview-aria="menu">
       <button type="button" data-preview-view="overview" aria-current="page"><span aria-hidden="true">▦</span><span data-preview-label="overview">한눈에</span></button>
       <button type="button" data-preview-view="references"><span aria-hidden="true">▣</span><span data-preview-label="references">레퍼런스</span></button>
       <button type="button" data-preview-view="topics"><span aria-hidden="true">⌕</span><span data-preview-label="topics">소재 탐색</span></button>
     </nav>
-    <div class="preview-sidebar-bottom"><span class="preview-public"><i></i><span data-preview-label="public">공개 데이터</span></span><a href="/" data-preview-label="home">소개 페이지</a></div>
+    <div class="preview-sidebar-bottom"><span class="preview-public"><i></i><span data-preview-label="snapshot">수집 스냅샷</span></span><a href="/" data-preview-label="home">소개 페이지</a></div>
   </aside>
   <main class="preview-main" id="previewMain" tabindex="-1">
     <header class="preview-topbar"><span class="preview-breadcrumb">CNOL RADAR <span aria-hidden="true">/</span> <span id="previewBreadcrumb">한눈에</span></span><div class="preview-languages" role="group" aria-label="언어" data-preview-aria="language"><button type="button" data-preview-lang="ko" aria-pressed="true">KO</button><button type="button" data-preview-lang="en" aria-pressed="false">EN</button><button type="button" data-preview-lang="ja" aria-pressed="false">JA</button></div></header>
     <div class="preview-content">
-      <div class="preview-heading"><div><div class="preview-eyebrow" data-preview-label="eyebrow">대시보드 미리보기 · 공개 데이터</div><h1 id="previewTitle">내 다음 영상의 시작.</h1><p id="previewSubtitle">실제 공개 영상과 채널을 한곳에서 비교해 보세요.</p></div><button type="button" class="preview-refresh" id="previewRefresh" data-preview-label="refresh">다시 불러오기</button></div>
+      <div class="preview-heading"><div><div class="preview-eyebrow" data-preview-label="eyebrow">대시보드 미리보기 · 수집 스냅샷</div><h1 id="previewTitle">내 채널을 한눈에.</h1><p id="previewSubtitle">여러 운영 채널의 최근 48시간 실적을 한곳에서 확인하세요.</p></div><button type="button" class="preview-refresh" id="previewRefresh" data-preview-label="refresh">다시 불러오기</button></div>
       <div id="previewStatus" class="preview-status" role="status" aria-live="polite"></div>
-      <section class="preview-controls" aria-label="영상 필터" data-preview-aria="filters">
-        <div class="preview-region-tabs" role="group" aria-label="채널 그룹" data-preview-aria="groups"><button type="button" data-preview-region="all" aria-pressed="true" data-preview-label="all">전체</button><button type="button" data-preview-region="global" aria-pressed="false" data-preview-label="global">해외</button><button type="button" data-preview-region="jp" aria-pressed="false" data-preview-label="jp">일본</button><button type="button" data-preview-region="company" aria-pressed="false" data-preview-label="company">운영 채널</button></div>
-        <div class="preview-search-tools"><label class="preview-search"><span aria-hidden="true">⌕</span><input id="previewSearch" type="search" autocomplete="off" placeholder="영상·채널 검색" aria-label="영상·채널 검색" data-preview-placeholder="search" data-preview-aria="search"></label><select id="previewSort" aria-label="정렬" data-preview-aria="sort"><option value="views" data-preview-label="sortViews">조회수 높은 순</option><option value="new" data-preview-label="sortNew">최신순</option></select></div>
+      <section id="previewOverview">
+        <section class="preview-kpis" aria-label="운영 현황" data-preview-aria="summary">
+          <article class="preview-kpi featured"><span data-preview-label="views48">최근 48시간 조회수</span><strong id="previewTotal48">—</strong><small id="preview48Note" data-preview-label="allChannels">전체 운영 채널 합계</small></article>
+          <article class="preview-kpi"><span data-preview-label="views60">최근 60분 조회수</span><strong id="previewTotal60">—</strong><small id="preview60Note" data-preview-label="minuteNote">실제 분 단위 수집값</small></article>
+          <article class="preview-kpi"><span data-preview-label="managedChannels">운영 채널</span><strong id="previewManagedCount">—</strong><small id="previewManagedNote" data-preview-label="managedNote">하나의 대시보드에서 함께 확인</small></article>
+        </section>
+        <section class="preview-panel realtime-panel">
+          <div class="preview-panel-heading"><div><h2 data-preview-label="realtimeTitle">조회수 · 최근 48시간</h2><p id="previewRealtimeStamp"></p></div><label class="preview-scope"><span data-preview-label="chartScope">차트 범위</span><select id="previewScope" aria-label="차트 범위" data-preview-aria="chartScope"><option value="all" data-preview-label="allChannels">전체 운영 채널</option></select></label></div>
+          <div class="preview-realtime-layout">
+            <div class="preview-time-panel"><div class="preview-time-heading"><span data-preview-label="hourly">1시간 단위</span><strong id="previewChart48Total">—</strong></div><div id="previewHourlyChart" class="preview-time-chart"></div><div id="previewHourlyLabels" class="preview-time-labels"></div></div>
+            <div class="preview-time-panel preview-minute-panel" id="previewMinutePanel" hidden><div class="preview-time-heading"><span data-preview-label="minuteTitle">최근 60분 · 1분 단위</span><strong id="previewChart60Total">—</strong></div><div id="previewMinuteChart" class="preview-time-chart"></div><div id="previewMinuteLabels" class="preview-time-labels"></div><p id="previewMinuteStamp" class="preview-time-stamp"></p></div>
+          </div>
+          <p id="previewCoverage" class="preview-coverage"></p>
+        </section>
+        <section class="preview-managed-section"><div class="preview-video-heading"><div><h2 data-preview-label="managedTitle">모든 운영 채널</h2><p class="preview-managed-subtitle" data-preview-label="managedSubtitle">채널별 48시간 실적과 시간별 흐름을 함께 보세요. 프로필은 익명 운영채널 아이콘입니다.</p></div><span id="previewManagedResult"></span></div><div class="preview-managed-tools"><label class="preview-search"><span aria-hidden="true">⌕</span><input id="previewManagedSearch" type="search" autocomplete="off" placeholder="운영 채널 검색" aria-label="운영 채널 검색" data-preview-placeholder="managedSearch" data-preview-aria="managedSearch"></label><select id="previewManagedSort" aria-label="채널 정렬" data-preview-aria="sort"><option value="views" data-preview-label="sort48">48시간 조회수 높은 순</option><option value="name" data-preview-label="sortName">채널 이름순</option></select></div><div id="previewManagedGrid" class="preview-managed-grid"></div></section>
       </section>
-      <section class="preview-kpis" aria-label="수집 현황" data-preview-aria="summary"><article class="preview-kpi featured"><span data-preview-label="totalViews">수집 영상 누적 조회수</span><strong id="previewTotalViews">—</strong><small id="previewViewsNote" data-preview-label="knownViews">공개된 영상별 조회수의 합계</small></article><article class="preview-kpi"><span data-preview-label="videos">수집 영상</span><strong id="previewVideoCount">—</strong><small data-preview-label="videoNote">현재 선택한 그룹</small></article><article class="preview-kpi"><span data-preview-label="channels">공개 채널</span><strong id="previewChannelCount">—</strong><small data-preview-label="channelNote">수집 영상이 있는 채널</small></article></section>
-      <section class="preview-panel preview-chart-section" id="previewChartSection"><div class="preview-panel-heading"><div><h2 data-preview-label="chart">채널별 영상 누적 조회수</h2><p data-preview-label="chartNote">수집 영상의 공개 조회수를 채널별로 합산했어요.</p></div><span class="preview-panel-badge" data-preview-label="comparison">누적 합계 비교</span></div><div id="previewChart" class="preview-chart"></div></section>
-      <section class="preview-panel preview-channels-section" id="previewChannelsSection" hidden><div class="preview-panel-heading"><div><h2 data-preview-label="channelList">참고할 채널</h2><p data-preview-label="channelListNote">공개 채널을 살펴보고 실제 영상에서 다음 소재를 찾아보세요.</p></div></div><div id="previewChannelGrid" class="preview-channel-grid"></div></section>
-      <section class="preview-video-section"><div class="preview-video-heading"><h2 id="previewVideoTitle">지금 살펴볼 영상</h2><span id="previewResultCount"></span></div><div id="previewVideoGrid" class="preview-video-grid"></div><button type="button" class="preview-more" id="previewMore" hidden data-preview-label="more">영상 더 보기</button></section>
-      <footer class="preview-footer"><span data-preview-label="footer">공개 영상 레퍼런스입니다. 다른 채널의 CNOL RADAR 이용 후기나 추천을 의미하지 않습니다.</span><span id="previewUpdated"></span></footer>
+      <section id="previewReferences" hidden>
+        <section class="preview-controls" aria-label="영상 필터" data-preview-aria="filters"><div class="preview-search-tools"><label class="preview-search"><span aria-hidden="true">⌕</span><input id="previewSearch" type="search" autocomplete="off" placeholder="영상·채널 검색" aria-label="영상·채널 검색" data-preview-placeholder="search" data-preview-aria="search"></label><select id="previewSort" aria-label="정렬" data-preview-aria="sort"><option value="views" data-preview-label="sortViews">조회수 높은 순</option><option value="new" data-preview-label="sortNew">최신순</option></select></div></section>
+        <div class="preview-reference-summary"><span data-preview-label="totalViews">수집 영상 누적 조회수</span><strong id="previewTotalViews">—</strong><span id="previewReferenceCounts"></span></div>
+        <section class="preview-panel preview-channels-section" id="previewChannelsSection"><div class="preview-panel-heading"><div><h2 data-preview-label="channelList">참고할 채널</h2><p data-preview-label="channelListNote">공개 채널과 실제 영상에서 다음 소재를 찾아보세요.</p></div></div><div id="previewChannelGrid" class="preview-channel-grid"></div></section>
+        <section class="preview-video-section"><div class="preview-video-heading"><h2 id="previewVideoTitle">지금 살펴볼 영상</h2><span id="previewResultCount"></span></div><div id="previewVideoGrid" class="preview-video-grid"></div><button type="button" class="preview-more" id="previewMore" hidden data-preview-label="more">영상 더 보기</button></section>
+      </section>
+      <footer class="preview-footer"><span id="previewFooter"></span><span id="previewUpdated"></span></footer>
     </div>
   </main>
 </body>

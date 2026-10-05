@@ -2,15 +2,16 @@
 const VIDEO_ID = /^[A-Za-z0-9_-]{11}$/;
 const COPY = {
   ko: {
-    over: '영상에서 찾는 다음 소재', heading: '지금, 어떤 영상을 참고할까요?',
-    lead: '공개 영상의 누적 조회수를 비교하고, 다음 소재의 실마리를 찾아보세요.',
+    over: '내 채널, 한 화면', heading: '내가 관리하는 여러 채널을, 한눈에',
+    lead: '채널마다 들어가지 않아도, 최근 48시간의 시간별 조회수 흐름을 함께 확인하세요.',
     collected: '수집 시각', unknownDate: '수집 시각 미확인', unknown: '미확인',
     chart: '영상별 누적 조회수', chartNote: '수집 시점의 누적 조회수 상위 영상 · 막대를 눌러 재생',
     count: '등록 영상', total: '확인된 누적 조회수 합계', best: '최고 누적 조회수',
     metricNote: '조회수는 영상별 누적 수치입니다. 미확인 값은 합계에서 제외합니다.',
     search: '소재·영상 제목 검색', searchPlaceholder: '관심 있는 소재를 검색해보세요',
     all: '전체', companyFilter: '회사', shorts: '쇼츠', long: '롱폼', video: '영상', topics: '소재', formats: '영상 유형',
-    foreign: '해외', japan: '일본', regions: '채널 지역', constellation: '채널을 하나로 모아 보기', collectedChannels: '공개 레퍼런스 채널', channelEmpty: '아직 표시할 채널 정보가 없습니다.',
+    foreign: '해외', japan: '일본', regions: '채널 지역', constellation: '관리 채널과 레퍼런스를, 하나로', collectedChannels: '공개 레퍼런스 채널', channelEmpty: '아직 표시할 채널 정보가 없습니다.',
+    connectionExample: '채널 연결 구조 예시 · 가상 아이콘 포함', managedChannel: '운영 채널', virtualChannel: '가상 채널', sum: '합산', byChannel: '채널별', now: '지금', ago24: '24시간 전', ago30: '30분 전', rtUnavailable: '48시간 조회수 데이터가 아직 없습니다.',
     sort: '정렬', byViews: '조회수순', byLatest: '최신순', byFeatured: '채널별 보기',
     results: '{n}개 영상', showing: '{n}개 중 {shown}개 표시',
     loading: '공개 영상 데이터를 불러오는 중입니다.',
@@ -21,22 +22,23 @@ const COPY = {
     reference: '공개 영상 레퍼런스 · CNOL 이용 후기와 무관',
     company: '회사 채널 한눈에', subscribers: '구독자', channelViews: '누적 조회수', videos: '영상',
     channelCount: '회사 채널', sampleViews: '수집 영상 누적 조회수',
-    publicSnapshot: '공개 데이터 대시보드', compare: '누적 조회수 비교',
+    publicSnapshot: '공개 데이터 대시보드', compare: '공개 영상 조회수',
     titleReferences: '실제 영상 제목', topicReferences: '조회수로 보는 영상 소재', source: 'YouTube 공개 영상',
-    studio: '회사 채널 운영 데이터', operatedChannels: '운영 채널', hours48: '최근 48시간 조회수',
-    minutes60: '최근 60분 조회수', captured: '확인 시각', studioNote: '확인 시점의 회사 운영 데이터 스냅샷',
+    studio: '관리하는 여러 채널의 48시간', operatedChannels: '관리 채널', hours48: '최근 48시간 조회수',
+    minutes60: '최근 60분 조회수', captured: '확인 시각', studioNote: '운영 데이터 미리보기 · 표시된 확인 시각 기준',
     ago48: '48시간 전', ago60: '60분 전', capturePoint: '확인 시점', interval: '구간'
   },
   en: {
-    over: 'Find your next idea in videos', heading: 'Which video will inspire your next idea?',
-    lead: 'Compare public videos’ cumulative views and find a starting point for your next topic.',
+    over: 'Your channels, one view', heading: 'Every channel you manage, in one view',
+    lead: 'See hourly views across your channels over the last 48 hours, without opening each channel separately.',
     collected: 'Collected', unknownDate: 'Collection time unverified', unknown: 'Unverified',
     chart: 'Cumulative views by video', chartNote: 'Top cumulative views at collection time · Select a bar to play',
     count: 'Collected videos', total: 'Sum of verified cumulative views', best: 'Highest cumulative views',
     metricNote: 'Views are cumulative for each video. Unverified values are excluded from the sum.',
     search: 'Search topics or video titles', searchPlaceholder: 'Search for a topic you want to explore',
     all: 'All', companyFilter: 'Company', shorts: 'Shorts', long: 'Long-form', video: 'Video', topics: 'Topics', formats: 'Video type',
-    foreign: 'International', japan: 'Japan', regions: 'Channel region', constellation: 'Bring your channels together', collectedChannels: 'Public reference channels', channelEmpty: 'No channel information is available yet.',
+    foreign: 'International', japan: 'Japan', regions: 'Channel region', constellation: 'Managed channels and references, together', collectedChannels: 'Public reference channels', channelEmpty: 'No channel information is available yet.',
+    connectionExample: 'Channel connection illustration · Includes virtual icons', managedChannel: 'Managed channel', virtualChannel: 'Virtual channel', sum: 'Combined', byChannel: 'By channel', now: 'Now', ago24: '24 hours earlier', ago30: '30 minutes earlier', rtUnavailable: 'No 48-hour view data is available yet.',
     sort: 'Sort', byViews: 'Most viewed', byLatest: 'Newest', byFeatured: 'Across channels',
     results: '{n} videos', showing: 'Showing {shown} of {n}',
     loading: 'Loading public video data.', failed: 'Video data could not be loaded. Please check again later.',
@@ -46,22 +48,23 @@ const COPY = {
     reference: 'Public video references · Not CNOL testimonials',
     company: 'Company channels at a glance', subscribers: 'Subscribers', channelViews: 'Cumulative views', videos: 'Videos',
     channelCount: 'Company channels', sampleViews: 'Collected videos’ cumulative views',
-    publicSnapshot: 'Public data dashboard', compare: 'Cumulative view comparison',
+    publicSnapshot: 'Public data dashboard', compare: 'Public video views',
     titleReferences: 'Actual video titles', topicReferences: 'Video topics by view count', source: 'Public YouTube videos',
-    studio: 'Company channel performance', operatedChannels: 'Managed channels', hours48: 'Views in the last 48 hours',
-    minutes60: 'Views in the last 60 minutes', captured: 'Captured', studioNote: 'Company performance snapshot at capture time',
+    studio: '48 hours across the channels you manage', operatedChannels: 'Managed channels', hours48: 'Views in the last 48 hours',
+    minutes60: 'Views in the last 60 minutes', captured: 'Captured', studioNote: 'Channel operations preview · As of the displayed capture time',
     ago48: '48 hours earlier', ago60: '60 minutes earlier', capturePoint: 'Capture time', interval: 'Interval'
   },
   ja: {
-    over: '動画から次のネタを探す', heading: '今、どの動画を参考にしますか？',
-    lead: '公開動画の累計再生数を比較し、次のネタの手がかりを探しましょう。',
+    over: '自分のチャンネルを、ひとつの画面に', heading: '管理する複数のチャンネルを、一目で',
+    lead: 'チャンネルごとに開かず、過去48時間の時間別再生数をまとめて確認できます。',
     collected: '収集日時', unknownDate: '収集日時は未確認', unknown: '未確認',
     chart: '動画別の累計再生数', chartNote: '収集時点の累計再生数上位 · 棒を押すと再生',
     count: '収集動画', total: '確認できた累計再生数の合計', best: '最多の累計再生数',
     metricNote: '再生数は動画ごとの累計値です。未確認の値は合計に含みません。',
     search: 'ネタ・動画タイトルを検索', searchPlaceholder: '気になるネタを検索してください',
     all: 'すべて', companyFilter: '会社', shorts: 'ショート', long: '長尺動画', video: '動画', topics: 'ネタ', formats: '動画タイプ',
-    foreign: '海外', japan: '日本', regions: 'チャンネルの地域', constellation: 'チャンネルをひとつにまとめる', collectedChannels: '公開リファレンスチャンネル', channelEmpty: '表示できるチャンネル情報はまだありません。',
+    foreign: '海外', japan: '日本', regions: 'チャンネルの地域', constellation: '管理チャンネルとリファレンスを、ひとつに', collectedChannels: '公開リファレンスチャンネル', channelEmpty: '表示できるチャンネル情報はまだありません。',
+    connectionExample: 'チャンネル接続のイメージ · 仮想アイコンを含みます', managedChannel: '運営チャンネル', virtualChannel: '仮想チャンネル', sum: '合計', byChannel: 'チャンネル別', now: '現在', ago24: '24時間前', ago30: '30分前', rtUnavailable: '48時間の再生数データはまだありません。',
     sort: '並び順', byViews: '再生数順', byLatest: '新着順', byFeatured: 'チャンネル別',
     results: '{n}本の動画', showing: '{n}本中{shown}本を表示',
     loading: '公開動画のデータを読み込んでいます。',
@@ -72,10 +75,10 @@ const COPY = {
     reference: '公開動画リファレンス · CNOLの利用者レビューではありません',
     company: '会社のチャンネル一覧', subscribers: '登録者', channelViews: '累計再生数', videos: '動画',
     channelCount: '会社チャンネル', sampleViews: '収集動画の累計再生数',
-    publicSnapshot: '公開データダッシュボード', compare: '累計再生数の比較',
+    publicSnapshot: '公開データダッシュボード', compare: '公開動画の再生数',
     titleReferences: '実際の動画タイトル', topicReferences: '再生数から見る動画のネタ', source: 'YouTube公開動画',
-    studio: '会社チャンネルの運営データ', operatedChannels: '運営チャンネル', hours48: '過去48時間の再生数',
-    minutes60: '過去60分の再生数', captured: '確認日時', studioNote: '確認時点の会社運営データのスナップショット',
+    studio: '管理する複数のチャンネルの48時間', operatedChannels: '管理チャンネル', hours48: '過去48時間の再生数',
+    minutes60: '過去60分の再生数', captured: '確認日時', studioNote: '運営データのプレビュー · 表示された確認日時の時点',
     ago48: '48時間前', ago60: '60分前', capturePoint: '確認時点', interval: '区間'
   }
 };
@@ -190,50 +193,50 @@ function constellation(data, selected = 'all', onChange) {
   const wrap = node('div', 'hd-constellation');
   const header = node('div', 'hd-constellation-head');
   header.append(node('h3', '', c('constellation')));
-  const filters = node('div', 'hd-region-filters');
-  filters.setAttribute('role', 'group'); filters.setAttribute('aria-label', c('regions'));
-  for (const [value, label] of [['all', 'all'], ['foreign', 'foreign'], ['jp', 'japan']]) {
-    const button = node('button', 'hd-chip hd-region-chip', c(label));
-    button.type = 'button'; button.dataset.regionFilter = value;
-    button.setAttribute('aria-pressed', String(value === selected));
-    if (onChange) button.addEventListener('click', () => onChange(value));
-    filters.append(button);
-  }
-  header.append(filters); wrap.append(header);
-  const chosen = referenceChannels(data).filter((channel) => !channel.company && ['global', 'jp'].includes(channel.region)).slice(0, 10);
-  if (!chosen.length) { wrap.append(node('p', 'hd-constellation-empty', c('channelEmpty'))); return wrap; }
-  const stage = node('div', 'hd-constellation-stage');
-  const positions = [[90,58],[280,34],[465,60],[670,35],[875,62],[135,149],[335,133],[530,163],[745,142],[930,156]];
+  header.append(node('span', 'hd-connection-caption', c('connectionExample'))); wrap.append(header);
+  const connected = normalizeChannels(data?.connectionChannels);
+  const actual = (connected.length ? connected : referenceChannels(data).filter((channel) => !channel.company && ['global', 'jp'].includes(channel.region))).slice(0, 10);
+  const chosen = [...actual, ...Array.from({ length: 20 }, (_, index) => ({
+    id: `virtual-${index + 1}`, name: `${c('virtualChannel')} ${String(index + 1).padStart(2, '0')}`,
+    thumbnail: '', virtual: true, spriteIndex: index
+  }))];
+  const stage = node('div', 'hd-constellation-stage is-row');
+  const scroll = node('div', 'hd-logo-scroll');
+  const strip = node('div', 'hd-logo-strip');
+  strip.style.setProperty('--hd-logo-count', String(chosen.length));
+  scroll.append(strip); stage.append(scroll);
   const swatches = ['#8b5cf6','#0ea5e9','#ec4899','#10b981','#f59e0b','#6366f1','#14b8a6','#ef4444','#a855f7','#3b82f6'];
   const ns = 'http://www.w3.org/2000/svg';
   const lines = document.createElementNS(ns, 'svg');
   lines.classList.add('hd-constellation-lines');
-  lines.setAttribute('viewBox', '0 0 1000 245'); lines.setAttribute('preserveAspectRatio', 'none');
+  lines.setAttribute('viewBox', '0 0 1200 145'); lines.setAttribute('preserveAspectRatio', 'none');
   lines.setAttribute('aria-hidden', 'true'); lines.setAttribute('focusable', 'false');
   stage.append(lines);
   for (const [index, channel] of chosen.entries()) {
-    const [x, y] = positions[index];
-    const active = inRegion(channel, selected);
+    const x = (index + .5) / chosen.length * 1200;
+    const active = true;
     const path = document.createElementNS(ns, 'path');
-    path.setAttribute('d', `M ${x} ${y} C ${x} ${y + 70}, 500 155, 500 236`);
+    path.setAttribute('d', `M ${x} 0 C ${x} 50, 600 55, 600 136`);
     path.setAttribute('class', `hd-constellation-path${active ? ' is-active' : ' is-muted'}`);
     path.style.setProperty('--hd-delay', `${index * -.55}s`); lines.append(path);
-    const item = node('div', `hd-constellation-node${active ? ' is-active' : ' is-muted'}`);
-    item.style.left = `${x / 10}%`; item.style.top = `${y / 245 * 100}%`;
+    const item = node('div', `hd-constellation-node is-row is-active${channel.virtual ? ' is-virtual' : ''}`);
     item.style.setProperty('--hd-delay', `${index * -.55}s`);
-    item.style.setProperty('--hd-avatar-color', swatches[index]);
-    item.dataset.region = channel.region;
+    item.style.setProperty('--hd-avatar-color', channel.virtual ? `hsl(${(index - actual.length) * 18} 65% 55%)` : swatches[index]);
+    if (channel.virtual) item.style.setProperty('--hd-avatar-position', `${channel.spriteIndex % 6 * 20}% ${Math.floor(channel.spriteIndex / 6) * 25}%`);
+    item.dataset.virtual = String(!!channel.virtual);
+    item.title = channel.name;
+    item.setAttribute('role', 'img'); item.setAttribute('aria-label', channel.name);
     const floating = node('div', 'hd-constellation-floating');
-    const avatar = node('span', 'hd-constellation-avatar', Array.from(channel.name).slice(0, 2).join(''));
+    const avatar = node('span', 'hd-constellation-avatar', channel.virtual ? '' : Array.from(channel.name).slice(0, 2).join(''));
     if (channel.thumbnail) {
       const image = node('img'); image.src = channel.thumbnail; image.alt = ''; image.loading = 'lazy'; image.decoding = 'async';
       image.addEventListener('error', () => image.remove(), { once: true }); avatar.append(image);
     }
     const label = node('span', 'hd-constellation-name', channel.name); label.title = channel.name;
-    floating.append(avatar, label); item.append(floating); stage.append(item);
+    floating.append(avatar, label); item.append(floating); strip.append(item);
   }
   const hub = node('div', 'hd-constellation-hub');
-  hub.append(node('span', 'hd-constellation-hub-dot'), node('span', '', c('compare')));
+  hub.append(node('span', 'hd-constellation-hub-dot'), node('span', '', c('hours48')));
   stage.append(hub); wrap.append(stage);
   return wrap;
 }
@@ -249,7 +252,20 @@ function normalizeRealtime(input) {
     || bars48.length !== 48 || bars60.length !== 60 || bars48.includes(null) || bars60.includes(null)
     || bars48.reduce((sum, value) => sum + value, 0) !== views48
     || bars60.reduce((sum, value) => sum + value, 0) !== views60) return null;
-  return { capturedAt, channelCount, views48, views60, bars48, bars60, source: text(input.source, 150) };
+  const channels = (Array.isArray(input.channels) ? input.channels : []).slice(0, 200).flatMap((channel, index) => {
+    if (!channel || typeof channel !== 'object') return [];
+    const hourly48 = Array.isArray(channel.hourly48) ? channel.hourly48.map(count) : [];
+    const total48 = count(channel.total48);
+    if (hourly48.length !== 48 || hourly48.includes(null) || total48 === null || hourly48.reduce((sum, value) => sum + value, 0) !== total48) return [];
+    const minutes = Array.isArray(channel.minuteBars60) ? channel.minuteBars60.map(count) : [];
+    const minute60 = count(channel.minute60);
+    const minuteBars60 = minutes.length === 60 && !minutes.includes(null) && minute60 !== null
+      && minutes.reduce((sum, value) => sum + value, 0) === minute60 ? minutes : [];
+    return [{ id: text(channel.id, 60) || String(index + 1),
+      name: text(channel.displayName || channel.name, 200) || `${COPY[language()].managedChannel} ${String(index + 1).padStart(2, '0')}`,
+      hourly48, total48, minuteBars60, minute60 }];
+  });
+  return { capturedAt, channelCount, views48, views60, bars48, bars60, channels, source: text(input.source, 150) };
 }
 
 function studioSnapshot(input, compact = false) {
@@ -273,7 +289,7 @@ function studioSnapshot(input, compact = false) {
     metrics.append(metric);
   }
   const charts = node('div', 'hd-studio-charts');
-  for (const [key, bars, ago] of [['hours48', data.bars48, 'ago48'], ['minutes60', data.bars60, 'ago60']]) {
+  function chart(key, bars, ago, middle) {
     const figure = node('figure', 'hd-studio-chart');
     figure.append(node('figcaption', '', c(key)));
     const series = node('div', 'hd-studio-series');
@@ -281,16 +297,42 @@ function studioSnapshot(input, compact = false) {
     const max = Math.max(...bars);
     for (const [index, value] of bars.entries()) {
       const bar = node('span', 'hd-studio-bar');
+      bar.classList.toggle('is-zero', value === 0);
       bar.style.height = `${max ? value / max * 100 : 0}%`;
       bar.title = `${c('interval')} ${index + 1} · ${c('views')} ${number(value)}`;
       bar.setAttribute('role', 'img'); bar.setAttribute('aria-label', bar.title);
       series.append(bar);
     }
     const axis = node('div', 'hd-studio-axis');
-    axis.append(node('span', '', c(ago)), node('span', '', c('capturePoint')));
-    figure.append(series, axis); charts.append(figure);
+    axis.append(node('span', '', c(ago)), node('span', '', c(middle)), node('span', '', c('now')));
+    figure.append(series, axis); return figure;
   }
-  panel.append(head, stamp, metrics, charts, node('p', 'hd-studio-note', c('studioNote')));
+  const modes = node('div', 'hd-studio-modes'); modes.setAttribute('role', 'group'); modes.setAttribute('aria-label', c('studio'));
+  let selected = 'sum';
+  const buttons = [];
+  for (const mode of data.channels.length ? ['sum', 'channels'] : ['sum']) {
+    const button = node('button', 'hd-chip', mode === 'sum' ? c('sum') : `${c('byChannel')} · ${number(data.channels.length)}`);
+    button.type = 'button'; button.dataset.snapshotMode = mode;
+    button.addEventListener('click', () => { selected = mode; render(); });
+    modes.append(button); buttons.push(button);
+  }
+  function render() {
+    for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.snapshotMode === selected));
+    charts.replaceChildren(); charts.classList.toggle('is-channel-view', selected === 'channels');
+    if (selected === 'sum') {
+      charts.append(chart('hours48', data.bars48, 'ago48', 'ago24'), chart('minutes60', data.bars60, 'ago60', 'ago30'));
+    } else {
+      for (const channel of data.channels) {
+        const card = node('article', 'hd-channel-snapshot');
+        card.append(node('h4', '', channel.name), node('strong', 'hd-channel-total', `${c('hours48')} ${number(channel.total48)}`),
+          chart('hours48', channel.hourly48, 'ago48', 'ago24'));
+        if (channel.minute60 !== null) card.append(node('p', 'hd-channel-minute', `${c('minutes60')} ${number(channel.minute60)}`));
+        charts.append(card);
+      }
+    }
+  }
+  render();
+  panel.append(head, stamp, modes, metrics, charts, node('p', 'hd-studio-note', c('studioNote')));
   return panel;
 }
 
@@ -399,11 +441,12 @@ function hydrateMiniPanels(data, status = 'ready', region = 'all', onRegionChang
     panel.classList.toggle('hd-hero-dashboard', type === 'hero');
     panel.classList.toggle('hd-multi-dashboard', type === 'multi');
     panel.classList.toggle('hd-showcase-dashboard', type === 'showcase');
-    if (status !== 'ready' || !videos.length) {
+    const realtime = normalizeRealtime(data?.realtime);
+    if (status !== 'ready' || !videos.length && !(type === 'multi' && realtime)) {
       panel.append(node('p', 'hd-mini-empty', c(status === 'loading' ? 'loading' : status === 'failed' ? 'failed' : 'empty')));
       continue;
     }
-    const title = ['multi', 'predict', 'case-predict', 'overview'].includes(type) ? c('compare')
+    const title = type === 'multi' ? c('studio') : ['predict', 'case-predict', 'overview'].includes(type) ? c('compare')
       : type === 'hero' ? c('publicSnapshot') : ['title', 'case-title'].includes(type) ? c('titleReferences')
       : type === 'topic' ? c('topicReferences') : c('source');
     const head = node('div', 'hd-mini-head');
@@ -412,12 +455,7 @@ function hydrateMiniPanels(data, status = 'ready', region = 'all', onRegionChang
     if (type === 'multi') {
       panel.append(constellation(data, region, onRegionChange));
       const aggregate = node('div', 'hd-constellation-aggregate');
-      const metricRow = node('div', 'hd-mini-metrics');
-      const sum = known.length ? known.reduce((total, video) => total + video.views, 0) : null;
-      for (const [key, value] of [['count', videos.length], ['total', sum], ['best', known[0]?.views ?? null]]) {
-        const metric = node('div'); metric.append(node('span', '', c(key)), node('strong', '', number(value))); metricRow.append(metric);
-      }
-      aggregate.append(metricRow, horizontalBars(known.slice(0, 10))); panel.append(aggregate);
+      aggregate.append(studioSnapshot(data?.realtime) || node('p', 'hd-chart-empty', c('rtUnavailable'))); panel.append(aggregate);
       if (channels.length) {
         panel.append(node('h4', 'hd-mini-section-title', `${c('company')} · ${number(channels.length)}`));
         panel.append(channelTiles(channels.slice(0, 9)));
@@ -468,11 +506,11 @@ function hydrateMiniPanels(data, status = 'ready', region = 'all', onRegionChang
       panel.append(thumbnailRow(type === 'case-refs' ? (shorts.length ? shorts : ranked) : ranked, true));
     }
     const foot = node('div', 'hd-mini-foot');
-    const panelCollected = collected;
+    const panelCollected = type === 'multi' && realtime ? realtime.capturedAt : collected;
     const dateLabel = panelCollected ? new Intl.DateTimeFormat(locale, {
       timeZone: 'Asia/Seoul', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
     }).format(panelCollected) + ' KST' : c('unknownDate');
-    foot.append(node('span', '', dateLabel), node('span', '', c('chart')));
+    foot.append(node('span', '', dateLabel), node('span', '', c(type === 'multi' ? 'studioNote' : 'chart')));
     panel.append(foot);
   }
 }
@@ -698,7 +736,7 @@ function initialize(section) {
 
   function renderContent() {
     const ready = state.status === 'ready';
-    panel.hidden = !ready || !state.videos.length;
+    panel.hidden = !ready;
     toolbar.hidden = !ready || !state.videos.length;
     resultLine.hidden = !ready || !state.videos.length;
     topicGroup.hidden = !ready || !state.videos.some((video) => video.topics.length);
@@ -708,7 +746,9 @@ function initialize(section) {
     }
     if (!ready) { status.hidden = false; status.textContent = c(state.status === 'loading' ? 'loading' : 'failed'); grid.replaceChildren(); return; }
     const videos = filtered();
-    renderMetrics(videos); renderChart(videos); renderGrid(videos);
+    panel.replaceChildren();
+    panel.append(studioSnapshot(state.snapshot?.realtime) || node('p', 'hd-chart-empty', c('rtUnavailable')));
+    renderGrid(videos);
     resultCount.textContent = videos.length > 24
       ? c('showing', { n: number(videos.length), shown: number(24) }) : c('results', { n: number(videos.length) });
     status.hidden = videos.length > 0;
@@ -730,11 +770,12 @@ function initialize(section) {
     lang = language();
     over.textContent = c('over'); heading.textContent = c('heading'); lead.textContent = c('lead');
     collection.replaceChildren();
-    if (state.collectedAt) {
+    const displayTime = normalizeRealtime(state.snapshot?.realtime)?.capturedAt || state.collectedAt;
+    if (displayTime) {
       const stamp = node('time', '', new Intl.DateTimeFormat(locale(), {
         timeZone: 'Asia/Seoul', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-      }).format(state.collectedAt) + ' KST');
-      stamp.dateTime = state.collectedAt.toISOString();
+      }).format(displayTime) + ' KST');
+      stamp.dateTime = displayTime.toISOString();
       collection.append(node('span', '', c('collected')), stamp);
     } else collection.textContent = c('unknownDate');
     metricsNote.textContent = c('metricNote'); chartTitle.textContent = c('chart'); chartNote.textContent = c('chartNote');
