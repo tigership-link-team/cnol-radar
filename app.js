@@ -345,7 +345,7 @@ Object.assign(T.ko, {
   tryHomeSub: '내 채널 데이터로 고른 실험 · 해보면 결과를 비교해 드려요', tryAllMine: '내 채널 전체',
   tryNoMine: '내 채널을 넣으면 내 채널에 맞춰 골라 드려요. 지금은 레퍼런스 기준이에요.', tryEmpty: '지금은 뚜렷하게 차이 나는 조건이 없어요. 쇼츠가 더 쌓이면 다시 찾아볼게요.',
   tryHourQ: '{h}에 올려볼래?', tryHourL: '이 시간에 올린 쇼츠 {n}개가 평소의 {x}배였어요 · 지금은 주로 {u}에 올려요', tryHourL0: '이 시간에 올린 쇼츠 {n}개가 평소의 {x}배였어요',
-  tryDayQ: '{d}에 올려볼래?', tryDayL: '{d}에 올린 쇼츠 {n}개가 평소의 {x}배였어요 · 지금은 주로 {u}에 올려요',
+  tryDayQ: '{d}에 올려볼래?', tryDayL: '{d}에 올린 쇼츠 {n}개가 평소의 {x}배였어요 · 지금은 주로 {u}에 올려요', tryDayL0: '{d}에 올린 쇼츠 {n}개가 평소의 {x}배였어요',
   tryDurQ: '{b} 길이로 만들어볼래?', tryDurL: '{b} 쇼츠 {n}개가 평소의 {x}배였어요 · 내 쇼츠는 보통 {m}초', tryDurL0: '{b} 쇼츠 {n}개가 평소의 {x}배였어요', tryFmtL0: '‘{f}’ 제목 쇼츠 {n}개가 평소의 {x}배였어요',
   tryFmtQ: '‘{f}’ 제목 써볼래?', tryFmtL: '‘{f}’ 제목 쇼츠 {n}개가 평소의 {x}배 · 내 쇼츠는 {p}%만 이렇게 써요', tryEx: '예: “{t}” · 평소의 {x}배',
   tryTopicQ: '“{t}” 같은 소재 해볼래?', tryTopicL: '{c} · 평소의 {x}배 · 맞춤 {f}', tryTopicL0: '{c} · 평소의 {x}배',
@@ -372,7 +372,7 @@ Object.assign(T.en, {
   tryHomeSub: 'Experiments picked from your channel data · we compare results after you try', tryAllMine: 'All my channels',
   tryNoMine: 'Add your own channel and we tailor these to it. For now they’re based on your references.', tryEmpty: 'No condition stands out yet. We’ll look again as more Shorts come in.',
   tryHourQ: 'Try posting at {h}?', tryHourL: '{n} Shorts posted at this hour hit {x}× usual · you mostly post at {u}', tryHourL0: '{n} Shorts posted at this hour hit {x}× usual',
-  tryDayQ: 'Try posting on {d}?', tryDayL: '{n} Shorts posted on {d} hit {x}× usual · you mostly post on {u}',
+  tryDayQ: 'Try posting on {d}?', tryDayL: '{n} Shorts posted on {d} hit {x}× usual · you mostly post on {u}', tryDayL0: '{n} Shorts posted on {d} hit {x}× usual',
   tryDurQ: 'Try a {b} length?', tryDurL: '{n} Shorts at {b} hit {x}× usual · yours usually run {m}s', tryDurL0: '{n} Shorts at {b} hit {x}× usual', tryFmtL0: '{n} “{f}” titles hit {x}× usual',
   tryFmtQ: 'Try a “{f}” title?', tryFmtL: '{n} “{f}” titles hit {x}× usual · only {p}% of yours use it', tryEx: 'e.g. “{t}” · {x}× usual',
   tryTopicQ: 'Try a topic like “{t}”?', tryTopicL: '{c} · {x}× usual · fit {f}', tryTopicL0: '{c} · {x}× usual',
@@ -399,7 +399,7 @@ Object.assign(T.ja, {
   tryHomeSub: 'チャンネルのデータから選んだ実験・試すと結果を比較します', tryAllMine: 'マイチャンネル全体',
   tryNoMine: 'マイチャンネルを入れると、そのチャンネルに合わせて選びます。今はリファレンス基準です。', tryEmpty: '今ははっきり差が出る条件がありません。ショートがたまったらまた探します。',
   tryHourQ: '{h}に投稿してみる？', tryHourL: 'この時間に投稿したショート{n}本が普段の{x}倍でした・今は主に{u}に投稿しています', tryHourL0: 'この時間に投稿したショート{n}本が普段の{x}倍でした',
-  tryDayQ: '{d}に投稿してみる？', tryDayL: '{d}に投稿したショート{n}本が普段の{x}倍でした・今は主に{u}に投稿しています',
+  tryDayQ: '{d}に投稿してみる？', tryDayL: '{d}に投稿したショート{n}本が普段の{x}倍でした・今は主に{u}に投稿しています', tryDayL0: '{d}に投稿したショート{n}本が普段の{x}倍でした',
   tryDurQ: '{b}の長さで作ってみる？', tryDurL: '{b}のショート{n}本が普段の{x}倍でした・あなたのショートは普段{m}秒', tryDurL0: '{b}のショート{n}本が普段の{x}倍でした', tryFmtL0: '「{f}」タイトルのショート{n}本が普段の{x}倍でした',
   tryFmtQ: '「{f}」のタイトルを試してみる？', tryFmtL: '「{f}」タイトルのショート{n}本が普段の{x}倍・あなたは{p}%しか使っていません', tryEx: '例：「{t}」・普段の{x}倍',
   tryTopicQ: '「{t}」みたいなネタを試してみる？', tryTopicL: '{c}・普段の{x}倍・適合 {f}', tryTopicL0: '{c}・普段の{x}倍',
@@ -992,7 +992,7 @@ function trySuggest(own, refs, prof, opt = {}) {
       const rows = A.days.map((r) => ({ v: r.v || 0, n: r.n, k: r.k, low: r.n < MIN_N, hot: r.k === bd.k, cur: r.k === usualD }));
       push({ id: 'day:' + bd.k, kind: 'day', key: bd.k, ic: IC.cal, n: bd.n, lift, basis, base,
         q: t('tryDayQ', { d: dayName(bd.k) }),
-        lead: usualD != null ? t('tryDayL', { d: dayName(bd.k), n: bd.n, x: bd.v.toFixed(1), u: dayName(usualD) }) : t('tryHourL0', { n: bd.n, x: bd.v.toFixed(1) }),
+        lead: usualD != null ? t('tryDayL', { d: dayName(bd.k), n: bd.n, x: bd.v.toFixed(1), u: dayName(usualD) }) : t('tryDayL0', { d: dayName(bd.k), n: bd.n, x: bd.v.toFixed(1) }),
         viz: (id) => ({ html: barsHtml(id, rows, t('insDay'), 96, { v: 1, label: t('insUsual') }) + `<div class="dk-axis">${rows.map((x) => `<span>${esc(dayName(x.k, 'short'))}</span>`).join('')}</div>` + keyHtml(usualD != null), bind: (root) => bindBars(root, id, rows, (x) => ratioTip(dayName(x.k), x), { v: 1 }) }) });
     }
   }
