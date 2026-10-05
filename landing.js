@@ -127,6 +127,7 @@ function apply() {
   splitH1();
   renderTools(false);
   renderFaq();
+  if (typeof drawOv === 'function' && document.getElementById('ovPlot')?.childElementCount) drawOv();
   requestAnimationFrame(moveInd);
 }
 apply();
@@ -145,21 +146,84 @@ document.getElementById('toolTabs')?.addEventListener('click', (e) => {
 });
 addEventListener('resize', moveInd);
 
-// ---------- 그림: 채널 3개를 쌓은 48시간 막대 · 24시간 막대 ----------
-const COLORS = ['#2a78d6', '#eb6834', '#1baf7a'];
-function stack(el) {
-  if (!el) return;
-  let html = '';
+// ---------- 그림 ----------
+// 유튜브 스튜디오 '실시간' 막대: 48칸 · 한 색 · 마우스를 올리면 그 시간 조회수
+const RT_TOTAL = 1284310;
+const RT = (() => {
+  const raw = [];
   for (let i = 0; i < 48; i++) {
-    const day = Math.sin(((i + 6) / 24) * Math.PI * 2) * 0.5 + 0.5; // 하루 흐름
-    const lift = i >= 34 ? 1 + (i - 34) * 0.07 : 1; // 막 터지는 중
-    const parts = [0.42, 0.33, 0.25].map((w, k) => w * (0.35 + day * 0.65) * lift * (0.85 + ((i * (k + 3)) % 7) / 23));
-    html += `<span class="c" style="--i:${i}">${parts.map((p, k) => `<i style="height:${Math.min(p * 44, 30).toFixed(1)}%;background:${COLORS[2 - k]}"></i>`).join('')}</span>`;
+    const day = Math.sin(((i + 6) / 24) * Math.PI * 2) * 0.5 + 0.5;
+    const lift = i >= 34 ? 1 + (i - 34) * 0.08 : 1;
+    raw.push((0.35 + day * 0.65) * lift * (0.88 + ((i * 7) % 11) / 40));
   }
-  el.innerHTML = html;
+  const sum = raw.reduce((a, v) => a + v, 0);
+  return raw.map((v) => Math.round((v / sum) * RT_TOTAL));
+})();
+const fmtNum = (n) => n.toLocaleString(lang === 'ko' ? 'ko-KR' : lang === 'ja' ? 'ja-JP' : 'en-US');
+function rtBars(el) {
+  if (!el) return;
+  const max = Math.max(...RT);
+  el.innerHTML = RT.map((v, i) => `<i style="--i:${i};height:${((v / max) * 100).toFixed(1)}%"></i>`).join('') + '<span class="lp-tip" role="status"></span>';
+  if (touch) return;
+  const tip = el.querySelector('.lp-tip');
+  el.querySelectorAll('i').forEach((b, i) => {
+    b.addEventListener('pointerenter', () => {
+      const ago = 47 - i;
+      tip.innerHTML = `<b>${esc(ago ? t('v7.tip.hago', { h: ago }) : t('v7.tip.now'))}</b><span>${esc(t('v7.tip.views', { n: fmtNum(RT[i]) }))}</span>`;
+      tip.style.left = Math.min(Math.max(b.offsetLeft + b.offsetWidth / 2, 70), el.clientWidth - 70) + 'px';
+      tip.style.top = (el.clientHeight - b.offsetHeight) + 'px';
+      tip.classList.add('on');
+      b.classList.add('on');
+    });
+    b.addEventListener('pointerleave', () => { tip.classList.remove('on'); b.classList.remove('on'); });
+  });
 }
-stack(document.getElementById('heroBars'));
-stack(document.getElementById('f48'));
+rtBars(document.getElementById('heroBars'));
+rtBars(document.getElementById('demoBars'));
+
+// 유튜브 스튜디오 '개요' 선 차트: 28일 · 오른쪽 눈금 · 회색 평소 범위 · 세로선 + 점 + 흰 툴팁
+const OV_TOTAL = 4120553;
+const OV = (() => {
+  const raw = [];
+  for (let i = 0; i < 28; i++) raw.push(1 + Math.sin((i / 7) * Math.PI * 2 + 0.6) * 0.17 + (i / 27) * 0.42 + ((i * 5) % 7) / 60);
+  const sum = raw.reduce((a, v) => a + v, 0);
+  return raw.map((v) => Math.round((v / sum) * OV_TOTAL));
+})();
+const OV_BAND = [112000, 141000];
+const OV_MAX = 200000;
+const ovDay = (i) => new Date(Date.UTC(2026, 8, 8 + i, 3));
+const loc = () => (lang === 'ko' ? 'ko-KR' : lang === 'ja' ? 'ja-JP' : 'en-US');
+function drawOv() {
+  const box = document.getElementById('ovPlot');
+  if (!box) return;
+  const W = 100, H = 100;
+  const x = (i) => (i / 27) * W, y = (v) => H - (v / OV_MAX) * H;
+  const grid = [0, 50000, 100000, 150000, 200000];
+  const yl = (v) => (v === 0 ? '0' : lang === 'en' ? v / 1000 + 'K' : v / 10000 + (lang === 'ja' ? '万' : '만'));
+  const d = OV.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(2)} ${y(v).toFixed(2)}`).join(' ');
+  const xd = (i) => ovDay(i).toLocaleDateString(loc(), { month: 'short', day: 'numeric', timeZone: 'UTC' });
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+    ${grid.map((g) => `<line class="g${g === 0 ? ' z' : ''}" x1="0" x2="${W}" y1="${y(g)}" y2="${y(g)}"/>`).join('')}
+    <rect class="band" x="0" y="${y(OV_BAND[1])}" width="${W}" height="${y(OV_BAND[0]) - y(OV_BAND[1])}"/>
+    <path class="ln" pathLength="1" d="${d}"/></svg>
+    ${grid.map((g) => `<span class="yl" style="top:${y(g)}%">${esc(yl(g))}</span>`).join('')}
+    <span class="xl first" style="left:0">${esc(xd(0))}</span><span class="xl" style="left:50%">${esc(xd(13))}</span><span class="xl last" style="left:100%">${esc(xd(27))}</span>
+    <i class="cross"></i><i class="dot"></i><span class="lp-tip" role="status"></span>`;
+  if (touch) return;
+  const cross = box.querySelector('.cross'), dot = box.querySelector('.dot'), tip = box.querySelector('.lp-tip');
+  box.onpointermove = (e) => {
+    const r = box.getBoundingClientRect();
+    const i = Math.max(0, Math.min(27, Math.round(((e.clientX - r.left) / r.width) * 27)));
+    const px = (i / 27) * r.width, py = (y(OV[i]) / 100) * r.height;
+    cross.style.left = px + 'px';
+    dot.style.left = px + 'px'; dot.style.top = py + 'px';
+    tip.innerHTML = `<b>${esc(ovDay(i).toLocaleDateString(loc(), { month: 'short', day: 'numeric', weekday: 'short', timeZone: 'UTC' }))}</b><span>${esc(t('v7.tip.views', { n: fmtNum(OV[i]) }))}</span>`;
+    tip.style.left = Math.min(Math.max(px, 70), r.width - 70) + 'px';
+    tip.style.top = py + 'px';
+    box.classList.add('on'); tip.classList.add('on');
+  };
+  box.onpointerleave = () => { box.classList.remove('on'); tip.classList.remove('on'); };
+}
 const hrs = document.getElementById('fHrs');
 if (hrs) {
   const v = [5, 4, 3, 3, 2, 2, 3, 5, 7, 8, 9, 10, 12, 11, 10, 11, 13, 15, 18, 26, 17, 14, 10, 7];
@@ -184,12 +248,13 @@ const io = new IntersectionObserver((ents) => {
     if (!en.isIntersecting) continue;
     const el = en.target;
     if (el.classList.contains('rv')) el.classList.add('in');
-    if (el.matches('.stk, .hrs') && !calm) el.classList.add('grow');
+    if (el.matches('.stk, .hrs, .rt-bars') && !calm) el.classList.add('grow');
+    if (el.id === 'ovPlot') { drawOv(); if (!calm) el.querySelector('.ln')?.classList.add('draw'); }
     if (el.dataset.count) countUp(el);
     io.unobserve(el);
   }
 }, { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
-document.querySelectorAll('.rv, .stk, .hrs, [data-count]').forEach((el) => io.observe(el));
+document.querySelectorAll('.rv, .stk, .hrs, .rt-bars, #ovPlot, [data-count]').forEach((el) => { if (!el.closest('.scene')) io.observe(el); });
 
 // ---------- Material 리플 ----------
 document.addEventListener('pointerdown', (e) => {
@@ -249,7 +314,6 @@ addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
 // ---------- 60초 둘러보기: 장면 4개를 차례로 (화면에 보일 때만 움직여요) ----------
-stack(document.getElementById('demoBars'));
 const player = document.getElementById('player');
 if (player) {
   const scenes = [...player.querySelectorAll('.scene')];

@@ -14,7 +14,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="/landing.css">
 <script src="/early.js"></script>
 </head>
@@ -58,12 +58,17 @@
     </div>
 
     <div class="hero-art" aria-hidden="true">
-      <div class="md-card e2 art-main rv" style="--d:.2s">
-        <div class="art-h"><span class="live"><i></i><span data-i18n="v6.f.1k">모든 채널 합산 · 지난 48시간</span></span></div>
-        <div class="art-v"><b data-i18n="v6.f.1v">128만 회</b><em data-i18n="v6.f.1u">▲ 23% · 직전 48시간보다</em></div>
-        <div class="stk" id="heroBars"></div>
-        <div class="ax"><span data-i18n="v6.f.ago">48시간 전</span><span data-i18n="v6.f.now">지금</span></div>
-        <div class="lg"><span><i style="background:#2a78d6"></i><span data-i18n="v6.f.ch1">꿀템연구소</span></span><span><i style="background:#eb6834"></i><span data-i18n="v6.f.ch2">자취요리 1분</span></span><span><i style="background:#1baf7a"></i><span data-i18n="v6.f.ch3">냥집사 일기</span></span></div>
+      <div class="md-card e2 art-main yt-rt rv" style="--d:.2s">
+        <div class="rt-h"><b data-i18n="v7.rt.t">실시간</b><span class="live"><i></i><span data-i18n="v7.rt.live">업데이트 중</span></span></div>
+        <p class="rt-sub" data-i18n="v7.rt.sub">채널 10개 합산</p>
+        <div class="rt-k"><small data-i18n="v7.rt.views">조회수 · 지난 48시간</small><b data-i18n="v7.rt.v">1,284,310</b></div>
+        <div class="rt-bars" id="heroBars"></div>
+        <div class="rt-ax"><span data-i18n="v6.f.ago">48시간 전</span><span data-i18n="v6.f.now">지금</span></div>
+        <div class="rt-top"><p data-i18n="v7.rt.top">채널 순위 · 48시간</p>
+          <div class="r"><span class="av" style="background:#2a78d6"></span><span class="n" data-i18n="v6.f.ch1">꿀템연구소</span><b>482,100</b></div>
+          <div class="r"><span class="av" style="background:#eb6834"></span><span class="n" data-i18n="v6.f.ch2">자취요리 1분</span><b>356,840</b></div>
+          <div class="r"><span class="av" style="background:#1baf7a"></span><span class="n" data-i18n="v6.f.ch3">냥집사 일기</span><b>211,370</b></div>
+        </div>
       </div>
       <div class="md-card e3 art-msg rv" style="--d:.5s">
         <span class="av"><img src="/logo.png" alt="" width="18" height="16"></span>
@@ -99,11 +104,15 @@
     </div>
 
     <div class="md-pillar">
-      <div class="pv rv"><div class="md-card e2 tilt fv yt48">
-        <div class="top"><small data-i18n="v6.f.1k">모든 채널 합산 · 지난 48시간</small><b data-i18n="v6.f.1v">128만 회</b><em data-i18n="v6.f.1u">▲ 23% · 직전 48시간보다</em></div>
-        <div class="stk" id="f48"></div>
-        <div class="ax"><span data-i18n="v6.f.ago">48시간 전</span><span data-i18n="v6.f.now">지금</span></div>
-        <div class="lg"><span><i style="background:#2a78d6"></i><span data-i18n="v6.f.ch1">꿀템연구소</span></span><span><i style="background:#eb6834"></i><span data-i18n="v6.f.ch2">자취요리 1분</span></span><span><i style="background:#1baf7a"></i><span data-i18n="v6.f.ch3">냥집사 일기</span></span></div>
+      <div class="pv rv"><div class="md-card e2 tilt yt-ov">
+        <p class="ov-h" data-i18n="v7.ov.h">지난 28일 동안 채널 10개 조회수 4,120,553회</p>
+        <div class="tabs">
+          <div class="tb on"><span data-i18n="v7.ov.views">조회수</span><b data-i18n="v7.ov.v1">412만</b><small><i>↑</i><span data-i18n="v7.ov.d1">평소보다 29% 많아요</span></small></div>
+          <div class="tb"><span data-i18n="v7.ov.subs">구독자</span><b data-i18n="v7.ov.v2">+1.2만</b><small><i>↑</i><span data-i18n="v7.ov.d2">평소보다 19% 많아요</span></small></div>
+          <div class="tb"><span data-i18n="v7.ov.new">새 영상</span><b data-i18n="v7.ov.v3">33개</b><small><i class="dn">↓</i><span data-i18n="v7.ov.d3">평소보다 11% 적어요</span></small></div>
+        </div>
+        <div class="plot" id="ovPlot"></div>
+        <p class="key"><i class="ln"></i><span data-i18n="v7.ov.views">조회수</span><i class="bd"></i><span data-i18n="v7.ov.band">평소 범위</span></p>
       </div></div>
       <div class="pt rv" style="--d:.1s">
         <p class="over" data-i18n="v7.p1.over">48시간 합산</p>
@@ -194,10 +203,11 @@
           <div class="ta"><span style="--i:0">https://www.youtube.com/@channel-a</span><span style="--i:1">@channel-b</span><span style="--i:2">https://www.youtube.com/@channel-c</span></div>
           <div class="row"><span class="go" data-i18n="v7.demo.btn">수집하기</span><span class="ok" data-i18n="v7.demo.ok">채널 3개 · 쇼츠 150개 · 롱폼 42개 수집했어요</span></div>
         </div>
-        <div class="scene s2">
-          <div class="top"><small data-i18n="v6.f.1k">모든 채널 합산 · 지난 48시간</small><b data-i18n="v6.f.1v">128만 회</b><em data-i18n="v6.f.1u">▲ 23% · 직전 48시간보다</em></div>
-          <div class="stk" id="demoBars"></div>
-          <div class="ax"><span data-i18n="v6.f.ago">48시간 전</span><span data-i18n="v6.f.now">지금</span></div>
+        <div class="scene s2 yt-rt">
+          <div class="rt-h"><b data-i18n="v7.rt.t">실시간</b><span class="live"><i></i><span data-i18n="v7.rt.live">업데이트 중</span></span></div>
+          <div class="rt-k"><small data-i18n="v7.rt.views">조회수 · 지난 48시간</small><b data-i18n="v7.rt.v">1,284,310</b></div>
+          <div class="rt-bars" id="demoBars"></div>
+          <div class="rt-ax"><span data-i18n="v6.f.ago">48시간 전</span><span data-i18n="v6.f.now">지금</span></div>
         </div>
         <div class="scene s3">
           <p class="lab" data-i18n="v7.demo.l3">에이전트가 고른 다음 소재</p>
