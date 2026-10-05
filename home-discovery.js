@@ -9,7 +9,8 @@ const COPY = {
     count: '등록 영상', total: '확인된 누적 조회수 합계', best: '최고 누적 조회수',
     metricNote: '조회수는 영상별 누적 수치입니다. 미확인 값은 합계에서 제외합니다.',
     search: '소재·영상 제목 검색', searchPlaceholder: '관심 있는 소재를 검색해보세요',
-    all: '전체', companyFilter: '회사', shorts: '쇼츠', long: '롱폼', topics: '소재', formats: '영상 유형',
+    all: '전체', companyFilter: '회사', shorts: '쇼츠', long: '롱폼', video: '영상', topics: '소재', formats: '영상 유형',
+    foreign: '해외', japan: '일본', regions: '채널 지역', constellation: '채널을 하나로 모아 보기', collectedChannels: '공개 레퍼런스 채널', channelEmpty: '아직 표시할 채널 정보가 없습니다.',
     sort: '정렬', byViews: '조회수순', byLatest: '최신순', byFeatured: '채널별 보기',
     results: '{n}개 영상', showing: '{n}개 중 {shown}개 표시',
     loading: '공개 영상 데이터를 불러오는 중입니다.',
@@ -34,7 +35,8 @@ const COPY = {
     count: 'Collected videos', total: 'Sum of verified cumulative views', best: 'Highest cumulative views',
     metricNote: 'Views are cumulative for each video. Unverified values are excluded from the sum.',
     search: 'Search topics or video titles', searchPlaceholder: 'Search for a topic you want to explore',
-    all: 'All', companyFilter: 'Company', shorts: 'Shorts', long: 'Long-form', topics: 'Topics', formats: 'Video type',
+    all: 'All', companyFilter: 'Company', shorts: 'Shorts', long: 'Long-form', video: 'Video', topics: 'Topics', formats: 'Video type',
+    foreign: 'International', japan: 'Japan', regions: 'Channel region', constellation: 'Bring your channels together', collectedChannels: 'Public reference channels', channelEmpty: 'No channel information is available yet.',
     sort: 'Sort', byViews: 'Most viewed', byLatest: 'Newest', byFeatured: 'Across channels',
     results: '{n} videos', showing: 'Showing {shown} of {n}',
     loading: 'Loading public video data.', failed: 'Video data could not be loaded. Please check again later.',
@@ -58,7 +60,8 @@ const COPY = {
     count: '収集動画', total: '確認できた累計再生数の合計', best: '最多の累計再生数',
     metricNote: '再生数は動画ごとの累計値です。未確認の値は合計に含みません。',
     search: 'ネタ・動画タイトルを検索', searchPlaceholder: '気になるネタを検索してください',
-    all: 'すべて', companyFilter: '会社', shorts: 'ショート', long: '長尺動画', topics: 'ネタ', formats: '動画タイプ',
+    all: 'すべて', companyFilter: '会社', shorts: 'ショート', long: '長尺動画', video: '動画', topics: 'ネタ', formats: '動画タイプ',
+    foreign: '海外', japan: '日本', regions: 'チャンネルの地域', constellation: 'チャンネルをひとつにまとめる', collectedChannels: '公開リファレンスチャンネル', channelEmpty: '表示できるチャンネル情報はまだありません。',
     sort: '並び順', byViews: '再生数順', byLatest: '新着順', byFeatured: 'チャンネル別',
     results: '{n}本の動画', showing: '{n}本中{shown}本を表示',
     loading: '公開動画のデータを読み込んでいます。',
@@ -118,7 +121,7 @@ function normalizeVideos(input) {
   const seen = new Set();
   return input.slice(0, 1000).flatMap((item) => {
     if (!item || typeof item !== 'object' || typeof item.id !== 'string' || !VIDEO_ID.test(item.id)
-      || seen.has(item.id) || !['shorts', 'long'].includes(item.format)) return [];
+      || seen.has(item.id) || !['shorts', 'long', 'video'].includes(item.format)) return [];
     seen.add(item.id);
     const topics = Array.isArray(item.topics) ? item.topics : typeof item.topic === 'string' ? [item.topic] : [];
     return [{
@@ -126,6 +129,7 @@ function normalizeVideos(input) {
       views: count(item.views), likes: count(item.likes), publishedAt: date(item.publishedAt),
       thumbnail: thumbnail(item.thumbnail), channelName: text(item.channelName, 200),
       channelId: text(item.channelId, 40), company: item.company === true,
+      region: ['global', 'jp', 'kr'].includes(item.region) ? item.region : null,
       topics: [...new Set(topics.map((value) => text(value, 40)).filter(Boolean))].slice(0, 8)
     }];
   });
@@ -133,13 +137,105 @@ function normalizeVideos(input) {
 
 function normalizeChannels(input) {
   if (!Array.isArray(input)) return [];
-  return input.slice(0, 12).flatMap((item) => {
+  return input.slice(0, 100).flatMap((item) => {
     if (!item || typeof item !== 'object') return [];
     const name = text(item.name || item.title || item.channelName, 200);
     if (!name) return [];
     return [{ id: text(item.id, 40), name, subscribers: count(item.subscriberCount), views: count(item.viewCount),
-      videos: count(item.videoCount), thumbnail: thumbnail(item.thumbnail) }];
+      videos: count(item.videoCount), thumbnail: thumbnail(item.thumbnail),
+      region: ['global', 'jp', 'kr'].includes(item.region) ? item.region : null, company: item.company === true }];
   });
+}
+
+function referenceChannels(data) {
+  const channels = normalizeChannels(data?.channels);
+  const byId = new Map(channels.filter((channel) => channel.id).map((channel) => [channel.id, channel]));
+  for (const video of normalizeVideos(data?.videos)) {
+    if (video.channelId && video.channelName && !byId.has(video.channelId)) byId.set(video.channelId, {
+      id: video.channelId, name: video.channelName, thumbnail: '', region: video.region, company: video.company
+    });
+  }
+  return [...byId.values()];
+}
+
+function videoRegions(videos, channels) {
+  const regions = new Map(channels.map((channel) => [channel.id, channel.region]));
+  return videos.map((video) => ({ ...video, region: video.region || regions.get(video.channelId) || null }));
+}
+
+function inRegion(item, selected) {
+  return selected === 'all' || selected === 'foreign' && item.region === 'global' || selected === 'jp' && item.region === 'jp';
+}
+
+function balancedVideos(videos, featuredIds = []) {
+  const byId = new Map(videos.map((video) => [video.id, video]));
+  const chosen = [...new Set(featuredIds)].map((id) => byId.get(id)).filter(Boolean);
+  const used = new Set(chosen.map((video) => video.id));
+  const groups = new Map();
+  const newest = [...videos].sort((a, b) => (b.publishedAt?.getTime() || 0) - (a.publishedAt?.getTime() || 0));
+  for (const video of newest) {
+    if (used.has(video.id)) continue;
+    const key = video.channelId || video.channelName || video.id;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(video);
+  }
+  while ([...groups.values()].some((group) => group.length)) {
+    for (const group of groups.values()) if (group.length) chosen.push(group.shift());
+  }
+  return chosen;
+}
+
+function constellation(data, selected = 'all', onChange) {
+  const lang = language(); const c = (key) => COPY[lang][key] || key;
+  const wrap = node('div', 'hd-constellation');
+  const header = node('div', 'hd-constellation-head');
+  header.append(node('h3', '', c('constellation')));
+  const filters = node('div', 'hd-region-filters');
+  filters.setAttribute('role', 'group'); filters.setAttribute('aria-label', c('regions'));
+  for (const [value, label] of [['all', 'all'], ['foreign', 'foreign'], ['jp', 'japan']]) {
+    const button = node('button', 'hd-chip hd-region-chip', c(label));
+    button.type = 'button'; button.dataset.regionFilter = value;
+    button.setAttribute('aria-pressed', String(value === selected));
+    if (onChange) button.addEventListener('click', () => onChange(value));
+    filters.append(button);
+  }
+  header.append(filters); wrap.append(header);
+  const chosen = referenceChannels(data).filter((channel) => !channel.company && ['global', 'jp'].includes(channel.region)).slice(0, 10);
+  if (!chosen.length) { wrap.append(node('p', 'hd-constellation-empty', c('channelEmpty'))); return wrap; }
+  const stage = node('div', 'hd-constellation-stage');
+  const positions = [[90,58],[280,34],[465,60],[670,35],[875,62],[135,149],[335,133],[530,163],[745,142],[930,156]];
+  const swatches = ['#8b5cf6','#0ea5e9','#ec4899','#10b981','#f59e0b','#6366f1','#14b8a6','#ef4444','#a855f7','#3b82f6'];
+  const ns = 'http://www.w3.org/2000/svg';
+  const lines = document.createElementNS(ns, 'svg');
+  lines.classList.add('hd-constellation-lines');
+  lines.setAttribute('viewBox', '0 0 1000 245'); lines.setAttribute('preserveAspectRatio', 'none');
+  lines.setAttribute('aria-hidden', 'true'); lines.setAttribute('focusable', 'false');
+  stage.append(lines);
+  for (const [index, channel] of chosen.entries()) {
+    const [x, y] = positions[index];
+    const active = inRegion(channel, selected);
+    const path = document.createElementNS(ns, 'path');
+    path.setAttribute('d', `M ${x} ${y} C ${x} ${y + 70}, 500 155, 500 236`);
+    path.setAttribute('class', `hd-constellation-path${active ? ' is-active' : ' is-muted'}`);
+    path.style.setProperty('--hd-delay', `${index * -.55}s`); lines.append(path);
+    const item = node('div', `hd-constellation-node${active ? ' is-active' : ' is-muted'}`);
+    item.style.left = `${x / 10}%`; item.style.top = `${y / 245 * 100}%`;
+    item.style.setProperty('--hd-delay', `${index * -.55}s`);
+    item.style.setProperty('--hd-avatar-color', swatches[index]);
+    item.dataset.region = channel.region;
+    const floating = node('div', 'hd-constellation-floating');
+    const avatar = node('span', 'hd-constellation-avatar', Array.from(channel.name).slice(0, 2).join(''));
+    if (channel.thumbnail) {
+      const image = node('img'); image.src = channel.thumbnail; image.alt = ''; image.loading = 'lazy'; image.decoding = 'async';
+      image.addEventListener('error', () => image.remove(), { once: true }); avatar.append(image);
+    }
+    const label = node('span', 'hd-constellation-name', channel.name); label.title = channel.name;
+    floating.append(avatar, label); item.append(floating); stage.append(item);
+  }
+  const hub = node('div', 'hd-constellation-hub');
+  hub.append(node('span', 'hd-constellation-hub-dot'), node('span', '', c('compare')));
+  stage.append(hub); wrap.append(stage);
+  return wrap;
 }
 
 function normalizeRealtime(input) {
@@ -199,18 +295,20 @@ function studioSnapshot(input, compact = false) {
 }
 
 // All illustration panels share the same public snapshot as the discovery wall.
-function hydrateMiniPanels(data, status = 'ready') {
+function hydrateMiniPanels(data, status = 'ready', region = 'all', onRegionChange) {
   const lang = language();
   const c = (key) => COPY[lang][key] || key;
   const locale = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP' }[lang];
   const number = (value) => value === null ? c('unknown') : new Intl.NumberFormat(locale).format(value);
-  const videos = normalizeVideos(data?.videos);
-  const channels = normalizeChannels(data?.companyChannels);
+  const publicChannels = referenceChannels(data);
+  const videos = videoRegions(normalizeVideos(data?.videos), publicChannels).filter((video) => inRegion(video, region));
+  const channels = [];
   const ranked = [...videos].sort((a, b) => (b.views ?? -1) - (a.views ?? -1));
   const known = ranked.filter((video) => video.views !== null);
   const featured = Array.isArray(data?.featuredIds) ? data.featuredIds : [];
   const byId = new Map(videos.map((video) => [video.id, video]));
   const selected = [...new Set(featured)].map((id) => byId.get(id)).filter(Boolean);
+  const balanced = balancedVideos(videos, featured);
   const shorts = [...selected.filter((video) => video.format === 'shorts'), ...ranked.filter((video) => video.format === 'shorts' && !featured.includes(video.id))];
   const collected = date(data?.collectedAt);
 
@@ -234,7 +332,7 @@ function hydrateMiniPanels(data, status = 'ready') {
     const row = node('div', `hd-mini-thumbs${compactCards ? ' is-compact' : ''}${wall ? ' is-wall' : ''}`);
     for (const video of items.slice(0, limit)) {
       const card = button(video, 'hd-mini-video');
-      card.classList.toggle('is-long', video.format === 'long');
+      card.classList.toggle('is-long', video.format !== 'shorts');
       if (video.thumbnail) card.append(image(video.thumbnail, 'hd-mini-thumb'));
       const detail = node('span', 'hd-mini-video-detail');
       detail.append(node('b', '', video.title), node('small', '', `${c('views')} ${number(video.views)}`));
@@ -305,46 +403,42 @@ function hydrateMiniPanels(data, status = 'ready') {
       panel.append(node('p', 'hd-mini-empty', c(status === 'loading' ? 'loading' : status === 'failed' ? 'failed' : 'empty')));
       continue;
     }
-    const title = ['multi', 'overview'].includes(type) && normalizeRealtime(data?.realtime) ? c('studio')
-      : ['predict', 'case-predict', 'overview'].includes(type) ? c('compare')
+    const title = ['multi', 'predict', 'case-predict', 'overview'].includes(type) ? c('compare')
       : type === 'hero' ? c('publicSnapshot') : ['title', 'case-title'].includes(type) ? c('titleReferences')
       : type === 'topic' ? c('topicReferences') : c('source');
     const head = node('div', 'hd-mini-head');
     head.append(node('b', '', title), node('span', 'hd-mini-source', 'YouTube'));
     panel.append(head);
     if (type === 'multi') {
-      const studio = studioSnapshot(data?.realtime);
-      if (studio) panel.append(studio);
-      else panel.append(horizontalBars(known.slice(0, 5)));
+      panel.append(constellation(data, region, onRegionChange));
+      const aggregate = node('div', 'hd-constellation-aggregate');
+      const metricRow = node('div', 'hd-mini-metrics');
+      const sum = known.length ? known.reduce((total, video) => total + video.views, 0) : null;
+      for (const [key, value] of [['count', videos.length], ['total', sum], ['best', known[0]?.views ?? null]]) {
+        const metric = node('div'); metric.append(node('span', '', c(key)), node('strong', '', number(value))); metricRow.append(metric);
+      }
+      aggregate.append(metricRow, horizontalBars(known.slice(0, 10))); panel.append(aggregate);
       if (channels.length) {
         panel.append(node('h4', 'hd-mini-section-title', `${c('company')} · ${number(channels.length)}`));
         panel.append(channelTiles(channels.slice(0, 9)));
       }
-      const companyVideos = [...selected.filter((video) => video.company),
-        ...ranked.filter((video) => video.company && !featured.includes(video.id))];
-      if (companyVideos.length) {
+      const wallVideos = balanced;
+      if (wallVideos.length) {
         panel.append(node('h4', 'hd-mini-section-title', c('chart')));
-        const wall = thumbnailRow(companyVideos, false, 9, true);
-        wall.classList.add('is-company');
+        const wall = thumbnailRow(wallVideos, false, 12, true);
         panel.append(wall);
       }
     } else if (type === 'showcase') {
-      const companyVideos = selected.filter((video) => video.company);
-      const references = ranked.filter((video) => !video.company);
-      const chosen = [...companyVideos.slice(0, 12), ...references.slice(0, 12)];
-      const shown = new Set(chosen.map((video) => video.id));
-      for (const video of ranked) {
-        if (chosen.length >= 24) break;
-        if (!shown.has(video.id)) { chosen.push(video); shown.add(video.id); }
-      }
-      panel.append(thumbnailRow(chosen, false, 24, true));
+      panel.append(thumbnailRow(balanced, false, 24, true));
     } else if (type === 'hero') {
-      const studio = studioSnapshot(data?.realtime, true);
+      const studio = null;
       if (studio) panel.append(studio);
       else {
         const metricRow = node('div', 'hd-mini-metrics');
         const sum = known.length ? known.reduce((total, video) => total + video.views, 0) : null;
-        for (const [key, value] of [['channelCount', channels.length], ['count', videos.length], ['total', sum]]) {
+        const values = channels.length ? [['channelCount', channels.length], ['count', videos.length], ['total', sum]]
+          : [['count', videos.length], ['total', sum], ['best', known[0]?.views ?? null]];
+        for (const [key, value] of values) {
           const metric = node('div');
           metric.append(node('span', '', c(key)), node('strong', '', number(value)));
           metricRow.append(metric);
@@ -365,8 +459,7 @@ function hydrateMiniPanels(data, status = 'ready') {
     } else if (type === 'predict') {
       panel.append(thumbnailRow(known.slice(0, 2), true), horizontalBars(known.slice(0, 2)));
     } else if (type === 'overview') {
-      const studio = studioSnapshot(data?.realtime, true);
-      panel.append(studio || horizontalBars(known.slice(0, 5)));
+      panel.append(horizontalBars(known.slice(0, 5)));
     } else if (type === 'case-predict') {
       panel.append(horizontalBars(known.slice(0, 3)));
     } else if (type === 'title') {
@@ -375,11 +468,11 @@ function hydrateMiniPanels(data, status = 'ready') {
       panel.append(thumbnailRow(type === 'case-refs' ? (shorts.length ? shorts : ranked) : ranked, true));
     }
     const foot = node('div', 'hd-mini-foot');
-    const panelCollected = ['hero', 'overview', 'multi'].includes(type) ? normalizeRealtime(data?.realtime)?.capturedAt || collected : collected;
+    const panelCollected = collected;
     const dateLabel = panelCollected ? new Intl.DateTimeFormat(locale, {
       timeZone: 'Asia/Seoul', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
     }).format(panelCollected) + ' KST' : c('unknownDate');
-    foot.append(node('span', '', dateLabel), node('span', '', c(['hero', 'overview', 'multi'].includes(type) && normalizeRealtime(data?.realtime) ? 'studioNote' : 'chart')));
+    foot.append(node('span', '', dateLabel), node('span', '', c('chart')));
     panel.append(foot);
   }
 }
@@ -391,7 +484,7 @@ function initialize(section) {
   const wrap = node('div', 'md-wrap');
   wrap.dataset.homeDiscovery = '';
   const state = { videos: [], channels: [], collectedAt: null, snapshot: null, featuredIds: [], status: 'loading',
-    query: '', format: 'company', topic: '', sort: 'featured' };
+    query: '', format: 'all', region: 'all', topic: '', sort: 'featured' };
   let lang = language();
   let debounce;
   const c = (key, values) => {
@@ -413,6 +506,7 @@ function initialize(section) {
   head.append(over, heading, lead, collection);
   const channels = node('div', 'hd-companies');
   const studio = node('div', 'hd-studio-container');
+  const graph = node('div', 'hd-constellation-container');
   const panel = node('div', 'hd-panel');
   const metrics = node('div', 'hd-metrics');
   const metricsNote = node('p', 'hd-metric-note');
@@ -435,7 +529,7 @@ function initialize(section) {
   searchLabel.append(searchText, searchIcon, input);
   const formatGroup = node('div', 'hd-filters');
   formatGroup.setAttribute('role', 'group');
-  const formats = ['all', 'company', 'shorts', 'long'].map((format) => {
+  const formats = ['all', 'shorts', 'long', 'video'].map((format) => {
     const button = node('button', 'hd-chip');
     button.type = 'button'; button.dataset.formatFilter = format;
     button.addEventListener('click', () => { state.format = format; renderContent(); });
@@ -460,7 +554,7 @@ function initialize(section) {
   const grid = node('div', 'hd-grid');
   const status = node('p', 'hd-status');
   status.setAttribute('role', 'status');
-  wrap.append(head, studio, channels, panel, toolbar, topicGroup, resultLine, grid, status);
+  wrap.append(head, graph, studio, channels, panel, toolbar, topicGroup, resultLine, grid, status);
   section.append(wrap);
 
   function videoButton(video, className) {
@@ -505,6 +599,7 @@ function initialize(section) {
   function filtered() {
     const query = state.query.trim().toLocaleLowerCase(locale());
     return state.videos.filter((video) => (state.format === 'all' || state.format === 'company' && video.company || video.format === state.format)
+      && inRegion(video, state.region)
       && (!state.topic || video.topics.includes(state.topic))
       && (!query || `${video.title} ${video.topics.join(' ')}`.toLocaleLowerCase(locale()).includes(query)))
       .sort(state.sort === 'featured'
@@ -562,7 +657,7 @@ function initialize(section) {
     for (const video of videos.slice(0, 24)) {
       const card = node('article', 'hd-video-card');
       const button = videoButton(video, 'hd-video-media');
-      button.classList.toggle('is-long', video.format === 'long');
+      button.classList.toggle('is-long', video.format !== 'shorts');
       const fallback = node('span', 'hd-thumb-fallback', 'YouTube');
       fallback.setAttribute('aria-hidden', 'true'); button.append(fallback);
       if (video.thumbnail) {
@@ -607,7 +702,10 @@ function initialize(section) {
     toolbar.hidden = !ready || !state.videos.length;
     resultLine.hidden = !ready || !state.videos.length;
     topicGroup.hidden = !ready || !state.videos.some((video) => video.topics.length);
-    for (const button of formats) button.setAttribute('aria-pressed', String(button.dataset.formatFilter === state.format));
+    for (const button of formats) {
+      button.hidden = button.dataset.formatFilter !== 'all' && !state.videos.some((video) => video.format === button.dataset.formatFilter);
+      button.setAttribute('aria-pressed', String(button.dataset.formatFilter === state.format));
+    }
     if (!ready) { status.hidden = false; status.textContent = c(state.status === 'loading' ? 'loading' : 'failed'); grid.replaceChildren(); return; }
     const videos = filtered();
     renderMetrics(videos); renderChart(videos); renderGrid(videos);
@@ -615,6 +713,17 @@ function initialize(section) {
       ? c('showing', { n: number(videos.length), shown: number(24) }) : c('results', { n: number(videos.length) });
     status.hidden = videos.length > 0;
     status.textContent = c(state.videos.length ? 'noMatch' : 'empty');
+  }
+
+  function changeRegion(region) {
+    state.region = ['all', 'foreign', 'jp'].includes(region) ? region : 'all';
+    renderContent(); renderGraph();
+    hydrateMiniPanels(state.snapshot, state.status, state.region, changeRegion);
+  }
+
+  function renderGraph() {
+    graph.replaceChildren(); graph.hidden = state.status !== 'ready';
+    if (state.status === 'ready') graph.append(constellation(state.snapshot, state.region, changeRegion));
   }
 
   function renderLabels() {
@@ -635,11 +744,10 @@ function initialize(section) {
     sortText.textContent = c('sort'); byFeatured.textContent = c('byFeatured'); byViews.textContent = c('byViews'); byLatest.textContent = c('byLatest');
     reference.textContent = c('reference');
     studio.replaceChildren();
-    const studioPanel = studioSnapshot(state.snapshot?.realtime);
-    studio.hidden = !studioPanel;
-    if (studioPanel) studio.append(studioPanel);
+    studio.hidden = true;
+    renderGraph();
     renderChannels(); renderTopics(); renderContent();
-    hydrateMiniPanels(state.snapshot, state.status);
+    hydrateMiniPanels(state.snapshot, state.status, state.region, changeRegion);
   }
 
   input.addEventListener('input', () => {
@@ -655,11 +763,11 @@ function initialize(section) {
     .then((response) => { if (!response.ok) throw new Error('Snapshot unavailable'); return response.json(); })
     .then((data) => {
       if (!data || typeof data !== 'object' || !Array.isArray(data.videos)) throw new Error('Invalid snapshot');
-      state.videos = normalizeVideos(data.videos); state.channels = normalizeChannels(data.companyChannels);
+      state.videos = videoRegions(normalizeVideos(data.videos), referenceChannels(data)); state.channels = [];
       state.snapshot = data;
-      state.featuredIds = Array.isArray(data.featuredIds) ? data.featuredIds.filter((id) => typeof id === 'string' && VIDEO_ID.test(id)).slice(0, 1000) : [];
+      const featuredIds = Array.isArray(data.featuredIds) ? data.featuredIds.filter((id) => typeof id === 'string' && VIDEO_ID.test(id)).slice(0, 1000) : [];
+      state.featuredIds = balancedVideos(state.videos, featuredIds).map((video) => video.id);
       state.collectedAt = date(data.collectedAt); state.status = 'ready';
-      if (!state.videos.some((video) => video.company)) state.format = state.videos.some((video) => video.format === 'shorts') ? 'shorts' : 'all';
       renderLabels();
     })
     .catch(() => { state.status = 'failed'; renderLabels(); });

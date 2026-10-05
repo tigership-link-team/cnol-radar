@@ -1,83 +1,127 @@
-// One visible, muted YouTube loop. Other cards stay lightweight reference images.
-const featured = document.querySelector('.creator-card:nth-child(2)');
-const poster = featured?.querySelector('.creator-video');
+// Public YouTube scene thumbnails, crossfaded as images. No video player is loaded.
+const portraits = [...document.querySelectorAll('.creator-portrait[data-loop-video]')];
 const toggle = document.querySelector('[data-motion-toggle]');
+const note = document.querySelector('[data-motion-note]');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-let player;
+const items = portraits.map(element => {
+  const poster = element.querySelector('img');
+  poster?.classList.add('portrait-frame', 'is-active');
+  element.setAttribute('role', 'button');
+  element.tabIndex = 0;
+  return { element, frames: poster ? [poster] : [], index: 0, loading: false, timer: null };
+});
 let enabled = !reduce.matches;
+let userChoice = null;
 let visible = false;
 let modalOpen = false;
-let ready = false;
 const copy = {
-  ko: ['모션 일시정지', '모션 재생', '영상 크게 보기', '무음 반복 재생'],
-  en: ['Pause motion', 'Play motion', 'Watch full video', 'Muted video loop'],
-  ja: ['モーションを停止', 'モーションを再生', '動画を大きく見る', 'ミュートでループ再生']
+  ko: ['모션 일시정지', '모션 재생', '반복 모션', '이미지 모션 재생'],
+  en: ['Pause motion', 'Play motion', 'Looping image motion', 'Play image motion'],
+  ja: ['モーションを停止', 'モーションを再生', '画像のループモーション', '画像モーションを再生']
 };
 function labels() { return copy[document.documentElement.lang] || copy.ko; }
+function stop(item) {
+  clearTimeout(item.timer);
+  item.timer = null;
+}
+function advance(item) {
+  if (item.frames.length < 2) return;
+  item.frames[item.index].classList.remove('is-active');
+  item.index = (item.index + 1) % item.frames.length;
+  item.frames[item.index].classList.add('is-active');
+}
+function schedule(item, delay) {
+  if (item.timer !== null) return;
+  item.timer = setTimeout(() => {
+    item.timer = null;
+    if (!enabled || !visible || document.hidden || modalOpen) return;
+    advance(item);
+    schedule(item, 3200);
+  }, delay);
+}
+function loadFrame(id, number) {
+  return new Promise(resolve => {
+    const image = new Image();
+    image.className = 'portrait-frame';
+    image.alt = '';
+    image.setAttribute('aria-hidden', 'true');
+    image.decoding = 'async';
+    let settled = false;
+    const finish = result => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      image.onload = image.onerror = null;
+      resolve(result);
+    };
+    const timeout = setTimeout(() => finish(null), 10000);
+    image.onload = () => finish(image.naturalWidth >= 200 && image.naturalHeight >= 200 ? image : null);
+    image.onerror = () => finish(null);
+    image.src = `https://i.ytimg.com/vi/${id}/hq${number}.jpg`;
+  });
+}
+async function loadFrames(item) {
+  if (item.loading || !item.frames.length) return;
+  const id = item.element.dataset.loopVideo;
+  if (!/^[A-Za-z0-9_-]{11}$/.test(id || '')) return;
+  item.loading = true;
+  const frames = await Promise.all([1, 2, 3].map(number => loadFrame(id, number)));
+  for (const frame of frames.filter(Boolean)) {
+    item.element.append(frame);
+    item.frames.push(frame);
+  }
+  update();
+}
 function update() {
   if (toggle) {
     toggle.textContent = labels()[enabled ? 0 : 1];
     toggle.setAttribute('aria-pressed', String(enabled));
   }
-  document.querySelector('[data-motion-full]')?.replaceChildren(labels()[2]);
-  document.querySelector('[data-motion-note]')?.replaceChildren(labels()[3]);
-  if (!ready) return;
-  if (enabled && visible && !document.hidden && !modalOpen) player.playVideo();
-  else player.pauseVideo();
-}
-function loadAPI() {
-  if (window.YT?.Player) return Promise.resolve(window.YT);
-  return new Promise((resolve, reject) => {
-    const previous = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = () => { previous?.(); resolve(window.YT); };
-    const script = document.createElement('script');
-    script.src = 'https://www.youtube.com/iframe_api';
-    script.onerror = reject;
-    document.head.append(script);
+  if (note) note.textContent = labels()[2];
+  const running = enabled && visible && !document.hidden && !modalOpen;
+  items.forEach((item, index) => {
+    item.element.title = labels()[3];
+    item.element.classList.toggle('is-motion-enabled', running);
+    if (running) {
+      loadFrames(item);
+      if (item.frames.length > 1) schedule(item, 2100 + index * 380);
+    } else stop(item);
   });
 }
-async function start() {
-  if (!featured || !poster || featured.querySelector('.creator-loop')) return;
-  const host = document.createElement('div');
-  host.className = 'creator-loop';
-  const frame = document.createElement('iframe');
-  const url = new URL(`https://www.youtube-nocookie.com/embed/${poster.dataset.video}`);
-  url.search = new URLSearchParams({ enablejsapi:'1', origin:location.origin, autoplay:'0', controls:'0', playsinline:'1', loop:'1', playlist:poster.dataset.video, rel:'0' });
-  frame.src = url.href;
-  frame.title = poster.dataset.title;
-  frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
-  frame.referrerPolicy = 'strict-origin-when-cross-origin';
-  frame.allowFullscreen = true;
-  frame.width = '240'; frame.height = '340';
-  host.append(frame);
-  featured.append(host);
-  poster.hidden = true;
-  featured.classList.add('has-loop');
-  try {
-    const YT = await loadAPI();
-    player = new YT.Player(frame, {
-      events: {
-        onReady: () => { ready = true; player.mute(); update(); },
-        onAutoplayBlocked: () => { enabled = false; update(); },
-        onError: () => { ready = false; host.remove(); poster.hidden = false; featured.classList.remove('has-loop'); }
+function enableMotion() {
+  enabled = true;
+  userChoice = true;
+  update();
+}
+if (portraits.length) {
+  const collage = document.querySelector('.creator-collage');
+  if (collage && 'IntersectionObserver' in window) {
+    new IntersectionObserver(entries => {
+      visible = entries.some(entry => entry.isIntersecting);
+      update();
+    }, { threshold: [0, .05] }).observe(collage);
+  } else visible = true;
+  portraits.forEach(element => {
+    element.addEventListener('click', enableMotion);
+    element.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        enableMotion();
       }
     });
-  } catch {
-    host.remove(); poster.hidden = false; featured.classList.remove('has-loop');
-    enabled = false; update();
-  }
-}
-if (featured && poster) {
-  new IntersectionObserver(entries => {
-    visible = entries[0].intersectionRatio > .5;
-    if (visible && enabled) start();
+  });
+  toggle?.addEventListener('click', () => {
+    enabled = !enabled;
+    userChoice = enabled;
     update();
-  }, {threshold:[0,.51,1]}).observe(featured);
-  toggle?.addEventListener('click', () => { enabled = !enabled; if (enabled) start(); update(); });
+  });
   document.addEventListener('visibilitychange', update);
   document.addEventListener('radar:video-open', () => { modalOpen = true; update(); });
   document.addEventListener('radar:video-close', () => { modalOpen = false; update(); });
-  reduce.addEventListener('change', () => { enabled = !reduce.matches; update(); });
-  new MutationObserver(update).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+  reduce.addEventListener('change', () => {
+    if (userChoice === null) enabled = !reduce.matches;
+    update();
+  });
+  new MutationObserver(update).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   update();
 }

@@ -118,3 +118,15 @@ button.creator-video{width:100%;padding:0;border:0;cursor:pointer;font:inherit;c
 @media(max-width:640px){.agent-visual{grid-template-columns:1fr}.ai-agent-portrait{max-width:220px;margin:auto}.ai-agent-portrait img{height:230px}.ai-agent-portrait figcaption{font-size:10px}.hero-media-notes .art-msg,.hero-media-notes .art-try{flex-basis:100%}.hero-media-notes{display:flex}}
 
 .md-tools .md-btn.sm{white-space:nowrap}@media(max-width:640px){.md-tools .md-btn.sm{padding-left:12px;padding-right:12px;font-size:11px}}
+
+/* Actual public scene thumbnails form a gentle image loop, without a player. */
+.creator-portrait{position:relative;display:block;width:100%;height:100%;overflow:hidden;border-radius:inherit;background:#1c1b1f;cursor:pointer;isolation:isolate}
+.creator-portrait>img{display:block;width:100%;height:100%;object-fit:cover;object-position:var(--portrait,50% 50%)}
+.creator-portrait:focus-visible{outline:3px solid var(--p,#6200ee);outline-offset:4px}
+.creator-portrait .portrait-frame{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:var(--portrait,50% 50%);opacity:0;transform:scale(1.06);transition:opacity 1.15s ease;animation:portrait-drift 9s ease-in-out infinite alternate;animation-play-state:paused;pointer-events:none}
+.creator-portrait .portrait-frame.is-active{opacity:1}
+.creator-portrait.is-motion-enabled .portrait-frame{animation-play-state:running}
+.creator-card:nth-child(2n) .portrait-frame{animation-direction:alternate-reverse}
+.creator-card:nth-child(3) .creator-portrait .portrait-frame{object-position:17% 50%}
+@keyframes portrait-drift{from{transform:scale(1.06) translate(-.6%,.2%)}to{transform:scale(1.11) translate(.6%,-.4%)}}
+@media(prefers-reduced-motion:reduce){.creator-portrait:not(.is-motion-enabled) .portrait-frame{transition:none;animation:none;transform:scale(1.06)}}

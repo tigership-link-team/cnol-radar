@@ -168,3 +168,39 @@
 @media(prefers-reduced-motion:reduce){.hd-live-panel *, .hd-live-panel *::before,.hd-live-panel *::after{transition:none!important}}
 @media(max-width:1000px){.hd-mini-thumbs.is-wall{grid-template-columns:repeat(4,minmax(0,1fr))}.hd-mini-thumbs.is-wall.is-company,.hd-multi-dashboard .hd-mini-channels{grid-template-columns:repeat(3,minmax(0,1fr))}.hd-multi-dashboard .hd-mini-channel{flex-direction:row;text-align:left;padding:10px}}
 @media(max-width:640px){.hd-mini-thumbs.is-wall{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.hd-mini-thumbs.is-wall.is-company{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.hd-multi-dashboard,.hd-showcase-dashboard{padding:15px;border-radius:14px;gap:14px}.hd-multi-dashboard .hd-mini-channel{padding:7px 5px;gap:5px}.hd-showcase-dashboard .hd-mini-video-detail b{font-size:11px}.hd-showcase-dashboard .hd-mini-video-detail small{font-size:10px}}
+
+/* Ten sourced channel identities converge on verified cumulative video counts. */
+.hd-constellation-container{margin:0 0 18px}
+.hd-constellation{--hd-blue:#3ea6ff;position:relative;min-width:0;padding:0 0 5px}
+.hd-constellation-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:5px}
+.hd-constellation-head h3{margin:0;font-size:15px;font-weight:700;line-height:1.5}
+.hd-region-filters{display:flex;align-items:center;gap:6px}
+.hd-region-chip{min-height:32px;padding:6px 14px}
+.hd-constellation-stage{position:relative;height:265px;isolation:isolate;margin:0 0 3px;background:radial-gradient(ellipse at 50% 100%,#d9ecff8f,transparent 68%)}
+.hd-constellation-stage::before{content:"";position:absolute;inset:0;background-image:radial-gradient(#cfe1f0 1px,transparent 1px);background-size:23px 23px;mask-image:radial-gradient(ellipse at center,#0005,transparent 75%);z-index:-1;pointer-events:none}
+.hd-constellation-lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.hd-constellation-path{fill:none;stroke:#83bcf0;stroke-width:1.3;vector-effect:non-scaling-stroke;stroke-dasharray:5 8;animation:hd-connector-flow 11s linear infinite;animation-delay:var(--hd-delay,0s);opacity:.6}
+.hd-constellation-path.is-muted{opacity:.12;animation:none}
+.hd-constellation-node{position:absolute;transform:translate(-50%,-50%);width:90px;z-index:2;text-align:center;transition:opacity .22s ease}
+.hd-constellation-floating{display:flex;flex-direction:column;align-items:center;gap:6px;animation:hd-channel-float 6.6s ease-in-out infinite;animation-delay:var(--hd-delay,0s)}
+.hd-constellation-avatar{position:relative;display:grid;place-items:center;flex:0 0 auto;width:57px;height:57px;border:4px solid #fff;border-radius:50%;overflow:hidden;background:var(--hd-avatar-color,#8b5cf6);color:#fff;font:700 16px/1 var(--font,system-ui);box-shadow:0 7px 22px #426d9e1b,0 0 0 1px #dce6f0}
+.hd-constellation-avatar img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;margin:0;max-width:none}
+.hd-constellation-name{display:block;max-width:95px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;font-weight:650;line-height:1.5;color:var(--ink2,#49454f);padding:1px 5px;border-radius:6px;background:#ffffffd9;box-shadow:0 2px 7px #456d9e05}
+.hd-constellation-node.is-muted{opacity:.3}
+.hd-constellation-node.is-muted .hd-constellation-floating{animation:none}
+.hd-constellation-node.is-active .hd-constellation-avatar{box-shadow:0 7px 22px #426d9e1b,0 0 0 2px #c7e5ff}
+.hd-constellation-hub{position:absolute;left:50%;bottom:0;transform:translateX(-50%);display:flex;align-items:center;gap:7px;padding:8px 14px;border:1px solid #b8dbfb;border-radius:20px;background:#f4faff;box-shadow:0 5px 22px #2169a317;color:#176db6;font-size:11px;font-weight:700;line-height:1.4;white-space:nowrap;z-index:3}
+.hd-constellation-hub-dot{width:7px;height:7px;border-radius:50%;background:#3ea6ff;box-shadow:0 0 0 4px #3ea6ff14}
+.hd-constellation-empty{display:grid;place-items:center;min-height:100px;margin:0;color:var(--ink3,#79747e);font-size:12px;text-align:center}
+.hd-constellation-aggregate{position:relative;display:flex;flex-direction:column;gap:22px;padding:22px;border:1px solid #d5e7f7;border-radius:14px;background:#fff;box-shadow:0 8px 27px #226aaa08}
+.hd-constellation-aggregate::before{content:"";position:absolute;left:50%;top:-20px;width:2px;height:20px;background:linear-gradient(#83bcf0,#d5e7f7);pointer-events:none}
+.hd-multi-dashboard .hd-constellation{margin-top:0}
+.hd-multi-dashboard .hd-mini-metrics>div{background:#f3f9ff;padding:13px}
+.hd-multi-dashboard .hd-mini-metrics strong{font-size:23px}
+.hd-multi-dashboard .hd-mini-bar-track{height:12px}
+.hd-multi-dashboard .hd-mini-bar-top{font-size:12px}
+.hd-region-filters button:focus-visible{outline:3px solid var(--hd-blue);outline-offset:3px}
+@keyframes hd-channel-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes hd-connector-flow{to{stroke-dashoffset:-104}}
+@media(max-width:640px){.hd-constellation-head{gap:10px;margin-bottom:10px}.hd-constellation-head h3{font-size:13px}.hd-region-filters{gap:4px}.hd-region-chip{padding:5px 10px;font-size:11px;min-height:29px}.hd-constellation-stage{height:235px}.hd-constellation-node{width:55px}.hd-constellation-avatar{width:36px;height:36px;border-width:3px;font-size:11px}.hd-constellation-name{max-width:65px;font-size:8px;padding:0 3px}.hd-constellation-floating{gap:4px}.hd-constellation-path{stroke-width:1;stroke-dasharray:3 6}.hd-constellation-hub{font-size:10px;padding:7px 12px}.hd-constellation-aggregate{padding:15px;gap:17px}.hd-multi-dashboard .hd-mini-metrics strong{font-size:17px}.hd-multi-dashboard .hd-mini-metrics>div{padding:10px 7px}.hd-multi-dashboard .hd-mini-bar-top{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.hd-constellation-path,.hd-constellation-floating{animation:none!important}.hd-constellation-node{transition:none!important}}
