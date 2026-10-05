@@ -137,7 +137,7 @@
 /* Actual 48-hour and 60-minute company figures, shown as a dated snapshot. */
 .hd-studio-snapshot{--hd-blue:#3ea6ff;box-sizing:border-box;padding:23px 26px;border:1px solid var(--line,#e7e0ec);border-radius:18px;background:#fff;color:var(--ink,#1c1b1f);min-width:0}
 .hd-studio-head{display:flex;justify-content:space-between;align-items:center;gap:8px 16px;flex-wrap:wrap}
-.hd-studio-head h3{margin:0;font-size:15px;line-height:1.5;font-weight:700}
+.hd-studio-head h3{margin:0;font-size:18px;line-height:1.5;font-weight:700;overflow-wrap:anywhere}
 .hd-studio-source{font-size:10px;line-height:1.5;color:var(--ink3,#79747e)}
 .hd-studio-stamp{display:block;margin-top:6px;font-size:10px;line-height:1.6;color:var(--ink3,#79747e);font-variant-numeric:tabular-nums}
 .hd-studio-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:21px 0 22px}
@@ -205,7 +205,7 @@
 @media(max-width:640px){.hd-constellation-head{gap:10px;margin-bottom:10px}.hd-constellation-head h3{font-size:13px}.hd-region-filters{gap:4px}.hd-region-chip{padding:5px 10px;font-size:11px;min-height:29px}.hd-constellation-stage{height:235px}.hd-constellation-node{width:55px}.hd-constellation-avatar{width:36px;height:36px;border-width:3px;font-size:11px}.hd-constellation-name{max-width:65px;font-size:8px;padding:0 3px}.hd-constellation-floating{gap:4px}.hd-constellation-path{stroke-width:1;stroke-dasharray:3 6}.hd-constellation-hub{font-size:10px;padding:7px 12px}.hd-constellation-aggregate{padding:15px;gap:17px}.hd-multi-dashboard .hd-mini-metrics strong{font-size:17px}.hd-multi-dashboard .hd-mini-metrics>div{padding:10px 7px}.hd-multi-dashboard .hd-mini-bar-top{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.hd-constellation-path,.hd-constellation-floating{animation:none!important}.hd-constellation-node{transition:none!important}}
 
-/* One row of 10 references and 20 clearly illustrative icons feeds a 48-hour chart. */
+/* Sourced identities, portrait illustrations and distinct marks share one row. */
 .hd-connection-caption{font-size:10px;line-height:1.6;color:var(--ink3,#79747e)}
 .hd-constellation-stage.is-row{height:205px;margin-top:10px;max-width:100%;min-width:0;background:radial-gradient(ellipse at 50% 100%,#e0efff80,transparent 70%)}
 .hd-logo-scroll{position:relative;z-index:3;max-width:100%;padding:8px 0 10px}
@@ -214,7 +214,14 @@
 .hd-constellation-node.is-row .hd-constellation-floating{gap:0}
 .hd-constellation-node.is-row .hd-constellation-avatar{width:clamp(22px,2.8vw,34px);max-width:100%;height:auto;aspect-ratio:1;border-width:2px;font-size:14px;box-shadow:0 4px 10px #426d9e15,0 0 0 1px #dce6f0}
 .hd-constellation-node.is-row .hd-constellation-name{display:none}
-.hd-constellation-node.is-virtual .hd-constellation-avatar{background-color:var(--hd-avatar-color);background-image:url('/creator-avatars-v2.png');background-size:600% 500%;background-position:var(--hd-avatar-position,0% 0%);background-repeat:no-repeat;font-family:system-ui,sans-serif}
+.hd-constellation-node.is-portrait .hd-constellation-avatar{background-color:var(--hd-avatar-color);background-image:url('/creator-avatars-v2.png');background-size:600% 500%;background-position:var(--hd-avatar-position,0% 0%);background-repeat:no-repeat;font-family:system-ui,sans-serif}
+.hd-constellation-node.is-mark .hd-constellation-avatar{background:var(--hd-avatar-color);color:#fff;font-family:system-ui,sans-serif;font-weight:900;text-shadow:0 1px 2px #0001}
+.hd-constellation-node.is-row.is-bolt .hd-constellation-avatar{color:#292229;font-size:clamp(5px,.65vw,8px);font-style:italic;letter-spacing:-.3px}
+.hd-constellation-node.is-row.is-game .hd-constellation-avatar,.hd-constellation-node.is-row.is-film .hd-constellation-avatar{font-size:clamp(5px,.58vw,7px);letter-spacing:-.2px}
+.hd-constellation-node.is-film .hd-constellation-avatar{border-radius:8px}
+.hd-constellation-node.is-music .hd-constellation-avatar{font-size:clamp(11px,1.35vw,19px)}
+.hd-constellation-node.is-wave .hd-constellation-avatar{border-radius:45% 55% 50% 42%}
+.hd-constellation-node.is-play .hd-constellation-avatar{font-size:clamp(8px,1.1vw,15px)}
 .hd-constellation-stage.is-row .hd-constellation-lines{top:48px;bottom:0;height:145px;width:100%;overflow:hidden}
 .hd-constellation-stage.is-row .hd-constellation-path{opacity:.38;stroke-width:1.05}
 .hd-constellation-stage.is-row .hd-constellation-hub{bottom:0}
@@ -232,5 +239,13 @@
 .hd-panel>.hd-studio-snapshot{border:0;border-radius:0}
 .hd-studio-axis span:nth-child(2){position:absolute;left:50%;transform:translateX(-50%)}
 .hd-studio-axis{position:relative}
+.hd-studio-metrics>div.is-combined span{font-size:14px;line-height:1.55}
+.hd-studio-metrics>div.is-combined strong{font-size:clamp(28px,3.1vw,38px)}
+.hd-studio-chart.is-combined figcaption{font-size:15px;line-height:1.55;overflow-wrap:anywhere}
+.hd-studio-snapshot.is-compact .hd-studio-head h3{font-size:15px}
+.hd-studio-snapshot.is-compact .hd-studio-metrics>div.is-combined span{font-size:11px}
+.hd-studio-snapshot.is-compact .hd-studio-metrics>div.is-combined strong{font-size:clamp(22px,2.5vw,30px)}
+.hd-studio-snapshot.is-compact .hd-studio-chart.is-combined figcaption{font-size:12px}
 @media(max-width:1000px){.hd-studio-charts.is-channel-view{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.hd-connection-caption{font-size:9px}.hd-constellation-stage.is-row{height:190px;margin-top:7px}.hd-logo-scroll{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;padding:10px 0 13px}.hd-logo-strip{width:max(100%,1020px);gap:3px}.hd-constellation-node.is-row .hd-constellation-avatar{width:28px;height:28px;border-width:2px;font-size:13px}.hd-constellation-stage.is-row .hd-constellation-lines{top:51px;height:125px}.hd-studio-charts.is-channel-view{grid-template-columns:1fr}.hd-channel-snapshot{padding:12px}.hd-studio-modes{margin-top:12px}.hd-studio-modes .hd-chip{font-size:10px}.hd-constellation-hub{max-width:calc(100% - 28px);white-space:normal;text-align:center}}
+@media(max-width:640px){.hd-studio-head h3{font-size:16px}.hd-studio-metrics{grid-template-columns:.7fr 1.5fr 1fr;gap:8px}.hd-studio-metrics>div.is-combined span{font-size:11px;min-height:33px}.hd-studio-metrics>div.is-combined strong{font-size:clamp(22px,5.6vw,26px)}.hd-studio-chart.is-combined figcaption{font-size:14px}.hd-studio-snapshot.is-compact .hd-studio-metrics>div.is-combined strong{font-size:22px}.hd-studio-snapshot.is-compact .hd-studio-chart.is-combined figcaption{font-size:12px}}

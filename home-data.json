@@ -1010,7 +1010,7 @@
       },
       {
         "id": "managed-002",
-        "displayName": "CHANNEL 02",
+        "displayName": "スポログ(스포로그)",
         "hourly48": [
           48627,
           59747,
@@ -1124,7 +1124,8 @@
           472,
           143
         ],
-        "minute60": 57853
+        "minute60": 57853,
+        "thumbnail": "https://yt3.ggpht.com/esCvCtB-I1M4fpCVxCqsvnDS8cwgA5NRbnib__1hpwICOx_VkXoTYVes2rp2xpsyfDkik5exi2U=s240-c-k-c0x00ffffff-no-rj"
       },
       {
         "id": "managed-003",
@@ -1482,7 +1483,7 @@
       },
       {
         "id": "managed-006",
-        "displayName": "CHANNEL 06",
+        "displayName": "スキマムービー",
         "hourly48": [
           27353,
           31106,
@@ -1596,11 +1597,12 @@
           56,
           2
         ],
-        "minute60": 16222
+        "minute60": 16222,
+        "thumbnail": "https://yt3.ggpht.com/I6Au8K0Ta-bairxnSVu75tN5NNYtu0shrL1ErWoJ-OsDKjtpX8qNtS8MS6Td-NpbZk3k7n6G=s240-c-k-c0x00ffffff-no-rj"
       },
       {
         "id": "managed-007",
-        "displayName": "CHANNEL 07",
+        "displayName": "チラ見シネマ(치라미 시네마)",
         "hourly48": [
           26262,
           25461,
@@ -1714,7 +1716,8 @@
           173,
           77
         ],
-        "minute60": 17216
+        "minute60": 17216,
+        "thumbnail": "https://yt3.ggpht.com/jwqu6B2XbULQ5-hQ0eAXCfq-PlGLxBYPqZIy1K0w8qZqokW_uKHiQJPrP-Dzs1BS1TTtmFRjww=s240-c-k-c0x00ffffff-no-rj"
       },
       {
         "id": "managed-008",
@@ -6937,6 +6940,31 @@
       "thumbnail": "https://yt3.googleusercontent.com/ytc/AIdro_nUSj8uaTeW6yo79qU0VA4FJ5V3Ypu2iwO86C2Tgb7XhV8=s900-c-k-c0x00ffffff-no-rj"
     },
     {
+      "id": "UCZf__ehlCEBPop-_sldpBUQ",
+      "name": "HikakinTV",
+      "thumbnail": "https://yt3.googleusercontent.com/kTCjv_Oh6U18R1VgElKFG3xDOK9xM1m9FcNCQkQHEP3dFEDjDoBj7DIhL7r0wVl94L9G_onKIZ4=s900-c-k-c0x00ffffff-no-rj"
+    },
+    {
+      "id": "UCgMPP6RRjktV7krOfyUewqw",
+      "name": "はじめしゃちょー（hajime）",
+      "thumbnail": "https://yt3.googleusercontent.com/0KVCl_7XS0e6THDRqygC0hiUXjqDAaDGUVITLREGEnbjscem5gss6WTWgznH_jvXVs_DEAFprA=s900-c-k-c0x00ffffff-no-rj"
+    },
+    {
+      "id": "UCjp_3PEaOau_nT_3vnqKIvg",
+      "name": "Junya.じゅんや",
+      "thumbnail": "https://yt3.googleusercontent.com/ytc/AIdro_mFt9iiVlgxD1gBW74I1o6H8xFtOg5AwqPj2_1JKHJ4UJg=s900-c-k-c0x00ffffff-no-rj"
+    },
+    {
+      "id": "UC6QZ_ss3i_8qLV_RczPZBkw",
+      "name": "ISSEI / いっせい",
+      "thumbnail": "https://yt3.googleusercontent.com/WQJfAcYaEL-sQ7LcF86SHG-T4u9zjiSScvdFxh73GCFJKleVcTakwZaqMhsGdZ64gfccQ2gn4Q=s900-c-k-c0x00ffffff-no-rj"
+    },
+    {
+      "id": "UCljYHFazflmGaDr5Lo90KmA",
+      "name": "すしらーめん《りく》",
+      "thumbnail": "https://yt3.googleusercontent.com/7ANrgmZXMd2xLOSGeCDQSalV_FILkamCQcsAHVp6c_oxYtxiEssRHGdY83csCc6sUhF9_fwXTQ=s900-c-k-c0x00ffffff-no-rj"
+    },
+    {
       "id": "UCwGf0f1Cr4GMR7cTqZWWQMA",
       "name": "スポログ(스포로그)",
       "thumbnail": "https://yt3.ggpht.com/esCvCtB-I1M4fpCVxCqsvnDS8cwgA5NRbnib__1hpwICOx_VkXoTYVes2rp2xpsyfDkik5exi2U=s240-c-k-c0x00ffffff-no-rj"
@@ -6952,14 +6980,29 @@
       "thumbnail": "https://yt3.ggpht.com/jwqu6B2XbULQ5-hQ0eAXCfq-PlGLxBYPqZIy1K0w8qZqokW_uKHiQJPrP-Dzs1BS1TTtmFRjww=s240-c-k-c0x00ffffff-no-rj"
     },
     {
-      "id": "UC6QZ_ss3i_8qLV_RczPZBkw",
-      "name": "ISSEI / いっせい",
-      "thumbnail": "https://yt3.googleusercontent.com/WQJfAcYaEL-sQ7LcF86SHG-T4u9zjiSScvdFxh73GCFJKleVcTakwZaqMhsGdZ64gfccQ2gn4Q=s900-c-k-c0x00ffffff-no-rj"
+      "id": "UCq8DICunczvLuJJq414110A",
+      "name": "Zach King",
+      "thumbnail": "https://yt3.googleusercontent.com/ytc/AIdro_kik7i7hId8EjFMERTw3_j8ODyhoot8JF3iUJRs53htOJc=s900-c-k-c0x00ffffff-no-rj"
     },
     {
-      "id": "UCljYHFazflmGaDr5Lo90KmA",
-      "name": "すしらーめん《りく》",
-      "thumbnail": "https://yt3.googleusercontent.com/7ANrgmZXMd2xLOSGeCDQSalV_FILkamCQcsAHVp6c_oxYtxiEssRHGdY83csCc6sUhF9_fwXTQ=s900-c-k-c0x00ffffff-no-rj"
+      "id": "UCRijo3ddMTht_IHyNSNXpNQ",
+      "name": "Dude Perfect",
+      "thumbnail": "https://yt3.googleusercontent.com/nZRsCgyfOVFhBzY-YFV8AhdMcYAybNZ8uttjcsrUGOnGRSVF5yKqRh6XHIs_o03TcbixvlOZ=s900-c-k-c0x00ffffff-no-rj"
+    },
+    {
+      "id": "UCsXVk37bltHxD1rDPwtNM8Q",
+      "name": "Kurzgesagt – In a Nutshell",
+      "thumbnail": "https://yt3.googleusercontent.com/ytc/AIdro_n1Ribd7LwdP_qKtqWL3ZDfIgv9M1d6g78VwpHGXVR2Ir4=s900-c-k-c0x00ffffff-no-rj"
+    },
+    {
+      "id": "UCblfuW_4rakIf2h6aqANefA",
+      "name": "Red Bull",
+      "thumbnail": "https://yt3.googleusercontent.com/ytc/AIdro_k94J7kkxpmlJe3c2iDFJpHk8SAADPpf49cN7XjomXSzEE=s900-c-k-c0x00ffffff-no-rj"
+    },
+    {
+      "id": "UCTQVIXvcHrR9jYoJ6qaBAow",
+      "name": "M2",
+      "thumbnail": "https://yt3.googleusercontent.com/-CMwNSrdUuj-abbE1fB1ml62omQHViexCOp4IrDmans8QgqKC153dCgPk9wtBLJfXEP1gNGa=s900-c-k-c0x00ffffff-no-rj"
     }
   ]
 }

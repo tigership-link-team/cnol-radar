@@ -24,7 +24,7 @@ const COPY = {
     channelCount: '회사 채널', sampleViews: '수집 영상 누적 조회수',
     publicSnapshot: '공개 데이터 대시보드', compare: '공개 영상 조회수',
     titleReferences: '실제 영상 제목', topicReferences: '조회수로 보는 영상 소재', source: 'YouTube 공개 영상',
-    studio: '관리하는 여러 채널의 48시간', operatedChannels: '관리 채널', hours48: '최근 48시간 조회수',
+    studio: '관리하는 여러 채널의 48시간', operatedChannels: '관리 채널', hours48: '최근 48시간 조회수', combinedHours48: '전체 채널 48시간 조회수',
     minutes60: '최근 60분 조회수', captured: '확인 시각', studioNote: '운영 데이터 미리보기 · 표시된 확인 시각 기준',
     ago48: '48시간 전', ago60: '60분 전', capturePoint: '확인 시점', interval: '구간'
   },
@@ -50,7 +50,7 @@ const COPY = {
     channelCount: 'Company channels', sampleViews: 'Collected videos’ cumulative views',
     publicSnapshot: 'Public data dashboard', compare: 'Public video views',
     titleReferences: 'Actual video titles', topicReferences: 'Video topics by view count', source: 'Public YouTube videos',
-    studio: '48 hours across the channels you manage', operatedChannels: 'Managed channels', hours48: 'Views in the last 48 hours',
+    studio: '48 hours across the channels you manage', operatedChannels: 'Managed channels', hours48: 'Views in the last 48 hours', combinedHours48: '48-hour views across all channels',
     minutes60: 'Views in the last 60 minutes', captured: 'Captured', studioNote: 'Channel operations preview · As of the displayed capture time',
     ago48: '48 hours earlier', ago60: '60 minutes earlier', capturePoint: 'Capture time', interval: 'Interval'
   },
@@ -77,7 +77,7 @@ const COPY = {
     channelCount: '会社チャンネル', sampleViews: '収集動画の累計再生数',
     publicSnapshot: '公開データダッシュボード', compare: '公開動画の再生数',
     titleReferences: '実際の動画タイトル', topicReferences: '再生数から見る動画のネタ', source: 'YouTube公開動画',
-    studio: '管理する複数のチャンネルの48時間', operatedChannels: '管理チャンネル', hours48: '過去48時間の再生数',
+    studio: '管理する複数のチャンネルの48時間', operatedChannels: '管理チャンネル', hours48: '過去48時間の再生数', combinedHours48: '全チャンネルの48時間再生数',
     minutes60: '過去60分の再生数', captured: '確認日時', studioNote: '運営データのプレビュー · 表示された確認日時の時点',
     ago48: '48時間前', ago60: '60分前', capturePoint: '確認時点', interval: '区間'
   }
@@ -195,11 +195,29 @@ function constellation(data, selected = 'all', onChange) {
   header.append(node('h3', '', c('constellation')));
   header.append(node('span', 'hd-connection-caption', c('connectionExample'))); wrap.append(header);
   const connected = normalizeChannels(data?.connectionChannels);
-  const actual = (connected.length ? connected : referenceChannels(data).filter((channel) => !channel.company && ['global', 'jp'].includes(channel.region))).slice(0, 10);
-  const chosen = [...actual, ...Array.from({ length: 20 }, (_, index) => ({
-    id: `virtual-${index + 1}`, name: `${c('virtualChannel')} ${String(index + 1).padStart(2, '0')}`,
-    thumbnail: '', virtual: true, spriteIndex: index
-  }))];
+  const actual = (connected.length ? connected : referenceChannels(data).filter((channel) => !channel.company && ['global', 'jp'].includes(channel.region))).slice(0, 18);
+  const portraits = [0, 1, 3, 4, 8];
+  const marks = [
+    { mark: 'BOLT', color: '#ffc928', style: 'bolt' }, { mark: '星', color: '#f44355', style: 'star' },
+    { mark: '♫', color: '#ff762d', style: 'music' }, { mark: 'GAME', color: '#16a36a', style: 'game' },
+    { mark: 'FILM', color: '#6954dd', style: 'film' }, { mark: '波', color: '#167fea', style: 'wave' },
+    { mark: '▶', color: '#dd4389', style: 'play' }
+  ];
+  const pattern = ['portrait', 'mark', 'mark', 'portrait', 'mark', 'portrait', 'mark', 'mark', 'portrait', 'mark', 'portrait', 'mark'];
+  let portraitIndex = 0; let markIndex = 0;
+  const virtual = Array.from({ length: Math.max(0, 30 - actual.length) }, (_, index) => {
+    const isPortrait = pattern[index] === 'portrait';
+    const appearance = isPortrait ? { portrait: true, spriteIndex: portraits[portraitIndex++] }
+      : { ...marks[markIndex++ % marks.length], portrait: false };
+    return { id: `virtual-${index + 1}`, name: `${c('virtualChannel')} ${String(index + 1).padStart(2, '0')}`,
+      thumbnail: '', virtual: true, ...appearance };
+  });
+  const chosen = actual.slice(0, 8);
+  const remaining = actual.slice(8);
+  for (let index = 0; index < Math.max(remaining.length, virtual.length); index++) {
+    if (virtual[index]) chosen.push(virtual[index]);
+    if (remaining[index]) chosen.push(remaining[index]);
+  }
   const stage = node('div', 'hd-constellation-stage is-row');
   const scroll = node('div', 'hd-logo-scroll');
   const strip = node('div', 'hd-logo-strip');
@@ -219,15 +237,15 @@ function constellation(data, selected = 'all', onChange) {
     path.setAttribute('d', `M ${x} 0 C ${x} 50, 600 55, 600 136`);
     path.setAttribute('class', `hd-constellation-path${active ? ' is-active' : ' is-muted'}`);
     path.style.setProperty('--hd-delay', `${index * -.55}s`); lines.append(path);
-    const item = node('div', `hd-constellation-node is-row is-active${channel.virtual ? ' is-virtual' : ''}`);
+    const item = node('div', `hd-constellation-node is-row is-active${channel.virtual ? ` is-virtual ${channel.portrait ? 'is-portrait' : `is-mark is-${channel.style}`}` : ''}`);
     item.style.setProperty('--hd-delay', `${index * -.55}s`);
-    item.style.setProperty('--hd-avatar-color', channel.virtual ? `hsl(${(index - actual.length) * 18} 65% 55%)` : swatches[index]);
-    if (channel.virtual) item.style.setProperty('--hd-avatar-position', `${channel.spriteIndex % 6 * 20}% ${Math.floor(channel.spriteIndex / 6) * 25}%`);
+    item.style.setProperty('--hd-avatar-color', channel.color || swatches[index % swatches.length]);
+    if (channel.portrait) item.style.setProperty('--hd-avatar-position', `${channel.spriteIndex % 6 * 20}% ${Math.floor(channel.spriteIndex / 6) * 25}%`);
     item.dataset.virtual = String(!!channel.virtual);
     item.title = channel.name;
     item.setAttribute('role', 'img'); item.setAttribute('aria-label', channel.name);
     const floating = node('div', 'hd-constellation-floating');
-    const avatar = node('span', 'hd-constellation-avatar', channel.virtual ? '' : Array.from(channel.name).slice(0, 2).join(''));
+    const avatar = node('span', 'hd-constellation-avatar', channel.virtual ? channel.mark || '' : Array.from(channel.name).slice(0, 2).join(''));
     if (channel.thumbnail) {
       const image = node('img'); image.src = channel.thumbnail; image.alt = ''; image.loading = 'lazy'; image.decoding = 'async';
       image.addEventListener('error', () => image.remove(), { once: true }); avatar.append(image);
@@ -236,7 +254,7 @@ function constellation(data, selected = 'all', onChange) {
     floating.append(avatar, label); item.append(floating); strip.append(item);
   }
   const hub = node('div', 'hd-constellation-hub');
-  hub.append(node('span', 'hd-constellation-hub-dot'), node('span', '', c('hours48')));
+  hub.append(node('span', 'hd-constellation-hub-dot'), node('span', '', c('combinedHours48')));
   stage.append(hub); wrap.append(stage);
   return wrap;
 }
@@ -283,14 +301,16 @@ function studioSnapshot(input, compact = false) {
   }).format(data.capturedAt)} KST`);
   stamp.dateTime = data.capturedAt.toISOString();
   const metrics = node('div', 'hd-studio-metrics');
-  for (const [key, value] of [['operatedChannels', data.channelCount], ['hours48', data.views48], ['minutes60', data.views60]]) {
+  for (const [key, value] of [['operatedChannels', data.channelCount], ['combinedHours48', data.views48], ['minutes60', data.views60]]) {
     const metric = node('div');
+    metric.classList.toggle('is-combined', key === 'combinedHours48');
     metric.append(node('span', '', c(key)), node('strong', '', number(value)));
     metrics.append(metric);
   }
   const charts = node('div', 'hd-studio-charts');
   function chart(key, bars, ago, middle) {
     const figure = node('figure', 'hd-studio-chart');
+    figure.classList.toggle('is-combined', key === 'combinedHours48');
     figure.append(node('figcaption', '', c(key)));
     const series = node('div', 'hd-studio-series');
     series.style.setProperty('--hd-series-count', String(bars.length));
@@ -320,7 +340,7 @@ function studioSnapshot(input, compact = false) {
     for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.snapshotMode === selected));
     charts.replaceChildren(); charts.classList.toggle('is-channel-view', selected === 'channels');
     if (selected === 'sum') {
-      charts.append(chart('hours48', data.bars48, 'ago48', 'ago24'), chart('minutes60', data.bars60, 'ago60', 'ago30'));
+      charts.append(chart('combinedHours48', data.bars48, 'ago48', 'ago24'), chart('minutes60', data.bars60, 'ago60', 'ago30'));
     } else {
       for (const channel of data.channels) {
         const card = node('article', 'hd-channel-snapshot');
