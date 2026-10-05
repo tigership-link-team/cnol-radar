@@ -301,6 +301,44 @@ Object.assign(T.ja, {
   add: '追加', refreshSkip: '収集したばかりです。少し待ってからお試しください。', brandSub: 'テストモード'
 });
 
+// 개편 문구 (채널별 차트 · 쇼츠 분석 창 · 맞춤도 · 채널 비교 · 오늘 할 일)
+Object.assign(T.ko, {
+  live48all: '모든 채널 합산 · 지난 48시간', daily28all: '모든 채널 합산 · 일별 조회수 · 지난 28일', byCh: '채널별', sumAll: '합산', others: '그 외 채널', chCount: '채널 {n}개',
+  close: '닫기', sxViews: '조회수', sxRatio: '평소 대비', sxVph: '시간당', sxLike: '좋아요율', sxComments: '댓글', sxDur: '길이', sxCurve: '조회수 성장 곡선',
+  sxSnaps: '{n}번 수집 · 첫 수집 {t}', sxOne: '아직 한 번만 수집했어요. 매시간 쌓이면 곡선이 그려져요.', sxOpenCh: '채널 분석', similar: '비슷한 채널 찾기', sxTags: '태그', sxPub: '올린 시각',
+  fitTitle: '내 채널과 맞는 점', fit: '맞춤 {n}', fitCat: '같은 분야({c})', fitTopic: '비슷한 분야({c})', fitKw: '겹치는 키워드 {k}', fitDur: '비슷한 길이 {s}초', fitFmt: '내 채널에서 잘 되는 {f}',
+  profTitle: '내 채널 프로필', profSub: '내 채널 쇼츠 {n}개를 읽어서 이 기준으로 맞춤도를 매겨요', profCat: '분야', profDur: '보통 길이', profFmt: '잘 되는 제목', profKw: '자주 쓰는 키워드',
+  profNone: '내 채널을 넣으면 분야·길이·제목 유형을 읽어서 레퍼런스 쇼츠마다 맞춤도를 매겨 드려요.', sortFit: '맞춤순', sortRatio2: '평소 대비순', durS: '{s}초', none: '없음',
+  cmpTitle: '채널 비교', cmpSub: '같은 기준으로 나란히 봐요 · 막대는 가장 큰 값 대비', cWk: '주간 업로드', cHit: '터진 비율', cDur: '보통 길이', cFmt: '잘 되는 유형',
+  tdTitle: '오늘 할 일', tdSub: '에이전트가 데이터로 골랐어요 · 체크는 이 브라우저에만 저장돼요',
+  td_addMine: '내 채널을 넣어서 맞춤 추천 켜기', td_gap: '{ch}에 오늘 쇼츠 1개 올리기 · {d}일째 공백', td_pick: '“{title}” 포맷으로 내 버전 만들기',
+  td_breaks: '터진 레퍼런스 {n}건 살펴보기', td_refs: '레퍼런스 채널을 {n}개 더 넣어서 추천 정확도 높이기', td_go: '바로 가기', td_issue: '{title} 확인하기'
+});
+Object.assign(T.en, {
+  live48all: 'All channels combined · last 48 hours', daily28all: 'All channels combined · daily views · last 28 days', byCh: 'By channel', sumAll: 'Total', others: 'Other channels', chCount: '{n} channels',
+  close: 'Close', sxViews: 'Views', sxRatio: 'vs usual', sxVph: 'Per hour', sxLike: 'Like rate', sxComments: 'Comments', sxDur: 'Length', sxCurve: 'View growth curve',
+  sxSnaps: 'Collected {n} times · first {t}', sxOne: 'Collected once so far. The curve draws itself as hourly data piles up.', sxOpenCh: 'Channel analytics', similar: 'Find similar channels', sxTags: 'Tags', sxPub: 'Posted',
+  fitTitle: 'Why it fits you', fit: 'Fit {n}', fitCat: 'Same niche ({c})', fitTopic: 'Related niche ({c})', fitKw: 'Shared keywords {k}', fitDur: 'Similar length {s}s', fitFmt: '{f} works on your channel',
+  profTitle: 'Your channel profile', profSub: 'Built from {n} of your Shorts — every pick is scored against it', profCat: 'Niche', profDur: 'Typical length', profFmt: 'Titles that work', profKw: 'Frequent keywords',
+  profNone: 'Add your own channel and we read its niche, length and title types to score every reference Short for fit.', sortFit: 'Best fit', sortRatio2: 'vs usual', durS: '{s}s', none: 'None',
+  cmpTitle: 'Channel comparison', cmpSub: 'Side by side on the same measures · bars are relative to the largest value', cWk: 'Uploads/week', cHit: 'Breakout rate', cDur: 'Typical length', cFmt: 'Best title type',
+  tdTitle: 'To-do today', tdSub: 'Picked by the agent from your data · checks are saved in this browser only',
+  td_addMine: 'Add your own channel to turn on personalized picks', td_gap: 'Post 1 Short on {ch} today · {d}-day gap', td_pick: 'Make your version of “{title}”',
+  td_breaks: 'Review {n} reference breakouts', td_refs: 'Add {n} more reference channels for sharper picks', td_go: 'Go', td_issue: 'Check: {title}'
+});
+Object.assign(T.ja, {
+  live48all: '全チャンネル合計・直近48時間', daily28all: '全チャンネル合計・日別再生数・直近28日', byCh: 'チャンネル別', sumAll: '合計', others: 'その他のチャンネル', chCount: '{n}チャンネル',
+  close: '閉じる', sxViews: '再生数', sxRatio: '普段比', sxVph: '時速', sxLike: '高評価率', sxComments: 'コメント', sxDur: '長さ', sxCurve: '再生数の伸び',
+  sxSnaps: '{n}回収集・初回 {t}', sxOne: 'まだ1回だけ収集しました。毎時たまると曲線が描かれます。', sxOpenCh: 'チャンネル分析', similar: '似たチャンネルを探す', sxTags: 'タグ', sxPub: '投稿日時',
+  fitTitle: 'あなたに合う点', fit: '適合 {n}', fitCat: '同じ分野（{c}）', fitTopic: '近い分野（{c}）', fitKw: '共通キーワード {k}', fitDur: '近い長さ {s}秒', fitFmt: 'あなたのチャンネルで伸びる{f}',
+  profTitle: 'マイチャンネルのプロフィール', profSub: 'マイチャンネルのショート{n}本から作り、この基準で適合度を付けます', profCat: '分野', profDur: '標準的な長さ', profFmt: '伸びるタイトル', profKw: 'よく使うキーワード',
+  profNone: 'マイチャンネルを入れると、分野・長さ・タイトル型を読み取り、リファレンスのショートごとに適合度を付けます。', sortFit: '適合順', sortRatio2: '普段比順', durS: '{s}秒', none: 'なし',
+  cmpTitle: 'チャンネル比較', cmpSub: '同じ基準で並べて見ます・棒は最大値との比較', cWk: '週の投稿', cHit: 'ヒット率', cDur: '標準的な長さ', cFmt: '伸びるタイプ',
+  tdTitle: '今日やること', tdSub: 'エージェントがデータから選びました・チェックはこのブラウザだけに保存されます',
+  td_addMine: 'マイチャンネルを入れてパーソナライズ提案をオン', td_gap: '{ch}に今日ショートを1本投稿・{d}日間の空白', td_pick: '「{title}」の形式で自分版を作る',
+  td_breaks: 'リファレンスのヒット{n}件を確認', td_refs: 'リファレンスをあと{n}件入れて提案の精度を上げる', td_go: '開く', td_issue: '確認：{title}'
+});
+
 const t = (k, v) => {
   let s = (T[lang] && T[lang][k]) ?? T.ko[k] ?? k;
   if (v) for (const x of Object.keys(v)) s = s.split('{' + x + '}').join(v[x]);
@@ -413,7 +451,7 @@ async function act(body) {
 const errText = (code) => (T.ko['err_' + code] ? t('err_' + code) : t('err_default', { e: code }));
 
 // ---------- 상태 ----------
-const S = { unread: 0, chans: null, chansAt: 0, period: 7, scope: 'all', kw: '', rankSort: 'v48', rankDays: 7, rankRole: 'all', rankQ: '', chQ: '', chRole: 'all', alertF: 'all', addRole: null, prefKw: '', chSort: 'new', insRole: 'all', insCh: '', board: new Set() };
+const S = { unread: 0, chans: null, chansAt: 0, period: 7, scope: 'all', kw: '', rankSort: 'v48', rankDays: 7, rankRole: 'all', rankQ: '', chQ: '', chRole: 'all', alertF: 'all', addRole: null, prefKw: '', chSort: 'new', insRole: 'all', insCh: '', stack: 'ch', pickSort: 'fit', prof: null, profAt: 0, same: false, board: new Set() };
 
 async function getChans(force) {
   if (!force && S.chans && Date.now() - S.chansAt < 60e3) return S.chans;
@@ -440,6 +478,7 @@ const IC = {
   status: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
   landing: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
   insights: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+  x: '<path d="M6 6l12 12M18 6L6 18"/>', compare: '<path d="M8 4v16M16 4v16M4 8h8M12 16h8"/>', todo: '<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   cal: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',
@@ -453,7 +492,12 @@ const svg = (p, s = 19) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" 
 const avatar = (url, sq) => (url ? `<img class="dk-av${sq ? ' sq' : ''}" src="${esc(url)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="dk-av${sq ? ' sq' : ''}"></span>`);
 const ratioTag = (x) => (x == null ? '' : `<span class="dk-tag ${x >= 3 ? 'red' : x >= 1.5 ? 'amber' : 'gray'}">${esc(t('ratio', { x: Number(x).toFixed(1) }))}</span>`);
 const head = (title, sub, actions = '') => `<div class="dk-head dk-fade"><div><h1>${esc(title)}</h1>${sub ? `<p>${sub}</p>` : ''}</div>${actions}</div>`;
-const loadingCard = () => `<div class="dk-card"><div class="dk-empty"><span class="dk-spin"></span> ${esc(t('loading'))}</div></div>`;
+const loadingCard = () => `<div class="dk-row" aria-busy="true" aria-label="${esc(t('loading'))}"><div class="dk-card f2"><div class="dk-sk" style="height:16px;width:38%"></div><div class="dk-sk" style="height:46px;width:30%"></div><div class="dk-sk" style="height:150px"></div></div><div class="dk-card f1"><div class="dk-sk" style="height:16px;width:55%"></div>${'<div class="dk-sk" style="height:38px"></div>'.repeat(4)}</div></div>`;
+// 같은 화면을 다시 그릴 때(필터·새로고침·언어)는 지금 화면을 흐리게 두고 바꿔요 — 깜빡임 없이
+function loading(v, title, sub) {
+  if (S.same) { v.classList.add('dk-busy'); return; }
+  v.innerHTML = head(title, sub) + loadingCard();
+}
 const ytShort = (id) => `https://www.youtube.com/shorts/${encodeURIComponent(id)}`;
 // 쇼츠 썸네일은 가로 틀 안에 세로 화면이 가운데 있어요 → 큰 해상도(hq)로 바꿔 9:16로 가운데만 보여줘요
 const vthumb = (u) => (u ? String(u).replace(/\/(mq|sd)?default\.jpg$/, '/hqdefault.jpg') : '');
@@ -476,7 +520,34 @@ function barsHtml(id, vals, aria, h = 170, ref = null) {
   return `<div class="dk-chart" id="${id}"><div class="dk-bars" style="height:${h}px" role="img" aria-label="${esc(aria)}">${vals.map((x, i) => {
     const cls = x.pre || x.low ? ' pre' : x.v ? (x.hot ? ' hot' : '') : ' z';
     return `<div class="c" data-i="${i}"><i class="dk-rise${cls}" style="height:${barH(x, max)}%;animation-delay:${Math.min(i, 60) * 9}ms"></i></div>`;
-  }).join('')}${ref ? `<span class="ref" style="bottom:${((ref.v / max) * 100).toFixed(1)}%"><em>${esc(ref.label)}</em></span>` : ''}</div><div class="dk-tip" hidden></div></div>`;
+  }).join('')}${ref ? `<span class="ref" style="bottom:${((ref.v / max) * 100).toFixed(1)}%"><em>${esc(ref.label)}</em></span>` : ''}</div><div class="dk-tip" role="status"></div></div>`;
+}
+// 툴팁: 문자열이면 줄글, 객체면 {title, rows:[{color, value, label}]} — 이름은 textContent로만 넣어요
+function fillTip(tip, content) {
+  tip.textContent = '';
+  if (typeof content === 'string') { tip.textContent = content; return; }
+  const tt = document.createElement('div');
+  tt.className = 'tt';
+  tt.textContent = content.title;
+  tip.appendChild(tt);
+  for (const r of content.rows || []) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const k = document.createElement('i');
+    k.style.background = r.color || '#fff';
+    const b = document.createElement('b');
+    b.textContent = r.value;
+    const sp = document.createElement('span');
+    sp.textContent = r.label;
+    row.append(k, b, sp);
+    tip.appendChild(row);
+  }
+}
+function placeTip(box, tip, c, topPx) {
+  const w = box.clientWidth;
+  const half = Math.min(110, tip.offsetWidth / 2 + 4);
+  tip.style.left = Math.min(Math.max(c.offsetLeft + c.offsetWidth / 2, half), w - half) + 'px';
+  tip.style.top = Math.max(-14, topPx - tip.offsetHeight - 10) + 'px';
 }
 function bindBars(root, id, vals, tipFn, ref = null) {
   const box = root.querySelector('#' + id);
@@ -486,17 +557,103 @@ function bindBars(root, id, vals, tipFn, ref = null) {
   box.querySelectorAll('.c').forEach((c) => {
     c.addEventListener('pointerenter', () => {
       const i = Number(c.dataset.i), x = vals[i];
-      tip.textContent = tipFn(x, i);
-      tip.hidden = false;
-      const w = box.clientWidth;
-      const cx = Math.min(Math.max(c.offsetLeft + c.offsetWidth / 2, 80), w - 80);
-      const barTop = c.offsetTop + c.offsetHeight * (1 - barH(x, max) / 100);
-      tip.style.left = cx + 'px';
-      tip.style.top = Math.max(-10, barTop - tip.offsetHeight - 8) + 'px';
+      fillTip(tip, tipFn(x, i));
+      tip.classList.add('on');
+      placeTip(box, tip, c, c.offsetTop + c.offsetHeight * (1 - barH(x, max) / 100));
       c.classList.add('on');
     });
-    c.addEventListener('pointerleave', () => { tip.hidden = true; c.classList.remove('on'); });
+    c.addEventListener('pointerleave', () => { tip.classList.remove('on'); c.classList.remove('on'); });
   });
+}
+// 채널별로 쌓은 막대 — cols: [{v, parts:{key:v}, pre}], series: [{key, label, color}] (첫 계열이 맨 아래)
+function stackHtml(id, cols, series, aria, h = 170) {
+  const max = Math.max(1, ...cols.map((c) => c.v || 0));
+  return `<div class="dk-chart" id="${id}"><div class="dk-bars stack" style="height:${h}px" role="img" aria-label="${esc(aria)}">${cols.map((c, i) => {
+    let inner;
+    if (c.pre) inner = '<i class="pre" style="height:100%"></i>';
+    else if (!c.v) inner = '<i class="z" style="height:2px"></i>';
+    else {
+      const segs = series.map((sr, k) => ({ sr, k, v: c.parts[sr.key] || 0 })).filter((x) => x.v > 0);
+      const avail = Math.max(h * (c.v / max) - 2 * (segs.length - 1), segs.length);
+      inner = segs.map((x) => `<i data-s="${x.k}" style="height:${Math.max(1, (x.v / c.v) * avail).toFixed(1)}px;background:${x.sr.color}"></i>`).join('');
+    }
+    return `<div class="c dk-rise" data-i="${i}" style="animation-delay:${Math.min(i, 60) * 9}ms">${inner}</div>`;
+  }).join('')}</div><div class="dk-tip" role="status"></div></div>`;
+}
+function bindStack(root, id, cols, series, titleFn) {
+  const box = root.querySelector('#' + id);
+  if (!box) return;
+  const tip = box.querySelector('.dk-tip');
+  const max = Math.max(1, ...cols.map((c) => c.v || 0));
+  box.querySelectorAll('.c').forEach((el) => {
+    el.addEventListener('pointerenter', () => {
+      const c = cols[Number(el.dataset.i)];
+      const rows = c.pre ? [] : series.map((sr) => ({ color: sr.color, v: c.parts[sr.key] || 0, label: sr.label }))
+        .filter((r) => r.v > 0).sort((a, b) => b.v - a.v).slice(0, 8).map((r) => ({ color: r.color, value: fmtFull(r.v), label: r.label }));
+      fillTip(tip, { title: titleFn(c), rows });
+      tip.classList.add('on');
+      placeTip(box, tip, el, el.offsetTop + el.offsetHeight * (1 - (c.pre ? 1 : (c.v || 0) / max)));
+      el.classList.add('on');
+    });
+    el.addEventListener('pointerleave', () => { tip.classList.remove('on'); el.classList.remove('on'); });
+  });
+}
+function legendHtml(series, totals, id) {
+  const all = series.reduce((a, sr) => a + (totals[sr.key] || 0), 0) || 1;
+  return `<div class="dk-legend" role="list" data-lg="${esc(id)}">${series.map((sr, k) => `<span class="lg" role="listitem" tabindex="0" data-s="${k}" title="${esc(sr.label)}"><i style="background:${sr.color}"></i><span>${esc(sr.label)}</span><b>${esc(fmtN(totals[sr.key] || 0))}</b><em>${Math.round(((totals[sr.key] || 0) / all) * 100)}%</em></span>`).join('')}</div>`;
+}
+// 범례에 마우스를 올리거나 포커스하면 그 채널 조각만 또렷하게
+function bindLegend(root, id) {
+  const bars = root.querySelector('#' + id + ' .dk-bars');
+  const lg = root.querySelector(`[data-lg="${id}"]`);
+  if (!bars || !lg) return;
+  const items = [...lg.querySelectorAll('.lg')];
+  const segs = [...bars.querySelectorAll('i[data-s]')];
+  const set = (k) => {
+    bars.classList.toggle('hl', k != null);
+    for (const i of segs) i.classList.toggle('hs', i.dataset.s === k);
+    for (const x of items) x.classList.toggle('dim', k != null && x.dataset.s !== k);
+  };
+  for (const x of items) {
+    x.addEventListener('pointerenter', () => set(x.dataset.s));
+    x.addEventListener('pointerleave', () => set(null));
+    x.addEventListener('focus', () => set(x.dataset.s));
+    x.addEventListener('blur', () => set(null));
+  }
+}
+// 채널 색: 검증된 8색을 순서대로(순위가 아니라 채널에 붙여요) · 9개부터는 '그 외 채널'로 묶어요
+const SERIES_COLORS = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#4a3aa7', '#e34948'];
+const OTHER_COLOR = '#c9c5d8';
+function buildSeries(bc, chans) {
+  const tot = new Map();
+  for (const x of bc.daily || []) tot.set(x.c, (tot.get(x.c) || 0) + Number(x.v || 0));
+  for (const x of bc.hourly || []) tot.set(x.c, (tot.get(x.c) || 0) + Number(x.v || 0));
+  const ranked = [...tot.entries()].filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+  const top = ranked.slice(0, ranked.length > 8 ? 7 : 8).map(([id]) => id);
+  const order = new Map([...(chans || [])].sort((a, b) => (Date.parse(a.added_at) || 0) - (Date.parse(b.added_at) || 0) || String(a.id).localeCompare(String(b.id))).map((c, i) => [c.id, { c, i }]));
+  top.sort((a, b) => (order.get(a)?.i ?? 1e9) - (order.get(b)?.i ?? 1e9));
+  const series = top.map((id, k) => ({ key: id, label: order.get(id)?.c.title || id, color: SERIES_COLORS[k] }));
+  const topSet = new Set(top);
+  if (ranked.length > top.length) series.push({ key: '_other', label: t('others'), color: OTHER_COLOR });
+  return { series, keyOf: (c) => (topSet.has(c) ? c : '_other'), n: ranked.length };
+}
+function stackCols(base, rows, keyOf, kOf, rowKey) {
+  const m = new Map();
+  for (const x of rows || []) {
+    const k = rowKey(x);
+    const o = m.get(k) || {};
+    const sk = keyOf(x.c);
+    o[sk] = (o[sk] || 0) + Number(x.v || 0);
+    m.set(k, o);
+  }
+  const totals = {};
+  const cols = base.map((b) => {
+    const parts = m.get(kOf(b)) || {};
+    const sum = Object.values(parts).reduce((a, v) => a + v, 0);
+    for (const [k, v] of Object.entries(parts)) totals[k] = (totals[k] || 0) + v;
+    return { ...b, parts, v: b.pre ? 0 : (sum || 0) };
+  });
+  return { cols, totals };
 }
 // 가로 막대 (값을 옆에 바로 적어요 · 점선 = 평소 1배)
 function hbarsHtml(rows) {
@@ -548,12 +705,17 @@ async function updateUnread() {
 }
 
 let seq = 0;
+let lastKey = '';
 async function render() {
   const my = ++seq;
   const alive = () => my === seq;
   renderChrome();
   const r = route();
   const v = document.getElementById('view');
+  const key = r.name + '/' + (r.id || '');
+  S.same = key === lastKey && v.childElementCount > 0;
+  lastKey = key;
+  v.classList.toggle('dk-still', S.same);
   const views = { home: vHome, picks: vPicks, insights: vInsights, ranking: vRanking, alerts: vAlerts, collect: vCollect, channels: vChannels, ch: vChannel, ideas: vIdeas, partners: vPartners, status: vStatus };
   document.title = t(r.name === 'ch' ? 'channels' : r.name) + ' · CNOL RADAR';
   try {
@@ -562,6 +724,7 @@ async function render() {
     console.error(e);
     if (alive()) v.innerHTML = head(t(r.name === 'ch' ? 'channels' : r.name), '') + `<div class="dk-card"><div class="dk-empty">${esc(t('loadFail'))}<br><small>${esc(e.message || String(e))}</small></div></div>`;
   }
+  if (alive()) v.classList.remove('dk-busy');
   updateUnread().catch(() => {});
 }
 
@@ -625,11 +788,12 @@ function pickCard(s) {
   const f = formatsOf(s.title);
   const inBoard = S.board.has(s.id);
   return `<article class="dk-pick dk-fade">
-    <a class="dk-thumb" href="${ytShort(s.id)}" target="_blank" rel="noopener" style="background-image:url('${cssUrl(vthumb(s.thumb))}')" aria-label="${esc(t('viewOnYt'))}: ${esc(s.title)}"><span class="v">${esc(fmtN(s.views))}</span></a>
+    <a class="dk-thumb" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}" style="background-image:url('${cssUrl(vthumb(s.thumb))}')" aria-label="${esc(t('sxCurve'))}: ${esc(s.title)}"><span class="v">${esc(fmtN(s.views))}</span></a>
     <div class="body">
-      <p class="t">${esc(s.title)}</p>
+      <a class="t" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}" style="color:inherit;text-decoration:none">${esc(s.title)}</a>
       <span class="m">${esc(s.channel_title)} · ${esc(ageTxt(s.age_h))}</span>
-      <div class="tags">${ratioTag(s.ratio)}${f.map((k) => `<span class="dk-tag gray">${esc(t('fmt_' + k))}</span>`).join('')}</div>
+      <div class="tags">${s._fit ? `<span class="dk-fit${s._fit.score < 50 ? ' low' : ''}">${esc(t('fit', { n: s._fit.score }))}</span>` : ''}${ratioTag(s.ratio)}${f.map((k) => `<span class="dk-tag gray">${esc(t('fmt_' + k))}</span>`).join('')}</div>
+      ${s._fit && s._fit.why.length ? `<p class="dk-why"><b>${esc(t('fitTitle'))}</b> · ${esc(s._fit.why.join(' · '))}</p>` : ''}
       <p class="dk-why"><b>${esc(t('whyTitle'))}</b> · ${esc(whyOf(s))}</p>
       <p class="dk-why"><b>${esc(t('applyTitle'))}</b> · ${esc(t('tip_' + (f[0] || 'default')))}</p>
       <div class="acts"><button type="button" class="dk-btn sm" data-board="${esc(s.id)}" ${inBoard ? 'disabled' : ''}>${esc(t(inBoard ? 'inBoard' : 'toBoard'))}</button><a class="dk-btn sm line" href="#ch/${esc(s.channel_id)}">${esc(t('chOpen'))}</a></div>
@@ -638,8 +802,8 @@ function pickCard(s) {
 function tileHtml(s) {
   const inBoard = S.board.has(s.id);
   return `<div class="dk-tile dk-fade">
-    <a class="dk-thumb" href="${ytShort(s.id)}" target="_blank" rel="noopener" style="background-image:url('${cssUrl(vthumb(s.thumb))}')" aria-label="${esc(t('viewOnYt'))}: ${esc(s.title)}"><span class="b">${ratioTag(s.ratio)}</span><span class="v">${esc(fmtN(s.views))}</span></a>
-    <a class="t" href="${ytShort(s.id)}" target="_blank" rel="noopener">${esc(s.title)}</a>
+    <a class="dk-thumb" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}" style="background-image:url('${cssUrl(vthumb(s.thumb))}')" aria-label="${esc(t('sxCurve'))}: ${esc(s.title)}"><span class="b">${ratioTag(s.ratio)}</span><span class="v">${esc(fmtN(s.views))}</span></a>
+    <a class="t" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}">${esc(s.title)}</a>
     <div class="m"><span>${esc(ageTxt(s.age_h))}</span>${s.v48 > 0 ? `<span>48h +${esc(fmtN(s.v48))}</span>` : ''}<button type="button" class="dk-mini" data-board="${esc(s.id)}" ${inBoard ? 'disabled' : ''}>${esc(t(inBoard ? 'inBoard' : 'add'))}</button></div>
   </div>`;
 }
@@ -655,26 +819,214 @@ function bindBoardButtons(root, list) {
     snack(t('added'));
   }));
 }
-function pickList(list, scope) {
+const rankFit = (s) => (s._fit ? s._fit.score / 100 : 0) * 0.55 + Math.min(Math.log2((Number(s.ratio) || 0) + 1) / Math.log2(11), 1) * 0.45;
+function pickList(list, scope, prof) {
   const cats = myCats();
   let arr = list.filter((s) => s.status === 'live' && s.ratio != null && s.ratio >= 1.5 && (s.views || 0) >= 3000);
   const refs = arr.filter((s) => s.role === 'reference');
   if (refs.length >= 3) arr = refs;
   if (scope === 'mine') arr = arr.filter((s) => cats.has(catOf(s)));
   if (scope === 'other') arr = arr.filter((s) => !cats.has(catOf(s)));
+  for (const x of arr) x._fit = prof ? fitOf(x, prof) : null;
+  if (prof && S.pickSort === 'fit') return arr.sort((a, b) => rankFit(b) - rankFit(a));
   return arr.sort((a, b) => (b.ratio - a.ratio) || (b.vph - a.vph));
 }
 
+// ---------- 맞춤: 내 채널 프로필 → 레퍼런스 쇼츠마다 맞춤도 ----------
+async function getProfile(force) {
+  if (!force && S.profAt && Date.now() - S.profAt < 5 * 60e3) return S.prof;
+  const chans = await getChans();
+  const mineCh = (chans || []).filter((c) => c.role === 'mine');
+  S.profAt = Date.now();
+  if (!mineCh.length) { S.prof = null; return null; }
+  const list = remember(await rpc('radar_shorts', { p_days: 120, p_channel: null, p_role: 'mine', p_limit: 400 }));
+  const live = list.filter((x) => x.status === 'live');
+  const kw = new Map();
+  for (const x of live) {
+    const w = Math.max(0.5, Math.min(Number(x.ratio) || 1, 5));
+    const tg = (x.tags || []).map((y) => String(y).toLowerCase().trim()).filter((y) => y.length >= 2 && y.length <= 20 && !STOPW.has(y));
+    for (const tok of new Set([...tokens(x.title), ...tg])) kw.set(tok, (kw.get(tok) || 0) + w);
+  }
+  const kwList = [...kw.entries()].sort((a, b) => b[1] - a[1]).slice(0, 30).map((y) => y[0]);
+  const a = analyze(live);
+  const fmtGood = a.fmts.filter((r) => r.k !== 'none' && r.n >= 2 && r.v >= 1.05).sort((x, y) => y.v - x.v).map((r) => r.k);
+  S.prof = { cats: new Set(mineCh.map(catOf).filter(Boolean)), topics: new Set(mineCh.flatMap((c) => c.topics || [])), kwTop: new Set(kwList), kwList, durMed: a.durMed, fmtGood, n: live.length };
+  return S.prof;
+}
+function fitOf(x, p) {
+  if (!p) return null;
+  let score = 0;
+  const why = [];
+  const cat = catOf(x);
+  if (cat && p.cats.has(cat)) { score += 40; why.push(t('fitCat', { c: cat })); }
+  else {
+    const tp = (x.topics || []).find((y) => p.topics.has(y));
+    if (tp) { score += 25; why.push(t('fitTopic', { c: topicLabel(tp) })); }
+  }
+  const toks = new Set([...tokens(x.title), ...(x.tags || []).map((y) => String(y).toLowerCase().trim())]);
+  const hit = [...toks].filter((y) => p.kwTop.has(y)).slice(0, 3);
+  if (hit.length) { score += Math.min(20, hit.length * 8); why.push(t('fitKw', { k: hit.join('·') })); }
+  if (p.durMed && x.dur) {
+    const sim = Math.max(0, 1 - Math.abs(x.dur - p.durMed) / Math.max(p.durMed, 15));
+    score += Math.round(sim * 20);
+    if (sim >= 0.6) why.push(t('fitDur', { s: Math.round(x.dur) }));
+  }
+  const fm = formatsOf(x.title).find((k) => p.fmtGood.includes(k));
+  if (fm) { score += 20; why.push(t('fitFmt', { f: t('fmt_' + fm) })); } else if (formatsOf(x.title).length) score += 6;
+  return { score: Math.min(100, score), why };
+}
+function profileHtml(p) {
+  if (!p) return `<div class="dk-banner info">${esc(t('profNone'))} <a href="#collect" style="font-weight:700">${esc(t('goCollect'))} →</a></div>`;
+  const cats = [...p.cats].concat([...p.topics].slice(0, 2).map(topicLabel)).filter((v, i, a) => v && a.indexOf(v) === i).slice(0, 3);
+  return `<div class="dk-ch"><h2>${esc(t('profTitle'))}</h2><span class="dk-sub">${esc(t('profSub', { n: p.n }))}</span></div>
+  <div class="dk-prof">
+    <div><span>${esc(t('profCat'))}</span><b>${esc(cats.join(' · ') || t('none'))}</b></div>
+    <div><span>${esc(t('profDur'))}</span><b>${p.durMed ? esc(t('durS', { s: Math.round(p.durMed) })) : '–'}</b></div>
+    <div><span>${esc(t('profFmt'))}</span><b>${esc(p.fmtGood.slice(0, 3).map((k) => t('fmt_' + k)).join(' · ') || t('none'))}</b></div>
+    <div><span>${esc(t('profKw'))}</span><b>${esc(p.kwList.slice(0, 5).map((k) => '#' + k).join(' ') || t('none'))}</b></div>
+  </div>`;
+}
+
+// ---------- 쇼츠 분석 창 ----------
+const SHORTS = new Map();
+function remember(list) { for (const x of list || []) SHORTS.set(x.id, x); return list; }
+function similarKw(list) {
+  const score = new Map();
+  for (const x of list) {
+    const tg = (x.tags || []).map((y) => String(y).toLowerCase().trim()).filter((y) => y.length >= 2 && y.length <= 20 && !STOPW.has(y));
+    for (const w of new Set([...tg, ...tokens(x.title)])) score.set(w, (score.get(w) || 0) + Math.min(Number(x.ratio) || 1, 10));
+  }
+  return [...score.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3).map((y) => y[0]);
+}
+let modalPrev = null;
+function modalEl() {
+  let m = document.getElementById('dkModal');
+  if (m) return m;
+  m = document.createElement('div');
+  m.id = 'dkModal';
+  m.className = 'dk-modal';
+  m.setAttribute('role', 'dialog');
+  m.setAttribute('aria-modal', 'true');
+  m.setAttribute('aria-labelledby', 'sxTitle');
+  m.innerHTML = '<div class="box"></div>';
+  m.addEventListener('click', (e) => { if (e.target === m) closeShort(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && m.classList.contains('on')) closeShort(); });
+  document.body.appendChild(m);
+  return m;
+}
+function closeShort() {
+  const m = document.getElementById('dkModal');
+  if (!m || !m.classList.contains('on')) return;
+  m.classList.remove('on');
+  m.dataset.id = '';
+  if (modalPrev && modalPrev.isConnected && modalPrev.focus) modalPrev.focus();
+}
+const durTxt = (sec) => (sec ? t('durS', { s: Math.round(sec) }) : '–');
+async function openShort(id) {
+  const x = SHORTS.get(id);
+  if (!x) return;
+  modalPrev = document.activeElement;
+  const m = modalEl();
+  const box = m.querySelector('.box');
+  m.dataset.id = id;
+  const f = formatsOf(x.title);
+  const inBoard = S.board.has(x.id);
+  const like = x.views ? ((x.likes || 0) / x.views) * 100 : null;
+  const pub = x.published_at ? new Date(x.published_at).toLocaleString(loc(), { month: 'short', day: 'numeric', weekday: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Seoul' }) : '–';
+  const stat = (k, v) => `<div class="dk-stat"><span>${esc(k)}</span><b>${esc(v)}</b></div>`;
+  const tags = (x.tags || []).slice(0, 10);
+  box.innerHTML = `<button type="button" class="x" aria-label="${esc(t('close'))}">${svg(IC.x, 18)}</button>
+  <div class="dk-sx">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <a class="dk-thumb" href="${ytShort(x.id)}" target="_blank" rel="noopener" style="background-image:url('${cssUrl(vthumb(x.thumb))}')" aria-label="${esc(t('viewOnYt'))}"><span class="b">${ratioTag(x.ratio)}</span><span class="v">${esc(fmtN(x.views))}</span></a>
+      <a class="dk-btn line" href="${ytShort(x.id)}" target="_blank" rel="noopener">${svg(IC.yt, 16)}${esc(t('viewOnYt'))}</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+      <div><h2 id="sxTitle">${esc(x.title)}</h2><span class="dk-sub"><a href="#ch/${esc(x.channel_id)}" data-close style="font-weight:700">${esc(x.channel_title)}</a> · ${esc(t(x.role === 'mine' ? 'mine' : 'reference'))} · ${esc(t('sxPub'))} ${esc(pub)}</span></div>
+      <div class="dk-stats">${stat(t('sxViews'), fmtN(x.views))}${stat(t('sxRatio'), x.ratio != null ? t('insX', { x: Number(x.ratio).toFixed(1) }) : '–')}${stat(t('sxVph'), fmtN(x.vph))}${stat(t('c48'), fmtN(x.v48))}${stat(t('sxLike'), like != null ? like.toFixed(1) + '%' : '–')}${stat(t('sxComments'), fmtN(x.comments))}${stat(t('sxDur'), durTxt(x.dur))}</div>
+      <div style="display:flex;flex-direction:column;gap:8px"><div class="dk-ch"><h3>${esc(t('sxCurve'))}</h3><span class="dk-sub" id="sxSub"></span></div><div class="dk-curve" id="sxCurve"><div class="dk-sk" style="height:150px"></div></div></div>
+      <div class="tags" style="display:flex;flex-wrap:wrap;gap:6px">${x._fit ? `<span class="dk-fit${x._fit.score < 50 ? ' low' : ''}">${esc(t('fit', { n: x._fit.score }))}</span>` : ''}${f.map((k) => `<span class="dk-tag gray">${esc(t('fmt_' + k))}</span>`).join('')}${tags.map((g) => `<span class="dk-tag">#${esc(g)}</span>`).join('')}</div>
+      ${x._fit && x._fit.why.length ? `<p class="dk-why"><b>${esc(t('fitTitle'))}</b> · ${esc(x._fit.why.join(' · '))}</p>` : ''}
+      <p class="dk-why"><b>${esc(t('whyTitle'))}</b> · ${esc(whyOf(x))}</p>
+      <p class="dk-why"><b>${esc(t('applyTitle'))}</b> · ${esc(t('tip_' + (f[0] || 'default')))}</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="dk-btn" data-board="${esc(x.id)}" ${inBoard ? 'disabled' : ''}>${esc(t(inBoard ? 'inBoard' : 'toBoard'))}</button><a class="dk-btn line" href="#ch/${esc(x.channel_id)}" data-close>${svg(IC.insights, 16)}${esc(t('sxOpenCh'))}</a><button type="button" class="dk-btn line" data-similar>${svg(IC.collect, 16)}${esc(t('similar'))}</button></div>
+    </div>
+  </div>`;
+  requestAnimationFrame(() => m.classList.add('on'));
+  const xb = box.querySelector('.x');
+  xb.addEventListener('click', closeShort);
+  setTimeout(() => xb.focus(), 60);
+  box.querySelectorAll('[data-close]').forEach((a) => a.addEventListener('click', closeShort));
+  bindBoardButtons(box, [x]);
+  box.querySelector('[data-similar]').addEventListener('click', () => { S.prefKw = similarKw([x]).join(', '); closeShort(); location.hash = '#collect'; });
+  const { data } = await sb.from('radar_video_stats').select('at,view_count').eq('video_id', id).order('at', { ascending: true }).limit(500);
+  if (m.dataset.id !== id) return;
+  drawCurve(box.querySelector('#sxCurve'), box.querySelector('#sxSub'), data || [], x);
+}
+// 성장 곡선: 올린 시각(0회)부터 수집한 조회수까지 — 마우스를 따라 세로선이 가장 가까운 시점을 잡아요
+function drawCurve(el, sub, rows, x) {
+  const pts = rows.map((r) => ({ t: Date.parse(r.at), v: Number(r.view_count) || 0 })).filter((p) => p.t);
+  const t0 = Date.parse(x.published_at);
+  if (t0 && pts.length && t0 < pts[0].t) pts.unshift({ t: t0, v: 0, pub: true });
+  if (pts.length < 2) { el.innerHTML = `<div class="dk-empty" style="padding:18px">${esc(t('sxOne'))}</div>`; sub.textContent = ''; return; }
+  sub.textContent = t('sxSnaps', { n: rows.length, t: agoTxt(rows[0].at) });
+  const W = 640, H = 170, L = 44, R = 10, T = 10, B = 24;
+  const tmin = pts[0].t, tmax = pts[pts.length - 1].t, vmax = Math.max(1, ...pts.map((p) => p.v));
+  const X = (tt) => L + ((tt - tmin) / Math.max(1, tmax - tmin)) * (W - L - R);
+  const Y = (v) => T + (1 - v / vmax) * (H - T - B);
+  const line = pts.map((p, i) => `${i ? 'L' : 'M'}${X(p.t).toFixed(1)},${Y(p.v).toFixed(1)}`).join('');
+  const area = `${line}L${X(tmax).toFixed(1)},${Y(0)}L${X(tmin).toFixed(1)},${Y(0)}Z`;
+  const lab = (tt) => new Date(tt).toLocaleString(loc(), { month: 'short', day: 'numeric', hour: 'numeric', timeZone: 'Asia/Seoul' });
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('sxCurve'))}">
+    <defs><linearGradient id="sxg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#7c3aed" stop-opacity=".28"/><stop offset="1" stop-color="#7c3aed" stop-opacity="0"/></linearGradient></defs>
+    <line x1="${L}" x2="${W - R}" y1="${Y(vmax)}" y2="${Y(vmax)}" stroke="#eef2f7"/><line x1="${L}" x2="${W - R}" y1="${Y(vmax / 2)}" y2="${Y(vmax / 2)}" stroke="#eef2f7"/><line x1="${L}" x2="${W - R}" y1="${Y(0)}" y2="${Y(0)}" stroke="#cbd5e1"/>
+    <text x="${L - 6}" y="${Y(vmax) + 4}" text-anchor="end" font-size="11" fill="#64748b">${esc(fmtN(vmax))}</text><text x="${L - 6}" y="${Y(0) + 4}" text-anchor="end" font-size="11" fill="#64748b">0</text>
+    <text x="${L}" y="${H - 6}" font-size="11" fill="#64748b">${esc(lab(tmin))}</text><text x="${W - R}" y="${H - 6}" text-anchor="end" font-size="11" fill="#64748b">${esc(lab(tmax))}</text>
+    <path d="${area}" fill="url(#sxg)"/><path d="${line}" fill="none" stroke="#6d28d9" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <g id="sxHover" style="opacity:0;transition:opacity .25s"><line id="sxL" y1="${T}" y2="${Y(0)}" stroke="#334155" stroke-dasharray="3 3"/><circle id="sxD" r="5" fill="#6d28d9" stroke="#fff" stroke-width="2"/></g>
+    <rect class="hit" x="${L}" y="${T}" width="${W - L - R}" height="${H - T - B}" fill="transparent"/>
+  </svg><div class="dk-tip" role="status"></div>`;
+  const svgEl = el.querySelector('svg'), tip = el.querySelector('.dk-tip'), g = el.querySelector('#sxHover');
+  const move = (e) => {
+    const r = svgEl.getBoundingClientRect();
+    const tx = tmin + (((e.clientX - r.left) / r.width) * W - L) / (W - L - R) * (tmax - tmin);
+    let best = pts[0];
+    for (const p of pts) if (Math.abs(p.t - tx) < Math.abs(best.t - tx)) best = p;
+    const px = X(best.t), py = Y(best.v);
+    el.querySelector('#sxL').setAttribute('x1', px); el.querySelector('#sxL').setAttribute('x2', px);
+    el.querySelector('#sxD').setAttribute('cx', px); el.querySelector('#sxD').setAttribute('cy', py);
+    g.style.opacity = 1;
+    fillTip(tip, `${lab(best.t)}\n${fmtFull(best.v)}${t('unitViews')}`);
+    tip.classList.add('on');
+    tip.style.left = Math.min(Math.max((px / W) * r.width, 70), r.width - 70) + 'px';
+    tip.style.top = Math.max(-10, (py / H) * r.height - tip.offsetHeight - 12) + 'px';
+  };
+  const hit = el.querySelector('.hit');
+  hit.addEventListener('pointermove', move);
+  hit.addEventListener('pointerleave', () => { g.style.opacity = 0; tip.classList.remove('on'); });
+}
+// 어디서든 data-short를 누르면 분석 창 (Ctrl/⌘·가운데 클릭은 유튜브 새 탭)
+document.addEventListener('click', (e) => {
+  const a = e.target.closest && e.target.closest('[data-short]');
+  if (!a || e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+  if (!SHORTS.has(a.dataset.short)) return;
+  e.preventDefault();
+  openShort(a.dataset.short);
+});
+
 // ---------- 대시보드 ----------
 async function vHome(v, r, alive) {
-  v.innerHTML = head(t('home'), esc(t('loading'))) + loadingCard();
-  const [ov, sh, al] = await Promise.all([
+  loading(v, t('home'), esc(t('loading')));
+  const [ov, sh, al, , bc, prof] = await Promise.all([
     rpc('radar_overview'),
     rpc('radar_shorts', { p_days: 7, p_channel: null, p_role: null, p_limit: 600 }),
     sb.from('radar_alerts').select('*').order('created_at', { ascending: false }).limit(60),
-    getChans()
+    getChans(),
+    rpc('radar_by_channel', { p_hours: 48, p_days: 28 }).catch(() => ({ hourly: [], daily: [] })),
+    getProfile().catch(() => null)
   ]);
   if (!alive()) return;
+  remember(sh);
   S.unread = ov.unread || 0;
   renderNav();
   if (!ov.channels.total) {
@@ -706,21 +1058,29 @@ async function vHome(v, r, alive) {
   }
   const tops = sh.filter((s) => s.v48 > 0).sort((a, b) => b.v48 - a.v48).slice(0, 5);
   const topsList = tops.length ? tops : sh.filter((s) => s.age_h <= 48).sort((a, b) => b.views - a.views).slice(0, 5);
-  const picks = pickList(sh, 'all').slice(0, 3);
+  const picks = pickList(sh, 'all', prof).slice(0, 3);
   const allAlerts = al.data || [];
+  // 채널별로 쌓기 (채널이 2개 이상 잡혔을 때)
+  const ser = buildSeries(bc || {}, S.chans);
+  const canStack = ser.series.length >= 2;
+  const stacked = canStack && S.stack === 'ch';
+  const hs = stackCols(hv, bc?.hourly, ser.keyOf, (b) => Date.parse(b.h), (x) => Date.parse(x.h));
+  const ds = stackCols(dv, bc?.daily, ser.keyOf, (b) => b.d, (x) => x.d);
+  const stackSeg = canStack ? `<div class="dk-seg" role="group" aria-label="${esc(t('byCh'))}"><button type="button" data-stack="ch" aria-pressed="${String(S.stack === 'ch')}">${esc(t('byCh'))}</button><button type="button" data-stack="sum" aria-pressed="${String(S.stack !== 'ch')}">${esc(t('sumAll'))}</button></div>` : '';
   const alerts = allAlerts.slice(0, 5);
   const nextRun = (() => { const d = new Date(); d.setMinutes(5, 0, 0); if (d <= new Date()) d.setHours(d.getHours() + 1); return d.toLocaleTimeString(loc(), { hour: 'numeric', minute: '2-digit' }); })();
 
   v.innerHTML = head(t('home'), sub, `<a class="dk-hbtn" href="#collect">${svg(IC.collect, 17)}${esc(t('addTitle'))}</a>`) + briefHtml(ov, allAlerts, picks, covH) + `
   <div class="dk-row">
     <section class="dk-card f2 dk-fade">
-      <div class="dk-ch"><span class="dk-live"><i></i>${esc(t('live48'))}</span><span class="dk-sub">${esc(t('kNextSub'))}</span></div>
+      <div class="dk-ch"><span class="dk-live"><i></i>${esc(t('live48all'))} · ${esc(t('chCount', { n: ov.channels.total }))}</span>${stackSeg || `<span class="dk-sub">${esc(t('kNextSub'))}</span>`}</div>
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px">
         <div><div class="dk-big">${esc(fmtN(ov.views48))}<span style="font-size:20px;font-weight:800">${esc(t('unitViews'))}</span></div><div class="dk-sub">${change}</div></div>
         <div style="text-align:right"><div class="dk-sub">${esc(t('last1h'))}</div><div class="dk-mid">${esc(fmtN(last1h))}</div></div>
       </div>
-      ${barsHtml('b48', hv, t('live48'))}
+      ${stacked ? stackHtml('b48', hs.cols, ser.series, t('live48all')) : barsHtml('b48', hv, t('live48all'))}
       <div class="dk-axis"><span>${esc(t('ago48'))}</span><span>${esc(t('ago24'))}</span><span>${esc(t('now'))}</span></div>
+      ${stacked ? legendHtml(ser.series, hs.totals, 'b48') : ''}
     </section>
     <section class="dk-card f1 dk-fade">
       <div class="dk-ch"><h2>${esc(t('rank48'))}</h2><span class="dk-sub">${esc(t('sinceLast'))}</span></div>
@@ -730,14 +1090,15 @@ async function vHome(v, r, alive) {
   </div>
   <div class="dk-row">
     <section class="dk-card f2 dk-fade">
-      <div class="dk-ch"><h2>${esc(t('daily28'))}</h2><span class="dk-mid" style="font-size:22px">${esc(fmtN(curSum))}${esc(t('unitViews'))}</span></div>
+      <div class="dk-ch"><h2>${esc(t('daily28all'))}</h2><span class="dk-mid" style="font-size:22px">${esc(fmtN(curSum))}${esc(t('unitViews'))}</span></div>
       <div class="dk-sub" style="margin-top:-8px">${dchange}</div>
-      ${barsHtml('bd', dv, t('daily28'), 150)}
+      ${stacked ? stackHtml('bd', ds.cols, ser.series, t('daily28all'), 150) : barsHtml('bd', dv, t('daily28all'), 150)}
       <div class="dk-axis"><span>${esc(cur[0] ? dayLabel(cur[0].d) : '')}</span><span>${esc(cur[14] ? dayLabel(cur[14].d) : '')}</span><span>${esc(cur.length ? dayLabel(cur[cur.length - 1].d) : '')}</span></div>
+      ${stacked ? legendHtml(ser.series, ds.totals, 'bd') : ''}
     </section>
     <section class="dk-card f1 dk-fade">
       <div class="dk-ch"><h2>${esc(t('tops48'))}</h2><a class="dk-sub" href="#ranking">${esc(t('seeAll'))}</a></div>
-      <ul class="dk-list">${topsList.length ? topsList.map((s) => `<li><a class="dk-li" href="${ytShort(s.id)}" target="_blank" rel="noopener">${avatar(s.thumb, true)}<span class="dk-ttl"><b>${esc(s.title)}</b><small>${esc(s.channel_title)} · ${esc(ageTxt(s.age_h))}</small></span><span class="dk-num">${esc(fmtN(s.v48 || s.views))}</span></a></li>`).join('') : `<li class="dk-empty">${esc(t('noShorts'))}</li>`}</ul>
+      <ul class="dk-list">${topsList.length ? topsList.map((s) => `<li><a class="dk-li" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}">${avatar(s.thumb, true)}<span class="dk-ttl"><b>${esc(s.title)}</b><small>${esc(s.channel_title)} · ${esc(ageTxt(s.age_h))}</small></span><span class="dk-num">${esc(fmtN(s.v48 || s.views))}</span></a></li>`).join('') : `<li class="dk-empty">${esc(t('noShorts'))}</li>`}</ul>
     </section>
   </div>
   <div class="dk-row">
@@ -757,8 +1118,17 @@ async function vHome(v, r, alive) {
     <div class="dk-kpi"><span>${esc(t('kUnits'))}</span><b>${esc(fmtFull(ov.units_today))}</b><small>${esc(t('kUnitsSub', { b: fmtFull(9000) }))}</small></div>
     <div class="dk-kpi"><span>${esc(t('kNext'))}</span><b>${esc(nextRun)}</b><small>${esc(t('kNextSub'))}</small></div>
   </div>`;
-  bindBars(v, 'b48', hv, (x) => `${hourLabel(x.h)}\n${x.pre ? t('preCollect') : fmtFull(x.v) + t('unitViews')}`);
-  bindBars(v, 'bd', dv, (x) => `${dayLabel(x.d)}\n${x.pre ? t('preCollect') : fmtFull(x.v) + t('unitViews')}`);
+  if (stacked) {
+    bindStack(v, 'b48', hs.cols, ser.series, (c) => `${hourLabel(c.h)} · ${c.pre ? t('preCollect') : fmtFull(c.v) + t('unitViews')}`);
+    bindStack(v, 'bd', ds.cols, ser.series, (c) => `${dayLabel(c.d)} · ${c.pre ? t('preCollect') : fmtFull(c.v) + t('unitViews')}`);
+    bindLegend(v, 'b48');
+    bindLegend(v, 'bd');
+  } else {
+    bindBars(v, 'b48', hv, (x) => `${hourLabel(x.h)}\n${x.pre ? t('preCollect') : fmtFull(x.v) + t('unitViews')}`);
+    bindBars(v, 'bd', dv, (x) => `${dayLabel(x.d)}\n${x.pre ? t('preCollect') : fmtFull(x.v) + t('unitViews')}`);
+  }
+  v.querySelectorAll('[data-stack]').forEach((b) => b.addEventListener('click', () => { S.stack = b.dataset.stack; render(); }));
+  bindTodos(v);
   bindBoardButtons(v, picks);
   bindAlertButtons(v);
 }
@@ -840,13 +1210,39 @@ function monthsChart(id, a, h = 150) {
 }
 const monthTip = (x) => (x.n ? `${monthName(x.ym)} · ${t('insTipN', { n: x.n })}\n${fmtFull(x.v)}${t('unitViews')} · ${t('insTipMed', { v: fmtN(x.med) })}` : `${monthName(x.ym)} · ${t('insTipN', { n: 0 })}`);
 
+// 채널 비교 표: 같은 기준(주간 업로드·평소 조회수·터진 비율·길이·잘 되는 유형·48시간)으로 나란히
+function compareHtml(list, chans) {
+  const rows = chans.filter((c) => S.insRole === 'all' || c.role === S.insRole).map((c) => {
+    const own = list.filter((x) => x.channel_id === c.id && x.status === 'live' && x.ratio != null);
+    const old = own.filter((x) => x.age_h >= 72);
+    const b = old.length >= 5 ? old : own;
+    const fm = bestOf(FMT.map(([k]) => { const xs = b.filter((x) => formatsOf(x.title).includes(k)).map((x) => Number(x.ratio)); return { k, n: xs.length, v: median(xs) }; }));
+    return { c, n: own.length, wk: own.filter((x) => x.age_h <= 28 * 24).length / 4, hit: b.length ? b.filter((x) => x.ratio >= 2).length / b.length : null, dur: median(own.map((x) => x.dur || 0).filter(Boolean)), fm };
+  }).filter((r) => r.n > 0).sort((p, q) => (q.c.role === 'mine') - (p.c.role === 'mine') || (q.c.v48 || 0) - (p.c.v48 || 0));
+  if (rows.length < 2) return '';
+  const mMed = Math.max(1, ...rows.map((r) => r.c.median || 0)), mHit = Math.max(0.01, ...rows.map((r) => r.hit || 0)), mWk = Math.max(0.1, ...rows.map((r) => r.wk));
+  const bar = (v, m) => `<span class="bar"><i style="width:${Math.max(2, Math.min(100, (v / m) * 100)).toFixed(1)}%"></i></span>`;
+  return `<section class="dk-card full dk-fade"><div class="dk-ch"><h2 style="display:flex;align-items:center;gap:8px">${svg(IC.compare, 19)}${esc(t('cmpTitle'))}</h2><span class="dk-sub">${esc(t('cmpSub'))}</span></div>
+  <div class="dk-tablewrap"><table class="dk-t dk-cmp"><thead><tr><th>${esc(t('cChannel'))}</th><th class="r">${esc(t('cSubs'))}</th><th class="r">${esc(t('cWk'))}</th><th class="r">${esc(t('cMedian'))}</th><th class="r">${esc(t('cHit'))}</th><th class="r">${esc(t('cDur'))}</th><th>${esc(t('cFmt'))}</th><th class="r">${esc(t('c48'))}</th></tr></thead><tbody>
+  ${rows.map((r) => `<tr class="${r.c.role === 'mine' ? 'mine' : ''}"><td><a href="#ch/${esc(r.c.id)}" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;min-width:180px">${avatar(r.c.thumb)}<span class="dk-ttl"><b>${esc(r.c.title)}</b><small>${esc(t(r.c.role === 'mine' ? 'mine' : 'reference'))}${catOf(r.c) ? ' · ' + esc(catOf(r.c)) : ''}</small></span></a></td>
+    <td class="r dk-num">${esc(r.c.subs_hidden ? '–' : fmtN(r.c.subs))}</td>
+    <td class="r dk-num" style="min-width:90px">${esc(String(Math.round(r.wk * 10) / 10))}${bar(r.wk, mWk)}</td>
+    <td class="r dk-num" style="min-width:100px">${esc(fmtN(r.c.median))}${bar(r.c.median || 0, mMed)}</td>
+    <td class="r dk-num" style="min-width:90px">${r.hit != null ? Math.round(r.hit * 100) + '%' : '–'}${r.hit != null ? bar(r.hit, mHit) : ''}</td>
+    <td class="r dk-num">${esc(durTxt(r.dur))}</td>
+    <td>${r.fm ? `<span class="dk-tag gray">${esc(t('fmt_' + r.fm.k))} · ${esc(t('insX', { x: r.fm.v.toFixed(1) }))}</span>` : '–'}</td>
+    <td class="r dk-num">${esc(fmtN(r.c.v48))}</td></tr>`).join('')}
+  </tbody></table></div></section>`;
+}
+
 async function vInsights(v, r, alive) {
-  v.innerHTML = head(t('insights'), esc(t('insSub'))) + loadingCard();
+  loading(v, t('insights'), esc(t('insSub')));
   const [list, chans] = await Promise.all([
     rpc('radar_shorts', { p_days: 400, p_channel: S.insCh || null, p_role: S.insRole === 'all' ? null : S.insRole, p_limit: 1000 }),
     getChans()
   ]);
   if (!alive()) return;
+  remember(list);
   const a = analyze(list);
   const seg = (val, lab) => `<button type="button" data-irole="${val}" aria-pressed="${String(S.insRole === val)}">${esc(lab)}</button>`;
   const controls = `<section class="dk-card full dk-fade"><div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
@@ -886,7 +1282,8 @@ async function vInsights(v, r, alive) {
     <section class="dk-card f1 dk-fade"><h2>${esc(t('insDurT'))}</h2>${hbarsHtml(durRows)}</section>
     <section class="dk-card f1 dk-fade"><h2>${esc(t('insFmt'))}</h2>${hbarsHtml(fmtRows)}</section>
   </div>
-  <section class="dk-card full dk-fade"><div class="dk-ch"><h2>${esc(t('insMonth'))}</h2><span class="dk-sub">${esc(t('insMonthSub'))}</span></div>${mc.html}</section>`;
+  <section class="dk-card full dk-fade"><div class="dk-ch"><h2>${esc(t('insMonth'))}</h2><span class="dk-sub">${esc(t('insMonthSub'))}</span></div>${mc.html}</section>
+  ${S.insCh ? '' : compareHtml(list, chans || [])}`;
   bindBars(v, 'ih', hc.vals, (x) => ratioTip(hourName(x.k), x), { v: 1 });
   bindBars(v, 'iw', dvals, (x) => ratioTip(dayName(x.k), x), { v: 1 });
   bindBars(v, 'im', mc.vals, monthTip);
@@ -904,6 +1301,18 @@ function briefHtml(ov, alerts, picks, covH) {
   if (covH >= 96 && ov.prev48 > 0) { const p = pct(ov.views48, ov.prev48); flow = t('vsPrev', { p: Math.abs(p), dir: t(p >= 0 ? 'more' : 'less') }); } else flow = t('coverage', { h: Math.min(covH, 48) });
   const b0 = breaks[0]?.data, i0 = issues[0] ? alertParts(issues[0]) : null, p0 = picks[0];
   const tile = (href, ic, tone, label, big, small) => `<a class="dk-bi" href="${href}"><span class="ic ${tone}">${svg(ic, 18)}</span><span class="tx"><b>${esc(label)}</b><strong>${esc(big)}</strong><span>${esc(small)}</span></span></a>`;
+  // 오늘 할 일 (데이터에서 고른 행동 3~4개)
+  const todos = [];
+  if (!ov.channels.mine) todos.push({ id: 'mine', tx: t('td_addMine'), href: '#collect' });
+  const gap = issues.find((a) => a.kind === 'gap');
+  if (gap) todos.push({ id: 'gap:' + gap.channel_id, tx: t('td_gap', { ch: gap.data?.channel || '', d: gap.data?.days || '' }), href: '#ch/' + gap.channel_id });
+  const iss = issues.find((a) => a.kind !== 'gap');
+  if (iss) { const pp = alertParts(iss); todos.push({ id: 'iss:' + iss.id, tx: t('td_issue', { title: pp.title }), href: '#alerts' }); }
+  if (p0) todos.push({ id: 'pick:' + p0.id, tx: t('td_pick', { title: String(p0.title || '').slice(0, 40) }), short: p0.id });
+  if (breaks.length) todos.push({ id: 'brk:' + new Date().toISOString().slice(0, 10), tx: t('td_breaks', { n: breaks.length }), href: '#alerts' });
+  if ((ov.channels.reference || 0) < 5) todos.push({ id: 'refs', tx: t('td_refs', { n: 5 - (ov.channels.reference || 0) }), href: '#collect' });
+  const done = todoDone();
+  const todoHtml = todos.slice(0, 4).map((x) => `<li class="${done.has(x.id) ? 'done' : ''}"><input type="checkbox" data-todo="${esc(x.id)}" ${done.has(x.id) ? 'checked' : ''} aria-label="${esc(x.tx)}"><span>${esc(x.tx)}</span>${x.short ? `<a href="${ytShort(x.short)}" data-short="${esc(x.short)}">${esc(t('td_go'))} →</a>` : `<a href="${esc(x.href)}">${esc(t('td_go'))} →</a>`}</li>`).join('');
   return `<section class="dk-card full dk-fade">
     <div class="dk-ch"><h2 style="display:flex;align-items:center;gap:10px">${svg(IC.sun, 20)}${esc(t('brTitle'))}</h2><span class="dk-live"><i></i>${esc(t('brSub'))}</span></div>
     <div class="dk-brief">
@@ -912,23 +1321,38 @@ function briefHtml(ov, alerts, picks, covH) {
       ${tile('#alerts', issues.length ? IC.warn : IC.lock, issues.length ? 'warn' : 'good', t('brIssue'), issues.length ? t('brCount', { n: issues.length }) : ov.channels.mine ? t('brIssueNone') : '–', i0 ? `${i0.title} · ${i0.body}` : (ov.channels.mine ? t('brIssueOk') : t('brIssueNoMine')))}
       ${tile('#picks', IC.picks, p0 ? 'good' : '', t('brIdea'), p0 ? t('ratio', { x: Number(p0.ratio).toFixed(1) }) : '–', p0 ? `“${p0.title}” · ${formatsOf(p0.title).map((k) => t('fmt_' + k)).join(' · ') || p0.channel_title}` : t('brIdeaNone'))}
     </div>
+    ${todoHtml ? `<div class="dk-ch" style="margin-top:4px"><h3 style="display:flex;align-items:center;gap:8px">${svg(IC.todo, 18)}${esc(t('tdTitle'))}</h3><span class="dk-sub">${esc(t('tdSub'))}</span></div><ul class="dk-todo">${todoHtml}</ul>` : ''}
   </section>`;
+}
+// 오늘 할 일 체크는 이 브라우저에만 (날짜별)
+const todoKey = () => 'radar.todo.' + new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+function todoDone() { try { return new Set(JSON.parse(localStorage.getItem(todoKey()) || '[]')); } catch (e) { return new Set(); } }
+function bindTodos(root) {
+  root.querySelectorAll('[data-todo]').forEach((cb) => cb.addEventListener('change', () => {
+    const d = todoDone();
+    if (cb.checked) d.add(cb.dataset.todo); else d.delete(cb.dataset.todo);
+    try { localStorage.setItem(todoKey(), JSON.stringify([...d])); } catch (e) { /* 저장 못 해도 화면은 그대로 */ }
+    cb.closest('li').classList.toggle('done', cb.checked);
+  }));
 }
 
 // ---------- 소재 추천 ----------
 async function vPicks(v, r, alive) {
-  v.innerHTML = head(t('picks'), esc(t('picksSub'))) + loadingCard();
-  const [list] = await Promise.all([rpc('radar_shorts', { p_days: S.period, p_channel: null, p_role: null, p_limit: 1000 }), getChans()]);
+  loading(v, t('picks'), esc(t('picksSub')));
+  const [list, , prof] = await Promise.all([rpc('radar_shorts', { p_days: S.period, p_channel: null, p_role: null, p_limit: 1000 }), getChans(), getProfile().catch(() => null)]);
   if (!alive()) return;
+  remember(list);
   const cats = myCats();
   const kws = trendKeywords(list);
-  let picks = pickList(list, S.scope);
+  let picks = pickList(list, S.scope, prof);
   if (S.kw) picks = picks.filter((s) => (s.title || '').toLowerCase().includes(S.kw) || (s.tags || []).some((x) => String(x).toLowerCase().includes(S.kw)));
   const seg = (k, val, lab) => `<button type="button" data-${k}="${val}" aria-pressed="${String((k === 'period' ? S.period : S.scope) === val)}">${esc(lab)}</button>`;
+  const sortSeg = prof ? `<div class="dk-seg" role="group"><button type="button" data-psort="fit" aria-pressed="${String(S.pickSort === 'fit')}">${esc(t('sortFit'))}</button><button type="button" data-psort="ratio" aria-pressed="${String(S.pickSort !== 'fit')}">${esc(t('sortRatio2'))}</button></div>` : '';
   v.innerHTML = head(t('picks'), esc(t('picksSub'))) + `
+  <section class="dk-card full dk-fade">${profileHtml(prof)}</section>
   <section class="dk-card full dk-fade">
     <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
-      <div class="dk-seg" role="group">${seg('period', 2, t('p2'))}${seg('period', 7, t('p7'))}${seg('period', 30, t('p30'))}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px"><div class="dk-seg" role="group">${seg('period', 2, t('p2'))}${seg('period', 7, t('p7'))}${seg('period', 30, t('p30'))}</div>${sortSeg}</div>
       <div class="dk-seg" role="group">${seg('scope', 'all', t('scopeAll'))}${seg('scope', 'mine', t('scopeMine'))}${seg('scope', 'other', t('scopeOther'))}</div>
     </div>
     ${!cats.size && S.scope !== 'all' ? `<div class="dk-banner info">${esc(t('noMyCat'))}</div>` : ''}
@@ -938,6 +1362,7 @@ async function vPicks(v, r, alive) {
   ${picks.length ? `<div class="dk-grid">${picks.slice(0, 60).map(pickCard).join('')}</div>` : `<section class="dk-card full"><div class="dk-empty">${esc(t('picksEmpty'))}<br><a class="dk-btn" style="margin-top:12px" href="#collect">${esc(t('goCollect'))}</a></div></section>`}`;
   v.querySelectorAll('[data-period]').forEach((b) => b.addEventListener('click', () => { S.period = Number(b.dataset.period); render(); }));
   v.querySelectorAll('[data-scope]').forEach((b) => b.addEventListener('click', () => { S.scope = b.dataset.scope; render(); }));
+  v.querySelectorAll('[data-psort]').forEach((b) => b.addEventListener('click', () => { S.pickSort = b.dataset.psort; render(); }));
   v.querySelectorAll('[data-kw]').forEach((b) => b.addEventListener('click', () => { S.kw = S.kw === b.dataset.kw ? '' : b.dataset.kw; render(); }));
   const kf = v.querySelector('#kwFind');
   if (kf) kf.addEventListener('click', () => { S.prefKw = S.kw; });
@@ -946,8 +1371,8 @@ async function vPicks(v, r, alive) {
 
 // ---------- 쇼츠 랭킹 ----------
 async function vRanking(v, r, alive) {
-  v.innerHTML = head(t('ranking'), esc(t('rankingSub'))) + loadingCard();
-  const list = await rpc('radar_shorts', { p_days: S.rankDays, p_channel: null, p_role: S.rankRole === 'all' ? null : S.rankRole, p_limit: 1000 });
+  loading(v, t('ranking'), esc(t('rankingSub')));
+  const list = remember(await rpc('radar_shorts', { p_days: S.rankDays, p_channel: null, p_role: S.rankRole === 'all' ? null : S.rankRole, p_limit: 1000 }));
   if (!alive()) return;
   const q = S.rankQ.trim().toLowerCase();
   const key = { v48: (s) => s.v48 || 0, ratio: (s) => s.ratio || 0, vph: (s) => s.vph || 0, views: (s) => s.views || 0, new: (s) => Date.parse(s.published_at) || 0 }[S.rankSort];
@@ -966,7 +1391,7 @@ async function vRanking(v, r, alive) {
     </div>
     ${rows.length ? `<div class="dk-tablewrap"><table class="dk-t"><thead><tr><th>#</th><th>${esc(t('cTitle'))}</th><th>${esc(t('cChannel'))}</th><th class="r">${esc(t('cAge'))}</th><th class="r">${esc(t('cViews'))}</th><th class="r">${esc(t('c48'))}</th><th class="r">${esc(t('cVph'))}</th><th class="r">${esc(t('cRatio'))}</th></tr></thead><tbody>
     ${rows.map((s, i) => `<tr><td class="dk-rank">${i + 1}</td>
-      <td><a href="${ytShort(s.id)}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;min-width:240px">${avatar(s.thumb, true)}<span style="font-weight:700;line-height:1.4">${esc(s.title)}</span></a></td>
+      <td><a href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;min-width:240px">${avatar(s.thumb, true)}<span style="font-weight:700;line-height:1.4">${esc(s.title)}</span></a></td>
       <td><a href="#ch/${esc(s.channel_id)}" style="color:#475569;font-size:13px;white-space:nowrap">${esc(s.channel_title)}</a></td>
       <td class="r" style="white-space:nowrap">${esc(ageTxt(s.age_h))}</td><td class="r dk-num">${esc(fmtN(s.views))}</td><td class="r dk-num">${esc(fmtN(s.v48))}</td><td class="r dk-num">${esc(fmtN(s.vph))}</td><td class="r">${ratioTag(s.ratio)}</td></tr>`).join('')}
     </tbody></table></div>` : `<div class="dk-empty">${esc(t('noShorts'))}</div>`}
@@ -1017,7 +1442,7 @@ function bindAlertButtons(root) {
   }));
 }
 async function vAlerts(v, r, alive) {
-  v.innerHTML = head(t('alerts'), esc(t('alertsSub'))) + loadingCard();
+  loading(v, t('alerts'), esc(t('alertsSub')));
   const { data, error } = await sb.from('radar_alerts').select('*, radar_channels(role)').order('created_at', { ascending: false }).limit(300);
   if (error) throw new Error(error.message);
   if (!alive()) return;
@@ -1040,7 +1465,7 @@ async function vAlerts(v, r, alive) {
 
 // ---------- 채널 수집 + 추천 채널 찾기 ----------
 async function vCollect(v, r, alive) {
-  v.innerHTML = head(t('collect'), esc(t('collectSub'))) + loadingCard();
+  loading(v, t('collect'), esc(t('collectSub')));
   const [, disc, sh] = await Promise.all([
     getChans(),
     sb.from('radar_discoveries').select('*').eq('status', 'new').order('score', { ascending: false }).limit(60),
@@ -1119,7 +1544,7 @@ function bindDisc(root) {
 
 // ---------- 채널 목록 ----------
 async function vChannels(v, r, alive) {
-  v.innerHTML = head(t('channels'), esc(t('channelsSub'))) + loadingCard();
+  loading(v, t('channels'), esc(t('channelsSub')));
   const list = await getChans(true);
   if (!alive()) return;
   const q = S.chQ.trim().toLowerCase();
@@ -1197,10 +1622,11 @@ async function vChannels(v, r, alive) {
 
 // ---------- 채널 상세 ----------
 async function vChannel(v, r, alive) {
-  v.innerHTML = head(t('channels'), '') + loadingCard();
+  loading(v, t('channels'), '');
   const id = r.id;
   const [d, shorts] = await Promise.all([rpc('radar_channel', { p_id: id }), rpc('radar_shorts', { p_days: 400, p_channel: id, p_role: null, p_limit: 400 })]);
   if (!alive()) return;
+  remember(shorts);
   const c = d?.channel;
   if (!c) { v.innerHTML = head(t('channels'), '') + `<div class="dk-card"><div class="dk-empty">${esc(t('chNotFound'))}<br><a class="dk-btn" style="margin-top:12px" href="#channels">${esc(t('chBack'))}</a></div></div>`; return; }
   const firstH = (d.hourly || []).find((x) => x.v > 0);
@@ -1215,7 +1641,7 @@ async function vChannel(v, r, alive) {
   const mc = monthsChart('cbm', an, 150);
   const seg = (val, lab) => `<button type="button" data-csort="${val}" aria-pressed="${String(S.chSort === val)}">${esc(lab)}</button>`;
   v.innerHTML = `<div class="dk-head dk-fade"><div style="display:flex;align-items:center;gap:16px">${c.thumbnail_url ? `<img src="${esc(c.thumbnail_url)}" alt="" width="72" height="72" style="border-radius:50%;border:3px solid rgba(255,255,255,.7)" referrerpolicy="no-referrer">` : ''}<div><h1>${esc(c.title)}</h1><p>${esc(c.handle || '')} · ${esc(t(c.role === 'mine' ? 'mine' : 'reference'))}${catOf(c) ? ' · ' + esc(catOf(c)) : ''} · ${esc(c.subscribers_hidden ? t('hiddenSubs') : t('subs', { n: fmtN(c.subscriber_count) }))}</p></div></div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="dk-hbtn ghost" href="#channels">← ${esc(t('chBack'))}</a><a class="dk-hbtn ghost" href="https://www.youtube.com/channel/${esc(c.id)}" target="_blank" rel="noopener">${svg(IC.yt, 17)}${esc(t('chOpenYt'))}</a><button type="button" class="dk-hbtn" id="chRf">${svg(IC.refresh, 17)}${esc(t('refresh'))}</button></div></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="dk-hbtn ghost" href="#channels">← ${esc(t('chBack'))}</a><a class="dk-hbtn ghost" href="https://www.youtube.com/channel/${esc(c.id)}" target="_blank" rel="noopener">${svg(IC.yt, 17)}${esc(t('chOpenYt'))}</a><button type="button" class="dk-hbtn ghost" id="chSim">${svg(IC.collect, 17)}${esc(t('similar'))}</button><button type="button" class="dk-hbtn" id="chRf">${svg(IC.refresh, 17)}${esc(t('refresh'))}</button></div></div>
   <div class="dk-row">
     <section class="dk-card f2 dk-fade"><div class="dk-ch"><span class="dk-live"><i></i>${esc(t('chHourly'))}</span><span class="dk-mid">${esc(fmtN(sum48))}${esc(t('unitViews'))}</span></div>
       ${barsHtml('cb48', hv, t('chHourly'), 150)}<div class="dk-axis"><span>${esc(t('ago48'))}</span><span>${esc(t('ago24'))}</span><span>${esc(t('now'))}</span></div></section>
@@ -1234,6 +1660,13 @@ async function vChannel(v, r, alive) {
   bindBars(v, 'cb48', hv, (x) => `${hourLabel(x.h)}\n${x.pre ? t('preCollect') : fmtFull(x.v) + t('unitViews')}`);
   bindBars(v, 'cbd', dd, (x) => `${dayLabel(x.d)}\n${x.pre ? t('preCollect') : fmtFull(x.v) + t('unitViews')}`);
   bindBars(v, 'cbm', mc.vals, monthTip);
+  v.querySelector('#chSim').addEventListener('click', () => {
+    const top = [...live].sort((p, q) => (q.ratio || 0) - (p.ratio || 0)).slice(0, 12);
+    let kws = similarKw(top);
+    if (!kws.length && c.keywords) kws = (String(c.keywords).match(/"[^"]+"|\S+/g) || []).map((k) => k.replace(/"/g, '')).slice(0, 3);
+    S.prefKw = kws.join(', ');
+    location.hash = '#collect';
+  });
   const toIns = v.querySelector('#toIns');
   if (toIns) toIns.addEventListener('click', () => { S.insRole = 'all'; S.insCh = c.id; });
   v.querySelectorAll('[data-csort]').forEach((b) => b.addEventListener('click', () => { S.chSort = b.dataset.csort; render(); }));
@@ -1251,7 +1684,7 @@ async function vChannel(v, r, alive) {
 // ---------- 소재 보드 ----------
 const STAGES = ['idea', 'script', 'production', 'uploaded'];
 async function vIdeas(v, r, alive) {
-  v.innerHTML = head(t('ideas'), esc(t('ideasSub'))) + loadingCard();
+  loading(v, t('ideas'), esc(t('ideasSub')));
   const { data, error } = await sb.from('radar_ideas').select('*').order('created_at', { ascending: false }).limit(300);
   if (error) throw new Error(error.message);
   if (!alive()) return;
@@ -1307,7 +1740,7 @@ async function vPartners(v) {
 
 // ---------- 설정 · 상태 ----------
 async function vStatus(v, r, alive) {
-  v.innerHTML = head(t('status'), esc(t('statusSub'))) + loadingCard();
+  loading(v, t('status'), esc(t('statusSub')));
   const st = await act({ action: 'status' });
   if (!alive()) return;
   if (!st.ok) throw new Error(st.error || 'status');

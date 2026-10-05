@@ -351,3 +351,133 @@ const LANDING2 = {
   }
 };
 for (const l of Object.keys(LANDING2)) Object.assign(DICT[l], LANDING2[l]);
+
+// 소개 페이지 다크 프리미엄 개편(2026-10) — 채널 여러 개 · 작동 방식 · 기능 벤토
+const LANDING3 = {
+  ko: {
+    'nav.how': '작동 방식', 'nav.faq': '질문', 'hero.cta2b': '대시보드 미리 보기', 'hero.note': '로그인 없이 바로 · 채널 여러 개도 한 번에 · 실험 모드',
+    'hero.f1t': '레퍼런스 쇼츠가 터졌어요', 'hero.f1d': '자취요리 1분 · 평소의 6.2배', 'hero.f2t': '모든 채널 합산 · 48시간', 'hero.f2v': '128만 회',
+    'st.1v': '매시간', 'st.1t': '자동으로 다시 수집', 'st.2v': '100개', 'st.2t': '채널까지 한 화면에', 'st.3v': '50개', 'st.3t': '채널마다 최근 쇼츠', 'st.4v': '한·영·일', 'st.4t': '3개 언어 지원',
+    'mc.over': '채널 여러 개', 'mc.h2': '채널이 몇 개든,\n한 화면에 합쳐서 봐요',
+    'mc.sub': '내 채널과 레퍼런스를 여러 개 넣으면, 모든 채널을 합산한 48시간 흐름과 일별 조회수를 채널별로 쌓아서 보여줘요. 채널마다 색이 정해져 있어서 조회수가 어디서 나오는지 한눈에 보여요.',
+    'mc.b1': '모든 채널 합산 48시간 · 일별 조회수', 'mc.b2': '채널별로 쌓아 보기 ↔ 합산 보기', 'mc.b3': '채널 순위와 직전 수집 대비 증가량', 'mc.b4': '채널 비교표로 업로드 주기·평소 조회수·터진 비율을 나란히',
+    'mc.chart': '모든 채널 합산 · 지난 48시간',
+    'dash.byCh': '채널별', 'dash.sum': '합산', 'dash.live2': '모든 채널 합산 · 지난 48시간 · 채널 5개', 'dash.daily2': '모든 채널 합산 · 일별 조회수 · 지난 28일',
+    'dash.homeSub2': '수집 중인 채널 5개 · 마지막 수집 12분 전 · 매시 5분 자동 수집', 'dash.k1s2': '내 채널 2 · 레퍼런스 3',
+    'how.over': '작동 방식', 'how.h2': '링크 하나면 레이더가 돌아가요', 'how.sub': '설치도 로그인도 없이, 채널 링크를 붙여넣는 순간부터 수집이 시작돼요.',
+    'how.s1t': '채널 링크 붙여넣기', 'how.s1d': '유튜브 채널 주소, @핸들, 쇼츠 링크 무엇이든 돼요. 내 채널과 레퍼런스를 여러 개 한 번에 넣어도 돼요.',
+    'how.s2t': '매시간 자동 수집', 'how.s2d': '최근 쇼츠 50개와 조회수를 바로 모으고, 그 뒤로 매시 5분마다 다시 재서 48시간 흐름을 쌓아요.',
+    'how.s3t': '추천 · 분석 · 알림', 'how.s3d': '평소보다 터진 쇼츠와 그 이유, 내 채널 맞춤도, 업로드 공백·영상 사라짐 같은 이슈를 정리해 드려요.',
+    'bt.over': '기능', 'bt.h2': '쇼츠 수집부터 맞춤 추천까지,\n한 번에', 'bt.sub': '모으고, 분석하고, 추천하고, 알려줘요. 크리에이터가 매일 손으로 하던 일을 레이더가 대신해요.',
+    'bt.pick.t': '맞춤 소재 추천', 'bt.pick.d': '레퍼런스에서 평소보다 크게 터진 쇼츠를 고르고, 내 채널과 얼마나 맞는지 분야·키워드·길이·제목 유형으로 점수를 매겨요.',
+    'bt.algo.t': '알고리즘 분석', 'bt.algo.d': '올린 시간·요일·길이·제목 유형·월별로, 어떤 조건에서 평소보다 잘 됐는지 보여줘요.',
+    'bt.agent.t': '에이전트 브리핑 · 알림', 'bt.agent.d': '매시간 이슈를 확인하고, 매일 아침 브리핑과 오늘 할 일을 정리해요.',
+    'bt.find.t': '레퍼런스 자동 발굴', 'bt.find.d': '키워드와 내 채널이 소개한 채널을 따라가며, 아직 모르는 잘 되는 채널을 찾아 와요.',
+    'bt.curve.t': '쇼츠 분석 창', 'bt.curve.d': '쇼츠를 누르면 조회수 성장 곡선, 좋아요율, 평소 대비, 비슷한 채널 찾기까지 한 번에.',
+    'bt.cmp.t': '채널 비교', 'bt.cmp.d': '업로드 주기, 평소 조회수, 터진 비율을 같은 기준으로 나란히 봐요.',
+    'bt.board.t': '소재 보드', 'bt.board.d': '추천에서 담은 소재를 아이디어 → 대본 → 업로드로 옮겨 가며 관리해요.',
+    'bt.m.fit1': '맞춤 93', 'bt.m.fit2': '맞춤 81', 'bt.m.r1': '평소의 6.2배', 'bt.m.r2': '평소의 4.2배', 'bt.m.w1': '같은 분야 · 비슷한 길이 32초', 'bt.m.w2': '겹치는 키워드 수납·다이소', 'bt.m.usual': '평소',
+    'bt.m.n1': '레퍼런스 쇼츠가 터졌어요', 'bt.m.n1s': '자취요리 1분 · 평소의 6.2배', 'bt.m.n2': '업로드 공백 3일', 'bt.m.n2s': '냥집사 일기 · 오늘 하나 올려 보세요', 'bt.m.n3': '오늘의 브리핑', 'bt.m.n3s': '48시간 128만 회 · 오늘 할 일 3개',
+    'bt.m.k1': '아이디어', 'bt.m.k2': '대본', 'bt.m.k3': '업로드', 'bt.m.i1': '편의점 신상 3초 리뷰', 'bt.m.i2': '반전 엔딩 챌린지', 'bt.m.i3': '고양이 오이 실험', 'bt.m.wk': '주간 업로드', 'bt.m.hit': '터진 비율',
+    'cta2.h2': '채널 링크 하나면,\n오늘부터 레이더가 돌아가요', 'cta2.sub': '로그인 없이 바로 써볼 수 있어요. 채널 여러 개도 한 번에 넣어 보세요.'
+  },
+  en: {
+    'nav.how': 'How it works', 'nav.faq': 'FAQ', 'hero.cta2b': 'Preview the dashboard', 'hero.note': 'No sign-in · Many channels at once · Test mode',
+    'hero.f1t': 'A reference Short broke out', 'hero.f1d': '1-Min Cooking · 6.2× usual', 'hero.f2t': 'All channels · 48h', 'hero.f2v': '1.28M views',
+    'st.1v': 'Hourly', 'st.1t': 'automatic re-collection', 'st.2v': '100', 'st.2t': 'channels on one screen', 'st.3v': '50', 'st.3t': 'latest Shorts per channel', 'st.4v': 'KO · EN · JA', 'st.4t': 'three languages',
+    'mc.over': 'Many channels', 'mc.h2': 'However many channels,\none combined view',
+    'mc.sub': 'Add your channels and references, and every channel is stacked into one 48-hour trend and daily views chart. Each channel keeps its own color, so you see exactly where views come from.',
+    'mc.b1': 'All channels combined · 48h and daily views', 'mc.b2': 'Switch between by-channel stacks and totals', 'mc.b3': 'Channel ranking with gains since last collection', 'mc.b4': 'Comparison table for upload pace, usual views and breakout rate',
+    'mc.chart': 'All channels combined · last 48h',
+    'dash.byCh': 'By channel', 'dash.sum': 'Total', 'dash.live2': 'All channels combined · last 48h · 5 channels', 'dash.daily2': 'All channels combined · daily views · 28 days',
+    'dash.homeSub2': 'Tracking 5 channels · last collected 12m ago · auto-collects hourly at :05', 'dash.k1s2': 'Mine 2 · References 3',
+    'how.over': 'How it works', 'how.h2': 'One link and the radar starts', 'how.sub': 'No install, no sign-in. Collection starts the moment you paste a channel link.',
+    'how.s1t': 'Paste channel links', 'how.s1d': 'Channel URLs, @handles or Shorts links all work. Add your own channels and references, many at once.',
+    'how.s2t': 'Hourly auto-collection', 'how.s2d': 'We grab the latest 50 Shorts and their views right away, then re-measure every hour at :05 to build the 48-hour trend.',
+    'how.s3t': 'Picks · insights · alerts', 'how.s3d': 'Shorts that beat their usual and why, fit scores for your channel, and issues like upload gaps or removed videos.',
+    'bt.over': 'Features', 'bt.h2': 'From collecting Shorts\nto personalized picks', 'bt.sub': 'Collect, analyze, recommend and alert. The radar does the daily legwork creators used to do by hand.',
+    'bt.pick.t': 'Personalized idea picks', 'bt.pick.d': 'We pick reference Shorts that beat their usual and score how well each fits your channel by niche, keywords, length and title type.',
+    'bt.algo.t': 'Algorithm insights', 'bt.algo.d': 'See which upload hours, weekdays, lengths, title types and months beat the usual.',
+    'bt.agent.t': 'Agent briefing · alerts', 'bt.agent.d': 'Issues checked every hour, plus a morning briefing and a to-do list each day.',
+    'bt.find.t': 'Reference discovery', 'bt.find.d': 'Following keywords and the channels yours features, it finds strong channels you don’t know yet.',
+    'bt.curve.t': 'Short analysis', 'bt.curve.d': 'Click a Short for its view growth curve, like rate, vs-usual score and similar channels.',
+    'bt.cmp.t': 'Channel comparison', 'bt.cmp.d': 'Upload pace, usual views and breakout rate side by side.',
+    'bt.board.t': 'Idea board', 'bt.board.d': 'Move saved ideas from idea → script → upload.',
+    'bt.m.fit1': 'Fit 93', 'bt.m.fit2': 'Fit 81', 'bt.m.r1': '6.2× usual', 'bt.m.r2': '4.2× usual', 'bt.m.w1': 'Same niche · similar 32s length', 'bt.m.w2': 'Shared keywords: storage, dollar store', 'bt.m.usual': 'usual',
+    'bt.m.n1': 'A reference Short broke out', 'bt.m.n1s': '1-Min Cooking · 6.2× usual', 'bt.m.n2': '3-day upload gap', 'bt.m.n2s': 'Cat Diary · post one today', 'bt.m.n3': "Today's briefing", 'bt.m.n3s': '48h 1.28M views · 3 to-dos',
+    'bt.m.k1': 'Idea', 'bt.m.k2': 'Script', 'bt.m.k3': 'Uploaded', 'bt.m.i1': '3-second snack review', 'bt.m.i2': 'Twist-ending challenge', 'bt.m.i3': 'Cat vs cucumber test', 'bt.m.wk': 'Uploads/week', 'bt.m.hit': 'Breakout rate',
+    'cta2.h2': 'One channel link,\nand the radar runs from today', 'cta2.sub': 'Try it now without signing in. Add as many channels as you like.'
+  },
+  ja: {
+    'nav.how': '仕組み', 'nav.faq': 'よくある質問', 'hero.cta2b': 'ダッシュボードを見る', 'hero.note': 'ログイン不要・複数チャンネルもまとめて・テストモード',
+    'hero.f1t': 'リファレンスのショートが伸びました', 'hero.f1d': '1分自炊・普段の6.2倍', 'hero.f2t': '全チャンネル合計・48時間', 'hero.f2v': '128万回',
+    'st.1v': '毎時', 'st.1t': '自動で再収集', 'st.2v': '100件', 'st.2t': 'のチャンネルを1画面で', 'st.3v': '50本', 'st.3t': 'チャンネルごとの最新ショート', 'st.4v': '韓・英・日', 'st.4t': '3言語に対応',
+    'mc.over': '複数チャンネル', 'mc.h2': 'チャンネルが何件でも、\n1画面で合計して見られます',
+    'mc.sub': 'マイチャンネルとリファレンスを複数入れると、全チャンネル合計の48時間の動きと日別再生数をチャンネル別に積み上げて表示します。チャンネルごとに色が決まっているので、再生数の出どころがひと目でわかります。',
+    'mc.b1': '全チャンネル合計の48時間・日別再生数', 'mc.b2': 'チャンネル別の積み上げ ↔ 合計表示を切り替え', 'mc.b3': 'チャンネル順位と前回収集からの増加', 'mc.b4': '比較表で投稿ペース・普段の再生数・ヒット率を並べて',
+    'mc.chart': '全チャンネル合計・直近48時間',
+    'dash.byCh': 'チャンネル別', 'dash.sum': '合計', 'dash.live2': '全チャンネル合計・直近48時間・5チャンネル', 'dash.daily2': '全チャンネル合計・日別再生数・直近28日',
+    'dash.homeSub2': '収集中のチャンネル5件・最終収集12分前・毎時5分に自動収集', 'dash.k1s2': 'マイ 2・リファレンス 3',
+    'how.over': '仕組み', 'how.h2': 'リンク1つでレーダーが回り始めます', 'how.sub': 'インストールもログインも不要。チャンネルのリンクを貼った瞬間から収集が始まります。',
+    'how.s1t': 'チャンネルのリンクを貼る', 'how.s1d': 'チャンネルURL、@ハンドル、ショートのリンクどれでもOK。マイチャンネルとリファレンスを複数まとめて入れられます。',
+    'how.s2t': '毎時自動で収集', 'how.s2d': '最新ショート50本と再生数をすぐ集め、その後は毎時5分に再計測して48時間の動きを積み上げます。',
+    'how.s3t': '提案・分析・通知', 'how.s3d': '普段より伸びたショートとその理由、チャンネルとの適合度、投稿の空白や動画の削除などの問題をまとめます。',
+    'bt.over': '機能', 'bt.h2': 'ショート収集から\nパーソナライズ提案まで', 'bt.sub': '集めて、分析して、提案して、知らせます。クリエイターが毎日手作業でしていたことをレーダーが代わりに行います。',
+    'bt.pick.t': 'パーソナライズされたネタ提案', 'bt.pick.d': 'リファレンスで普段より大きく伸びたショートを選び、分野・キーワード・長さ・タイトル型でチャンネルとの適合度を採点します。',
+    'bt.algo.t': 'アルゴリズム分析', 'bt.algo.d': '投稿時間・曜日・長さ・タイトル型・月別に、どの条件で普段より伸びたかを表示します。',
+    'bt.agent.t': 'エージェントのブリーフィング・通知', 'bt.agent.d': '毎時問題をチェックし、毎朝ブリーフィングと今日やることをまとめます。',
+    'bt.find.t': 'リファレンス自動発掘', 'bt.find.d': 'キーワードやマイチャンネルが紹介しているチャンネルをたどり、まだ知らない伸びているチャンネルを見つけます。',
+    'bt.curve.t': 'ショート分析', 'bt.curve.d': 'ショートを押すと、再生数の伸び、高評価率、普段比、似たチャンネル探しまで。',
+    'bt.cmp.t': 'チャンネル比較', 'bt.cmp.d': '投稿ペース、普段の再生数、ヒット率を同じ基準で並べて見ます。',
+    'bt.board.t': 'ネタボード', 'bt.board.d': '提案から保存したネタを、アイデア → 台本 → 投稿へと進めて管理します。',
+    'bt.m.fit1': '適合 93', 'bt.m.fit2': '適合 81', 'bt.m.r1': '普段の6.2倍', 'bt.m.r2': '普段の4.2倍', 'bt.m.w1': '同じ分野・近い長さ32秒', 'bt.m.w2': '共通キーワード 収納・100均', 'bt.m.usual': '普段',
+    'bt.m.n1': 'リファレンスのショートが伸びました', 'bt.m.n1s': '1分自炊・普段の6.2倍', 'bt.m.n2': '投稿の空白 3日', 'bt.m.n2s': '猫日記・今日1本投稿しましょう', 'bt.m.n3': '今日のブリーフィング', 'bt.m.n3s': '48時間 128万回・やること3件',
+    'bt.m.k1': 'アイデア', 'bt.m.k2': '台本', 'bt.m.k3': '投稿済み', 'bt.m.i1': 'コンビニ新商品3秒レビュー', 'bt.m.i2': 'どんでん返しチャレンジ', 'bt.m.i3': '猫ときゅうりの実験', 'bt.m.wk': '週の投稿', 'bt.m.hit': 'ヒット率',
+    'cta2.h2': 'チャンネルのリンク1つで、\n今日からレーダーが回ります', 'cta2.sub': 'ログインなしですぐ試せます。複数チャンネルもまとめてどうぞ。'
+  }
+};
+for (const l of Object.keys(LANDING3)) Object.assign(DICT[l], LANDING3[l]);
+
+// 소개 페이지 데모·그림 보강(2026-10) — 채널 5개 데모 · 오늘 할 일 · 맞춤 추천 · 알림
+const LANDING4 = {
+  ko: {
+    'mc.aria': '내 채널 2개와 레퍼런스 3개가 CNOL RADAR로 모여, 모든 채널을 합산한 48시간 차트 하나로 쌓이는 그림',
+    'mc.hub': '매시간 수집', 'mc.up': '▲ 23% · 직전 48시간 대비',
+    'dash.c4': '편의점 먹거리',
+    'dash.br2s': '자취요리 1분 · “전자레인지 3분 계란밥” · 평소의 6.2배', 'dash.br4v': '평소의 6.2배',
+    'dash.tdTitle': '오늘 할 일', 'dash.tdSub': '에이전트가 데이터로 골랐어요', 'dash.tdGo': '바로 가기',
+    'dash.td1': '냥집사 일기에 오늘 쇼츠 1개 올리기 · 3일째 공백', 'dash.td2': '“전자레인지 3분 계란밥” 포맷으로 내 버전 만들기', 'dash.td3': '터진 레퍼런스 2건 살펴보기',
+    'dash.agoH': '{n}시간 전', 'dash.pkSub': '레퍼런스에서 평소보다 터진 쇼츠를 내 채널 맞춤도 순으로 골랐어요',
+    'dash.fit': '맞춤 {n}', 'dash.ratio': '평소의 {x}배', 'dash.fitWhy': '맞춤 이유',
+    'dash.fmtHow': '정보·꿀팁', 'dash.fmtQ': '질문형', 'dash.fmtNum': '가격·숫자', 'dash.w3': '겹치는 키워드 한 끼 · 비슷한 길이 41초',
+    'bt.m.w1': '정보·꿀팁형 제목 · 비슷한 길이 32초', 'bt.m.w2': '같은 분야 반려동물 · 겹치는 키워드 고양이',
+    'bt.m.prof': '내 채널 기준', 'bt.m.p1': '분야 생활꿀템·반려동물', 'bt.m.p2': '보통 길이 32초', 'bt.m.p3': '잘 되는 유형 정보·꿀팁', 'bt.m.p4': '자주 쓰는 키워드 수납·고양이'
+  },
+  en: {
+    'mc.aria': 'Two of your channels and three references flow into CNOL RADAR and stack into one combined 48-hour chart',
+    'mc.hub': 'Collected hourly', 'mc.up': '▲ 23% vs previous 48h',
+    'dash.c4': 'Convenience food',
+    'dash.br2s': '1-Min Cooking · “3-minute microwave egg rice” · 6.2× usual', 'dash.br4v': '6.2× usual',
+    'dash.tdTitle': 'To-do today', 'dash.tdSub': 'Picked by the agent from your data', 'dash.tdGo': 'Go',
+    'dash.td1': 'Post 1 Short on Cat Diary today · 3-day gap', 'dash.td2': 'Make your version of “3-minute microwave egg rice”', 'dash.td3': 'Review 2 reference breakouts',
+    'dash.agoH': '{n}h ago', 'dash.pkSub': 'Reference Shorts that beat their usual, ranked by fit for your channel',
+    'dash.fit': 'Fit {n}', 'dash.ratio': '{x}× usual', 'dash.fitWhy': 'Why it fits',
+    'dash.fmtHow': 'How-to', 'dash.fmtQ': 'Question', 'dash.fmtNum': 'Price/number', 'dash.w3': 'Shared keyword: meal · similar 41s length',
+    'bt.m.w1': 'How-to title · similar 32s length', 'bt.m.w2': 'Same niche: pets · shared keyword: cats',
+    'bt.m.prof': 'Based on my channels', 'bt.m.p1': 'Niches: life hacks · pets', 'bt.m.p2': 'Typical length 32s', 'bt.m.p3': 'Best format: how-to', 'bt.m.p4': 'Top keywords: storage · cats'
+  },
+  ja: {
+    'mc.aria': 'マイチャンネル2件とリファレンス3件がCNOL RADARに集まり、全チャンネル合計の48時間チャート1つに積み上がる図',
+    'mc.hub': '毎時収集', 'mc.up': '▲ 23%・直前48時間比',
+    'dash.c4': 'コンビニグルメ',
+    'dash.br2s': '1分自炊・「レンジで3分たまごご飯」・普段の6.2倍', 'dash.br4v': '普段の6.2倍',
+    'dash.tdTitle': '今日やること', 'dash.tdSub': 'エージェントがデータから選びました', 'dash.tdGo': '開く',
+    'dash.td1': '猫日記に今日ショートを1本投稿・3日間の空白', 'dash.td2': '「レンジで3分たまごご飯」の形式で自分版を作る', 'dash.td3': 'リファレンスのヒット2件を確認',
+    'dash.agoH': '{n}時間前', 'dash.pkSub': 'リファレンスで普段より伸びたショートを、チャンネルとの適合度順に選びました',
+    'dash.fit': '適合 {n}', 'dash.ratio': '普段の{x}倍', 'dash.fitWhy': '適合の理由',
+    'dash.fmtHow': 'ハウツー', 'dash.fmtQ': '質問型', 'dash.fmtNum': '価格・数字', 'dash.w3': '共通キーワード ごはん・近い長さ41秒',
+    'bt.m.w1': 'ハウツー型タイトル・近い長さ32秒', 'bt.m.w2': '同じ分野ペット・共通キーワード 猫',
+    'bt.m.prof': 'マイチャンネル基準', 'bt.m.p1': '分野 生活の便利グッズ・ペット', 'bt.m.p2': '標準の長さ32秒', 'bt.m.p3': '伸びる型 ハウツー', 'bt.m.p4': 'よく使うキーワード 収納・猫'
+  }
+};
+for (const l of Object.keys(LANDING4)) Object.assign(DICT[l], LANDING4[l]);

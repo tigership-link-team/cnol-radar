@@ -4,350 +4,296 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CNOL RADAR · 터지는 쇼츠를 먼저 잡는 레이더</title>
-<meta name="description" content="채널 링크만 넣으면 매시간 쇼츠 조회수를 재서, 평소보다 크게 터진 쇼츠와 그 이유, 내 채널에 맞는 다음 소재, 채널 이슈까지 알려주는 CNOL RADAR.">
+<meta name="description" content="채널 링크만 넣으면 매시간 쇼츠 조회수를 재서, 평소보다 크게 터진 쇼츠와 그 이유, 내 채널에 맞는 다음 소재, 채널 이슈까지 알려주는 CNOL RADAR. 채널 여러 개도 한 화면에서 합쳐 봐요.">
 <meta property="og:title" content="CNOL RADAR">
 <meta property="og:description" content="터지는 쇼츠, 먼저 잡는 레이더">
 <meta property="og:image" content="/icon-512.png">
-<meta name="theme-color" content="#6200EE">
+<meta name="theme-color" content="#07050f">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto:wght@400;500;700;900&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
 <link rel="stylesheet" href="/dash.css">
-<style>
-.pre{white-space:pre-line}
-.top{background:var(--primary);color:#fff}
-.top .wrap{min-height:64px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 28px}
-.top nav{display:flex;flex-wrap:wrap;gap:4px;flex:1 1 auto}
-.top nav a{color:#fff;text-decoration:none;padding:10px 12px;font-size:15px;font-weight:500}
-.lang{display:inline-flex;border-radius:18px;background:rgba(255,255,255,.14);padding:2px}
-.lang button{min-height:36px;padding:0 12px;border-radius:16px;border:0;background:transparent;color:#fff;font-size:13px;font-weight:700;cursor:pointer}
-.lang button[aria-pressed="true"]{background:#fff;color:var(--primary-dark)}
-.hero{background:var(--primary);color:#fff;overflow:hidden}
-.hero .wrap{padding-top:56px;padding-bottom:96px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr));gap:48px;align-items:center}
-.hero h1{margin:0;font-size:clamp(40px,6vw,64px);line-height:1.12;font-weight:900;letter-spacing:-1.5px}
-.hero .sub{margin:0;font-size:20px;line-height:1.6;color:#E9DDFF;max-width:540px}
-.pill{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;padding:6px 14px 6px 10px;border-radius:16px;background:rgba(255,255,255,.14);font-size:14px;font-weight:500}
-.radar{position:relative;min-height:460px}
-.ring{position:absolute;left:50%;top:50%;border-radius:50%;transform:translate(-50%,-50%)}
-.blab{position:absolute;font-size:13px;font-weight:700}
-section.band{padding:88px 0}
-.over{font-size:13px;font-weight:700;letter-spacing:1.2px;color:var(--primary)}
-.h2{margin:0;font-size:clamp(30px,4vw,42px);line-height:1.25;font-weight:900;letter-spacing:-.8px}
-.lead{margin:0;font-size:17px;line-height:1.7;color:var(--ink-2)}
-.stack{display:flex;flex-direction:column;gap:14px}
-.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr));gap:56px;align-items:center}
-.dash{background:#fff;border-radius:16px;box-shadow:var(--e8);overflow:hidden}
-.dash-bar{background:var(--primary);color:#fff;min-height:56px;padding:0 20px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px}
-.dash-bar .tabs{display:flex;flex-wrap:wrap;gap:4px;flex:1 1 auto;font-size:14px;font-weight:700}
-.dash-bar .tabs span{padding:16px 12px 14px;color:#E9DDFF}
-.dash-bar .tabs span.on{color:#fff;border-bottom:2px solid var(--secondary)}
-.dash-body{padding:20px;background:var(--bg);display:flex;flex-direction:column;gap:16px}
-.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:12px}
-.steps li{background:#fff;border-radius:12px;padding:24px;box-shadow:var(--e1);display:flex;flex-direction:column;gap:12px;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
-.steps li:hover{transform:translateY(-4px);box-shadow:var(--e8)}
-.ico{width:44px;height:44px;border-radius:22px;background:var(--primary-tint);color:var(--primary-dark);display:flex;align-items:center;justify-content:center}
-.dark{background:#121212;color:#DEDEDE}
-.dark .h2{color:#fff}
-.dark .over{color:#BB86FC}
-.dark .lead{color:#B3B3B3}
-.dcard{background:#1E1E1E;border-radius:12px;padding:28px;display:flex;flex-direction:column;gap:12px}
-.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(208px,100%),1fr));gap:16px;align-items:stretch}
-.plan{border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px;background:#fff;position:relative}
-.plan.rec{border:2px solid var(--primary);padding:23px;box-shadow:var(--e8)}
-.plan ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.5;flex:1 1 auto}
-.plan .price{font-size:32px;font-weight:900}
-details{background:#fff;border-radius:8px;box-shadow:var(--e1)}
-details summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 24px;font-size:17px;font-weight:700}
-details summary::-webkit-details-marker{display:none}
-details p{margin:0;padding:0 24px 22px;font-size:15px;line-height:1.7;color:var(--ink-2)}
-details[open] .chev{transform:rotate(180deg)}
-.chev{transition:transform .25s ease;flex:none}
-.feature-card{background:#fff;border-radius:12px;box-shadow:var(--e4);padding:24px;display:flex;flex-direction:column;gap:14px}
-.mini{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:8px;background:var(--bg)}
-.mini b{font-size:15px}.mini span{font-size:13px;color:var(--ink-2)}
-@media (max-width:640px){.hero .wrap{padding-top:32px;padding-bottom:56px}.radar{min-height:340px}section.band{padding:64px 0}}
-</style>
+<link rel="stylesheet" href="/landing.css">
 </head>
-<body>
-<header class="top">
-  <div class="wrap">
-    <a class="brand" href="/" aria-label="CNOL RADAR 홈">
-      <span class="mark"><img src="/logo.png" alt="" width="30" height="26"></span>
-      <span class="word"><b>CNOL</b> RADAR</span>
-    </a>
-    <nav aria-label="주요 메뉴">
-      <a href="#agent" data-i18n="nav.agent">에이전트</a>
+<body class="lp">
+
+<header class="lp-top" id="top">
+  <div class="lp-wrap">
+    <a class="lp-brand" href="/" aria-label="CNOL RADAR"><span class="mk"><img src="/logo.png" alt="" width="24" height="21"></span><b>CNOL RADAR</b></a>
+    <nav class="lp-nav" aria-label="메뉴">
       <a href="#features" data-i18n="nav.features">기능</a>
-      <a href="#why" data-i18n="nav.why">왜 CNOL RADAR</a>
+      <a href="#how" data-i18n="nav.how">작동 방식</a>
       <a href="#pricing" data-i18n="nav.pricing">요금</a>
+      <a href="#faq-sec" data-i18n="nav.faq">질문</a>
     </nav>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
-      <div class="lang" role="group" aria-label="Language">
-        <button type="button" data-lang="ko">KO</button>
-        <button type="button" data-lang="en">EN</button>
-        <button type="button" data-lang="ja">日本語</button>
-      </div>
-      <a class="btn text rip" href="/app" style="color:#fff" data-i18n="nav.login">대시보드</a>
-      <a class="btn white rip" href="/app" data-i18n="nav.start">지금 써보기</a>
+    <div class="lp-tools">
+      <div class="lp-lang" role="group" aria-label="Language"><button type="button" data-lang="ko">KO</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="ja">日本語</button></div>
+      <a class="lp-link" href="/app" data-i18n="nav.login">대시보드</a>
+      <a class="lp-btn pri sm" href="/app"><span data-i18n="nav.start">지금 써보기</span></a>
     </div>
   </div>
 </header>
 
-<main id="top">
-<section class="hero">
-  <div class="wrap">
-    <div class="stack" style="gap:28px">
-      <span class="pill fu">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#03DAC6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg>
-        <span data-i18n="hero.over">숏폼 크리에이터를 위한 CNOL RADAR</span>
-      </span>
-      <h1>
-        <span class="rv"><span data-i18n="hero.h1a">터지는 쇼츠,</span></span>
-        <span class="rv"><span style="animation-delay:120ms;color:var(--secondary)" data-i18n="hero.h1b">먼저 잡는 레이더</span></span>
-      </h1>
-      <p class="sub fu" style="animation-delay:200ms" data-i18n="hero.sub">채널 링크만 넣으면 매시간 조회수를 재서, 평소보다 크게 터진 쇼츠와 왜 떴는지, 내 채널에 맞는 다음 소재까지 골라 드려요. 채널에 문제가 생기면 바로 알려드려요.</p>
-      <div class="fu" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;animation-delay:300ms">
-        <a class="btn fab rip" id="magnet" href="/app">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.4 4.5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.42-1.41"/></svg>
-          <span data-i18n="hero.cta1">지금 바로 써보기</span>
-        </a>
-        <a class="btn ghost-white rip" href="#extension">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h4a2 2 0 1 1 4 0h4v4a2 2 0 1 1 0 4v4H4z"/></svg>
-          <span data-i18n="hero.cta2">크롬 확장 받기</span>
-        </a>
+<main>
+<!-- 히어로 -->
+<section class="lp-hero">
+  <div class="lp-wrap">
+    <div>
+      <span class="lp-pill"><i aria-hidden="true"></i><span data-i18n="hero.over">숏폼 크리에이터를 위한 CNOL RADAR</span></span>
+      <h1 class="lp-h1"><span data-i18n="hero.h1a">터지는 쇼츠,</span><span class="lp-grad" data-i18n="hero.h1b">먼저 잡는 레이더</span></h1>
+      <p class="lp-sub" data-i18n="hero.sub">채널 링크만 넣으면 매시간 조회수를 재서, 평소보다 크게 터진 쇼츠와 왜 떴는지, 내 채널에 맞는 다음 소재까지 골라 드려요. 채널에 문제가 생기면 바로 알려드려요.</p>
+      <div class="lp-cta">
+        <a class="lp-btn pri" href="/app"><span data-i18n="hero.cta1">지금 바로 써보기</span><span class="ar" aria-hidden="true">→</span></a>
+        <a class="lp-btn glass" href="#dashboard"><span data-i18n="hero.cta2b">대시보드 미리 보기</span></a>
       </div>
-      <p class="fu" style="margin:0;font-size:14px;color:#E9DDFF;animation-delay:380ms" data-i18n="hero.note">로그인 없이 바로 · 유튜브 채널 링크만 있으면 돼요 · 실험 모드</p>
+      <p class="lp-note" data-i18n="hero.note">로그인 없이 바로 · 채널 여러 개도 한 번에 · 실험 모드</p>
     </div>
-    <div class="radar zi" aria-hidden="true">
-      <div class="ring" style="width:460px;height:460px;border:1px solid rgba(255,255,255,.16)"></div>
-      <div class="ring" style="width:330px;height:330px;border:1px solid rgba(255,255,255,.18)"></div>
-      <div class="ring" style="width:200px;height:200px;border:1px solid rgba(255,255,255,.22)"></div>
-      <div class="ring sweep" style="width:460px;height:460px;margin:-230px 0 0 -230px;transform:none;background:conic-gradient(from 0deg,rgba(3,218,198,0) 0deg,rgba(3,218,198,0) 290deg,rgba(3,218,198,.26) 360deg)"></div>
-      <div class="ring" style="width:14px;height:14px;background:#fff"></div>
-      <span class="blip" style="left:68%;top:30%"></span><span class="blab" style="left:calc(68% + 14px);top:calc(30% - 9px)" data-i18n="hero.b1">수납 6.2×</span>
-      <span class="blip w" style="left:30%;top:38%;animation-delay:.6s"></span><span class="blab" style="left:calc(30% + 14px);top:calc(38% - 9px);color:#E9DDFF" data-i18n="hero.b2">반려묘 5.4×</span>
-      <span class="blip" style="left:61%;top:70%;animation-delay:1.1s"></span><span class="blab" style="left:calc(61% + 14px);top:calc(70% - 9px)" data-i18n="hero.b3">여행 4.6×</span>
-      <span class="blip w" style="left:36%;top:66%;animation-delay:1.7s"></span><span class="blab" style="left:calc(36% + 14px);top:calc(66% - 9px);color:#E9DDFF" data-i18n="hero.b4">편의점 3.8×</span>
+    <div class="lp-radar" aria-hidden="true">
+      <svg viewBox="0 0 520 520">
+        <defs>
+          <radialGradient id="rg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#8b5cf6" stop-opacity=".22"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/></radialGradient>
+          <linearGradient id="sw" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#22d3ee" stop-opacity="0"/><stop offset="1" stop-color="#a78bfa" stop-opacity=".55"/></linearGradient>
+        </defs>
+        <circle cx="260" cy="260" r="250" fill="url(#rg)"/>
+        <g fill="none" stroke="rgba(196,181,253,.22)">
+          <circle cx="260" cy="260" r="240"/><circle cx="260" cy="260" r="180"/><circle cx="260" cy="260" r="120"/><circle cx="260" cy="260" r="60"/>
+          <path d="M20 260H500M260 20V500" stroke-dasharray="3 6"/>
+        </g>
+        <g class="lp-sweep"><path d="M260 260 L500 260 A240 240 0 0 0 429.7 90.3 Z" fill="url(#sw)" opacity=".75"/><line x1="260" y1="260" x2="500" y2="260" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round"/></g>
+        <circle cx="260" cy="260" r="10" fill="#fff"/><circle cx="260" cy="260" r="22" fill="none" stroke="rgba(255,255,255,.35)"/>
+      </svg>
+      <span class="lp-blip" style="left:72%;top:28%;color:#3987e5"><i style="background:#3987e5"></i><span data-i18n="hero.b1">수납 6.2×</span></span>
+      <span class="lp-blip" style="left:22%;top:36%;color:#d95926"><i style="background:#d95926;animation-delay:.6s"></i><span data-i18n="hero.b2">반려묘 5.4×</span></span>
+      <span class="lp-blip" style="left:63%;top:70%;color:#199e70"><i style="background:#199e70;animation-delay:1.1s"></i><span data-i18n="hero.b3">여행 4.6×</span></span>
+      <span class="lp-blip" style="left:30%;top:64%;color:#d55181"><i style="background:#d55181;animation-delay:1.7s"></i><span data-i18n="hero.b4">편의점 3.8×</span></span>
+      <div class="lp-float" style="left:-4%;bottom:6%"><small data-i18n="hero.f2t">모든 채널 합산 · 48시간</small><b data-i18n="hero.f2v">128만 회</b><div class="bars" id="heroBars"></div></div>
+      <div class="lp-float" style="right:-2%;top:2%;animation-delay:1.5s"><small data-i18n="hero.f1t">레퍼런스 쇼츠가 터졌어요</small><b data-i18n="hero.f1d">자취요리 1분 · 평소의 6.2배</b></div>
+    </div>
+  </div>
+  <div class="lp-wrap">
+    <div class="lp-stats">
+      <div class="lp-stat rv-in"><b data-i18n="st.1v">매시간</b><span data-i18n="st.1t">자동으로 다시 수집</span></div>
+      <div class="lp-stat rv-in d1"><b data-i18n="st.2v">100개</b><span data-i18n="st.2t">채널까지 한 화면에</span></div>
+      <div class="lp-stat rv-in d2"><b data-i18n="st.3v">50개</b><span data-i18n="st.3t">채널마다 최근 쇼츠</span></div>
+      <div class="lp-stat rv-in d3"><b data-i18n="st.4v">한·영·일</b><span data-i18n="st.4t">3개 언어 지원</span></div>
     </div>
   </div>
 </section>
 
-<section class="band" id="dashboard" style="background:var(--bg)">
-  <div class="wrap stack" style="gap:36px">
-    <div style="display:flex;flex-wrap:wrap;gap:20px 32px;justify-content:space-between;align-items:flex-end">
-      <div class="stack" style="max-width:760px">
-        <span class="over" data-i18n="dash.over">실제 대시보드</span>
-        <h2 class="h2 pre" data-i18n="dash.h2"></h2>
-        <p class="lead" data-i18n="dash.sub"></p>
-      </div>
-      <a class="btn rip" href="/app"><span data-i18n="dash.open"></span> →</a>
+<!-- 채널 여러 개 -->
+<section class="lp-sec" id="multi" style="padding-top:60px">
+  <div class="lp-wrap lp-mc">
+    <div class="rv-in">
+      <span class="lp-over" data-i18n="mc.over">채널 여러 개</span>
+      <h2 class="lp-h2 pre" data-i18n="mc.h2"></h2>
+      <p class="lp-lead" data-i18n="mc.sub"></p>
     </div>
-    <div class="dk-demo fu" role="figure" data-i18n-aria="dash.aria">
-      <div class="dk-orbs" aria-hidden="true"><i style="top:-90px;left:-120px;width:380px;height:380px"></i><i style="top:30px;right:12%;width:220px;height:220px"></i><i style="bottom:-160px;right:-140px;width:480px;height:480px"></i></div>
-      <aside class="dk-side" aria-hidden="true">
-        <div class="dk-brand"><span style="display:flex;align-items:center;gap:12px;flex-grow:1;min-width:0"><span class="dk-logo"><img src="/logo.png" alt="" width="30" height="26"></span><span style="min-width:0"><b>CNOL RADAR</b><small data-i18n="dash.brandSub"></small></span></span><span class="dk-bell"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="dk-badge">3</span></span></div>
-        <span class="dk-nav" aria-current="page"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span data-i18n="dash.m1"></span></span>
-        <p class="dk-sec" data-i18n="dash.s1"></p>
-        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg><span data-i18n="dash.m2"></span></span>
-        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span data-i18n="dash.m3"></span></span>
-        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg><span data-i18n="dash.m4"></span></span>
-        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span data-i18n="dash.m5"></span><span class="n">3</span></span>
-        <p class="dk-sec" data-i18n="dash.s2"></p>
-        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span data-i18n="dash.m6"></span></span>
-        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span data-i18n="dash.m7"></span></span>
-        <p class="dk-sec" data-i18n="dash.s3"></p>
-        <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></svg><span data-i18n="dash.m8"></span></span>
-      </aside>
-      <div class="dk-main">
-        <div class="dk-head">
-          <div><div class="dk-h" data-i18n="dash.title"></div><p data-i18n="dash.homeSub"></p></div>
-          <span class="dk-hbtn ghost" style="height:38px;padding:0 14px;font-size:13px" data-i18n="dash.sample"></span>
+    <ul class="lp-checks rv-in d1">
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span data-i18n="mc.b1"></span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span data-i18n="mc.b2"></span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span data-i18n="mc.b3"></span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span data-i18n="mc.b4"></span></li>
+    </ul>
+    <div class="lp-flow rv-in d2" id="flow" role="img" data-i18n-aria="mc.aria">
+      <div class="lp-chs" id="flowChs"></div>
+      <div class="wiresWrap"><svg class="wires" id="flowWires" aria-hidden="true"></svg></div>
+      <div class="hubWrap"><div class="lp-hub"><img src="/logo.png" alt="" width="40" height="34"></div><small data-i18n="mc.hub">매시간 수집</small></div>
+      <div class="gapw"><svg class="wires" id="flowGap" aria-hidden="true"></svg></div>
+      <div class="lp-chart">
+        <div class="hd"><div><h4 data-i18n="mc.chart">모든 채널 합산 · 지난 48시간</h4><strong data-i18n="hero.f2v">128만 회</strong></div><span class="up" data-i18n="mc.up">▲ 23% · 직전 48시간 대비</span></div>
+        <div class="stk" id="flowStk"></div>
+        <div class="ax"><span data-i18n="dash.ago48">48시간 전</span><span data-i18n="dash.ago24">24시간 전</span><span data-i18n="dash.now">지금</span></div>
+        <div class="lg" id="flowLg"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 실제 대시보드 데모 -->
+<section class="lp-sec" id="dashboard" style="padding-top:40px">
+  <div class="lp-wrap">
+    <div class="lp-head c rv-in">
+      <span class="lp-over" data-i18n="dash.over">실제 대시보드</span>
+      <h2 class="lp-h2 pre" data-i18n="dash.h2"></h2>
+      <p class="lp-lead" data-i18n="dash.sub"></p>
+    </div>
+    <div class="lp-demo rv-in d1">
+      <div class="dk-demo" role="figure" data-i18n-aria="dash.aria">
+        <div class="dk-orbs" aria-hidden="true"><i style="top:-90px;left:-120px;width:380px;height:380px"></i><i style="top:30px;right:12%;width:220px;height:220px"></i><i style="bottom:-160px;right:-140px;width:480px;height:480px"></i></div>
+        <aside class="dk-side" aria-hidden="true">
+          <div class="dk-brand"><span style="display:flex;align-items:center;gap:12px;flex-grow:1;min-width:0"><span class="dk-logo"><img src="/logo.png" alt="" width="30" height="26"></span><span style="min-width:0"><b>CNOL RADAR</b><small data-i18n="dash.brandSub"></small></span></span></div>
+          <span class="dk-nav" aria-current="page"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span data-i18n="dash.m1"></span></span>
+          <p class="dk-sec" data-i18n="dash.s1"></p>
+          <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg><span data-i18n="dash.m2"></span></span>
+          <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span data-i18n="dash.m3"></span></span>
+          <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg><span data-i18n="dash.m4"></span></span>
+          <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span data-i18n="dash.m5"></span><span class="n">3</span></span>
+          <p class="dk-sec" data-i18n="dash.s2"></p>
+          <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span data-i18n="dash.m6"></span></span>
+          <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span data-i18n="dash.m7"></span></span>
+          <p class="dk-sec" data-i18n="dash.s3"></p>
+          <span class="dk-nav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></svg><span data-i18n="dash.m8"></span></span>
+        </aside>
+        <div class="dk-main">
+          <div class="dk-head">
+            <div><div class="dk-h" data-i18n="dash.title"></div><p data-i18n="dash.homeSub2"></p></div>
+            <span class="dk-hbtn ghost" style="height:38px;padding:0 14px;font-size:13px" data-i18n="dash.sample"></span>
+          </div>
+          <div id="demoBody" style="display:flex;flex-direction:column;gap:16px"></div>
         </div>
-        <div id="demoBody" style="display:flex;flex-direction:column;gap:16px"></div>
       </div>
+    </div>
+    <div style="display:flex;justify-content:center;margin-top:36px"><a class="lp-btn pri" href="/app"><span data-i18n="dash.open">내 채널로 열어보기</span><span class="ar" aria-hidden="true">→</span></a></div>
+  </div>
+</section>
+
+<!-- 작동 방식 -->
+<section class="lp-sec" id="how">
+  <div class="lp-wrap">
+    <div class="lp-head c rv-in">
+      <span class="lp-over" data-i18n="how.over">작동 방식</span>
+      <h2 class="lp-h2" data-i18n="how.h2"></h2>
+      <p class="lp-lead" data-i18n="how.sub"></p>
+    </div>
+    <div class="lp-steps">
+      <div class="lp-step rv-in"><span class="no">01</span><span class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.4 4.5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.42-1.41"/></svg></span><h3 data-i18n="how.s1t"></h3><p data-i18n="how.s1d"></p></div>
+      <div class="lp-step rv-in d1"><span class="no">02</span><span class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 12l6-6"/></svg></span><h3 data-i18n="how.s2t"></h3><p data-i18n="how.s2d"></p></div>
+      <div class="lp-step rv-in d2"><span class="no">03</span><span class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg></span><h3 data-i18n="how.s3t"></h3><p data-i18n="how.s3d"></p></div>
     </div>
   </div>
 </section>
 
-<section aria-label="proof" style="border-bottom:1px solid var(--line)">
-  <div class="wrap" style="padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;gap:24px 48px;align-items:center;justify-content:space-between">
-    <p style="margin:0;font-size:17px;font-weight:500;flex:1 1 320px" data-i18n="proof.line">쇼츠 채널 [운영 채널 수]개를 직접 키우는 팀이 만들었어요.</p>
-    <div style="display:flex;flex-wrap:wrap;gap:32px">
-      <div class="stack" style="gap:4px"><span style="font-size:26px;font-weight:900;color:var(--primary-dark)" data-i18n="proof.v1"></span><span style="font-size:13px;color:var(--ink-2)" data-i18n="proof.s1"></span></div>
-      <div class="stack" style="gap:4px"><span style="font-size:26px;font-weight:900;color:var(--primary-dark)" data-i18n="proof.v2"></span><span style="font-size:13px;color:var(--ink-2)" data-i18n="proof.s2"></span></div>
-      <div class="stack" style="gap:4px"><span style="font-size:26px;font-weight:900;color:var(--primary-dark)" data-i18n="proof.v3"></span><span style="font-size:13px;color:var(--ink-2)" data-i18n="proof.s3"></span></div>
+<!-- 기능 (벤토) -->
+<section class="lp-sec" id="features" style="background:linear-gradient(180deg,transparent,rgba(124,58,237,.06) 40%,transparent)">
+  <div class="lp-wrap">
+    <div class="lp-head rv-in">
+      <span class="lp-over" data-i18n="bt.over">기능</span>
+      <h2 class="lp-h2 pre" data-i18n="bt.h2"></h2>
+      <p class="lp-lead" data-i18n="bt.sub"></p>
+    </div>
+    <div class="lp-bento">
+      <article class="lp-card b-l rv-in">
+        <h3 data-i18n="bt.pick.t"></h3><p data-i18n="bt.pick.d"></p>
+        <div class="viz mini-shorts">
+          <div class="mini-short"><span class="th" style="background:linear-gradient(160deg,#fde68a,#f97316)"></span><div><b data-i18n="top.2"></b><div class="chips"><span class="chip fit" data-i18n="bt.m.fit1"></span><span class="chip hot" data-i18n="bt.m.r1"></span></div><small data-i18n="bt.m.w1"></small></div></div>
+          <div class="mini-short"><span class="th" style="background:linear-gradient(160deg,#fbcfe8,#db2777)"></span><div><b data-i18n="top.4"></b><div class="chips"><span class="chip fit" data-i18n="bt.m.fit2"></span><span class="chip hot" data-i18n="bt.m.r2"></span></div><small data-i18n="bt.m.w2"></small></div></div>
+        </div>
+        <div class="prof"><small data-i18n="bt.m.prof"></small><span class="chip gr" data-i18n="bt.m.p1"></span><span class="chip gr" data-i18n="bt.m.p2"></span><span class="chip gr" data-i18n="bt.m.p3"></span><span class="chip gr" data-i18n="bt.m.p4"></span></div>
+      </article>
+      <article class="lp-card b-s rv-in d1">
+        <h3 data-i18n="bt.agent.t"></h3><p data-i18n="bt.agent.d"></p>
+        <div class="viz notes">
+          <div class="note"><i style="background:rgba(52,211,153,.16);color:#6ee7b7"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></i><span><b data-i18n="bt.m.n1"></b><small data-i18n="bt.m.n1s"></small></span></div>
+          <div class="note"><i style="background:rgba(251,191,36,.16);color:#fcd34d"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></i><span><b data-i18n="bt.m.n2"></b><small data-i18n="bt.m.n2s"></small></span></div>
+          <div class="note"><i style="background:rgba(167,139,250,.18);color:#c4b5fd"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg></i><span><b data-i18n="bt.m.n3"></b><small data-i18n="bt.m.n3s"></small></span></div>
+        </div>
+      </article>
+      <article class="lp-card b-s rv-in">
+        <h3 data-i18n="bt.algo.t"></h3><p data-i18n="bt.algo.d"></p>
+        <div class="viz" id="btAlgo"></div>
+      </article>
+      <article class="lp-card b-s rv-in d1">
+        <h3 data-i18n="bt.curve.t"></h3><p data-i18n="bt.curve.d"></p>
+        <div class="viz"><svg viewBox="0 0 300 120" aria-hidden="true"><defs><linearGradient id="cv" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#a78bfa" stop-opacity=".45"/><stop offset="1" stop-color="#a78bfa" stop-opacity="0"/></linearGradient></defs><path class="fadeA" d="M0 112 C40 104 60 70 100 56 S170 30 210 22 S270 14 300 10 L300 118 L0 118Z" fill="url(#cv)"/><path class="draw" pathLength="1" d="M0 112 C40 104 60 70 100 56 S170 30 210 22 S270 14 300 10" fill="none" stroke="#c4b5fd" stroke-width="2.5" stroke-linecap="round"/><line class="fadeA" x1="100" x2="100" y1="8" y2="118" stroke="rgba(255,255,255,.35)" stroke-dasharray="3 4"/><circle class="pop" cx="100" cy="56" r="5" fill="#a78bfa" stroke="#fff" stroke-width="2"/><line x1="0" x2="300" y1="118" y2="118" stroke="rgba(255,255,255,.15)"/></svg></div>
+      </article>
+      <article class="lp-card b-s rv-in d2">
+        <h3 data-i18n="bt.find.t"></h3><p data-i18n="bt.find.d"></p>
+        <div class="viz"><svg viewBox="0 0 300 130" aria-hidden="true"><g stroke="rgba(196,181,253,.35)" stroke-width="1.5"><line x1="150" y1="65" x2="60" y2="30"/><line x1="150" y1="65" x2="50" y2="100"/><line x1="150" y1="65" x2="245" y2="28"/><line x1="150" y1="65" x2="255" y2="98"/><line x1="150" y1="65" x2="150" y2="118"/><line x1="245" y1="28" x2="290" y2="62"/><line x1="60" y1="30" x2="20" y2="62"/></g><g><circle cx="150" cy="65" r="16" fill="#fff"/><circle class="pop" style="--d:.15s" cx="60" cy="30" r="9" fill="#3987e5"/><circle class="pop" style="--d:.25s" cx="50" cy="100" r="9" fill="#d95926"/><circle class="pop" style="--d:.35s" cx="245" cy="28" r="9" fill="#199e70"/><circle class="pop" style="--d:.45s" cx="255" cy="98" r="9" fill="#c98500"/><circle class="pop" style="--d:.55s" cx="150" cy="118" r="8" fill="#d55181"/><circle class="pop find" style="--d:.8s" cx="290" cy="62" r="7" fill="none" stroke="#a78bfa" stroke-width="2" stroke-dasharray="3 3"/><circle class="pop find" style="--d:.95s" cx="20" cy="62" r="7" fill="none" stroke="#a78bfa" stroke-width="2" stroke-dasharray="3 3"/></g><image href="/logo.png" x="139" y="55" width="22" height="19"/></svg></div>
+      </article>
+      <article class="lp-card b-m rv-in">
+        <h3 data-i18n="bt.cmp.t"></h3><p data-i18n="bt.cmp.d"></p>
+        <div class="viz cmp" id="btCmp"></div>
+      </article>
+      <article class="lp-card b-m rv-in d1">
+        <h3 data-i18n="bt.board.t"></h3><p data-i18n="bt.board.d"></p>
+        <div class="viz kb"><div><b data-i18n="bt.m.k1"></b><span data-i18n="bt.m.i1"></span><span data-i18n="top.5"></span></div><div><b data-i18n="bt.m.k2"></b><span data-i18n="bt.m.i2"></span></div><div><b data-i18n="bt.m.k3"></b><span data-i18n="bt.m.i3"></span></div></div>
+      </article>
     </div>
   </div>
 </section>
 
-<section class="band" id="agent" style="background:var(--bg)">
-  <div class="wrap stack" style="gap:40px">
-    <div class="stack" style="max-width:760px">
-      <span class="over" data-i18n="agent.over"></span>
-      <h2 class="h2 pre" data-i18n="agent.h2"></h2>
-      <p class="lead" data-i18n="agent.sub"></p>
+<!-- 왜 CNOL RADAR -->
+<section class="lp-sec" id="why">
+  <div class="lp-wrap">
+    <div class="lp-head rv-in">
+      <span class="lp-over" data-i18n="why.over"></span>
+      <h2 class="lp-h2 pre" data-i18n="why.h2"></h2>
+      <p class="lp-lead" data-i18n="why.sub"></p>
     </div>
-    <ol class="steps">
-      <li><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 12l6-6"/></svg></span><h3 style="margin:0;font-size:19px;font-weight:900" data-i18n="agent.s1t"></h3><p style="margin:0;font-size:14px;line-height:1.65;color:var(--ink-2)" data-i18n="agent.s1d"></p></li>
-      <li><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><h3 style="margin:0;font-size:19px;font-weight:900" data-i18n="agent.s2t"></h3><p style="margin:0;font-size:14px;line-height:1.65;color:var(--ink-2)" data-i18n="agent.s2d"></p></li>
-      <li><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3z"/></svg></span><h3 style="margin:0;font-size:19px;font-weight:900" data-i18n="agent.s3t"></h3><p style="margin:0;font-size:14px;line-height:1.65;color:var(--ink-2)" data-i18n="agent.s3d"></p></li>
-      <li><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span><h3 style="margin:0;font-size:19px;font-weight:900" data-i18n="agent.s4t"></h3><p style="margin:0;font-size:14px;line-height:1.65;color:var(--ink-2)" data-i18n="agent.s4d"></p></li>
-      <li style="background:var(--primary-dark);color:#fff;box-shadow:var(--e4)"><span class="ico" style="background:var(--secondary);color:#121212"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.4 4.5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.42-1.41"/></svg></span><h3 style="margin:0;font-size:19px;font-weight:900" data-i18n="agent.s5t"></h3><p style="margin:0;font-size:14px;line-height:1.65;color:#E9DDFF" data-i18n="agent.s5d"></p></li>
-    </ol>
-    <div class="card raised" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:24px;align-items:center">
-      <div class="stack" style="gap:10px"><b style="font-size:20px" data-i18n="agent.askT"></b><span style="font-size:15px;line-height:1.7;color:var(--ink-2)" data-i18n="agent.askD"></span></div>
-      <div class="stack" style="gap:8px">
-        <span style="align-self:flex-end;max-width:80%;padding:10px 14px;border-radius:16px 16px 4px 16px;background:var(--primary);color:#fff;font-size:14px" data-i18n="agent.q"></span>
-        <span style="align-self:flex-start;max-width:88%;padding:10px 14px;border-radius:16px 16px 16px 4px;background:var(--primary-soft);font-size:14px;line-height:1.6" data-i18n="agent.a"></span>
-      </div>
+    <div class="lp-why">
+      <div class="lp-card rv-in"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 12l6-6"/></svg><h3 style="margin-top:14px" data-i18n="why.c1t"></h3><p data-i18n="why.c1d"></p></div>
+      <div class="lp-card rv-in d1"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><h3 style="margin-top:14px" data-i18n="why.c2t"></h3><p data-i18n="why.c2d"></p></div>
+      <div class="lp-card rv-in d2"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><h3 style="margin-top:14px" data-i18n="why.c3t"></h3><p data-i18n="why.c3d"></p></div>
+      <div class="lp-card rv-in d3"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10v4l11 5V5z"/><path d="M14 8a4 4 0 0 1 0 8"/><path d="M6 14l1 6h3l-1-5"/></svg><h3 style="margin-top:14px" data-i18n="why.c4t"></h3><p data-i18n="why.c4d"></p></div>
     </div>
-  </div>
-</section>
-
-<section class="band" id="features">
-  <div class="wrap stack" style="gap:96px">
-    <div class="two">
-      <div class="stack">
-        <span class="over" data-i18n="feat.b.over"></span>
-        <h2 class="h2 pre" style="font-size:clamp(28px,3.4vw,36px)" data-i18n="feat.b.h"></h2>
-        <p class="lead" data-i18n="feat.b.d"></p>
-      </div>
-      <div class="feature-card tilt">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span style="font-size:15px;font-weight:700" data-i18n="pv.title"></span><span class="tag teal" data-i18n="pv.tag"></span></div>
-        <div class="mini"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00695C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg><div class="stack" style="gap:2px"><b data-i18n="pv.1t"></b><span data-i18n="pv.1d"></span></div></div>
-        <div class="mini"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3700B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z"/></svg><div class="stack" style="gap:2px"><b data-i18n="pv.2t"></b><span data-i18n="pv.2d"></span></div></div>
-        <div class="mini" style="background:var(--err-bg)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B00020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M12 3L2 21h20L12 3z"/><path d="M12 10v5M12 18h.01"/></svg><div class="stack" style="gap:2px"><b data-i18n="pv.3t"></b><span data-i18n="pv.3d"></span></div></div>
-      </div>
-    </div>
-
-    <div class="two">
-      <div class="feature-card tilt" style="padding:8px 0;gap:0">
-        <div style="display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px 20px"><span class="ico" style="width:40px;height:40px;background:#E0F7FA;color:#006064;font-weight:700">A</span><div class="stack" style="gap:2px;min-width:0"><b style="font-size:15px" data-i18n="rf.1"></b><span style="font-size:13px;color:var(--ink-2)" data-i18n="rf.1d"></span></div><span class="tag" data-i18n="rf.1t"></span></div>
-        <div style="display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px 20px;border-top:1px solid #F0EEF3"><span class="ico" style="width:40px;height:40px;background:#FFF3E0;color:#E65100;font-weight:700">B</span><div class="stack" style="gap:2px;min-width:0"><b style="font-size:15px" data-i18n="rf.2"></b><span style="font-size:13px;color:var(--ink-2)" data-i18n="rf.2d"></span></div><span class="tag" data-i18n="rf.2t"></span></div>
-        <div style="display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px 20px;border-top:1px solid #F0EEF3"><span class="ico" style="width:40px;height:40px;background:#E8F5E9;color:#1B5E20;font-weight:700">C</span><div class="stack" style="gap:2px;min-width:0"><b style="font-size:15px" data-i18n="rf.3"></b><span style="font-size:13px;color:var(--ink-2)" data-i18n="rf.3d"></span></div><span class="tag teal" data-i18n="rf.3t"></span></div>
-      </div>
-      <div class="stack">
-        <span class="over" data-i18n="feat.r.over"></span>
-        <h2 class="h2 pre" style="font-size:clamp(28px,3.4vw,36px)" data-i18n="feat.r.h"></h2>
-        <p class="lead" data-i18n="feat.r.d"></p>
-        <p style="margin:0;font-size:14px;line-height:1.6;color:var(--ink-2)" data-i18n="feat.r.n"></p>
-      </div>
-    </div>
-
-    <div class="two">
-      <div class="stack">
-        <span class="over" data-i18n="feat.i.over"></span>
-        <h2 class="h2 pre" style="font-size:clamp(28px,3.4vw,36px)" data-i18n="feat.i.h"></h2>
-        <p class="lead" data-i18n="feat.i.d"></p>
-      </div>
-      <div class="feature-card tilt" style="gap:10px">
-        <span style="font-size:15px;font-weight:700;padding:4px 4px 8px" data-i18n="iss.card"></span>
-        <div class="mini" style="background:var(--err-bg);align-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B00020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><span style="font-size:14px;color:var(--ink)" data-i18n="iss.1"></span></div>
-        <div class="mini" style="background:var(--err-bg);align-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B00020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg><span style="font-size:14px;color:var(--ink)" data-i18n="iss.2"></span></div>
-        <div class="mini" style="align-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5F5B66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M3 7l6 6 4-4 8 8"/><path d="M15 17h6v-6"/></svg><span style="font-size:14px;color:var(--ink)" data-i18n="iss.3"></span></div>
-        <div class="mini" style="align-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5F5B66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span style="font-size:14px;color:var(--ink)" data-i18n="iss.4"></span></div>
-      </div>
-    </div>
-
-    <div class="grid-auto" id="extension" style="grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:24px">
-      <div class="card lift stack" style="background:var(--bg);box-shadow:none;padding:32px"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6200EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><h3 style="margin:0;font-size:24px;font-weight:900" data-i18n="feat.m.t"></h3><p style="margin:0;font-size:16px;line-height:1.7;color:var(--ink-2)" data-i18n="feat.m.d"></p></div>
-      <div class="card lift stack" style="background:var(--bg);box-shadow:none;padding:32px"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6200EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10v4l11 5V5z"/><path d="M14 8a4 4 0 0 1 0 8"/><path d="M6 14l1 6h3l-1-5"/></svg><h3 style="margin:0;font-size:24px;font-weight:900" data-i18n="feat.a.t"></h3><p style="margin:0;font-size:16px;line-height:1.7;color:var(--ink-2)" data-i18n="feat.a.d"></p></div>
-      <div class="card lift stack" style="background:var(--bg);box-shadow:none;padding:32px"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6200EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h4a2 2 0 1 1 4 0h4v4a2 2 0 1 1 0 4v4H4z"/></svg><h3 style="margin:0;font-size:24px;font-weight:900" data-i18n="feat.e.t"></h3><p style="margin:0;font-size:16px;line-height:1.7;color:var(--ink-2)" data-i18n="feat.e.d"></p></div>
-    </div>
-  </div>
-</section>
-
-<section class="band dark" id="why">
-  <div class="wrap stack" style="gap:40px">
-    <div class="stack" style="max-width:780px">
-      <span class="over" data-i18n="why.over"></span>
-      <h2 class="h2 pre" data-i18n="why.h2"></h2>
-      <p class="lead" data-i18n="why.sub"></p>
-    </div>
-    <div class="grid-auto" style="grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:16px">
-      <div class="dcard"><span style="font-size:30px;font-weight:900;color:var(--secondary)" data-i18n="why.c1v"></span><h3 style="margin:0;font-size:19px;color:#fff" data-i18n="why.c1t"></h3><p style="margin:0;font-size:15px;line-height:1.65;color:#B3B3B3" data-i18n="why.c1d"></p></div>
-      <div class="dcard"><span style="font-size:30px;font-weight:900;color:var(--secondary)" data-i18n="why.c2v"></span><h3 style="margin:0;font-size:19px;color:#fff" data-i18n="why.c2t"></h3><p style="margin:0;font-size:15px;line-height:1.65;color:#B3B3B3" data-i18n="why.c2d"></p></div>
-      <div class="dcard"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#BB86FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><h3 style="margin:0;font-size:19px;color:#fff" data-i18n="why.c3t"></h3><p style="margin:0;font-size:15px;line-height:1.65;color:#B3B3B3" data-i18n="why.c3d"></p></div>
-      <div class="dcard"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#BB86FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10v4l11 5V5z"/><path d="M14 8a4 4 0 0 1 0 8"/><path d="M6 14l1 6h3l-1-5"/></svg><h3 style="margin:0;font-size:19px;color:#fff" data-i18n="why.c4t"></h3><p style="margin:0;font-size:15px;line-height:1.65;color:#B3B3B3" data-i18n="why.c4d"></p></div>
-    </div>
-    <div class="scroll-x" style="border-radius:12px;background:#1E1E1E">
-      <table style="width:100%;min-width:640px;border-collapse:collapse;font-size:15px">
-        <thead><tr style="text-align:left"><th scope="col" style="padding:18px 24px;border-bottom:1px solid #2C2C2C"></th><th scope="col" style="padding:18px 24px;color:#9E9E9E;font-weight:500;border-bottom:1px solid #2C2C2C" data-i18n="why.th1"></th><th scope="col" style="padding:18px 24px;color:#fff;font-weight:900;border-bottom:1px solid #2C2C2C">CNOL RADAR</th></tr></thead>
+    <div class="lp-tbl rv-in">
+      <table>
+        <thead><tr><th scope="col"></th><th scope="col" data-i18n="why.th1"></th><th scope="col" style="color:#fff;font-weight:800">CNOL RADAR</th></tr></thead>
         <tbody>
-          <tr><th scope="row" style="padding:16px 24px;text-align:left;color:#9E9E9E;font-weight:500;border-bottom:1px solid #2C2C2C" data-i18n="why.r1"></th><td style="padding:16px 24px;border-bottom:1px solid #2C2C2C" data-i18n="why.r1a"></td><td style="padding:16px 24px;border-bottom:1px solid #2C2C2C;color:#fff;font-weight:700" data-i18n="why.r1b"></td></tr>
-          <tr><th scope="row" style="padding:16px 24px;text-align:left;color:#9E9E9E;font-weight:500;border-bottom:1px solid #2C2C2C" data-i18n="why.r2"></th><td style="padding:16px 24px;border-bottom:1px solid #2C2C2C" data-i18n="why.r2a"></td><td style="padding:16px 24px;border-bottom:1px solid #2C2C2C;color:#fff;font-weight:700" data-i18n="why.r2b"></td></tr>
-          <tr><th scope="row" style="padding:16px 24px;text-align:left;color:#9E9E9E;font-weight:500;border-bottom:1px solid #2C2C2C" data-i18n="why.r3"></th><td style="padding:16px 24px;border-bottom:1px solid #2C2C2C" data-i18n="why.r3a"></td><td style="padding:16px 24px;border-bottom:1px solid #2C2C2C;color:#fff;font-weight:700" data-i18n="why.r3b"></td></tr>
-          <tr><th scope="row" style="padding:16px 24px;text-align:left;color:#9E9E9E;font-weight:500" data-i18n="why.r4"></th><td style="padding:16px 24px" data-i18n="why.r4a"></td><td style="padding:16px 24px;color:var(--secondary);font-weight:700" data-i18n="why.r4b"></td></tr>
+          <tr><th scope="row" data-i18n="why.r1"></th><td data-i18n="why.r1a"></td><td class="us" data-i18n="why.r1b"></td></tr>
+          <tr><th scope="row" data-i18n="why.r2"></th><td data-i18n="why.r2a"></td><td class="us" data-i18n="why.r2b"></td></tr>
+          <tr><th scope="row" data-i18n="why.r3"></th><td data-i18n="why.r3a"></td><td class="us" data-i18n="why.r3b"></td></tr>
+          <tr><th scope="row" data-i18n="why.r4"></th><td data-i18n="why.r4a"></td><td class="us lp-grad" data-i18n="why.r4b"></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </section>
 
-<section class="band" style="background:var(--bg)">
-  <div class="wrap stack" style="gap:32px">
-    <div class="stack" style="max-width:720px"><span class="over" data-i18n="trust.over"></span><h2 class="h2" style="font-size:clamp(28px,3.4vw,36px)" data-i18n="trust.h2"></h2></div>
-    <div class="grid-auto" style="grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:16px">
-      <div class="card stack" style="gap:12px"><h3 style="margin:0;font-size:18px" data-i18n="trust.1t"></h3><p style="margin:0;font-size:15px;line-height:1.6;color:var(--ink-2)" data-i18n="trust.1d"></p></div>
-      <div class="card stack" style="gap:12px"><h3 style="margin:0;font-size:18px" data-i18n="trust.2t"></h3><p style="margin:0;font-size:15px;line-height:1.6;color:var(--ink-2)" data-i18n="trust.2d"></p></div>
-      <div class="card stack" style="gap:12px"><h3 style="margin:0;font-size:18px" data-i18n="trust.3t"></h3><p style="margin:0;font-size:15px;line-height:1.6;color:var(--ink-2)" data-i18n="trust.3d"></p></div>
-      <div class="card stack" style="gap:12px"><h3 style="margin:0;font-size:18px" data-i18n="trust.4t"></h3><p style="margin:0;font-size:15px;line-height:1.6;color:var(--ink-2)" data-i18n="trust.4d"></p></div>
-    </div>
-  </div>
-</section>
-
-<section class="band" id="pricing">
-  <div class="wrap stack" style="gap:32px">
+<!-- 요금 -->
+<section class="lp-sec" id="pricing">
+  <div class="lp-wrap">
     <div style="display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:flex-end">
-      <div class="stack" style="max-width:640px"><span class="over" data-i18n="price.over"></span><h2 class="h2" data-i18n="price.h2"></h2><p class="lead" style="font-size:16px" data-i18n="price.sub"></p></div>
-      <div style="display:flex;flex-wrap:wrap;gap:12px">
-        <div class="seg" role="group" aria-label="currency"><button type="button" data-cur="krw" data-i18n="price.krw"></button><button type="button" data-cur="usd" data-i18n="price.usd"></button></div>
-        <div class="seg" role="group" aria-label="billing"><button type="button" data-per="month" data-i18n="price.month"></button><button type="button" data-per="year" data-i18n="price.year"></button></div>
+      <div class="lp-head rv-in"><span class="lp-over" data-i18n="price.over"></span><h2 class="lp-h2" data-i18n="price.h2"></h2><p class="lp-lead" style="font-size:16px" data-i18n="price.sub"></p></div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        <div class="lp-seg" role="group" aria-label="currency"><button type="button" data-cur="krw" data-i18n="price.krw"></button><button type="button" data-cur="usd" data-i18n="price.usd"></button></div>
+        <div class="lp-seg" role="group" aria-label="billing"><button type="button" data-per="month" data-i18n="price.month"></button><button type="button" data-per="year" data-i18n="price.year"></button></div>
       </div>
     </div>
-    <div class="plans">
-      <div class="plan lift"><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.free"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch1"></span></div><div class="stack" style="gap:2px"><span class="price num" data-price="free"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="free"></span></div><ul><li data-i18n="plan.f1"></li><li data-i18n="plan.f2"></li><li data-i18n="plan.f3"></li></ul><a class="btn outline rip" href="/app" data-i18n="plan.start"></a></div>
-      <div class="plan lift"><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.solo"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch1"></span></div><div class="stack" style="gap:2px"><span class="price num" data-price="solo"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="solo"></span></div><ul><li data-i18n="plan.s1"></li><li data-i18n="plan.s2"></li><li data-i18n="plan.s3"></li><li data-i18n="plan.s4"></li><li data-i18n="plan.s5"></li></ul><a class="btn outline rip" href="/app" data-i18n="plan.start"></a></div>
-      <div class="plan rec lift"><span class="tag" style="position:absolute;top:-14px;left:20px;background:var(--secondary);color:#121212" data-i18n="plan.rec"></span><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.plus"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch5"></span></div><div class="stack" style="gap:2px"><span class="price num" style="color:var(--primary-dark)" data-price="plus"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="plus"></span></div><ul><li data-i18n="plan.p1"></li><li data-i18n="plan.p2"></li><li data-i18n="plan.p3"></li><li data-i18n="plan.p4"></li></ul><a class="btn rip" href="/app" data-i18n="plan.start"></a></div>
-      <div class="plan lift"><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.team"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch10"></span></div><div class="stack" style="gap:2px"><span class="price num" data-price="team"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="team"></span></div><ul><li data-i18n="plan.t1"></li><li data-i18n="plan.t2"></li><li data-i18n="plan.t3"></li><li data-i18n="plan.t4"></li></ul><a class="btn outline rip" href="/app" data-i18n="plan.start"></a></div>
-      <div class="plan lift"><div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="plan.agency"></h3><span style="font-size:14px;color:var(--ink-2)" data-i18n="plan.ch30"></span></div><div class="stack" style="gap:2px"><span class="price num" data-price="agency"></span><span style="font-size:13px;color:var(--ink-2)" data-sub="agency"></span></div><ul><li data-i18n="plan.a1"></li><li data-i18n="plan.a2"></li><li data-i18n="plan.a3"></li><li data-i18n="plan.a4"></li></ul><a class="btn outline rip" href="/app" data-i18n="plan.start"></a></div>
+    <div class="lp-plans">
+      <div class="lp-plan rv-in"><div><h3 data-i18n="plan.free"></h3><span class="who" data-i18n="plan.ch1"></span></div><div><span class="price" data-price="free"></span><div class="per" data-sub="free"></div></div><ul><li data-i18n="plan.f1"></li><li data-i18n="plan.f2"></li><li data-i18n="plan.f3"></li></ul><a class="lp-btn glass sm" href="/app" data-i18n="plan.start"></a></div>
+      <div class="lp-plan rv-in d1"><div><h3 data-i18n="plan.solo"></h3><span class="who" data-i18n="plan.ch1"></span></div><div><span class="price" data-price="solo"></span><div class="per" data-sub="solo"></div></div><ul><li data-i18n="plan.s1"></li><li data-i18n="plan.s2"></li><li data-i18n="plan.s3"></li><li data-i18n="plan.s4"></li><li data-i18n="plan.s5"></li></ul><a class="lp-btn glass sm" href="/app" data-i18n="plan.start"></a></div>
+      <div class="lp-plan rec rv-in d2"><span class="tagr" data-i18n="plan.rec"></span><div><h3 data-i18n="plan.plus"></h3><span class="who" data-i18n="plan.ch5"></span></div><div><span class="price" data-price="plus"></span><div class="per" data-sub="plus"></div></div><ul><li data-i18n="plan.p1"></li><li data-i18n="plan.p2"></li><li data-i18n="plan.p3"></li><li data-i18n="plan.p4"></li></ul><a class="lp-btn pri sm" href="/app" data-i18n="plan.start"></a></div>
+      <div class="lp-plan rv-in d3"><div><h3 data-i18n="plan.team"></h3><span class="who" data-i18n="plan.ch10"></span></div><div><span class="price" data-price="team"></span><div class="per" data-sub="team"></div></div><ul><li data-i18n="plan.t1"></li><li data-i18n="plan.t2"></li><li data-i18n="plan.t3"></li><li data-i18n="plan.t4"></li></ul><a class="lp-btn glass sm" href="/app" data-i18n="plan.start"></a></div>
+      <div class="lp-plan rv-in d4"><div><h3 data-i18n="plan.agency"></h3><span class="who" data-i18n="plan.ch30"></span></div><div><span class="price" data-price="agency"></span><div class="per" data-sub="agency"></div></div><ul><li data-i18n="plan.a1"></li><li data-i18n="plan.a2"></li><li data-i18n="plan.a3"></li><li data-i18n="plan.a4"></li></ul><a class="lp-btn glass sm" href="/app" data-i18n="plan.start"></a></div>
     </div>
-    <p style="margin:0;font-size:15px;color:var(--ink-2)" data-i18n="price.note"></p>
+    <p style="margin:22px 0 0;font-size:14.5px;color:var(--lp-ink3)" data-i18n="price.note"></p>
   </div>
 </section>
 
-<section class="band" style="background:var(--bg)">
-  <div class="wrap stack" style="max-width:880px;gap:24px">
-    <h2 class="h2" style="font-size:36px" data-i18n="faq.h2"></h2>
-    <div class="stack" style="gap:8px" id="faq"></div>
-    <form id="askForm" class="card raised stack" style="gap:14px;padding:28px">
-      <div class="stack" style="gap:4px"><h3 style="margin:0;font-size:20px;font-weight:900" data-i18n="ask.h3"></h3><p style="margin:0;font-size:15px;color:var(--ink-2)" data-i18n="ask.p"></p></div>
-      <div class="field"><label for="askEmail" data-i18n="ask.email"></label><input class="input" id="askEmail" type="email" autocomplete="email" required maxlength="320" placeholder="name@example.com"></div>
-      <div class="field"><label for="askMsg" data-i18n="ask.msg"></label><textarea class="textarea" id="askMsg" required maxlength="4000"></textarea></div>
-      <button class="btn rip" type="submit" style="align-self:flex-start" data-i18n="ask.send"></button>
-      <p id="askOk" role="status" style="margin:0;font-size:14px;color:var(--up)" hidden></p>
+<!-- 질문 -->
+<section class="lp-sec" id="faq-sec" style="padding-top:40px">
+  <div class="lp-wrap" style="max-width:880px">
+    <h2 class="lp-h2 rv-in" data-i18n="faq.h2"></h2>
+    <div class="lp-faq" id="faq"></div>
+    <form id="askForm" class="lp-glass lp-ask rv-in">
+      <div><h3 style="margin:0;font-size:20px;font-weight:800" data-i18n="ask.h3"></h3><p style="margin:6px 0 0;font-size:15px;color:var(--lp-ink2)" data-i18n="ask.p"></p></div>
+      <div class="lp-field"><label for="askEmail" data-i18n="ask.email"></label><input class="lp-input" id="askEmail" type="email" autocomplete="email" required maxlength="320" placeholder="name@example.com"></div>
+      <div class="lp-field"><label for="askMsg" data-i18n="ask.msg"></label><textarea class="lp-textarea" id="askMsg" required maxlength="4000"></textarea></div>
+      <button class="lp-btn pri" type="submit" style="align-self:flex-start" data-i18n="ask.send"></button>
+      <p id="askOk" role="status" style="margin:0;font-size:14px;color:#6ee7b7" hidden></p>
     </form>
   </div>
 </section>
 
-<section style="background:var(--primary);color:#fff">
-  <div class="wrap" style="padding-top:80px;padding-bottom:80px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:center">
-    <h2 style="margin:0;font-size:clamp(28px,3.4vw,36px);line-height:1.3;font-weight:900;flex:1 1 420px" data-i18n="cta.h2"></h2>
-    <a class="btn fab rip" href="/app" data-i18n="hero.cta1"></a>
+<!-- 마지막 -->
+<section style="padding:20px 0 120px">
+  <div class="lp-wrap">
+    <div class="lp-final rv-in">
+      <div style="flex:1 1 420px"><h2 class="pre" data-i18n="cta2.h2"></h2><p data-i18n="cta2.sub"></p></div>
+      <a class="lp-btn pri" href="/app"><span data-i18n="hero.cta1"></span><span class="ar" aria-hidden="true">→</span></a>
+    </div>
   </div>
 </section>
 </main>
 
-<footer>
-  <div class="wrap" style="padding-top:40px;padding-bottom:56px;display:flex;flex-direction:column;gap:12px;font-size:13px;line-height:1.7;color:var(--ink-2)">
-    <div style="display:flex;flex-wrap:wrap;gap:8px 20px">
-      <span style="font-weight:700;color:var(--ink)" data-i18n="foot.co"></span>
+<footer class="lp-foot">
+  <div class="lp-wrap" style="display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center">
+      <span style="font-weight:700;color:var(--lp-ink)" data-i18n="foot.co"></span>
       <span><span data-i18n="foot.contact"></span> <a href="mailto:support@whrcompany.com">support@whrcompany.com</a></span>
       <a href="/terms" data-i18n="foot.terms"></a>
       <a href="/privacy" data-i18n="foot.privacy"></a>
