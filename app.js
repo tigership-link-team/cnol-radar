@@ -346,7 +346,7 @@ Object.assign(T.ko, {
   tryNoMine: '내 채널을 넣으면 내 채널에 맞춰 골라 드려요. 지금은 레퍼런스 기준이에요.', tryEmpty: '지금은 뚜렷하게 차이 나는 조건이 없어요. 쇼츠가 더 쌓이면 다시 찾아볼게요.',
   tryHourQ: '{h}에 올려볼래?', tryHourL: '이 시간에 올린 쇼츠 {n}개가 평소의 {x}배였어요 · 지금은 주로 {u}에 올려요', tryHourL0: '이 시간에 올린 쇼츠 {n}개가 평소의 {x}배였어요',
   tryDayQ: '{d}에 올려볼래?', tryDayL: '{d}에 올린 쇼츠 {n}개가 평소의 {x}배였어요 · 지금은 주로 {u}에 올려요',
-  tryDurQ: '{b} 길이로 만들어볼래?', tryDurL: '{b} 쇼츠 {n}개가 평소의 {x}배였어요 · 내 쇼츠는 보통 {m}초',
+  tryDurQ: '{b} 길이로 만들어볼래?', tryDurL: '{b} 쇼츠 {n}개가 평소의 {x}배였어요 · 내 쇼츠는 보통 {m}초', tryDurL0: '{b} 쇼츠 {n}개가 평소의 {x}배였어요', tryFmtL0: '‘{f}’ 제목 쇼츠 {n}개가 평소의 {x}배였어요',
   tryFmtQ: '‘{f}’ 제목 써볼래?', tryFmtL: '‘{f}’ 제목 쇼츠 {n}개가 평소의 {x}배 · 내 쇼츠는 {p}%만 이렇게 써요', tryEx: '예: “{t}” · 평소의 {x}배',
   tryTopicQ: '“{t}” 같은 소재 해볼래?', tryTopicL: '{c} · 평소의 {x}배 · 맞춤 {f}', tryTopicL0: '{c} · 평소의 {x}배',
   tryKwQ: '‘#{k}’ 소재 해볼래?', tryKwL: '요즘 레퍼런스에서 #{k} 쇼츠 {n}개가 터졌어요 · 가운데값 평소의 {x}배', kwBreak: '터진 쇼츠 {n}개',
@@ -373,7 +373,7 @@ Object.assign(T.en, {
   tryNoMine: 'Add your own channel and we tailor these to it. For now they’re based on your references.', tryEmpty: 'No condition stands out yet. We’ll look again as more Shorts come in.',
   tryHourQ: 'Try posting at {h}?', tryHourL: '{n} Shorts posted at this hour hit {x}× usual · you mostly post at {u}', tryHourL0: '{n} Shorts posted at this hour hit {x}× usual',
   tryDayQ: 'Try posting on {d}?', tryDayL: '{n} Shorts posted on {d} hit {x}× usual · you mostly post on {u}',
-  tryDurQ: 'Try a {b} length?', tryDurL: '{n} Shorts at {b} hit {x}× usual · yours usually run {m}s',
+  tryDurQ: 'Try a {b} length?', tryDurL: '{n} Shorts at {b} hit {x}× usual · yours usually run {m}s', tryDurL0: '{n} Shorts at {b} hit {x}× usual', tryFmtL0: '{n} “{f}” titles hit {x}× usual',
   tryFmtQ: 'Try a “{f}” title?', tryFmtL: '{n} “{f}” titles hit {x}× usual · only {p}% of yours use it', tryEx: 'e.g. “{t}” · {x}× usual',
   tryTopicQ: 'Try a topic like “{t}”?', tryTopicL: '{c} · {x}× usual · fit {f}', tryTopicL0: '{c} · {x}× usual',
   tryKwQ: 'Try a “#{k}” topic?', tryKwL: '{n} #{k} Shorts broke out across your references lately · median {x}× usual', kwBreak: '{n} breakouts',
@@ -400,7 +400,7 @@ Object.assign(T.ja, {
   tryNoMine: 'マイチャンネルを入れると、そのチャンネルに合わせて選びます。今はリファレンス基準です。', tryEmpty: '今ははっきり差が出る条件がありません。ショートがたまったらまた探します。',
   tryHourQ: '{h}に投稿してみる？', tryHourL: 'この時間に投稿したショート{n}本が普段の{x}倍でした・今は主に{u}に投稿しています', tryHourL0: 'この時間に投稿したショート{n}本が普段の{x}倍でした',
   tryDayQ: '{d}に投稿してみる？', tryDayL: '{d}に投稿したショート{n}本が普段の{x}倍でした・今は主に{u}に投稿しています',
-  tryDurQ: '{b}の長さで作ってみる？', tryDurL: '{b}のショート{n}本が普段の{x}倍でした・あなたのショートは普段{m}秒',
+  tryDurQ: '{b}の長さで作ってみる？', tryDurL: '{b}のショート{n}本が普段の{x}倍でした・あなたのショートは普段{m}秒', tryDurL0: '{b}のショート{n}本が普段の{x}倍でした', tryFmtL0: '「{f}」タイトルのショート{n}本が普段の{x}倍でした',
   tryFmtQ: '「{f}」のタイトルを試してみる？', tryFmtL: '「{f}」タイトルのショート{n}本が普段の{x}倍・あなたは{p}%しか使っていません', tryEx: '例：「{t}」・普段の{x}倍',
   tryTopicQ: '「{t}」みたいなネタを試してみる？', tryTopicL: '{c}・普段の{x}倍・適合 {f}', tryTopicL0: '{c}・普段の{x}倍',
   tryKwQ: '「#{k}」のネタを試してみる？', tryKwL: '最近リファレンスで#{k}のショート{n}本がヒット・中央値は普段の{x}倍', kwBreak: 'ヒット{n}本',
@@ -1008,7 +1008,7 @@ function trySuggest(own, refs, prof, opt = {}) {
       const rows = A.durs.map((r) => ({ label: t('dur' + r.k), v: r.v || 0, low: r.n < MIN_N, hot: r.k === bdur.k, cur: r.k === myB, text: r.n < MIN_N ? t('insLow') : t('insX', { x: (r.v || 0).toFixed(1) }), sub: t('insTipN', { n: r.n }) }));
       push({ id: 'dur:' + bdur.k, kind: 'dur', key: bdur.k, ic: IC.timer, n: bdur.n, lift, basis, base,
         q: t('tryDurQ', { b: t('dur' + bdur.k) }),
-        lead: t('tryDurL', { b: t('dur' + bdur.k), n: bdur.n, x: bdur.v.toFixed(1), m: myDur ? Math.round(myDur) : '–' }),
+        lead: myDur ? t('tryDurL', { b: t('dur' + bdur.k), n: bdur.n, x: bdur.v.toFixed(1), m: Math.round(myDur) }) : t('tryDurL0', { b: t('dur' + bdur.k), n: bdur.n, x: bdur.v.toFixed(1) }),
         viz: () => ({ html: ytRowsHtml(rows) }) });
     }
   }
@@ -1025,7 +1025,7 @@ function trySuggest(own, refs, prof, opt = {}) {
           .map((r) => ({ label: t('fmt_' + r.k), v: r.v || 0, low: r.n < MIN_N, hot: r.k === bf.k, text: r.n < MIN_N ? t('insLow') : t('insX', { x: (r.v || 0).toFixed(1) }), sub: t('insTipN', { n: r.n }) }));
         push({ id: 'fmt:' + bf.k, kind: 'fmt', key: bf.k, ic: IC.picks, n: bf.n, lift, basis, base: restV,
           q: t('tryFmtQ', { f: t('fmt_' + bf.k) }),
-          lead: t('tryFmtL', { f: t('fmt_' + bf.k), n: bf.n, x: bf.v.toFixed(1), p: Math.round(share * 100) }),
+          lead: liveOwn.length ? t('tryFmtL', { f: t('fmt_' + bf.k), n: bf.n, x: bf.v.toFixed(1), p: Math.round(share * 100) }) : t('tryFmtL0', { f: t('fmt_' + bf.k), n: bf.n, x: bf.v.toFixed(1) }),
           ex: exS ? t('tryEx', { t: shortT(exS.title, 40), x: Number(exS.ratio).toFixed(1) }) : '',
           viz: () => ({ html: ytRowsHtml(rows) }) });
       }
