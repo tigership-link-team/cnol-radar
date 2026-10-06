@@ -211,13 +211,23 @@ const enc = encodeURIComponent;
 const VID_IN = /(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
 const CH_IN = /(youtube\.com\/(?:@[^\s/?]+|channel\/UC[\w-]{22}|c\/[^\s/?]+)|(?:^|\s)@[\w.\-]{3,30}(?:\s|$))/;
 const FILLER = /^(소재|소재로|어때|어때요|어떨까|어떨까요|해볼까|해볼까요|분석|분석해|분석해줘|찾아줘|알려줘|검색|검색해줘|좀|해줘|요즘|how|about|is|ideas?|for|search|find|について|どう|どう？|ネタ|は|を)$/i;
-export function parseCmd(raw) {
+export function parseCmd(raw, chans = []) {
   const s = String(raw || '').trim();
   if (!s) return null;
   const v = s.match(VID_IN);
   if (v) return /댓글|comment|コメント/i.test(s) ? { to: '#tool/comments?v=' + v[1], say: 'c_cm' } : { to: '#tool/title?v=' + v[1], say: 'c_ver' };
   const ch = s.match(CH_IN);
   if (ch) return { add: ch[1].trim(), say: 'c_add' };
+  // v11: 지금 뜨는 중 · 지켜보는 채널 이름(3글자 이상) · 채널 비교 · 소재 보드 · 할당량 · 48시간 조회수
+  if (/지금\s?뜨|뜨는\s?(영상|중|거)|급상승|터지는|막\s?터|rising|breaking out|taking off|急上昇|伸びてる|伸び始め/i.test(s)) return { to: '#radar', say: 'c_radar' };
+  const low = s.toLowerCase();
+  const named = (chans || []).filter((c) => c.title && c.title.length >= 3 && low.includes(c.title.toLowerCase())).slice(0, 4);
+  if (named.length >= 2 || (named.length === 1 && /비교|\bvs\b|compare|比較/i.test(s))) return { to: '#compare?ids=' + named.map((c) => c.id).join(','), say: 'c_cmp' };
+  if (/채널\s?비교|compare channels?|チャンネル比較/i.test(s)) return { to: '#compare', say: 'c_cmp' };
+  if (named.length === 1) return { to: '#ch/' + named[0].id, say: 'c_ch', k: named[0].title };
+  if (/소재\s?보드|아이디어\s?보드|idea board|ネタボード/i.test(s)) return { to: '#ideas', say: 'c_board' };
+  if (/할당량|쿼터|quota|クォータ/i.test(s)) return { to: '#status', say: 'c_quota' };
+  if (/48\s?(시간|h|時間)/i.test(s) && /조회|views?|再生/i.test(s)) return { answer: 'v48', say: 'c_v48' };
   const q = s.match(/[‘'"“「『](.+?)[’'"”」』]/);
   if (q && /예측|몇\s?배|어때|대결|forecast|predict|vs|予測|どう/i.test(s)) return { to: '#tool/predict?t=' + enc(q[1]), say: 'c_pred' };
   if (/레퍼런스|비슷한\s?채널|채널\s?(더\s?)?찾|reference|similar channel|リファレンス|似たチャンネル/i.test(s)) return { to: '#refs', say: 'c_refs' };
@@ -238,13 +248,14 @@ function cmdHtml() {
   return `<form class="ag-ask dk-fade" id="askForm" novalidate>${C.agAv(true)}<input class="dk-input" id="askIn" autocomplete="off" placeholder="${e(tt('c_ph'))}" aria-label="${e(tt('c_label'))}"><button class="dk-btn" id="askBtn">${e(tt('c_go'))}</button>
     <div class="ag-ask-ex">${['c_ex1', 'c_ex2', 'c_ex3', 'c_ex4'].map((k) => `<button type="button" class="dk-chip" data-ex="${e(tt(k))}">${e(tt(k))}</button>`).join('')}</div><div class="ag-ask-say" id="askSay" aria-live="polite"></div></form>`;
 }
-function bindCmd(v) {
+function bindCmd(v, ov) {
   const form = v.querySelector('#askForm');
   if (!form) return;
   const say = v.querySelector('#askSay');
   const go = async (txt) => {
-    const c = parseCmd(txt);
+    const c = parseCmd(txt, C.S.chans || []);
     if (!c) { say.textContent = tt('c_unknown'); return; }
+    if (c.answer === 'v48') { say.textContent = tt('c_v48', { v: C.fmtFull(ov?.views48 || 0), n: C.fmtFull(ov?.channels?.total || 0) }); return; }
     if (c.add) {
       say.innerHTML = `<span class="dk-spin"></span> ${e(tt('c_add'))}`;
       const out = await C.act({ action: 'add', inputs: [c.add], role: 'reference' });
@@ -327,7 +338,7 @@ function bigPick(s, fit) {
     <div class="bp-b">
       <a class="bp-t" href="${C.ytShort(s.id)}" target="_blank" rel="noopener" data-short="${e(s.id)}">${e(s.title)}</a>
       <span class="bp-m">${e(s.channel_title)} · ${e(C.ageTxt(s.age_h))}</span>
-      <div class="bp-tags">${C.ratioTag(s.ratio)}${fit ? `<span class="dk-fit${fit.score < 50 ? ' low' : ''}">${e(C.t('fit', { n: fit.score }))}</span>` : ''}</div>
+      <div class="bp-tags">${C.ratioTag(s.ratio)}${C.plus.paceTag(s, 1.5)}${fit ? `<span class="dk-fit${fit.score < 50 ? ' low' : ''}">${e(C.t('fit', { n: fit.score }))}</span>` : ''}</div>
       <div class="bp-act"><button type="button" class="dk-btn sm" data-board="${e(s.id)}" ${inBoard ? 'disabled' : ''}>${e(C.t(inBoard ? 'inBoard' : 'toBoard'))}</button><a class="dk-btn sm line" href="#tool/title?v=${encodeURIComponent(s.id)}">${ic('wand', 15)}${e(tt('a_myVer'))}</a><a class="dk-btn sm line" href="#tool/comments?v=${encodeURIComponent(s.id)}">${ic('chat', 15)}${e(tt('a_cmt'))}</a></div>
     </div>
   </article>`;
@@ -335,8 +346,9 @@ function bigPick(s, fit) {
 export async function vHome(v, r, alive) {
   C.loading(v, C.t('home'), '');
   const since = new Date(Date.now() - 36 * 3600e3).toISOString();
-  const [ov, , al, nd] = await Promise.all([C.rpc('radar_overview'), C.getChans(), C.sb.from('radar_alerts').select('*').order('created_at', { ascending: false }).limit(40),
-    discoveryRead(C.sb.from('radar_discoveries').select('channel_id,title,thumbnail_url,found_at,match').eq('status', 'new').in('via', ['match', 'featured']).gte('found_at', since).order('score', { ascending: false }).limit(6))]);
+  const [ov, , al, nd, feed] = await Promise.all([C.rpc('radar_overview'), C.getChans(), C.sb.from('radar_alerts').select('*').order('created_at', { ascending: false }).limit(40),
+    discoveryRead(C.sb.from('radar_discoveries').select('channel_id,title,thumbnail_url,found_at,match').eq('status', 'new').in('via', ['match', 'featured']).gte('found_at', since).order('score', { ascending: false }).limit(6)),
+    C.rpc('radar_feed', { p_hours: 24, p_role: null, p_kind: kindNow() }).catch(() => [])]);
   if (!alive()) return;
   C.S.unread = ov.unread || 0;
   C.renderNav();
@@ -363,6 +375,9 @@ export async function vHome(v, r, alive) {
   const rtTop = topCh.length >= 2 ? `<div class="ag-rt-top"><p>${e(C.t('rtTopCh'))}</p>${topCh.map((c) => `<a class="r" href="#ch/${e(c.id)}">${C.avatar(c.thumb)}<span class="n">${e(c.title)}</span><b>${e(C.fmtFull(c.v48))}</b></a>`).join('')}</div>` : '';
   msgs.push(C.agMsg(`${C.greet()}${L() === 'ja' ? '' : ' '}${tt('a_sum', { r: C.fmtFull(nRef), n: C.fmtFull(refs.length), v: C.fmtFull(ov.views48) })}`,
     `<div class="ag-card yt-rtc"><div class="ag-48h"><div><div class="rt-t">${e(C.t('rtTitle'))} <span class="rt-live"><i></i>${e(C.t('rtLive'))}</span></div><div class="dk-sub">${e(C.t('chCount', { n: total }))} · ${e(C.t('rtSum'))}</div></div><a class="ag-link" href="#overview">${e(C.t('toOverview'))} →</a></div><div><div class="dk-sub" style="font-weight:600">${e(C.t('ytRtViews'))}</div><div class="dk-big huge yt-num">${e(C.fmtFull(ov.views48))}</div></div>${C.barsHtml('agb', hv, C.t('live48all'), 72)}<div class="dk-axis"><span>${e(C.t('ago48'))}</span><span>${e(C.t('now'))}</span></div>${rtTop}</div>`));
+  // 1.5) 막 뜨기 시작한 영상 (같은 시간 대비 2배 이상 · 24시간 안)
+  const rising = C.plus.rememberFeed(feed || []).filter((x) => C.plus.paceVal(x) >= 2).sort((a, b) => C.plus.paceVal(b) - C.plus.paceVal(a)).slice(0, 3);
+  if (rising.length) msgs.push(C.agMsg(tt('r_msg', { n: rising.length }), `${C.plus.risingMini(rising)}<a class="ag-link" href="#radar">${e(tt('r_go'))} →</a>`));
   // 2) 오늘의 소재 — 큰 썸네일로
   const picks = C.pickList(refs.filter((x) => (x.age_h || 0) <= 7 * 24), 'all', prof).slice(0, 3);
   if (picks.length) msgs.push(C.agMsg(tt('a_hotMsg'), `<div class="bp-list">${picks.map((s) => bigPick(s, s._fit)).join('')}</div><a class="ag-link" href="#picks">${e(C.t('toPicks'))} →</a>`));
@@ -394,7 +409,7 @@ export async function vHome(v, r, alive) {
     <a href="#refs">${ic('plus', 16)}${e(tt('a_qRefs'))}</a><a href="#tool/topic">${ic('search', 16)}${e(tt('t_topic'))}</a><a href="#tool/predict">${ic('target', 16)}${e(tt('t_predict'))}</a><a href="#tool/comments">${ic('chat', 16)}${e(tt('t_comments'))}</a><a href="#tools">${ic('layers', 16)}${e(tt('a_allTools'))}</a></nav>`;
   v.innerHTML = C.head(C.t('home'), '') + hd + cmdHtml() + `<div class="ag-feed">${msgs.join('')}</div>` + quick;
   bindDiscoveryRetry(v);
-  bindCmd(v);
+  bindCmd(v, ov);
   bindPlan(v, plan);
   C.bindBars(v, 'agb', hv, (x) => `${C.hourLabel(x.h)}\n${x.pre ? C.t('preCollect') : C.fmtFull(x.v) + C.t('unitViews')}`);
   C.bindTry(v, tryList, '', () => C.render());
@@ -532,9 +547,10 @@ const TOOLS = [
   { g: 'soon', items: [['ab', 'ab'], ['bulk', 'layers'], ['reply', 'reply'], ['ret', 'eye']] }
 ];
 export async function vTools(v) {
-  v.innerHTML = C.head(tt('a_tools'), e(tt('a_toolsLead'))) + TOOLS.map((grp) => `<section class="tl-sec dk-fade"><h2>${e(tt('tg_' + grp.g))}</h2><div class="tl-grid">${grp.items.map(([k, icn, href]) => grp.g === 'soon'
+  v.innerHTML = C.head(tt('a_tools'), e(tt('a_toolsLead'))) + C.plus.histHtml() + TOOLS.map((grp) => `<section class="tl-sec dk-fade"><h2>${e(tt('tg_' + grp.g))}</h2><div class="tl-grid">${grp.items.map(([k, icn, href]) => grp.g === 'soon'
     ? `<div class="tl-card soon"><span class="tl-ic">${ic(icn, 20)}</span><b>${e(tt('t_' + k))}</b><p>${e(tt('td_' + k))}</p><span class="tl-lock">${C.svg(C.IC.lock, 13)}${e(tt('a_soon'))}</span></div>`
     : `<a class="tl-card" href="${href || '#tool/' + k}"><span class="tl-ic">${ic(icn, 20)}</span><b>${e(tt('t_' + k))}</b><p>${e(tt('td_' + k))}</p></a>`).join('')}</div></section>`).join('');
+  C.plus.bindHist(v);
 }
 export async function vTool(v, r, alive) {
   const fn = { topic: tTopic, predict: tPredict, title: tTitle, thumb: tThumb, comments: tComments, dna: tDna }[r.id];
@@ -578,6 +594,7 @@ async function tTopic(v, r, alive) {
   const out = v.querySelector('#tpOut');
   const run = async (q) => {
     if (!q) return;
+    C.plus.histAdd('topic', q);
     v.querySelector('#tpIn').value = q;
     out.innerHTML = spinBox(tt('a_searching'));
     const d = await C.act({ action: 'topic', q, lang: L(), kind: kindNow() });
@@ -641,6 +658,7 @@ async function tPredict(v, r, alive) {
   const run = () => {
     const lines = v.querySelector('#prIn').value.split('\n').map((s) => s.trim()).filter(Boolean).slice(0, 4);
     if (!lines.length) return;
+    C.plus.histAdd('predict', lines[0]);
     const res = lines.map((tl) => ({ tl, p: M.predict(tl, refs, dna, { idf }) }));
     const ok = res.filter((x) => x.p.conf !== 'none');
     const top = ok.length > 1 ? ok.reduce((a, b) => (b.p.mult > a.p.mult ? b : a)) : null;
@@ -673,6 +691,7 @@ async function tTitle(v, r, alive) {
   const run = () => {
     const s = v.querySelector('#tiIn').value.trim();
     if (!s) return;
+    C.plus.histAdd('title', s);
     const isTitle = M.tokens(s).length >= 3 || s.length > 18;
     const kwSeed = isTitle ? M.tokens(s).slice(0, 2).join(' ') : s;
     const rel = M.similar(s, refs, { k: 12, idf }).flatMap((x) => M.keyToks(x.v)).filter((k) => !kwSeed.includes(k));
@@ -819,7 +838,7 @@ async function tComments(v, r, alive) {
     C.snack(C.t('added'));
   }));
   const idOf = (raw) => { const m = String(raw || '').match(/(?:v=|shorts\/|youtu\.be\/|^)([A-Za-z0-9_-]{11})(?:[?&#]|$)/); return m ? m[1] : null; };
-  v.querySelector('#cmForm').addEventListener('submit', (ev) => { ev.preventDefault(); const id = idOf(v.querySelector('#cmIn').value.trim()); if (id) run([id]); else C.snack(C.errText('BAD_LINK')); });
+  v.querySelector('#cmForm').addEventListener('submit', (ev) => { ev.preventDefault(); const id = idOf(v.querySelector('#cmIn').value.trim()); if (id) { C.plus.histAdd('comments', id); run([id]); } else C.snack(C.errText('BAD_LINK')); });
   v.querySelector('#cmTop')?.addEventListener('click', () => run(top.map((x) => x.id)));
   if (A.cm) bind();
   else if (vp && idOf(vp)) run([idOf(vp)]);

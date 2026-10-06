@@ -1,7 +1,9 @@
-// CNOL RADAR 대시보드 — 실험 모드 (로그인 없이 열린 공용 공간)
-// 읽기: Supabase RPC(공개 읽기 전용) · 수집·편집: Edge Function `radar` (유튜브 키는 서버에만)
+// CNOL RADAR 대시보드 — 관리자 로그인 뒤에만 열려요
+// 읽기: Supabase RPC(관리자만 · RLS) · 수집·편집: Edge Function `radar` (유튜브 키는 서버에만)
+// v11: 속도(같은 시간 대비) · 지금 뜨는 중 · 채널 비교 · 소재 보드 · 찾기(⌘K) · 브라우저 알림 → radar-plus.js
 import { sb, getLang, setLang, esc, loginUrl, emailToId } from '/common.js';
 import { mountAgent, vHome as aHome, vRefs, vWave, vTools, vTool, dropPool } from '/agent.js';
+import * as P from '/radar-plus.js';
 
 const LANGS = ['ko', 'en', 'ja'];
 let lang = getLang();
@@ -653,6 +655,8 @@ Object.assign(T.ja, {
   qUnits: 'APIポイント（検索を除く）', qSearch: '検索（別枠で1日100回）', qReset: '回復する時刻：{at}', qKeep: 'YouTubeのポリシーに沿って、収集したデータは{d}日まで保管します。',
   qShow: '紹介ページの公開動画：{at}に更新', derived: '48時間の再生数・いつもとの比較・スコア・予測は、CNOL RADARがYouTubeの公開データから計算した値です。YouTubeが提供する指標ではありません。'
 });
+// v11 문구 (radar-plus.js) — 지금 뜨는 중 · 채널 비교 · 소재 보드 · 찾기 · 알림
+for (const l of LANGS) Object.assign(T[l], P.PT[l]);
 const t = (k, v) => {
   let s = (T[lang] && T[lang][k]) ?? T.ko[k] ?? k;
   if (v) for (const x of Object.keys(v)) s = s.split('{' + x + '}').join(v[x]);
@@ -1538,8 +1542,8 @@ function tryRunsHtml(runs, own) {
 // ---------- 틀: 메뉴 5개 · 메뉴마다 안쪽 탭 ----------
 const GROUPS = [
   { k: 'agent', ic: 'agent', tabs: ['home'], hidden: ['alerts'] },
-  { k: 'ovG', ic: 'overview', tabs: ['overview', 'ranking'] },
-  { k: 'refsG', ic: 'channels', tabs: ['refs', 'channels'], hidden: ['ch', 'collect'] },
+  { k: 'ovG', ic: 'overview', tabs: ['overview', 'radar', 'ranking'] },
+  { k: 'refsG', ic: 'channels', tabs: ['refs', 'channels', 'compare'], hidden: ['ch', 'collect'] },
   { k: 'ideasG', ic: 'picks', tabs: ['picks', 'try', 'wave', 'ideas'] },
   { k: 'toolsG', ic: 'tools', tabs: ['tools'], hidden: ['tool', 'insights'] },
   { k: 'setG', ic: 'status', tabs: ['status', 'partners'], minor: true }
@@ -1585,6 +1589,7 @@ function renderChrome() {
     ks.setAttribute('aria-label', t('kindAria'));
     ks.innerHTML = ['short', 'long'].map((k) => `<button type="button" data-kind="${k}" aria-pressed="${String(S.kind === k)}">${esc(t(k === 'short' ? 'kindShort' : 'kindLong'))}</button>`).join('');
   }
+  P.findLabel();
   renderNav();
 }
 async function updateUnread() {
@@ -1606,7 +1611,7 @@ async function render() {
   S.same = key === lastKey && v.childElementCount > 0;
   lastKey = key;
   v.classList.toggle('dk-still', S.same);
-  const views = { home: aHome, refs: vRefs, wave: vWave, tools: vTools, tool: vTool, overview: vOverview, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, channels: vChannels, ch: vChannel, ideas: vIdeas, partners: vPartners, status: vStatus };
+  const views = { home: aHome, refs: vRefs, wave: vWave, tools: vTools, tool: vTool, overview: vOverview, radar: P.vRadar, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, channels: vChannels, compare: P.vCompare, ch: vChannel, ideas: P.vBoard, partners: vPartners, status: vStatus };
   document.title = t(r.name === 'ch' ? 'channels' : r.name) + ' · CNOL RADAR';
   try {
     await views[r.name](v, r, alive);
@@ -1782,7 +1787,7 @@ async function openShort(id) {
     </div>
     <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
       <div><h2 id="sxTitle">${esc(x.title)}</h2><span class="dk-sub"><a href="#ch/${esc(x.channel_id)}" data-close style="font-weight:700">${esc(x.channel_title)}</a> · ${esc(t(x.role === 'mine' ? 'mine' : 'reference'))} · ${esc(t('sxPub'))} ${esc(pub)}</span></div>
-      <div class="dk-stats">${stat(t('sxViews'), fmtN(x.views))}${stat(t('sxRatio'), x.ratio != null ? t('insX', { x: Number(x.ratio).toFixed(1) }) : '–')}${stat(t('sxVph'), fmtN(x.vph))}${stat(t('c48'), fmtN(x.v48))}${stat(t('sxLike'), like != null ? like.toFixed(1) + '%' : '–')}${stat(t('sxComments'), fmtN(x.comments))}${stat(t('sxDur'), durTxt(x.dur))}</div>
+      <div class="dk-stats" id="sxStats">${stat(t('sxViews'), fmtN(x.views))}${stat(t('sxRatio'), x.ratio != null ? t('insX', { x: Number(x.ratio).toFixed(1) }) : '–')}${x.pace != null ? stat(t('sxPace'), t('insX', { x: Number(x.pace).toFixed(1) })) : ''}${stat(t('sxVph'), fmtN(x.vph))}${stat(t('c48'), fmtN(x.v48))}${stat(t('sxLike'), like != null ? like.toFixed(1) + '%' : '–')}${stat(t('sxComments'), fmtN(x.comments))}${stat(t('sxDur'), durTxt(x.dur))}</div>
       <div style="display:flex;flex-direction:column;gap:8px"><div class="dk-ch"><h3>${esc(t('sxCurve'))}</h3><span class="dk-sub" id="sxSub"></span></div><div class="dk-curve" id="sxCurve"><div class="dk-sk" style="height:150px"></div></div></div>
       <div class="tags" style="display:flex;flex-wrap:wrap;gap:6px">${x._fit ? `<span class="dk-fit${x._fit.score < 50 ? ' low' : ''}">${esc(t('fit', { n: x._fit.score }))}</span>` : ''}${f.map((k) => `<span class="dk-tag gray">${esc(t('fmt_' + k))}</span>`).join('')}${tags.map((g) => `<span class="dk-tag">#${esc(g)}</span>`).join('')}</div>
       ${x._fit && x._fit.why.length ? `<p class="dk-why"><b>${esc(t('fitTitle'))}</b> · ${esc(x._fit.why.join(' · '))}</p>` : ''}
@@ -1801,6 +1806,10 @@ async function openShort(id) {
   let data = null;
   try { data = await rpc('radar_curve', { p_video: id }); } catch (e) { data = null; }
   if (m.dataset.id !== id) return;
+  if (data && data.pace != null && x.pace == null) {
+    const st = box.querySelector('#sxStats');
+    if (st && st.children.length > 1) st.children[1].insertAdjacentHTML('afterend', stat(t('sxPace'), t('insX', { x: Number(data.pace).toFixed(1) })));
+  }
   drawCurve(box.querySelector('#sxCurve'), box.querySelector('#sxSub'), data || { me: [], peers: [] }, x);
 }
 // 성장 곡선 (유튜브 '동영상 분석'처럼): 파란 선 = 이 쇼츠, 회색 띠 = 같은 채널 쇼츠가 같은 시점에 보통 받은 조회수
@@ -1818,15 +1827,27 @@ function drawCurve(el, sub, data, x) {
   const fromPub = t0 && raw.length && raw[0][0] - t0 <= 48 * 3600e3;
   const pts = fromPub && t0 < raw[0][0] ? [[t0, 0], ...raw] : raw;
   if (pts.length < 2) { el.innerHTML = `<div class="dk-empty" style="padding:18px">${esc(t('sxOne'))}</div>`; sub.textContent = ''; return; }
-  sub.textContent = t('sxSnaps', { n: raw.length, t: agoTxt(new Date(raw[0][0]).toISOString()) });
+  const pc = data.pace != null ? Number(data.pace) : x.pace != null ? Number(x.pace) : null;
+  sub.textContent = t('sxSnaps', { n: raw.length, t: agoTxt(new Date(raw[0][0]).toISOString()) }) + (pc != null ? ' · ' + t('paceX', { x: pc >= 10 ? Math.round(pc) : pc.toFixed(1) }) : '');
   const tmin = pts[0][0], tmax = pts[pts.length - 1][0];
   const N = Math.max(2, Math.min(97, Math.ceil((tmax - tmin) / 3600e3) + 1));
   const grid = Array.from({ length: N }, (_, i) => tmin + (i / (N - 1)) * (tmax - tmin));
   const vals = grid.map((tt) => Math.round(interpAt(pts, tt)));
-  // 같은 채널 또래 쇼츠의 나이별 조회수 → 시점마다 가운데 50%
+  // 1) 채널 평소 곡선(radar_curves · 사흘~30일 전 영상 3개 이상) → 시점마다 가운데 50%
   let bands = null;
+  const band = (data.band || []).map((b) => [Number(b[0]), Number(b[1]), Number(b[2]), Number(b[3])]).filter((b) => b.every(Number.isFinite)).sort((p, q) => p[0] - q[0]);
+  if (fromPub && band.length >= 2) {
+    const at = (age, k) => {
+      if (age <= band[0][0]) return band[0][0] > 0 ? (band[0][k] * Math.max(0, age)) / band[0][0] : band[0][k];
+      for (let i = 1; i < band.length; i++) if (age <= band[i][0]) return band[i - 1][k] + ((band[i][k] - band[i - 1][k]) * (age - band[i - 1][0])) / Math.max(1e-9, band[i][0] - band[i - 1][0]);
+      return null;
+    };
+    const lo = grid.map((tt) => at((tt - t0) / 3600e3, 1)), hi = grid.map((tt) => at((tt - t0) / 3600e3, 3));
+    if (lo.filter((v) => v != null).length >= 2) bands = { lo, hi, label: t('ytBandCh') };
+  }
+  // 2) 없으면: 같은 채널 또래 쇼츠의 나이별 조회수 → 시점마다 가운데 50%
   const peers = (data.peers || []).map((p) => [[0, 0], ...p.map(([a, v]) => [Number(a), Number(v) || 0])]);
-  if (fromPub && peers.length >= 3) {
+  if (!bands && fromPub && peers.length >= 3) {
     const lo = [], hi = [];
     for (const tt of grid) {
       const age = (tt - t0) / 3600e3;
@@ -2161,7 +2182,8 @@ async function vRanking(v, r, alive) {
   const list = remember(await vids({ p_days: S.rankDays, p_channel: null, p_role: S.rankRole === 'all' ? null : S.rankRole, p_limit: 1000 }));
   if (!alive()) return;
   const q = S.rankQ.trim().toLowerCase();
-  const key = { v48: (s) => s.v48 || 0, ratio: (s) => s.ratio || 0, vph: (s) => s.vph || 0, views: (s) => s.views || 0, new: (s) => Date.parse(s.published_at) || 0 }[S.rankSort];
+  if (!['v48', 'pace', 'ratio', 'vph', 'views', 'new'].includes(S.rankSort)) S.rankSort = 'v48';
+  const key = { v48: (s) => s.v48 || 0, pace: (s) => (s.pace == null ? -1 : Number(s.pace)), ratio: (s) => s.ratio || 0, vph: (s) => s.vph || 0, views: (s) => s.views || 0, new: (s) => Date.parse(s.published_at) || 0 }[S.rankSort];
   const rows = list.filter((s) => s.status === 'live' && (!q || (s.title || '').toLowerCase().includes(q) || (s.channel_title || '').toLowerCase().includes(q)))
     .sort((a, b) => key(b) - key(a)).slice(0, 200);
   const seg = (k, val, lab, cur) => `<button type="button" data-${k}="${val}" aria-pressed="${String(cur === val)}">${esc(lab)}</button>`;
@@ -2171,24 +2193,24 @@ async function vRanking(v, r, alive) {
       <div class="dk-seg" role="group">${seg('days', 2, t('p2'), S.rankDays)}${seg('days', 7, t('p7'), S.rankDays)}${seg('days', 30, t('p30'), S.rankDays)}</div>
       <div class="dk-seg" role="group">${seg('role', 'all', t('all'), S.rankRole)}${seg('role', 'mine', t('mine'), S.rankRole)}${seg('role', 'reference', t('reference'), S.rankRole)}</div>
       <label class="sr" for="rSort">${esc(t('sort_v48'))}</label>
-      <select class="dk-select" id="rSort" style="min-height:40px">${['v48', 'ratio', 'vph', 'views', 'new'].map((k) => `<option value="${k}" ${S.rankSort === k ? 'selected' : ''}>${esc(t('sort_' + k))}</option>`).join('')}</select>
+      <select class="dk-select" id="rSort" style="min-height:40px">${['v48', 'pace', 'ratio', 'vph', 'views', 'new'].map((k) => `<option value="${k}" ${S.rankSort === k ? 'selected' : ''}>${esc(t('sort_' + k))}</option>`).join('')}</select>
       <label class="sr" for="rQ">${esc(t('search'))}</label>
       <input class="dk-input" id="rQ" type="search" placeholder="${esc(t('search'))}" value="${esc(S.rankQ)}" style="min-height:40px;flex:1 1 200px">
       ${rows.length ? `<button type="button" class="dk-btn sm line" id="csvRank">${svg(IC.dl, 15)}<span>${esc(t('csv'))}</span></button>` : ''}
     </div>
-    ${rows.length ? `<div class="dk-tablewrap"><table class="dk-t"><thead><tr><th>#</th><th>${esc(t('cTitle'))}</th><th>${esc(t('cChannel'))}</th><th class="r">${esc(t('cAge'))}</th><th class="r">${esc(t('cViews'))}</th><th class="r">${esc(t('c48'))}</th><th class="r">${esc(t('cVph'))}</th><th class="r">${esc(t('cRatio'))}</th></tr></thead><tbody>
+    ${rows.length ? `<div class="dk-tablewrap"><table class="dk-t"><thead><tr><th>#</th><th>${esc(t('cTitle'))}</th><th>${esc(t('cChannel'))}</th><th class="r">${esc(t('cAge'))}</th><th class="r">${esc(t('cViews'))}</th><th class="r">${esc(t('c48'))}</th><th class="r">${esc(t('cVph'))}</th><th class="r">${esc(t('cPace'))}</th><th class="r">${esc(t('cRatio'))}</th></tr></thead><tbody>
     ${rows.map((s, i) => `<tr><td class="dk-rank">${i + 1}</td>
       <td><a href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;min-width:240px">${avatar(s.thumb, true)}<span style="font-weight:700;line-height:1.4">${esc(s.title)}</span></a></td>
       <td><a href="#ch/${esc(s.channel_id)}" style="color:#475569;font-size:13px;white-space:nowrap">${esc(s.channel_title)}</a></td>
-      <td class="r" style="white-space:nowrap">${esc(ageTxt(s.age_h))}</td><td class="r dk-num">${esc(fmtN(s.views))}</td><td class="r dk-num">${esc(fmtN(s.v48))}</td><td class="r dk-num">${esc(fmtN(s.vph))}</td><td class="r">${ratioTag(s.ratio)}</td></tr>`).join('')}
+      <td class="r" style="white-space:nowrap">${esc(ageTxt(s.age_h))}</td><td class="r dk-num">${esc(fmtN(s.views))}</td><td class="r dk-num">${esc(fmtN(s.v48))}</td><td class="r dk-num">${esc(fmtN(s.vph))}</td><td class="r">${P.paceTag(s) || '<span class="dk-sub">–</span>'}</td><td class="r">${ratioTag(s.ratio)}</td></tr>`).join('')}
     </tbody></table></div>` : `<div class="dk-empty">${esc(t('noShorts'))}</div>`}
   </section>`;
   v.querySelectorAll('[data-days]').forEach((b) => b.addEventListener('click', () => { S.rankDays = Number(b.dataset.days); render(); }));
   v.querySelectorAll('[data-role]').forEach((b) => b.addEventListener('click', () => { S.rankRole = b.dataset.role; render(); }));
   v.querySelector('#rSort').addEventListener('change', (e) => { S.rankSort = e.target.value; render(); });
   v.querySelector('#csvRank')?.addEventListener('click', () => csvDownload(`cnol-radar-videos-${S.rankDays}d-${stamp()}.csv`, [
-    ['#', t('cTitle'), t('cChannel'), t('csvKind'), t('csvPublished'), t('cViews'), t('c48'), t('cVph'), t('cRatio'), 'URL'],
-    ...rows.map((x, i) => [i + 1, x.title, x.channel_title, x.kind === 'long' ? t('kindLong') : t('kindShort'), x.published_at ? new Date(Date.parse(x.published_at) + 9 * 3600e3).toISOString().slice(0, 16).replace('T', ' ') : '', x.views, x.v48 || 0, x.vph, x.ratio, ytShort(x.id)])
+    ['#', t('cTitle'), t('cChannel'), t('csvKind'), t('csvPublished'), t('cViews'), t('c48'), t('cVph'), t('cPace'), t('cRatio'), 'URL'],
+    ...rows.map((x, i) => [i + 1, x.title, x.channel_title, x.kind === 'long' ? t('kindLong') : t('kindShort'), x.published_at ? new Date(Date.parse(x.published_at) + 9 * 3600e3).toISOString().slice(0, 16).replace('T', ' ') : '', x.views, x.v48 || 0, x.vph, x.pace ?? '', x.ratio, ytShort(x.id)])
   ]));
   let timer = null;
   v.querySelector('#rQ').addEventListener('input', (e) => {
@@ -2202,7 +2224,7 @@ async function vRanking(v, r, alive) {
 function alertParts(a) {
   const d = a.data || {};
   switch (a.kind) {
-    case 'breakout': return { ic: IC.up, title: t(d.role === 'mine' ? 'alBreakMine' : 'alBreakRef'), body: t('alBreakBody', { ch: d.channel, title: d.title, h: d.hours, v: fmtN(d.views), x: d.ratio }) };
+    case 'breakout': return { ic: IC.up, title: t(d.role === 'mine' ? 'alBreakMine' : 'alBreakRef'), body: d.early ? t('alBreakEarly', { ch: d.channel, title: d.title, h: d.hours, v: fmtN(d.views), x: d.pace }) : t('alBreakBody', { ch: d.channel, title: d.title, h: d.hours, v: fmtN(d.views), x: d.ratio }) };
     case 'gap': return { ic: IC.warn, title: t('alGap'), body: t('alGapBody', { ch: d.channel, d: d.days }) };
     case 'missing': return { ic: IC.gone, title: t('alMissing'), body: t('alMissingBody', { ch: d.channel, title: d.title }) };
     case 'age': return { ic: IC.lock, title: t('alAge'), body: t('alAgeBody', { ch: d.channel, title: d.title }) };
@@ -2261,26 +2283,66 @@ async function vChannels(v, r, alive) {
   const list = await getChans(true);
   if (!alive()) return;
   const q = S.chQ.trim().toLowerCase();
-  const rows = list.filter((c) => (S.chRole === 'all' || c.role === S.chRole) && (!q || (c.title || '').toLowerCase().includes(q) || (c.handle || '').toLowerCase().includes(q) || (c.category || '').toLowerCase().includes(q)));
+  const long = S.kind === 'long';
+  const STATE_ORDER = { err: 0, br: 1, down: 2, idle: 3, up: 4, new: 5, ok: 6 };
+  const base = list.filter((c) => (S.chRole === 'all' || c.role === S.chRole) && (!q || (c.title || '').toLowerCase().includes(q) || (c.handle || '').toLowerCase().includes(q) || (c.category || '').toLowerCase().includes(q)))
+    .map((c) => ({ ...c, _st: P.chanState(c, long), _ch: P.chanChange(c) }));
+  if (!S.chTS) S.chTS = { k: '', dir: -1 };
+  const SK = {
+    title: (c) => (c.title || '').toLowerCase(), state: (c) => STATE_ORDER[c._st.k] ?? 9, subs: (c) => (c.subs_hidden ? -1 : Number(c.subs) || 0),
+    count: (c) => (long ? c.longs : c.shorts) || 0, n7: (c) => (long ? c.n7_long : c.n7) || 0, median: (c) => (long ? c.median_long : c.median) || 0,
+    hit: (c) => { const h = long ? c.hit_long : c.hit; return h == null ? -1 : Number(h); }, v48: (c) => Number(c.v48) || 0, change: (c) => (c._ch == null ? -1e9 : c._ch), last: (c) => Date.parse(c.last_collected_at || 0) || 0
+  };
+  const sk = SK[S.chTS.k];
+  // dir -1 = 처음 누른 쪽: 숫자는 큰 것부터, 이름·상태는 가나다·급한 것부터
+  const txtKey = S.chTS.k === 'title' || S.chTS.k === 'state';
+  const asc = txtKey ? S.chTS.dir < 0 : S.chTS.dir > 0;
+  const rows = sk ? [...base].sort((a, b) => { const x = sk(a), y = sk(b); const c = x < y ? -1 : x > y ? 1 : 0; return asc ? c : -c; }) : base;
   const cats = [...new Set(list.map((c) => c.category).filter(Boolean))];
   const seg = (val, lab) => `<button type="button" data-crole="${val}" aria-pressed="${String(S.chRole === val)}">${esc(lab)}</button>`;
+  if (!S.cmpSel) S.cmpSel = new Set();
+  for (const id of [...S.cmpSel]) if (!list.some((c) => c.id === id)) S.cmpSel.delete(id);
+  const th = (k, lab, cls = 'r') => {
+    const on = S.chTS.k === k;
+    const dirTxt = on ? (asc ? '↑' : '↓') : '';
+    return `<th class="${cls}" ${on ? `aria-sort="${asc ? 'ascending' : 'descending'}"` : ''}><button type="button" class="th-s${on ? ' on' : ''}" data-ts="${k}" title="${esc(t('sortBy', { c: lab }))}">${esc(lab)}<i aria-hidden="true">${dirTxt}</i></button></th>`;
+  };
+  const chg = (c) => (c._ch == null ? '<span class="dk-sub">–</span>' : `<span class="chg ${c._ch > 0 ? 'up' : c._ch < 0 ? 'dn' : ''}">${c._ch > 0 ? '↑' : c._ch < 0 ? '↓' : ''}${Math.abs(c._ch)}%</span>`);
+  const hitTxt = (c) => { const h = long ? c.hit_long : c.hit; return h == null ? '–' : Math.round(Number(h) * 100) + '%'; };
   v.innerHTML = head(t('channels'), esc(t('channelsSub')), `<a class="dk-hbtn" href="#collect">${svg(IC.collect, 17)}${esc(t('addTitle'))}</a>`) + `
   <section class="dk-card full dk-fade">
     <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
       <div class="dk-seg" role="group">${seg('all', t('all') + ' ' + list.length)}${seg('mine', t('mine'))}${seg('reference', t('reference'))}</div>
       <label class="sr" for="cQ">${esc(t('search'))}</label><input class="dk-input" id="cQ" type="search" placeholder="${esc(t('search'))}" value="${esc(S.chQ)}" style="min-height:40px;flex:1 1 220px">
+      <button type="button" class="dk-btn sm" id="cmpGo" ${S.cmpSel.size >= 2 ? '' : 'disabled'}>${svg(IC.compare, 15)}<span>${esc(t('cmpGo', { n: S.cmpSel.size }))}</span></button>
     </div>
     <datalist id="catList2">${cats.map((c) => `<option value="${esc(c)}">`).join('')}</datalist>
-    ${rows.length ? `<div class="dk-tablewrap"><table class="dk-t"><thead><tr><th>${esc(t('cChannel'))}</th><th>${esc(t('cRole'))}</th><th>${esc(t('cCat'))}</th><th class="r">${esc(t('cSubs'))}</th><th class="r">${esc(t(S.kind === 'long' ? 'cLongs' : 'cShorts'))}</th><th class="r">${esc(t('cN7'))}</th><th class="r">${esc(t('cMedian'))}</th><th class="r">${esc(t('c48'))}</th><th class="r">${esc(t('cLast'))}</th><th></th></tr></thead><tbody>
+    ${rows.length ? `<div class="dk-tablewrap"><table class="dk-t ch-t"><thead><tr><th><span class="sr">${esc(t('cmpPick'))}</span></th>${th('title', t('cChannel'), '')}<th>${esc(t('cRole'))}</th><th>${esc(t('cCat'))}</th>${th('state', t('cState'), '')}${th('subs', t('cSubs'))}${th('count', t(long ? 'cLongs' : 'cShorts'))}${th('n7', t('cN7'))}${th('median', t('cMedian'))}${th('hit', t('cHit'))}${th('v48', t('c48'))}${th('change', t('cChange'))}${th('last', t('cLast'))}<th></th></tr></thead><tbody>
     ${rows.map((c) => `<tr class="click" data-go="${esc(c.id)}">
+      <td><input type="checkbox" class="cmp-ck" data-cmp="${esc(c.id)}" ${S.cmpSel.has(c.id) ? 'checked' : ''} ${!S.cmpSel.has(c.id) && S.cmpSel.size >= 4 ? 'disabled' : ''} aria-label="${esc(t('cmpPick'))}: ${esc(c.title)}"></td>
       <td><span style="display:flex;align-items:center;gap:10px;min-width:200px">${avatar(c.thumb)}<span class="dk-ttl"><b>${esc(c.title)}</b><small>${esc(c.handle || '')}${c.error ? ` · <span style="color:#b91c1c">${esc(c.error)}</span>` : ''}</small></span></span></td>
       <td><button type="button" class="dk-chip" data-swap="${esc(c.id)}" data-cur="${esc(c.role)}" style="min-height:30px;padding:0 10px">${esc(t(c.role === 'mine' ? 'mine' : 'reference'))}</button></td>
       <td><input class="dk-input" data-cat="${esc(c.id)}" list="catList2" maxlength="30" value="${esc(c.category || '')}" placeholder="${esc(c.topics && c.topics[0] ? topicLabel(c.topics[0]) : '–')}" aria-label="${esc(t('cCat'))}" style="min-height:34px;width:130px;font-size:13px;padding:0 10px"></td>
-      <td class="r dk-num">${esc(c.subs_hidden ? '–' : fmtN(c.subs))}</td><td class="r dk-num">${esc(fmtFull(S.kind === 'long' ? c.longs : c.shorts))}</td><td class="r dk-num">${esc(fmtFull(S.kind === 'long' ? c.n7_long : c.n7))}</td>
-      <td class="r dk-num">${esc(fmtN(S.kind === 'long' ? c.median_long : c.median))}</td><td class="r dk-num">${esc(fmtN(c.v48))}</td><td class="r" style="white-space:nowrap;font-size:13px;color:#64748b">${esc(agoTxt(c.last_collected_at))}</td>
+      <td style="white-space:nowrap"><span class="dk-tag ${c._st.cls}">${esc(c._st.txt)}</span></td>
+      <td class="r dk-num">${esc(c.subs_hidden ? '–' : fmtN(c.subs))}</td><td class="r dk-num">${esc(fmtFull(long ? c.longs : c.shorts))}</td><td class="r dk-num">${esc(fmtFull(long ? c.n7_long : c.n7))}</td>
+      <td class="r dk-num">${esc(fmtN(long ? c.median_long : c.median))}</td><td class="r dk-num">${esc(hitTxt(c))}</td><td class="r dk-num">${esc(fmtN(c.v48))}</td><td class="r dk-num">${chg(c)}</td><td class="r" style="white-space:nowrap;font-size:13px;color:#64748b">${esc(agoTxt(c.last_collected_at))}</td>
       <td class="r" style="white-space:nowrap"><button type="button" class="dk-btn sm line" data-rf="${esc(c.id)}" title="${esc(t('refresh'))}" aria-label="${esc(t('refresh'))}">${svg(IC.refresh, 15)}</button> <button type="button" class="dk-btn sm danger" data-rm="${esc(c.id)}">${esc(t('remove'))}</button></td></tr>`).join('')}
     </tbody></table></div>` : `<div class="dk-empty">${esc(t('noChannels'))}<br><a class="dk-btn" style="margin-top:12px" href="#collect">${esc(t('goCollect'))}</a></div>`}
   </section>`;
+  v.querySelectorAll('[data-ts]').forEach((b) => b.addEventListener('click', () => {
+    const k = b.dataset.ts;
+    if (S.chTS.k === k) S.chTS.dir = -S.chTS.dir; else S.chTS = { k, dir: -1 };
+    render();
+  }));
+  v.querySelectorAll('[data-cmp]').forEach((ck) => ck.addEventListener('change', () => {
+    if (ck.checked) S.cmpSel.add(ck.dataset.cmp); else S.cmpSel.delete(ck.dataset.cmp);
+    const n = S.cmpSel.size;
+    v.querySelectorAll('[data-cmp]').forEach((x) => { x.disabled = !x.checked && n >= 4; });
+    const go = v.querySelector('#cmpGo');
+    go.disabled = n < 2;
+    go.querySelector('span').textContent = t('cmpGo', { n });
+  }));
+  v.querySelector('#cmpGo').addEventListener('click', () => { const ids = [...S.cmpSel].slice(0, 4); S.cmpIds = ids; location.hash = '#compare?ids=' + ids.join(','); });
   v.querySelectorAll('[data-crole]').forEach((b) => b.addEventListener('click', () => { S.chRole = b.dataset.crole; render(); }));
   let timer = null;
   v.querySelector('#cQ').addEventListener('input', (e) => {
@@ -2337,7 +2399,7 @@ async function vChannels(v, r, alive) {
 async function vChannel(v, r, alive) {
   loading(v, t('channels'), '');
   const id = r.id;
-  const [d, shorts, trend] = await Promise.all([rpc('radar_channel', { p_id: id }), vids({ p_days: 400, p_channel: id, p_role: null, p_limit: 400 }), rpc('radar_trend', { p_days: 57, p_channel: id }).catch(() => [])]);
+  const [d, shorts, trend, cset] = await Promise.all([rpc('radar_channel', { p_id: id }), vids({ p_days: 400, p_channel: id, p_role: null, p_limit: 400 }), rpc('radar_trend', { p_days: 57, p_channel: id }).catch(() => []), rpc('radar_curve_set', { p_ids: [id], p_kind: S.kind }).catch(() => ({}))]);
   if (!alive()) return;
   remember(shorts);
   const c = d?.channel;
@@ -2355,11 +2417,12 @@ async function vChannel(v, r, alive) {
   if (!['views', 'subs', 'uploads'].includes(S.ytTab)) S.ytTab = 'views';
   const cChart = () => studioChart('cbl', sd, S.ytTab, null);
   const cc = cChart();
+  const cv = P.chCurveCard((cset || {})[id]);
   // 내 채널이면: 이 채널 데이터로 고른 '이거 해볼래?'
   const tryList = c.role === 'mine' ? trySuggest(shorts, [], null, { noRefs: true }).filter((x) => !tryHidden().has(x.id)).slice(0, 3) : [];
   const seg = (val, lab) => `<button type="button" data-csort="${val}" aria-pressed="${String(S.chSort === val)}">${esc(lab)}</button>`;
   v.innerHTML = `<div class="dk-head dk-fade"><div style="display:flex;align-items:center;gap:16px">${c.thumbnail_url ? `<img src="${esc(c.thumbnail_url)}" alt="" width="72" height="72" style="border-radius:50%;border:3px solid rgba(255,255,255,.7)" referrerpolicy="no-referrer">` : ''}<div><h1>${esc(c.title)}</h1><p>${esc(c.handle || '')} · ${esc(t(c.role === 'mine' ? 'mine' : 'reference'))}${catOf(c) ? ' · ' + esc(catOf(c)) : ''} · ${esc(c.subscribers_hidden ? t('hiddenSubs') : t('subs', { n: fmtN(c.subscriber_count) }))}</p></div></div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="dk-hbtn ghost" href="#channels">← ${esc(t('chBack'))}</a><a class="dk-hbtn ghost" href="https://www.youtube.com/channel/${esc(c.id)}" target="_blank" rel="noopener">${svg(IC.yt, 17)}${esc(t('chOpenYt'))}</a><button type="button" class="dk-hbtn ghost" id="chSim">${svg(IC.collect, 17)}${esc(t('similar'))}</button><button type="button" class="dk-hbtn" id="chRf">${svg(IC.refresh, 17)}${esc(t('refresh'))}</button></div></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="dk-hbtn ghost" href="#channels">← ${esc(t('chBack'))}</a><a class="dk-hbtn ghost" href="https://www.youtube.com/channel/${esc(c.id)}" target="_blank" rel="noopener">${svg(IC.yt, 17)}${esc(t('chOpenYt'))}</a><button type="button" class="dk-hbtn ghost" id="chSim">${svg(IC.collect, 17)}${esc(t('similar'))}</button><button type="button" class="dk-hbtn ghost" id="chCmp">${svg(IC.compare, 17)}${esc(t('cmpThis'))}</button><button type="button" class="dk-hbtn" id="chRf">${svg(IC.refresh, 17)}${esc(t('refresh'))}</button></div></div>
   <div class="dk-row">
     <section class="dk-card f1 dk-fade"><div class="dk-ch"><span class="dk-live"><i></i>${esc(t('chHourly'))}</span></div>
       <div><div class="dk-sub" style="font-weight:600">${esc(t('ytRtViews'))}</div><div class="dk-big huge yt-num">${esc(fmtFull(sum48))}</div></div>
@@ -2370,6 +2433,7 @@ async function vChannel(v, r, alive) {
       <div id="cbWrap">${cc.html}</div>
     </section>
   </div>
+  ${cv.html}
   ${tryList.length ? `<section class="dk-card full dk-fade"><div class="dk-ch"><h2 style="display:flex;align-items:center;gap:8px">${svg(IC.try, 20)}${esc(t('try'))}</h2><a class="dk-sub" href="#try" id="toTry" style="font-weight:700">${esc(t('tryMore'))} →</a></div><div class="ty-grid home">${tryList.map((sg, i) => tyCardHtml(sg, i, 'tc', c.id)).join('')}</div></section>` : ''}
   <div class="dk-row">
     <section class="dk-card f1 dk-fade"><div class="dk-ch"><h2>${esc(t('chAlgo'))}</h2><a class="dk-sub" href="#insights" id="toIns">${esc(t('insights'))} →</a></div>${an.n >= 5 ? insListHtml(an) : `<div class="dk-empty">${esc(t('insFew'))}</div>`}</section>
@@ -2383,6 +2447,12 @@ async function vChannel(v, r, alive) {
   <section class="dk-card full dk-fade"><h2>${esc(t('chAlerts'))}</h2><div style="display:flex;flex-direction:column;gap:10px">${(d.alerts || []).length ? d.alerts.map(alertHtml).join('') : `<div class="dk-empty">${esc(t('noAlerts'))}</div>`}</div></section>`;
   bindBars(v, 'cb48', hv, (x) => `${hourLabel(x.h)}\n${x.pre ? t('preCollect') : fmtFull(x.v) + t('unitViews')}`);
   cc.bind(v);
+  cv.bind(v);
+  v.querySelector('#chCmp').addEventListener('click', () => {
+    const ids = [c.id, ...(S.cmpIds || []).filter((x) => x !== c.id)].slice(0, 4);
+    S.cmpIds = ids;
+    location.hash = '#compare?ids=' + ids.join(',');
+  });
   v.querySelectorAll('[data-ytab]').forEach((b) => b.addEventListener('click', () => {
     if (S.ytTab === b.dataset.ytab) return;
     S.ytTab = b.dataset.ytab;
@@ -2452,56 +2522,7 @@ async function vTry(v, r, alive) {
   }));
 }
 
-// ---------- 소재 보드 ----------
-const STAGES = ['idea', 'script', 'production', 'uploaded'];
-async function vIdeas(v, r, alive) {
-  loading(v, t('ideas'), esc(t('ideasSub')));
-  const { data, error } = await sb.from('radar_ideas').select('*').order('created_at', { ascending: false }).limit(300);
-  if (error) throw new Error(error.message);
-  if (!alive()) return;
-  const ideas = data || [];
-  for (const i of ideas) if (i.source_video_id) S.board.add(i.source_video_id);
-  v.innerHTML = head(t('ideas'), esc(t('ideasSub'))) + `
-  <form class="dk-card full dk-fade" id="ideaForm" novalidate style="flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px">
-    <label class="sr" for="ideaT">${esc(t('ideaPh'))}</label><input class="dk-input" id="ideaT" maxlength="200" placeholder="${esc(t('ideaPh'))}" style="flex:1 1 260px">
-    <button class="dk-btn" type="submit">${esc(t('ideaAdd'))}</button>
-  </form>
-  <div class="dk-kanban dk-fade">${STAGES.map((st) => {
-    const items = ideas.filter((i) => i.stage === st);
-    return `<div class="dk-col"><h3>${esc(t('st_' + st))} · ${items.length}</h3>${items.length ? items.map((i) => `<div class="dk-kc">
-      <b style="font-size:14.5px;line-height:1.45">${esc(i.title)}</b>${i.note ? `<span style="font-size:12.5px;color:#64748b;line-height:1.5">${esc(i.note)}</span>` : ''}
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <label class="sr" for="mv${i.id}">${esc(t('stage'))}</label>
-        <select class="dk-select" id="mv${i.id}" data-mv="${i.id}" style="min-height:34px;font-size:13px;padding:0 8px">${STAGES.map((x) => `<option value="${x}" ${x === i.stage ? 'selected' : ''}>${esc(t('st_' + x))}</option>`).join('')}</select>
-        ${i.source_video_id ? `<a class="dk-btn sm line" href="${ytShort(i.source_video_id)}" target="_blank" rel="noopener" aria-label="${esc(t('viewOnYt'))}">${svg(IC.yt, 15)}</a>` : ''}
-        <button type="button" class="dk-btn sm danger" data-del="${i.id}">${esc(t('del'))}</button>
-      </div></div>`).join('') : `<span style="font-size:13px;color:rgba(255,255,255,.8)">${esc(t('ideaEmpty'))}</span>`}</div>`;
-  }).join('')}</div>`;
-  v.querySelector('#ideaForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const title = v.querySelector('#ideaT').value.trim();
-    if (!title) return;
-    const out = await act({ action: 'idea', op: 'add', title });
-    if (!out.ok) { snack(errText(out.error)); return; }
-    render();
-  });
-  v.querySelectorAll('[data-mv]').forEach((s) => s.addEventListener('change', async () => {
-    const out = await act({ action: 'idea', op: 'move', id: Number(s.dataset.mv), stage: s.value });
-    if (!out.ok) { snack(errText(out.error)); return; }
-    render();
-  }));
-  v.querySelectorAll('[data-del]').forEach((b) => b.addEventListener('click', async () => {
-    if (b.dataset.armed !== '1') {
-      b.dataset.armed = '1';
-      b.textContent = t('removeConfirm');
-      setTimeout(() => { if (b.isConnected) { b.dataset.armed = ''; b.textContent = t('del'); } }, 4000);
-      return;
-    }
-    const out = await act({ action: 'idea', op: 'delete', id: Number(b.dataset.del) });
-    if (!out.ok) { snack(errText(out.error)); return; }
-    render();
-  }));
-}
+// ---------- 소재 보드: radar-plus.js의 vBoard (끌어 옮기기 · 올릴 날 · 올린 영상 성과) ----------
 
 // ---------- 음원·광고 ----------
 async function vPartners(v) {
@@ -2515,6 +2536,8 @@ async function vStatus(v, r, alive) {
   const st = await act({ action: 'status' });
   if (!alive()) return;
   if (!st.ok) throw new Error(st.error || 'status');
+  const ex = await P.statusExtra(st).catch(() => null);
+  if (!alive()) return;
   const meter = (label, used, max) => {
     const pct = Math.min(100, Math.round(((Number(used) || 0) / Math.max(1, Number(max) || 1)) * 100));
     return `<div class="dk-meter"><div class="lb"><span>${esc(label)}</span><b>${esc(fmtFull(used || 0))}<small> / ${esc(fmtFull(max))}</small></b></div><div class="bar" role="img" aria-label="${pct}%"><i style="width:${pct}%" class="${pct >= 90 ? 'hot' : ''}"></i></div></div>`;
@@ -2537,6 +2560,7 @@ async function vStatus(v, r, alive) {
       <h2>${esc(t('testTitle'))}</h2><p class="dk-sub" style="margin:0;font-size:14px">${esc(t('test1'))}</p>
     </section>
   </div>
+  ${ex ? ex.html : ''}
   <div class="dk-row">
     <section class="dk-card f1 dk-fade dk-acc">
       <h2>${esc(t('acct'))}</h2>
@@ -2553,6 +2577,7 @@ async function vStatus(v, r, alive) {
   <section class="dk-card full dk-fade"><h2>${esc(t('runsTitle'))}</h2>
     ${(st.runs || []).length ? `<div class="dk-tablewrap"><table class="dk-t"><tbody>${st.runs.map((x) => `<tr><td style="white-space:nowrap">${esc(agoTxt(x.started_at))}</td><td>${esc(t('run_' + x.kind))}</td><td>${x.ok === false ? `<span class="dk-tag red">${esc(t('runFail'))}</span> <small style="color:#b91c1c">${esc(errText(x.error || ''))}</small>` : x.ok ? `<span class="dk-tag teal">${esc(t('runOk'))}</span>` : '<span class="dk-spin"></span>'}</td><td class="r dk-num">${x.channels != null ? esc(fmtFull(x.channels)) + ' ch' : ''}</td><td class="r dk-num">${esc(fmtFull(x.units))} pt</td></tr>`).join('')}</tbody></table></div>` : '<div class="dk-empty">–</div>'}
   </section>`;
+  if (ex) ex.bind(v);
   // 비밀번호 바꾸기 (로그인한 관리자 본인)
   const pf = v.querySelector('#pwForm');
   pf.addEventListener('submit', async (e) => {
@@ -2604,14 +2629,18 @@ window.addEventListener('hashchange', () => { render(); document.getElementById(
 // 보고 있는 화면이면 5분마다 새로 불러와요 (매시 5분 자동 수집 반영)
 setInterval(() => {
   if (document.visibilityState !== 'visible') return;
-  if (['home', 'overview', 'ranking', 'alerts', 'wave'].includes(route().name)) { dropPool(); render(); }
+  if (['home', 'overview', 'radar', 'ranking', 'alerts', 'wave'].includes(route().name) && !document.querySelector('.dk-modal.on') && !(document.getElementById('pf') && !document.getElementById('pf').hidden)) { dropPool(); render(); }
 }, 5 * 60e3);
-mountAgent({
+const CTX = {
   get lang() { return lang; }, t, esc, fmtN, fmtFull, ageTxt, agoTxt, durTxt, hourLabel, sb, rpc, act, vids, S, getChans, getProfile, remember, SHORTS,
   svg, IC, head, loading, snack, avatar, ratioTag, ytShort, vthumb, cssUrl, barsHtml, bindBars, trySuggest, tyCardHtml, bindTry, tryHidden, tryRuns,
   learnStore, pickList, alertHtml, bindAlertButtons, bindBoardButtons, render, errText, renderNav, nextRunTxt, greet, agAv, agMsg,
-  buildSeries, stackCols, stackHtml, bindStack, legendHtml, bindLegend
-});
+  buildSeries, stackCols, stackHtml, bindStack, legendHtml, bindLegend,
+  ytLine, xTicks, quant, median, tokens, loc, YT_LINE, alertParts, openShort, updateUnread, route, plus: P
+};
+mountAgent(CTX);
+P.mountPlus(CTX);
+P.mountKeys();
 
 // ---------- 관리자 로그인 확인 (로그인 안 했으면 로그인 화면으로) ----------
 async function signOut(btn) {
@@ -2650,4 +2679,4 @@ async function gate() {
   sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') toLogin(); });
   return true;
 }
-gate().then((ok) => { if (ok) render(); });
+gate().then((ok) => { if (ok) { render(); P.startNotify(); } });
