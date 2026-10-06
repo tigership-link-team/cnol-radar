@@ -346,8 +346,8 @@ function bigPick(s, fit) {
 export async function vHome(v, r, alive) {
   C.loading(v, C.t('home'), '');
   const since = new Date(Date.now() - 36 * 3600e3).toISOString();
-  const [ov, , al, nd, feed] = await Promise.all([C.rpc('radar_overview'), C.getChans(), C.sb.from('radar_alerts').select('*').order('created_at', { ascending: false }).limit(40),
-    discoveryRead(C.sb.from('radar_discoveries').select('channel_id,title,thumbnail_url,found_at,match').eq('status', 'new').in('via', ['match', 'featured']).gte('found_at', since).order('score', { ascending: false }).limit(6)),
+  const [ov, , al, nd, feed] = await Promise.all([C.rpc('radar_overview'), C.getChans(), C.sb.from('radar_alerts').select('*').eq('workspace_id', C.S.ws.id).order('created_at', { ascending: false }).limit(40),
+    discoveryRead(C.sb.from('radar_found').select('channel_id,title,thumbnail_url,found_at,match').eq('workspace_id', C.S.ws.id).eq('status', 'new').in('via', ['match', 'featured']).gte('found_at', since).order('score', { ascending: false }).limit(6)),
     C.rpc('radar_feed', { p_hours: 24, p_role: null, p_kind: kindNow() }).catch(() => [])]);
   if (!alive()) return;
   C.S.unread = ov.unread || 0;
@@ -445,7 +445,7 @@ export async function vRefs(v, r, alive) {
   C.loading(v, tt('tab_refs'), '');
   const chans = await C.getChans();
   const mc = (chans || []).find((c) => c.role === 'mine') || null;
-  const [pool, disc] = await Promise.all([loadPool(30), discoveryRead(C.sb.from('radar_discoveries').select('*').eq('status', 'new').in('via', ['match', 'featured']).order('score', { ascending: false }).limit(60))]);
+  const [pool, disc] = await Promise.all([loadPool(30), discoveryRead(C.sb.from('radar_found').select('*').eq('workspace_id', C.S.ws.id).eq('status', 'new').in('via', ['match', 'featured']).order('score', { ascending: false }).limit(60))]);
   const dna = mc ? await loadDna(pool) : null;
   if (!alive()) return;
   const items = (disc.data || []).filter((d) => !(chans || []).some((c) => c.id === d.channel_id))

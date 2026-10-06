@@ -570,7 +570,7 @@ document.getElementById('wlForm')?.addEventListener('submit', async (e) => {
     const r = await fetch(SB_URL + '/rest/v1/inquiries', {
       method: 'POST',
       headers: { apikey: SB_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-      body: JSON.stringify({ email, language: lang, message: '[가입 알림] 소개 페이지에서 신청' })
+      body: JSON.stringify({ email, language: lang, message: '[사용 신청] 소개 페이지' })
     });
     if (!r.ok) throw new Error(String(r.status));
     say('v9.wl.ok', 'ok', { e: email });

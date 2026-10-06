@@ -504,7 +504,7 @@ function dueBadge(d, stage) {
 export async function vBoard(v, r, alive) {
   C.loading(v, t('bdTitle'), e(t('bdSub')));
   const [res, mine] = await Promise.all([
-    C.sb.from('radar_ideas').select('*').order('created_at', { ascending: false }).limit(300),
+    C.sb.from('radar_ideas').select('*').eq('workspace_id', C.S.ws.id).order('created_at', { ascending: false }).limit(300),
     C.rpc('radar_videos_list', { p_days: 90, p_channel: null, p_role: 'mine', p_limit: 600, p_kind: 'all' }).catch(() => [])
   ]);
   if (res.error) throw new Error(res.error.message);
@@ -668,7 +668,10 @@ export async function vBoard(v, r, alive) {
 // ---------- 설정: 최근 7일 할당량 · 자동 수집 상태 · 브라우저 알림 · 단축키 ----------
 export async function statusExtra(st) {
   const since = new Date(Date.now() - 8 * 864e5).toISOString();
-  const { data } = await C.sb.from('radar_runs').select('kind,started_at,finished_at,ok,error,units,searches').gte('started_at', since).order('started_at', { ascending: true }).limit(3000);
+  // 서비스 관리자는 서비스 전체 할당량을, 팀원은 우리 워크스페이스가 쓴 만큼을 봐요
+  let rq = C.sb.from('radar_runs').select('kind,started_at,finished_at,ok,error,units,searches').gte('started_at', since);
+  if (!C.S.user?.admin) rq = rq.eq('workspace_id', C.S.ws.id);
+  const { data } = await rq.order('started_at', { ascending: true }).limit(3000);
   const runs = data || [];
   const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' });
   const today = fmt.format(new Date());
@@ -742,7 +745,8 @@ let ntLast = null;
 export function notifyState() { return 'Notification' in window ? Notification.permission : 'none'; }
 export function notifyOn() { return store.get('radar.notify') === '1' && notifyState() === 'granted'; }
 async function pollAlerts(first) {
-  const { data } = await C.sb.from('radar_alerts').select('id,kind,severity,data,video_id,channel_id,created_at')
+  if (!C.S.ws) return;
+  const { data } = await C.sb.from('radar_alerts').select('id,kind,severity,data,video_id,channel_id,created_at').eq('workspace_id', C.S.ws.id)
     .in('kind', ['breakout', 'drop', 'surge', 'missing', 'gap']).order('id', { ascending: false }).limit(12);
   const list = data || [];
   const max = list.reduce((m, a) => Math.max(m, Number(a.id) || 0), 0);

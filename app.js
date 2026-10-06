@@ -1,9 +1,11 @@
-// CNOL RADAR 대시보드 — 관리자 로그인 뒤에만 열려요
-// 읽기: Supabase RPC(관리자만 · RLS) · 수집·편집: Edge Function `radar` (유튜브 키는 서버에만)
+// CNOL RADAR 대시보드 — 로그인한 팀원만 열려요 (워크스페이스마다 데이터가 따로예요)
+// 읽기: Supabase RPC(지금 워크스페이스만 · RLS) · 수집·편집: Edge Function `radar` (유튜브 · AI 키는 서버에만)
 // v11: 속도(같은 시간 대비) · 지금 뜨는 중 · 채널 비교 · 소재 보드 · 찾기(⌘K) · 브라우저 알림 → radar-plus.js
+// v12: 팀 · 요금제 · 워크스페이스 바꾸기 · RADAR에게 묻기(AI 대화) → radar-team.js
 import { sb, getLang, setLang, esc, loginUrl, emailToId } from '/common.js';
 import { mountAgent, vHome as aHome, vRefs, vWave, vTools, vTool, dropPool } from '/agent.js';
 import * as P from '/radar-plus.js';
+import * as TMM from '/radar-team.js';
 
 const LANGS = ['ko', 'en', 'ja'];
 let lang = getLang();
@@ -656,7 +658,7 @@ Object.assign(T.ja, {
   qShow: '紹介ページの公開動画：{at}に更新', derived: '48時間の再生数・いつもとの比較・スコア・予測は、CNOL RADARがYouTubeの公開データから計算した値です。YouTubeが提供する指標ではありません。'
 });
 // v11 문구 (radar-plus.js) — 지금 뜨는 중 · 채널 비교 · 소재 보드 · 찾기 · 알림
-for (const l of LANGS) Object.assign(T[l], P.PT[l]);
+for (const l of LANGS) Object.assign(T[l], P.PT[l], TMM.TM[l]);
 const t = (k, v) => {
   let s = (T[lang] && T[lang][k]) ?? T.ko[k] ?? k;
   if (v) for (const x of Object.keys(v)) s = s.split('{' + x + '}').join(v[x]);
@@ -755,7 +757,7 @@ async function rpc(fn, args) {
 }
 async function act(body) {
   try {
-    const { data, error } = await sb.functions.invoke('radar', { body });
+    const { data, error } = await sb.functions.invoke('radar', { body: S.ws ? { ws: S.ws.id, ...body } : body });
     if (error) {
       let msg = error.message;
       try { const j = await error.context?.json?.(); if (j?.error) msg = j.error; } catch (e) { /* 무시 */ }
@@ -1546,7 +1548,7 @@ const GROUPS = [
   { k: 'refsG', ic: 'channels', tabs: ['refs', 'channels', 'compare'], hidden: ['ch', 'collect'] },
   { k: 'ideasG', ic: 'picks', tabs: ['picks', 'try', 'wave', 'ideas'] },
   { k: 'toolsG', ic: 'tools', tabs: ['tools'], hidden: ['tool', 'insights'] },
-  { k: 'setG', ic: 'status', tabs: ['status', 'partners'], minor: true }
+  { k: 'setG', ic: 'status', tabs: ['status', 'team', 'partners'], minor: true }
 ];
 const ROUTES = GROUPS.flatMap((g) => [...g.tabs, ...(g.hidden || [])]);
 const groupOf = (name) => GROUPS.find((g) => g.tabs.includes(name) || (g.hidden || []).includes(name));
@@ -1581,8 +1583,14 @@ function renderChrome() {
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-a]').forEach((el) => { el.textContent = t(el.dataset.a); });
   const ac = document.getElementById('acct');
-  if (ac) ac.innerHTML = S.user ? `<span class="who"><span class="dk-av sq me" aria-hidden="true">${esc((S.user.id || '?').slice(0, 1).toUpperCase())}</span><span class="txt"><b>${esc(S.user.id)}</b><small>${esc(t('acctRole'))}</small></span></span><button type="button" class="dk-out" data-logout>${svg(IC.logout, 16)}<span>${esc(t('logout'))}</span></button>` : '';
-  document.getElementById('refreshAll').innerHTML = `${svg(IC.refresh, 16)}<span>${esc(t('refreshAll'))}</span>`;
+  if (ac) ac.innerHTML = TMM.acctHtml();
+  const pill = document.getElementById('rolePill');
+  if (pill) pill.innerHTML = TMM.topPill();
+  const ra = document.getElementById('refreshAll');
+  ra.innerHTML = `${svg(IC.refresh, 16)}<span>${esc(t('refreshAll'))}</span>`;
+  const viewer = !!(S.ws && S.ws.role === 'viewer' && !S.user?.admin);
+  ra.hidden = viewer;
+  document.body.dataset.role = viewer ? 'viewer' : (S.ws ? S.ws.role : '');
   document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   const ks = document.getElementById('kindSeg');
   if (ks) {
@@ -1593,7 +1601,8 @@ function renderChrome() {
   renderNav();
 }
 async function updateUnread() {
-  const { count } = await sb.from('radar_alerts').select('id', { count: 'exact', head: true }).is('read_at', null);
+  if (!S.ws) return;
+  const { count } = await sb.from('radar_alerts').select('id', { count: 'exact', head: true }).eq('workspace_id', S.ws.id).is('read_at', null);
   S.unread = count || 0;
   renderNav();
 }
@@ -1601,7 +1610,7 @@ async function updateUnread() {
 let seq = 0;
 let lastKey = '';
 async function render() {
-  if (!S.user || !S.user.admin) return; // 관리자 확인 전에는 그리지 않아요
+  if (!S.user || !S.ws) return; // 로그인 · 워크스페이스 확인 전에는 그리지 않아요
   const my = ++seq;
   const alive = () => my === seq;
   renderChrome();
@@ -1611,7 +1620,7 @@ async function render() {
   S.same = key === lastKey && v.childElementCount > 0;
   lastKey = key;
   v.classList.toggle('dk-still', S.same);
-  const views = { home: aHome, refs: vRefs, wave: vWave, tools: vTools, tool: vTool, overview: vOverview, radar: P.vRadar, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, channels: vChannels, compare: P.vCompare, ch: vChannel, ideas: P.vBoard, partners: vPartners, status: vStatus };
+  const views = { home: aHome, refs: vRefs, wave: vWave, tools: vTools, tool: vTool, overview: vOverview, radar: P.vRadar, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, channels: vChannels, compare: P.vCompare, ch: vChannel, ideas: P.vBoard, partners: vPartners, status: vStatus, team: TMM.vTeam };
   document.title = t(r.name === 'ch' ? 'channels' : r.name) + ' · CNOL RADAR';
   try {
     await views[r.name](v, r, alive);
@@ -2256,11 +2265,16 @@ function bindAlertButtons(root) {
 }
 async function vAlerts(v, r, alive) {
   loading(v, t('alerts'), esc(t('alertsSub')));
-  const { data, error } = await sb.from('radar_alerts').select('*, radar_channels(role)').order('created_at', { ascending: false }).limit(300);
+  const [{ data, error }, chans] = await Promise.all([
+    sb.from('radar_alerts').select('*').eq('workspace_id', S.ws.id).order('created_at', { ascending: false }).limit(300),
+    getChans().catch(() => [])
+  ]);
   if (error) throw new Error(error.message);
   if (!alive()) return;
+  const roleOf = new Map((chans || []).map((c) => [c.id, c.role]));
+  const roleA = (a) => roleOf.get(a.channel_id) || a.data?.role || null;
   const f = S.alertF;
-  const list = (data || []).filter((a) => f === 'all' || (f === 'unread' && !a.read_at) || (f === 'mine' && a.radar_channels?.role === 'mine') || (f === 'reference' && a.radar_channels?.role === 'reference'));
+  const list = (data || []).filter((a) => f === 'all' || (f === 'unread' && !a.read_at) || (f === 'mine' && roleA(a) === 'mine') || (f === 'reference' && roleA(a) === 'reference'));
   const chip = (k, lab) => `<button type="button" class="dk-chip" data-f="${k}" aria-pressed="${String(f === k)}">${esc(lab)}</button>`;
   v.innerHTML = head(t('alerts'), esc(t('alertsSub')), `<button type="button" class="dk-hbtn" id="readAll">${esc(t('markAll'))}</button>`) + `
   <section class="dk-card full dk-fade">
@@ -2564,7 +2578,7 @@ async function vStatus(v, r, alive) {
   <div class="dk-row">
     <section class="dk-card f1 dk-fade dk-acc">
       <h2>${esc(t('acct'))}</h2>
-      <div class="who"><span class="dk-av sq me" aria-hidden="true">${esc((S.user?.id || '?').slice(0, 1).toUpperCase())}</span><span class="txt"><b>${esc(S.user?.id || '')}</b><small>${esc(t('acctRole'))}</small></span><button type="button" class="dk-btn sm line" data-logout>${svg(IC.logout, 15)}<span>${esc(t('logout'))}</span></button></div>
+      <div class="who"><span class="dk-av sq me" aria-hidden="true">${esc((S.user?.id || '?').slice(0, 1).toUpperCase())}</span><span class="txt"><b>${esc(S.user?.name || S.user?.id || '')}</b><small>${esc(S.user?.id || '')} · ${esc(S.user?.admin ? t('roleAdmin') : t('role_' + (S.ws?.role || 'editor')))}${S.ws ? ' · ' + esc(S.ws.name) : ''}</small></span><button type="button" class="dk-btn sm line" data-logout>${svg(IC.logout, 15)}<span>${esc(t('logout'))}</span></button></div>
     </section>
     <form class="dk-card f1 dk-fade" id="pwForm" novalidate>
       <h2>${esc(t('pwTitle'))}</h2>
@@ -2604,6 +2618,7 @@ document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('clic
   lang = b.dataset.lang;
   setLang(lang);
   render();
+  TMM.chatLang();
 }));
 document.getElementById('kindSeg')?.addEventListener('click', (e) => {
   const b = e.target.closest('[data-kind]');
@@ -2640,6 +2655,8 @@ const CTX = {
 };
 mountAgent(CTX);
 P.mountPlus(CTX);
+TMM.mountTeam(CTX);
+TMM.bindAcct();
 P.mountKeys();
 
 // ---------- 관리자 로그인 확인 (로그인 안 했으면 로그인 화면으로) ----------
@@ -2663,20 +2680,25 @@ async function gate() {
   let s = null;
   try { s = (await sb.auth.getSession()).data.session; } catch (e) { s = null; }
   if (!s) { toLogin(); return false; }
-  S.user = { uid: s.user.id, id: emailToId(s.user.email) || 'admin', admin: false };
-  let admin;
-  try { admin = !!(await rpc('is_admin')); } catch (e) {
+  S.user = { uid: s.user.id, id: emailToId(s.user.email) || '', name: '', admin: false };
+  let me;
+  try { me = await rpc('radar_me'); } catch (e) {
     renderChrome();
     gateCard(t('loadFail'), String(e.message || e), `<button type="button" class="dk-btn" data-reload>${esc(t('refreshAll'))}</button>`);
     return false;
   }
-  S.user.admin = admin;
-  if (!admin) {
+  // 나 · 들어간 워크스페이스들 · 지금 워크스페이스 (서버도 같은 워크스페이스를 써요)
+  S.me = me || { workspaces: [] };
+  S.user = { uid: s.user.id, id: (me && me.login) || S.user.id, name: (me && me.name) || '', admin: !!(me && me.admin) };
+  const list = S.me.workspaces || [];
+  S.ws = list.find((w) => w.id === (me && me.ws)) || list[0] || null;
+  if (!S.ws) {
     renderChrome();
-    gateCard(t('deniedH'), t('deniedP'), `<button type="button" class="dk-btn" data-logout>${svg(IC.logout, 17)}<span>${esc(t('logout'))}</span></button>`);
+    gateCard(t('noWsH'), t('noWsP'), (S.user.admin ? `<a class="dk-btn" href="/admin">${esc(t('toAdmin'))}</a>` : `<a class="dk-btn" href="/#start">${esc(t('toLanding'))}</a>`)
+      + `<button type="button" class="dk-btn line" data-logout>${svg(IC.logout, 17)}<span>${esc(t('logout'))}</span></button>`);
     return false;
   }
   sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') toLogin(); });
   return true;
 }
-gate().then((ok) => { if (ok) { render(); P.startNotify(); } });
+gate().then((ok) => { if (ok) { render(); P.startNotify(); TMM.mountChat(); } });

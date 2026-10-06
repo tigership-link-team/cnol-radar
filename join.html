@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>초대 · CNOL RADAR</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#17212d">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="/auth.css">
+</head>
+<body>
+<div class="au">
+  <aside class="au-side">
+    <a class="brand" href="/"><span><img src="/logo.png" alt="" width="24" height="21"></span><b>CNOL RADAR</b></a>
+    <div>
+      <h2 data-l="sideH"></h2>
+      <p data-l="sideP"></p>
+      <ul class="au-pts">
+        <li><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></i><span><b data-l="pt1h"></b><span data-l="pt1"></span></span></li>
+        <li><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></i><span><b data-l="pt2h"></b><span data-l="pt2"></span></span></li>
+        <li><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></i><span><b data-l="pt3h"></b><span data-l="pt3"></span></span></li>
+      </ul>
+    </div>
+    <small data-l="fine"></small>
+  </aside>
+  <div class="au-main">
+    <header class="au-bar">
+      <a class="brand" href="/"><span><img src="/logo.png" alt="" width="24" height="21"></span><b>CNOL RADAR</b></a>
+      <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="ko">KO</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="ja">日本語</button></div>
+    </header>
+    <main id="main" aria-live="polite">
+      <section class="card" id="loadCard"><p class="load"><span class="spin" aria-hidden="true"></span><span data-l="checking"></span></p></section>
+
+      <!-- 링크가 안 맞아요 -->
+      <section class="card" id="badCard" hidden aria-labelledby="bh">
+        <div><span class="badge amber" data-l="badBadge"></span><h1 id="bh" data-l="badT" style="margin-top:10px"></h1><p class="sub" data-l="badP"></p></div>
+        <a class="btn line" href="/login" data-l="toLogin"></a>
+      </section>
+
+      <!-- 초대로 들어오기 -->
+      <section class="card" id="joinCard" hidden aria-labelledby="jh">
+        <div>
+          <span class="badge" id="roleBadge"></span>
+          <h1 id="jh" style="margin-top:10px"></h1>
+          <p class="sub" id="joinSub"></p>
+        </div>
+        <div class="inv" id="invBox"></div>
+        <p class="msg warn" id="seatMsg" hidden></p>
+        <!-- 이미 로그인한 계정으로 -->
+        <div id="meBox" hidden>
+          <div class="me"><span class="av" id="meAv"></span><div><b id="meName"></b><small id="meId"></small></div></div>
+          <button class="btn" type="button" id="asMeBtn" style="width:100%;margin-top:12px"><span data-l="asMe"></span></button>
+          <p class="or" style="margin:14px 0 0"><span data-l="orNew"></span></p>
+          <button class="btn line" type="button" id="otherBtn" style="width:100%;margin-top:10px"><span data-l="other"></span></button>
+        </div>
+        <form id="joinForm" novalidate>
+          <div class="field"><label for="jName" data-l="name"></label><div class="inp"><input id="jName" autocomplete="name" maxlength="40"></div><span class="hint" data-l="nameHint"></span></div>
+          <div class="field"><label for="jId" data-l="id"></label><div class="inp"><input id="jId" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="30" required></div><span class="hint" data-l="idHint"></span></div>
+          <div class="field"><label for="jPw" data-l="pw"></label><div class="inp pw"><input id="jPw" type="password" autocomplete="new-password" maxlength="72" required><button type="button" class="eye" data-eye="jPw"></button></div></div>
+          <div class="field"><label for="jPw2" data-l="pw2"></label><div class="inp pw"><input id="jPw2" type="password" autocomplete="new-password" maxlength="72" required><button type="button" class="eye" data-eye="jPw2"></button></div></div>
+          <ul class="checks" aria-live="polite"><li id="c1"><i>✓</i><span data-l="ck1"></span></li><li id="c2"><i>✓</i><span data-l="ck2"></span></li><li id="c3"><i>✓</i><span data-l="ck3"></span></li></ul>
+          <label class="agree"><input type="checkbox" id="jAgree"><span id="agreeTxt"></span></label>
+          <p class="msg" id="joinMsg" role="alert"></p>
+          <button class="btn" type="submit" id="joinBtn" disabled><span data-l="joinBtn"></span></button>
+        </form>
+        <p class="note" data-l="joinNote"></p>
+      </section>
+
+      <!-- 비밀번호 다시 정하기 -->
+      <section class="card" id="resetCard" hidden aria-labelledby="rh">
+        <div><span class="badge" data-l="resetBadge"></span><h1 id="rh" data-l="resetT" style="margin-top:10px"></h1><p class="sub" id="resetSub"></p></div>
+        <form id="resetForm" novalidate>
+          <input type="text" name="username" id="rId" autocomplete="username" readonly hidden>
+          <div class="field"><label for="rPw" data-l="newPw"></label><div class="inp pw"><input id="rPw" type="password" autocomplete="new-password" maxlength="72" required><button type="button" class="eye" data-eye="rPw"></button></div></div>
+          <div class="field"><label for="rPw2" data-l="pw2"></label><div class="inp pw"><input id="rPw2" type="password" autocomplete="new-password" maxlength="72" required><button type="button" class="eye" data-eye="rPw2"></button></div></div>
+          <ul class="checks" aria-live="polite"><li id="r1"><i>✓</i><span data-l="ck1"></span></li><li id="r2"><i>✓</i><span data-l="ck2"></span></li><li id="r3"><i>✓</i><span data-l="ck3"></span></li></ul>
+          <p class="msg" id="resetMsg" role="alert"></p>
+          <button class="btn" type="submit" id="resetBtn" disabled><span data-l="resetBtn"></span></button>
+        </form>
+      </section>
+
+      <!-- 끝 -->
+      <section class="card" id="doneCard" hidden aria-labelledby="dh">
+        <div><span class="badge" data-l="doneBadge"></span><h1 id="dh" style="margin-top:10px"></h1><p class="sub" id="doneSub"></p></div>
+        <a class="btn" href="/app#home" id="doneGo" data-l="go"></a>
+      </section>
+      <nav class="foot" aria-label="links"><a href="/" data-l="home"></a><a href="/terms" data-l="terms"></a><a href="/privacy" data-l="privacy"></a><a href="/login" data-l="toLogin"></a></nav>
+    </main>
+  </div>
+</div>
+<script type="module" src="/join.js"></script>
+</body>
+</html>

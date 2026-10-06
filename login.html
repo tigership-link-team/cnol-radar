@@ -5,128 +5,85 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>로그인 · CNOL RADAR</title>
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#6200EE">
+<meta name="theme-color" content="#17212d">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
-<style>
-:root{--p:#6200EE;--p2:#3700B3;--p-cont:#EDE3FF;--ink:#1C1B1F;--ink2:#49454F;--ink3:#79747E;--line:#E7E0EC;--outline:#CAC4D0;--tint:#F7F3FE;--ok:#00695C;--err:#B3261E;--err-bg:#FCEEEE;
-  --e1:0 1px 2px rgba(28,27,31,.12),0 1px 3px 1px rgba(28,27,31,.06);--e2:0 1px 2px rgba(28,27,31,.12),0 2px 6px 2px rgba(28,27,31,.08);
-  --em:cubic-bezier(.2,0,0,1);--font:'Pretendard Variable',Pretendard,'Noto Sans KR','Noto Sans JP',system-ui,-apple-system,sans-serif}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;min-height:100vh;background:var(--tint);color:var(--ink);font-family:var(--font);line-height:1.6;-webkit-font-smoothing:antialiased;word-break:keep-all}
-html:lang(ja) body{word-break:normal;line-break:strict}
-a{color:var(--p)}
-:focus-visible{outline:2px solid var(--p);outline-offset:3px;border-radius:6px}
-.bar{background:rgba(255,255,255,.92);box-shadow:var(--e1)}
-.bar .in{max-width:1080px;margin:0 auto;padding:0 20px;min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
-.brand span{width:34px;height:34px;border-radius:10px;background:#fff;box-shadow:var(--e1);display:inline-flex;align-items:center;justify-content:center}
-.brand img{width:22px;height:auto}
-.brand b{font-size:16px;font-weight:800;letter-spacing:.2px}
-.lang{display:flex;padding:3px;border-radius:20px;background:#ECE6F5}
-.lang button{border:0;background:transparent;color:var(--ink2);font:600 12.5px/1 var(--font);padding:8px 11px;border-radius:16px;cursor:pointer}
-.lang button[aria-pressed="true"]{background:#fff;color:var(--p);box-shadow:var(--e1)}
-main{max-width:460px;margin:0 auto;padding:40px 20px 56px;display:flex;flex-direction:column;gap:18px}
-.card{background:#fff;border-radius:24px;box-shadow:var(--e2);padding:30px 28px;display:flex;flex-direction:column;gap:18px;animation:up .45s var(--em) both}
-.card.soft{box-shadow:var(--e1);padding:22px 24px;gap:12px;animation-delay:.06s}
-@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-h1{margin:0;font-size:28px;font-weight:900;letter-spacing:-.6px;line-height:1.3}
-h2{margin:0;font-size:17px;font-weight:800}
-.sub{margin:6px 0 0;font-size:15px;color:var(--ink2)}
-.badge{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:8px;background:var(--p-cont);color:#21005D;font-size:12.5px;font-weight:800}
-form{display:flex;flex-direction:column;gap:14px;margin:0}
-.field{display:flex;flex-direction:column;gap:6px}
-.field label{font-size:13.5px;font-weight:700;color:var(--ink2)}
-.inp{position:relative;display:flex}
-.inp input{flex:1 1 auto;min-width:0;height:52px;border-radius:12px;border:1px solid var(--outline);padding:0 14px;font:500 16px/1 var(--font);color:var(--ink);background:#fff;transition:border-color .2s var(--em),box-shadow .2s var(--em)}
-.inp input:focus{outline:0;border-color:var(--p);box-shadow:0 0 0 3px rgba(98,0,238,.16)}
-.inp input[readonly]{background:#F6F2FC;color:var(--ink2)}
-.inp.pw input{padding-right:52px}
-.eye{position:absolute;right:6px;top:6px;width:40px;height:40px;border:0;border-radius:10px;background:transparent;color:var(--ink3);cursor:pointer;display:flex;align-items:center;justify-content:center}
-.eye:hover{background:#F3EDF7;color:var(--p)}
-.btn{height:52px;border:0;border-radius:26px;background:var(--p);color:#fff;font:800 16px/1 var(--font);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:box-shadow .2s var(--em),opacity .2s var(--em)}
-.btn:hover{box-shadow:var(--e2)}
-.btn[disabled]{opacity:.5;cursor:not-allowed;box-shadow:none}
-.btn.line{background:#fff;color:var(--p);border:1px solid var(--outline);height:46px;font-size:15px}
-.msg{margin:0;font-size:14px;line-height:1.55;min-height:0}
-.msg.err{padding:10px 12px;border-radius:10px;background:var(--err-bg);color:var(--err)}
-.msg.ok{color:var(--ok)}
-.msg:empty{display:none}
-.checks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
-.checks li{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink3)}
-.checks li i{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--outline);flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:11px;font-weight:900;color:#fff;transition:background-color .2s var(--em),border-color .2s var(--em)}
-.checks li.on{color:var(--ok)}
-.checks li.on i{background:var(--ok);border-color:var(--ok)}
-.note{margin:0;font-size:13px;line-height:1.65;color:var(--ink3)}
-.row{display:flex;gap:8px}
-.row .inp{flex:1 1 auto;min-width:0}
-.row .btn{flex-shrink:0;padding:0 18px}
-.foot{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;font-size:13px;color:var(--ink3)}
-.foot a{color:var(--ink3);text-decoration:none}
-.foot a:hover{color:var(--p)}
-.spin{width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;animation:sp .8s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-[hidden]{display:none!important}
-@media (max-width:480px){main{padding:24px 16px 40px}.card{padding:24px 20px}h1{font-size:25px}.row{flex-direction:column}.row .btn{height:48px}}
-@media (prefers-reduced-motion:reduce){.card{animation:none}.spin{animation-duration:2s}}
-</style>
+<link rel="stylesheet" href="/auth.css">
 </head>
 <body>
-<header class="bar">
-  <div class="in">
-    <a class="brand" href="/"><span><img src="/logo.png" alt="" width="22" height="19"></span><b>CNOL RADAR</b></a>
-    <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="ko">KO</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="ja">日本語</button></div>
+<div class="au">
+  <aside class="au-side">
+    <a class="brand" href="/"><span><img src="/logo.png" alt="" width="24" height="21"></span><b>CNOL RADAR</b></a>
+    <div>
+      <h2 data-l="sideH"></h2>
+      <p data-l="sideP"></p>
+      <ul class="au-pts">
+        <li><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></i><span><b data-l="pt1h"></b><span data-l="pt1"></span></span></li>
+        <li><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6"/></svg></i><span><b data-l="pt2h"></b><span data-l="pt2"></span></span></li>
+        <li><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></i><span><b data-l="pt3h"></b><span data-l="pt3"></span></span></li>
+      </ul>
+    </div>
+    <small data-l="fine"></small>
+  </aside>
+  <div class="au-main">
+    <header class="au-bar">
+      <a class="brand" href="/"><span><img src="/logo.png" alt="" width="24" height="21"></span><b>CNOL RADAR</b></a>
+      <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="ko">KO</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="ja">日本語</button></div>
+    </header>
+    <main id="main">
+      <!-- 로그인 -->
+      <section class="card" id="loginCard" aria-labelledby="lh">
+        <div>
+          <span class="badge" data-l="badge"></span>
+          <h1 id="lh" data-l="title" style="margin-top:10px"></h1>
+          <p class="sub" data-l="sub"></p>
+        </div>
+        <form id="loginForm" novalidate>
+          <div class="field"><label for="uid" data-l="id"></label><div class="inp"><input id="uid" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required></div></div>
+          <div class="field"><label for="pw" data-l="pw"></label><div class="inp pw"><input id="pw" name="password" type="password" autocomplete="current-password" required><button type="button" class="eye" data-eye="pw"></button></div></div>
+          <p class="msg" id="loginMsg" role="alert"></p>
+          <button class="btn" type="submit" id="loginBtn"><span data-l="login"></span></button>
+        </form>
+        <p class="note"><a href="#forgot" id="forgotLink" data-l="forgot"></a></p>
+        <p class="msg warn" id="forgotMsg" data-l="forgotP" hidden></p>
+      </section>
+
+      <!-- 1회용 관리자 계정 만들기 -->
+      <section class="card" id="setupCard" aria-labelledby="sh" hidden>
+        <div>
+          <span class="badge" data-l="sBadge"></span>
+          <h1 id="sh" data-l="sTitle" style="margin-top:10px"></h1>
+          <p class="sub" data-l="sSub"></p>
+        </div>
+        <form id="setupForm" novalidate>
+          <div class="field"><label for="sid" data-l="id"></label><div class="inp"><input id="sid" name="username" autocomplete="username" value="hrcompany" readonly></div></div>
+          <div class="field"><label for="np" data-l="newPw"></label><div class="inp pw"><input id="np" type="password" autocomplete="new-password" minlength="8" maxlength="72" required><button type="button" class="eye" data-eye="np"></button></div></div>
+          <div class="field"><label for="np2" data-l="newPw2"></label><div class="inp pw"><input id="np2" type="password" autocomplete="new-password" minlength="8" maxlength="72" required><button type="button" class="eye" data-eye="np2"></button></div></div>
+          <ul class="checks" aria-live="polite"><li id="ck1"><i>✓</i><span data-l="ck1"></span></li><li id="ck2"><i>✓</i><span data-l="ck2"></span></li><li id="ck3"><i>✓</i><span data-l="ck3"></span></li></ul>
+          <p class="msg" id="setupMsg" role="alert"></p>
+          <button class="btn" type="submit" id="setupBtn" disabled><span data-l="sBtn"></span></button>
+          <p class="note" data-l="sNote"></p>
+        </form>
+      </section>
+
+      <!-- 처음이신가요: 초대 링크 · 사용 신청 -->
+      <section class="card soft" id="startCard" aria-labelledby="nh">
+        <h2 id="nh" data-l="startT"></h2>
+        <p class="note" style="font-size:13.5px;color:var(--ink2)" data-l="startD"></p>
+        <form id="startForm" novalidate>
+          <div class="row"><div class="inp"><input id="startMail" type="email" autocomplete="email" inputmode="email" placeholder="name@example.com" maxlength="200" aria-label="Email"></div></div>
+          <div class="row"><div class="inp"><input id="startOrg" autocomplete="organization" maxlength="80" data-l-ph="orgPh" aria-label="Company"></div><button class="btn line" type="submit" id="startBtn"><span data-l="startBtn"></span></button></div>
+          <input type="text" id="startHp" tabindex="-1" autocomplete="off" hidden aria-hidden="true">
+          <p class="msg" id="startMsg" role="status"></p>
+        </form>
+      </section>
+      <nav class="foot" aria-label="links"><a href="/" data-l="home"></a><a href="/terms" data-l="terms"></a><a href="/privacy" data-l="privacy"></a><a href="mailto:support@whrcompany.com">support@whrcompany.com</a></nav>
+    </main>
   </div>
-</header>
-<main id="main">
-  <!-- 로그인 -->
-  <section class="card" id="loginCard" aria-labelledby="lh">
-    <div>
-      <span class="badge" data-l="badge"></span>
-      <h1 id="lh" data-l="title" style="margin-top:10px"></h1>
-      <p class="sub" data-l="sub"></p>
-    </div>
-    <form id="loginForm" novalidate>
-      <div class="field"><label for="uid" data-l="id"></label><div class="inp"><input id="uid" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required></div></div>
-      <div class="field"><label for="pw" data-l="pw"></label><div class="inp pw"><input id="pw" name="password" type="password" autocomplete="current-password" required><button type="button" class="eye" data-eye="pw"></button></div></div>
-      <p class="msg" id="loginMsg" role="alert"></p>
-      <button class="btn" type="submit" id="loginBtn"><span data-l="login"></span></button>
-    </form>
-  </section>
-
-  <!-- 1회용 관리자 계정 만들기 -->
-  <section class="card" id="setupCard" aria-labelledby="sh" hidden>
-    <div>
-      <span class="badge" data-l="sBadge"></span>
-      <h1 id="sh" data-l="sTitle" style="margin-top:10px"></h1>
-      <p class="sub" data-l="sSub"></p>
-    </div>
-    <form id="setupForm" novalidate>
-      <div class="field"><label for="sid" data-l="id"></label><div class="inp"><input id="sid" name="username" autocomplete="username" value="hrcompany" readonly></div></div>
-      <div class="field"><label for="np" data-l="newPw"></label><div class="inp pw"><input id="np" type="password" autocomplete="new-password" minlength="8" maxlength="72" required><button type="button" class="eye" data-eye="np"></button></div></div>
-      <div class="field"><label for="np2" data-l="newPw2"></label><div class="inp pw"><input id="np2" type="password" autocomplete="new-password" minlength="8" maxlength="72" required><button type="button" class="eye" data-eye="np2"></button></div></div>
-      <ul class="checks" aria-live="polite"><li id="ck1"><i>✓</i><span data-l="ck1"></span></li><li id="ck2"><i>✓</i><span data-l="ck2"></span></li><li id="ck3"><i>✓</i><span data-l="ck3"></span></li></ul>
-      <p class="msg" id="setupMsg" role="alert"></p>
-      <button class="btn" type="submit" id="setupBtn" disabled><span data-l="sBtn"></span></button>
-      <p class="note" data-l="sNote"></p>
-    </form>
-  </section>
-
-  <!-- 회원가입은 곧 -->
-  <section class="card soft" id="soonCard" aria-labelledby="nh">
-    <h2 id="nh" data-l="soonT"></h2>
-    <p class="note" style="font-size:14px;color:var(--ink2)" data-l="soonD"></p>
-    <form id="soonForm" novalidate>
-      <div class="row"><div class="inp"><input id="soonMail" type="email" autocomplete="email" inputmode="email" placeholder="name@example.com" aria-label="Email" maxlength="200"></div><button class="btn line" type="submit" id="soonBtn"><span data-l="soonBtn"></span></button></div>
-      <p class="msg" id="soonMsg" role="status"></p>
-    </form>
-  </section>
-  <nav class="foot" aria-label="links"><a href="/" data-l="home"></a><a href="/terms" data-l="terms"></a><a href="/privacy" data-l="privacy"></a><a href="mailto:support@whrcompany.com">support@whrcompany.com</a></nav>
-</main>
+</div>
 <script type="module" src="/login.js"></script>
 </body>
 </html>
