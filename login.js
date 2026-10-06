@@ -20,7 +20,8 @@ const L = {
     pt2h: '팀이 함께', pt2: '초대 링크로 팀원을 부르고 대표 · 편집 · 보기 전용으로 나눠 써요',
     pt3h: 'RADAR에게 묻기', pt3: '지금 뭐가 떴는지, 내 채널이 어떤지 말로 물어보세요',
     fine: '유튜브 공식 API로 받은 공개 데이터만 써요 · 에이치알컴퍼니',
-    home: '소개 페이지', terms: '이용약관', privacy: '개인정보처리방침', doc: '로그인'
+    home: '소개 페이지', terms: '이용약관', privacy: '개인정보처리방침', doc: '로그인',
+    pvT: '로그인 없이 둘러보기', pvD: '개발 중이라 지금은 로그인 없이 대시보드를 볼 수 있어요. 채널 삭제 · 팀 · 폰 알림은 로그인하면 써요.', pvBtn: '대시보드 바로 열기'
   },
   en: {
     badge: 'Team sign-in', title: 'Sign in', sub: 'Sign in with your ID (or email) and password.', id: 'ID', pw: 'Password', login: 'Sign in',
@@ -40,7 +41,8 @@ const L = {
     pt2h: 'Built for teams', pt2: 'Invite teammates by link and split roles: owner, editor, viewer',
     pt3h: 'Ask RADAR', pt3: 'Ask in plain words what’s rising or how your channel is doing',
     fine: 'Uses only public data from the official YouTube API · HR Company',
-    home: 'About CNOL RADAR', terms: 'Terms', privacy: 'Privacy', doc: 'Sign in'
+    home: 'About CNOL RADAR', terms: 'Terms', privacy: 'Privacy', doc: 'Sign in',
+    pvT: 'Look around without signing in', pvD: 'While we build, the dashboard is open without sign-in. Removing channels, team and phone notifications need a sign-in.', pvBtn: 'Open the dashboard'
   },
   ja: {
     badge: 'チームログイン', title: 'ログイン', sub: 'ID（またはメール）とパスワードでログインします。', id: 'ID', pw: 'パスワード', login: 'ログイン',
@@ -60,7 +62,8 @@ const L = {
     pt2h: 'チームで一緒に', pt2: '招待リンクでメンバーを呼び、オーナー・編集・閲覧のみで分けて使えます',
     pt3h: 'RADARに聞く', pt3: '今なにが伸びているか、自分のチャンネルはどうか、言葉で聞いてください',
     fine: 'YouTube公式APIの公開データのみ使います · HR Company',
-    home: '紹介ページ', terms: '利用規約', privacy: 'プライバシーポリシー', doc: 'ログイン'
+    home: '紹介ページ', terms: '利用規約', privacy: 'プライバシーポリシー', doc: 'ログイン',
+    pvT: 'ログインせずに見る', pvD: '開発中のため、いまはログインなしでダッシュボードを見られます。チャンネル削除・チーム・スマホ通知はログインすると使えます。', pvBtn: 'ダッシュボードを開く'
   }
 };
 
@@ -203,7 +206,11 @@ if (setupCode) {
   checkSetup();
   setTimeout(() => $('np').focus(), 60);
 } else {
-  getSession().then((s) => { if (s) location.replace(next); }).catch(() => {});
+  getSession().then((s) => {
+    if (s) { location.replace(next); return; }
+    // 둘러보기 모드(개발 중): 서버가 열어 두면 '대시보드 바로 열기'를 보여 줘요
+    fnCall({ action: 'status' }).then((o) => { if (o && o.ok && o.guest) $('previewCard').hidden = false; }).catch(() => {});
+  }).catch(() => {});
   setTimeout(() => $('uid').focus(), 60);
 }
 

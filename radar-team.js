@@ -201,9 +201,16 @@ export const TM = {
 };
 
 // ---------- 사이드바 계정 칸 · 워크스페이스 바꾸기 ----------
+const EYE = '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>';
 export function acctHtml() {
   const S = C.S;
   if (!S.user) return '';
+  if (S.user.guest) { // 둘러보기(로그인 없이): 워크스페이스 이름 + 로그인 버튼
+    const w = S.ws || {};
+    return `<div class="tm-wsw"><span>${e(t('wsLabel'))}</span><b title="${e(w.name || '')}">${e(w.name || '')}</b><small>${e(planName(w.plan || 'free'))}</small></div>`
+      + `<span class="who"><span class="dk-av sq me" aria-hidden="true">${svg(EYE, 16)}</span><span class="txt"><b>${e(t('guestName'))}</b><small>${e(t('guestPill'))}</small></span></span>`
+      + `<a class="dk-out" href="/login?next=%2Fapp">${svg('<path d="M10 17l5-5-5-5M15 12H3M14 3h6v18h-6"/>', 16)}<span>${e(t('guestLogin'))}</span></a>`;
+  }
   const ws = S.ws;
   const list = (S.me && S.me.workspaces) || [];
   const wsCtl = !ws ? '' : list.length > 1
@@ -239,6 +246,7 @@ export function bindAcct() {
   if (sw) { store.set('radar.wsSwitched', ''); setTimeout(() => C.snack(t('wsSwitched', { n: sw })), 400); }
 }
 export function topPill() {
+  if (C.S.user?.guest) return `<span class="tm-pill guest" title="${e(t('guestTip'))}">${svg(EYE, 15)}${e(t('guestPill'))}</span>`;
   const ws = C.S.ws;
   if (!ws || ws.role !== 'viewer' || C.S.user?.admin) return '';
   return `<span class="tm-pill" title="${e(t('viewerTip'))}">${svg('<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>', 15)}${e(t('viewerPill'))}</span>`;
@@ -569,7 +577,7 @@ function paintLog() {
   box.scrollTop = box.scrollHeight;
 }
 async function runBtn(btn, el) {
-  if (btn.to) { location.hash = btn.to; if (window.matchMedia('(max-width: 720px)').matches) closeChat(); return; }
+  if (btn.to) { if (btn.to.startsWith('/')) { location.href = btn.to; return; } location.hash = btn.to; if (window.matchMedia('(max-width: 720px)').matches) closeChat(); return; }
   if (btn.add) {
     el.disabled = true;
     const out = await C.act({ action: 'add', inputs: [btn.add], role: 'reference' });
@@ -634,7 +642,8 @@ const RX = {
   plan: /요금제|한도|플랜|plan|limit|プラン|上限/i,
   team: /팀원|멤버|누가\s?(있|들어)|members?|team ?mates?|メンバー/i,
   board: /소재\s?보드|아이디어\s?보드|보드|idea board|board|ネタボード/i,
-  quota: /할당량|쿼터|포인트|quota|クォータ/i
+  quota: /할당량|쿼터|포인트|quota|クォータ/i,
+  push: /(알림|푸시|노티).{0,6}(켜|받|설정|오게|와|보내)|폰으로|휴대폰|핸드폰|푸시|push notif|notifications?|turn on alerts|通知(を|の)?(オン|受け|設定|届)|プッシュ/i
 };
 const fx = (x) => (x >= 10 ? String(Math.round(x)) : Number(x).toFixed(1));
 const ytUrl = (id, kind) => (kind === 'long' ? 'https://www.youtube.com/watch?v=' + id : 'https://www.youtube.com/shorts/' + id);
@@ -644,6 +653,8 @@ async function localAnswer(q) {
   if (RX.help.test(q)) return { text: t('aHelp'), btns: EXS.map((k) => ({ label: t(k), ai: null, ask: t(k) })) };
   const cmd = parseCmd(q, chans);
   if (cmd && cmd.add) return { text: t('aAddQ'), btns: [{ label: t('chatAddBtn'), add: cmd.add, primary: true }] };
+  if (RX.push.test(q) && S.user?.guest) return { text: t('aGuest'), btns: [{ label: t('guestLogin'), to: '/login?next=%2Fapp', primary: true }] };
+  if (RX.push.test(q)) return { text: (C.push?.pushOn() ? t('aPushOn') + ' ' : '') + t('aPush'), btns: [{ label: t('chatGo'), to: '#notify', primary: true }] };
   if (RX.rising.test(q)) {
     const feed = await C.rpc('radar_feed', { p_hours: 48, p_role: null, p_kind: S.kind }).catch(() => []);
     const top = (feed || []).filter((x) => x.pace != null && x.pace >= 1.5).sort((a, b) => b.pace - a.pace).slice(0, 4);
@@ -676,6 +687,7 @@ async function localAnswer(q) {
     if (!top.length) return { text: t('aTopNone'), btns: [{ label: t('chatGo'), to: '#ranking' }], data: 1 };
     return { text: t('aTop'), items: top.map((x) => ({ t: x.title, s: `${x.channel_title} · ${t('aItemX', { x: fx(x.ratio), v: C.fmtN(x.views) })}`, href: ytUrl(x.id, x.kind) })), btns: [{ label: t('chatGo'), to: '#ranking', primary: true }], data: 1 };
   }
+  if ((RX.plan.test(q) || RX.team.test(q)) && S.user?.guest) return { text: t('aGuest'), btns: [{ label: t('guestLogin'), to: '/login?next=%2Fapp', primary: true }] };
   if (RX.plan.test(q) || RX.team.test(q)) {
     const tm = await C.rpc('radar_team');
     if (!tm) return null;

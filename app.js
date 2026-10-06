@@ -6,6 +6,7 @@ import { sb, getLang, setLang, esc, loginUrl, emailToId } from '/common.js';
 import { mountAgent, vHome as aHome, vRefs, vWave, vTools, vTool, dropPool } from '/agent.js';
 import * as P from '/radar-plus.js';
 import * as TMM from '/radar-team.js';
+import * as PU from '/radar-push.js';
 
 const LANGS = ['ko', 'en', 'ja'];
 let lang = getLang();
@@ -658,7 +659,7 @@ Object.assign(T.ja, {
   qShow: '紹介ページの公開動画：{at}に更新', derived: '48時間の再生数・いつもとの比較・スコア・予測は、CNOL RADARがYouTubeの公開データから計算した値です。YouTubeが提供する指標ではありません。'
 });
 // v11 문구 (radar-plus.js) — 지금 뜨는 중 · 채널 비교 · 소재 보드 · 찾기 · 알림
-for (const l of LANGS) Object.assign(T[l], P.PT[l], TMM.TM[l]);
+for (const l of LANGS) Object.assign(T[l], P.PT[l], TMM.TM[l], PU.TP[l]);
 const t = (k, v) => {
   let s = (T[lang] && T[lang][k]) ?? T.ko[k] ?? k;
   if (v) for (const x of Object.keys(v)) s = s.split('{' + x + '}').join(v[x]);
@@ -835,7 +836,7 @@ function head(title, sub, actions = '') {
   const g = groupOf(name);
   if (!g || name === 'ch') return `<div class="dk-head dk-fade"><div>${g ? `<a class="ag-crumb" href="#${g.tabs[0]}">← ${esc(t('g_' + g.k))}</a>` : ''}<h1>${esc(title)}</h1>${sub ? `<p>${sub}</p>` : ''}</div>${actions}</div>`;
   if ((g.hidden || []).includes(name)) return `<div class="dk-head dk-fade"><div><a class="ag-crumb" href="#${g.tabs[0]}">← ${esc(t('g_' + g.k))}</a><h1>${esc(title)}</h1></div>${actions}</div>${sub ? `<p class="dk-lead dk-fade">${sub}</p>` : ''}`;
-  const tabs = g.tabs.length > 1 ? `<nav class="dk-tabs dk-fade" aria-label="${esc(t('g_' + g.k))}">${g.tabs.map((k) => `<a href="#${k}" ${k === name ? 'aria-current="page"' : ''}>${esc(t('tab_' + k))}</a>`).join('')}</nav>` : '';
+  const tabs = tabsOf(g).length > 1 ? `<nav class="dk-tabs dk-fade" aria-label="${esc(t('g_' + g.k))}">${tabsOf(g).map((k) => `<a href="#${k}" ${k === name ? 'aria-current="page"' : ''}>${esc(t('tab_' + k))}</a>`).join('')}</nav>` : '';
   return `<div class="dk-head dk-fade"><div><h1>${esc(t('g_' + g.k))}</h1></div>${actions}</div>${tabs}${sub ? `<p class="dk-lead dk-fade">${sub}</p>` : ''}`;
 }
 const loadingCard = () => `<div class="dk-row" aria-busy="true" aria-label="${esc(t('loading'))}"><div class="dk-card f2"><div class="dk-sk" style="height:16px;width:38%"></div><div class="dk-sk" style="height:46px;width:30%"></div><div class="dk-sk" style="height:150px"></div></div><div class="dk-card f1"><div class="dk-sk" style="height:16px;width:55%"></div>${'<div class="dk-sk" style="height:38px"></div>'.repeat(4)}</div></div>`;
@@ -1548,9 +1549,11 @@ const GROUPS = [
   { k: 'refsG', ic: 'channels', tabs: ['refs', 'channels', 'compare'], hidden: ['ch', 'collect'] },
   { k: 'ideasG', ic: 'picks', tabs: ['picks', 'try', 'wave', 'ideas'] },
   { k: 'toolsG', ic: 'tools', tabs: ['tools'], hidden: ['tool', 'insights'] },
-  { k: 'setG', ic: 'status', tabs: ['status', 'team', 'partners'], minor: true }
+  { k: 'setG', ic: 'status', tabs: ['status', 'team', 'notify', 'partners'], minor: true }
 ];
 const ROUTES = GROUPS.flatMap((g) => [...g.tabs, ...(g.hidden || [])]);
+const GUEST_HIDE = ['team', 'notify']; // 둘러보기(로그인 없이)에서는 계정이 필요한 화면을 숨겨요
+const tabsOf = (g) => (S.user?.guest ? g.tabs.filter((k) => !GUEST_HIDE.includes(k)) : g.tabs);
 const groupOf = (name) => GROUPS.find((g) => g.tabs.includes(name) || (g.hidden || []).includes(name));
 function route() {
   let h = (location.hash || '#home').slice(1);
@@ -1559,6 +1562,7 @@ function route() {
   if (h.startsWith('ch/')) return { name: 'ch', id: h.slice(3) };
   if (h.startsWith('tool/')) return { name: 'tool', id: h.slice(5) };
   if (h === 'collect') return { name: 'refs' };
+  if (S.user?.guest && GUEST_HIDE.includes(h)) return { name: 'status' };
   return { name: ROUTES.includes(h) && h !== 'ch' && h !== 'tool' ? h : 'home' };
 }
 function renderNav() {
@@ -1620,7 +1624,7 @@ async function render() {
   S.same = key === lastKey && v.childElementCount > 0;
   lastKey = key;
   v.classList.toggle('dk-still', S.same);
-  const views = { home: aHome, refs: vRefs, wave: vWave, tools: vTools, tool: vTool, overview: vOverview, radar: P.vRadar, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, channels: vChannels, compare: P.vCompare, ch: vChannel, ideas: P.vBoard, partners: vPartners, status: vStatus, team: TMM.vTeam };
+  const views = { home: aHome, refs: vRefs, wave: vWave, tools: vTools, tool: vTool, overview: vOverview, radar: P.vRadar, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, channels: vChannels, compare: P.vCompare, ch: vChannel, ideas: P.vBoard, partners: vPartners, status: vStatus, team: TMM.vTeam, notify: PU.vNotify };
   document.title = t(r.name === 'ch' ? 'channels' : r.name) + ' · CNOL RADAR';
   try {
     await views[r.name](v, r, alive);
@@ -2575,7 +2579,7 @@ async function vStatus(v, r, alive) {
     </section>
   </div>
   ${ex ? ex.html : ''}
-  <div class="dk-row">
+  ${S.user?.guest ? `<div class="dk-row"><section class="dk-card f1 dk-fade dk-acc"><h2>${esc(t('guestCardH'))}</h2><p class="dk-sub" style="margin:0">${esc(t('guestCardP'))}</p><div><a class="dk-btn" href="${esc(loginUrl('/app#status'))}">${svg(IC.lock, 16)}<span>${esc(t('guestLogin'))}</span></a></div></section></div>` : `<div class="dk-row">
     <section class="dk-card f1 dk-fade dk-acc">
       <h2>${esc(t('acct'))}</h2>
       <div class="who"><span class="dk-av sq me" aria-hidden="true">${esc((S.user?.id || '?').slice(0, 1).toUpperCase())}</span><span class="txt"><b>${esc(S.user?.name || S.user?.id || '')}</b><small>${esc(S.user?.id || '')} · ${esc(S.user?.admin ? t('roleAdmin') : t('role_' + (S.ws?.role || 'editor')))}${S.ws ? ' · ' + esc(S.ws.name) : ''}</small></span><button type="button" class="dk-btn sm line" data-logout>${svg(IC.logout, 15)}<span>${esc(t('logout'))}</span></button></div>
@@ -2587,14 +2591,14 @@ async function vStatus(v, r, alive) {
       <input type="text" autocomplete="username" value="${esc(S.user?.id || '')}" hidden readonly>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="dk-btn" type="submit" id="pwBtn">${esc(t('pwSave'))}</button><span id="pwMsg" class="dk-sub" role="status"></span></div>
     </form>
-  </div>
+  </div>`}
   <section class="dk-card full dk-fade"><h2>${esc(t('runsTitle'))}</h2>
     ${(st.runs || []).length ? `<div class="dk-tablewrap"><table class="dk-t"><tbody>${st.runs.map((x) => `<tr><td style="white-space:nowrap">${esc(agoTxt(x.started_at))}</td><td>${esc(t('run_' + x.kind))}</td><td>${x.ok === false ? `<span class="dk-tag red">${esc(t('runFail'))}</span> <small style="color:#b91c1c">${esc(errText(x.error || ''))}</small>` : x.ok ? `<span class="dk-tag teal">${esc(t('runOk'))}</span>` : '<span class="dk-spin"></span>'}</td><td class="r dk-num">${x.channels != null ? esc(fmtFull(x.channels)) + ' ch' : ''}</td><td class="r dk-num">${esc(fmtFull(x.units))} pt</td></tr>`).join('')}</tbody></table></div>` : '<div class="dk-empty">–</div>'}
   </section>`;
   if (ex) ex.bind(v);
   // 비밀번호 바꾸기 (로그인한 관리자 본인)
   const pf = v.querySelector('#pwForm');
-  pf.addEventListener('submit', async (e) => {
+  pf?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const a = pf.querySelector('#pwA').value, b = pf.querySelector('#pwB').value;
     const msg = pf.querySelector('#pwMsg');
@@ -2619,6 +2623,7 @@ document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('clic
   setLang(lang);
   render();
   TMM.chatLang();
+  PU.pushLang();
 }));
 document.getElementById('kindSeg')?.addEventListener('click', (e) => {
   const b = e.target.closest('[data-kind]');
@@ -2651,12 +2656,13 @@ const CTX = {
   svg, IC, head, loading, snack, avatar, ratioTag, ytShort, vthumb, cssUrl, barsHtml, bindBars, trySuggest, tyCardHtml, bindTry, tryHidden, tryRuns,
   learnStore, pickList, alertHtml, bindAlertButtons, bindBoardButtons, render, errText, renderNav, nextRunTxt, greet, agAv, agMsg,
   buildSeries, stackCols, stackHtml, bindStack, legendHtml, bindLegend,
-  ytLine, xTicks, quant, median, tokens, loc, YT_LINE, alertParts, openShort, updateUnread, route, plus: P
+  ytLine, xTicks, quant, median, tokens, loc, YT_LINE, alertParts, openShort, updateUnread, route, plus: P, push: PU
 };
 mountAgent(CTX);
 P.mountPlus(CTX);
 TMM.mountTeam(CTX);
 TMM.bindAcct();
+PU.mountPush(CTX);
 P.mountKeys();
 
 // ---------- 관리자 로그인 확인 (로그인 안 했으면 로그인 화면으로) ----------
@@ -2664,6 +2670,7 @@ async function signOut(btn) {
   if (btn) btn.disabled = true;
   leaving = true;
   snack(t('loggingOut'));
+  try { await PU.beforeSignOut(); } catch (e) { /* 알림 정리를 못 해도 나가요 */ }
   try { await sb.auth.signOut(); } catch (e) { /* 그래도 나가요 */ }
   location.replace('/login');
 }
@@ -2679,7 +2686,19 @@ function gateCard(title, text, btns) {
 async function gate() {
   let s = null;
   try { s = (await sb.auth.getSession()).data.session; } catch (e) { s = null; }
-  if (!s) { toLogin(); return false; }
+  if (!s) {
+    // 둘러보기 모드(개발 중 · v13): 서버가 열어 두면 로그인 없이 기본 워크스페이스를 바로 봐요 (닫혀 있으면 로그인 화면으로)
+    const st = await act({ action: 'status' });
+    if (st && st.ok && st.guest && st.ws) {
+      S.user = { uid: null, id: 'guest', name: t('guestName'), admin: false, guest: true };
+      S.ws = { id: st.ws.id, name: st.ws.name, plan: st.ws.plan, role: 'editor', limits: st.ws.limits, guest: true };
+      S.me = { workspaces: [S.ws] };
+      document.body.dataset.guest = '1';
+      return true;
+    }
+    toLogin();
+    return false;
+  }
   S.user = { uid: s.user.id, id: emailToId(s.user.email) || '', name: '', admin: false };
   let me;
   try { me = await rpc('radar_me'); } catch (e) {
@@ -2701,4 +2720,4 @@ async function gate() {
   sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') toLogin(); });
   return true;
 }
-gate().then((ok) => { if (ok) { render(); P.startNotify(); TMM.mountChat(); } });
+gate().then((ok) => { if (ok) { render(); P.startNotify(); TMM.mountChat(); PU.syncPush().catch(() => {}); } });

@@ -1351,3 +1351,35 @@ body[data-role="viewer"] [data-viewer-hide]{display:none}
   .tm-mt .tm-acts{justify-content:flex-start}
 }
 @media (prefers-reduced-motion:reduce){.rc-panel,.rc-fab{transition:none}}
+
+/* ==========================================================================
+   v13 — 폰 · PC 알림(웹 푸시) · 앱으로 설치
+   ========================================================================== */
+.pu-dev h2,.pu-devs h2{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.pu-btns{display:flex;flex-wrap:wrap;gap:10px}
+.pu-note{margin:0;font-size:13px;line-height:1.6}
+.pu-prefs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.pu-prefs li{display:flex;align-items:flex-start;gap:14px;padding:13px 0;border-top:1px solid var(--pv-line)}
+.pu-prefs li:first-child{border-top:0;padding-top:4px}
+.pu-prefs li>span{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pu-prefs b{font-size:14.5px;color:var(--pv-ink)}
+.pu-prefs small{font-size:12.5px;line-height:1.55;color:var(--pv-muted)}
+.pu-sw{flex:0 0 auto;position:relative;width:46px;height:28px;margin-top:1px;padding:0;border-radius:999px;border:0;background:#cbd5e1;cursor:pointer;transition:background-color .25s var(--dk-ease)}
+.pu-sw i{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.25);transition:transform .25s var(--dk-ease)}
+.pu-sw[aria-checked="true"]{background:var(--pv-blue)}
+.pu-sw[aria-checked="true"] i{transform:translateX(18px)}
+.pu-sw:disabled{opacity:.6;cursor:wait}
+.pu-sw:focus-visible{outline:3px solid #9ec0ff;outline-offset:2px}
+.pu-devlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.pu-devlist li{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--pv-line)}
+.pu-devlist li:first-child{border-top:0}
+.pu-ic{flex:0 0 auto;width:36px;height:36px;border-radius:10px;background:var(--pv-soft);color:var(--pv-ink2);display:inline-flex;align-items:center;justify-content:center}
+.pu-dv{flex:1 1 200px;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:2px 6px}
+.pu-dv b{font-size:14px;color:var(--pv-ink);overflow-wrap:anywhere}
+.pu-dv small{flex-basis:100%;font-size:12.5px;color:var(--pv-muted)}
+.pu-steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.6;color:var(--pv-ink2)}
+.pu-ins .dk-btn{align-self:flex-start}
+@media (max-width:640px){.pu-devlist li{flex-wrap:wrap}.pu-devlist li .dk-btn{margin-left:48px}}
+@media (prefers-reduced-motion:reduce){.pu-sw,.pu-sw i{transition:none}}
+/* v13 둘러보기 모드(로그인 없이) */
+.tm-pill.guest{background:#eaf1ff;color:#1d4fd8;border-color:#c7d7fe}

@@ -699,7 +699,7 @@ export async function statusExtra(st) {
     </section>
   </div>
   <div class="dk-row">
-    <section class="dk-card f1 dk-fade" id="ntCard">${ntCardHtml()}</section>
+    <section class="dk-card f1 dk-fade" id="${C.push ? 'puStatus' : 'ntCard'}">${C.push ? C.push.statusCardHtml() : ntCardHtml()}</section>
     <section class="dk-card f1 dk-fade"><h2>${e(t('kbTitle'))}</h2>
       <ul class="kb-list"><li><kbd>${/Mac|iPhone|iPad/.test(navigator.platform || '') ? '⌘' : 'Ctrl'}</kbd><kbd>K</kbd> <kbd>/</kbd><span>${e(t('kbFind'))}</span></li><li><kbd>G</kbd><span>${e(t('kbGo'))}</span></li></ul>
       <p class="dk-sub" style="margin:0;line-height:1.7">${e(t('kbList'))}</p>
@@ -709,11 +709,11 @@ export async function statusExtra(st) {
     html,
     bind(v) {
       C.bindBars(v, 'qbar', vals, (x) => t('qDayTip', { d: dl(x.d), u: C.fmtFull(x.v), s: C.fmtFull(x.s) }));
-      bindNt(v);
+      if (!C.push) bindNt(v);
     }
   };
 }
-function ntCardHtml() {
+export function ntCardHtml() {
   const st = notifyState();
   const on = notifyOn();
   const stTxt = st === 'none' ? t('ntNo') : st === 'denied' ? t('ntDenied') : on ? t('ntOnState') : t('ntOffState');
@@ -721,7 +721,7 @@ function ntCardHtml() {
     <div class="dk-banner ${on ? 'good' : st === 'denied' ? 'warn' : 'info'}">${e(stTxt)}</div>
     ${st === 'none' || st === 'denied' ? '' : `<div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="dk-btn${on ? ' line' : ''}" id="ntBtn">${e(on ? t('ntOff') : t('ntOn'))}</button>${on ? `<button type="button" class="dk-btn line" id="ntTest">${e(t('ntTest'))}</button>` : ''}</div>`}`;
 }
-function bindNt(v) {
+export function bindNt(v) {
   const card = v.querySelector('#ntCard');
   if (!card) return;
   card.querySelector('#ntBtn')?.addEventListener('click', async () => {
@@ -743,7 +743,8 @@ function bindNt(v) {
 let ntTimer = null;
 let ntLast = null;
 export function notifyState() { return 'Notification' in window ? Notification.permission : 'none'; }
-export function notifyOn() { return store.get('radar.notify') === '1' && notifyState() === 'granted'; }
+// 폰 · PC 알림(웹 푸시, v13)이 이 기기에서 켜져 있으면 페이지 알림은 쉬어요 (같은 알림이 두 번 뜨지 않게)
+export function notifyOn() { return store.get('radar.notify') === '1' && notifyState() === 'granted' && store.get('radar.pushOn') !== '1'; }
 async function pollAlerts(first) {
   if (!C.S.ws) return;
   const { data } = await C.sb.from('radar_alerts').select('id,kind,severity,data,video_id,channel_id,created_at').eq('workspace_id', C.S.ws.id)

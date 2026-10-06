@@ -102,3 +102,6 @@ form{display:flex;flex-direction:column;gap:14px;margin:0}
 @media (max-width:480px){main{padding:12px 14px 40px}.card{padding:22px 18px}h1{font-size:23px}.row{flex-direction:column}.au-bar{padding:12px 14px}}
 @media (prefers-reduced-motion:reduce){.card{animation:none}.spin{animation-duration:2s}}
 @media (min-width:980px){.au-bar .brand{visibility:hidden}}
+/* v13 둘러보기 모드 안내 */
+.card.pv{border-color:#c7d7fe;background:#f5f8ff}
+.card.pv .btn{align-self:flex-start;text-decoration:none}

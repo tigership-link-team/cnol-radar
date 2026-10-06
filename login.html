@@ -34,6 +34,12 @@
       <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="ko">KO</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="ja">日本語</button></div>
     </header>
     <main id="main">
+      <!-- 둘러보기 모드 (개발 중 · 서버가 열어 둔 동안만 보여요) -->
+      <section class="card soft pv" id="previewCard" aria-labelledby="pvh" hidden>
+        <h2 id="pvh" data-l="pvT"></h2>
+        <p class="note" style="font-size:13.5px;color:var(--ink2)" data-l="pvD"></p>
+        <a class="btn" href="/app#home" id="pvBtn"><span data-l="pvBtn"></span></a>
+      </section>
       <!-- 로그인 -->
       <section class="card" id="loginCard" aria-labelledby="lh">
         <div>

@@ -29,6 +29,7 @@
 - 화면 코드에는 **공개용 키(publishable)만** 들어 있어요. 데이터는 행 단위 보안(RLS)으로 회원 본인 것만 보이고, 관리자 데이터는 `is_admin()` 검사를 통과해야 내려와요. **서비스 키는 절대 저장소에 넣지 마세요.**
 - 테이블: `profiles`, `channels`, `reference_channels`, `collected_items`, `ideas`, `agent_settings`, `partner_requests`, `inquiries`, 수집용 `radar_*`(v11: `radar_video_ages` 영상마다 정해진 나이의 조회수 · `radar_curves` 채널·형식·나이별 평소 조회수 25/50/75% · `radar_ideas.due_on`·`result_video_id`), 서버만 읽는 `radar_config`(cron 비밀키 · 1회용 관리자 설정 코드 · 선택: `showcase_videos`), 누구나 읽기만 되는 `radar_public`(key `showcase` = 소개 페이지 공개 영상, 서버가 공식 API로 하루 한 번 새로 써요)
 - **잠금(2026-10-06)**: `radar_*` 표와 함수는 로그인한 사람만 읽어요. 로그인 안 한 사람(anon)은 권한이 없어요. 쓰기는 Edge Function(서비스 키)만 해요.
+- **둘러보기 모드 (v13, 개발 중)**: `radar_config`에 `preview_ws`(워크스페이스 id · `expires_at`)가 있으면 로그인 없이 `/app`이 그 워크스페이스로 열려요. 읽기는 RLS(`radar_preview_ws()` · `radar_preview_channel_ids()` · anon 읽기 규칙), 쓰기는 Edge Function이 정해진 동작만(보기 · 채널 추가(한 번에 10개) · 새로 고침 · 소재 찾기 · 소재 보드) 받고 IP마다 10분에 40번까지예요. 채널 삭제 · 팀 · 초대 · 관리자 · AI · 폰 알림은 로그인해야 해요. 팀원 · 초대 · 계정 · 설정은 anon이 못 읽어요. 닫기: `update radar_config set expires_at = now() where key = 'preview_ws'` (1분 안에 닫혀요).
 - **팀 · 워크스페이스 (v12, 2026-10-06)**: 회사(워크스페이스)마다 데이터를 나누고, 유튜브 데이터(채널 · 영상 · 조회수)는 한 번만 모아 함께 써요.
   - 표: `radar_workspaces`(요금제) · `radar_members`(owner 대표 · editor 편집 · viewer 보기 전용) · `radar_invites`(초대 · 비밀번호 링크, 1회용, 서버만 읽어요) · `radar_follows`(워크스페이스가 지켜보는 채널 + 역할 · 분류 · 메모) · `radar_found`(워크스페이스마다 찾은 채널, 예전 `radar_discoveries` 대신) · `radar_plan_requests`(요금제 신청). `radar_ideas` · `radar_alerts` · `radar_runs`에는 `workspace_id`, `profiles.current_ws`(지금 워크스페이스)
   - 읽기: 뷰 `radar_wchannels` · `radar_wvideos` · `radar_wstats` · `radar_wchstats` · `radar_walerts`가 `radar_ws()`(지금 워크스페이스)만 보여 주고, 읽기 함수가 이 뷰를 써요. 표에도 '내 워크스페이스' RLS(`radar_my_ws_ids()` · `radar_my_channel_ids()`)
@@ -76,6 +77,7 @@
 - **한도·할당량 (2026-09-15 유튜브 기준)**: `search.list`는 따로 하루 100번(한 번에 1) — 서버는 95번까지 쓰고 6번은 아침 자동 맞춤 찾기 몫으로 남겨요(`QUOTA_SEARCH`). 나머지 API는 하루 1만 포인트 중 9천까지(`QUOTA_BUDGET`). 둘 다 **태평양 시간 자정**(한국 오후 4~5시)에 다시 채워져요. 채널 상한 200개. `radar_runs.units`·`searches`로 따로 세요.
 - **보관 (유튜브 API 정책 III.E.4)**: 공개 데이터·통계는 30일까지만 — 매일 04시(KST) 자동 정리: 조회수 스냅샷·채널 통계·찾은 채널·알림·나이별 조회수(`radar_video_ages`) 30일, 30일 넘게 다시 확인 못 한 영상 정보 삭제, 검색 캐시 3일, 하루 넘게 안 고쳐진 평소 곡선(`radar_curves`) 삭제. 감사를 통과하면 `KEEP_DAYS`를 늘려요.
 - **계산값 표시**: 48시간 조회수 · 평소 대비 · 같은 시간 대비 속도 · 점수 · 예측은 우리가 계산한 값이라 대시보드 아래에 "YouTube 지표가 아님" 안내를 늘 보여 줘요.
+- **폰 · PC 알림 (v13 · 서버 v10)**: 설정 › 알림에서 기기마다 켜요(서비스 워커 `/sw.js` + 웹 푸시). 서버가 매시간 수집 뒤 새 알림(`radar_alerts.pushed_at`이 빈 것, 3시간 안)을, 아침 8시 30분엔 오늘의 보고를 보내요. 내용은 RFC 8291(aes128gcm)로 잠가 받는 기기만 풀고, 보내는 쪽은 VAPID(RFC 8292) 서명 — 키는 처음 쓸 때 서버가 만들어 `radar_config.vapid`(서버만 읽음)에 둬요. 사람마다 받을 알림(`profiles.notify`: 내 채널 · 레퍼런스 · 아침 보고 · 밤 11시~아침 8시 조용히), 한 번에 최대 3개(넘치면 2개 + '더 있어요'), 기기는 10대까지 · 404/410이면 바로, 5번 연속 실패하면 · 120일 안 쓰면 지워요. 아이폰은 홈 화면에 앱으로 설치해야 와요(`manifest.webmanifest`).
 - **워크스페이스마다 따로 (v12)**: 채널 넣기는 요금제 한도(내 채널 · 레퍼런스) 안에서, 다른 회사가 2시간 안에 모은 채널은 다시 모으지 않아요. 채널 빼기는 그 워크스페이스에서만 — 아무도 안 지켜보게 되면 모은 데이터도 지워요. 검색(맞춤 · 넓게 · 소재 검색)은 서비스 하루 몫 + 요금제 하루 몫(`PLAN_SEARCH`). 아침 브리핑 · 맞춤 찾기도 워크스페이스마다(요금제가 높은 곳부터, 검색 6번 안에서).
 
 ## 다음 단계
