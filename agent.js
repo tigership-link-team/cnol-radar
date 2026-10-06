@@ -641,6 +641,7 @@ function predCard(title, p, best) {
     ${p.views ? `<div class="pr-v">${e(tt('a_expViews', { a: C.fmtN(p.views.lo), m: C.fmtN(p.views.mid), b: C.fmtN(p.views.hi) }))}</div>` : `<div class="dk-sub">${e(tt('a_noBase'))}</div>`}
     <ul class="pr-why"><li>${e(tt('a_whyNb', { n: p.n }))}</li>${p.why.map((w) => `<li>${e(w.k === 'fmt' ? tt('a_whyFmt', { f: C.t('fmt_' + w.f), x: fmtX(w.x) }) : tt('a_whyDna', { w: w.w.map((x) => '#' + x).join(' ') }))}</li>`).join('')}</ul>
     <div class="pr-nb">${p.nb.slice(0, 4).map((x) => `<a class="dk-thumb${x.v.kind === 'long' ? ' wide' : ''}" href="${C.ytShort(x.v.id)}" target="_blank" rel="noopener" data-short="${e(x.v.id)}" style="background-image:url('${C.cssUrl(C.vthumb(x.v.thumb))}')" title="${e(x.v.title)}"><span class="v">${e(tt('a_xShort', { x: fmtX(x.v.ratio) }))}</span></a>`).join('')}</div>
+    <div class="pr-act">${C.plus.toBoardBtn(title)}</div>
   </article>`;
 }
 async function tPredict(v, r, alive) {
@@ -664,6 +665,7 @@ async function tPredict(v, r, alive) {
     const top = ok.length > 1 ? ok.reduce((a, b) => (b.p.mult > a.p.mult ? b : a)) : null;
     const duel = ok.length > 1 ? `<div class="pr-duel">${ok.map((x) => `<div class="row${x === top ? ' on' : ''}"><span>${e(x.tl)}</span><i style="width:${Math.min(100, (x.p.mult / top.p.mult) * 100).toFixed(1)}%"></i><b>${e(tt('a_xShort', { x: fmtX(x.p.mult) }))}</b></div>`).join('')}</div>` : '';
     v.querySelector('#prOut').innerHTML = duel + `<div class="pr-grid">${res.map((x) => predCard(x.tl, x.p, x === top)).join('')}</div><p class="dk-sub">${e(tt('a_predNote'))}</p>`;
+    C.plus.bindToBoard(v.querySelector('#prOut'), tt('t_predict'));
   };
   v.querySelector('#prForm').addEventListener('submit', (ev) => { ev.preventDefault(); run(); });
   if (pre) run();
@@ -702,9 +704,9 @@ async function tTitle(v, r, alive) {
     const swaps = src && dna ? dna.kws.slice(0, 5).map((k) => M.swapTopic(src.title, k.k)).filter(Boolean).filter((x, i, a) => a.indexOf(x) === i).slice(0, 3)
       .map((title) => ({ title, p: M.predict(title, refs, dna, { idf, k: 10 }) })) : [];
     v.querySelector('#tiOut').innerHTML = (swaps.length ? `<h3 class="tp-h">${e(tt('a_swapTitle'))}</h3>
-      <div class="ti-list">${swaps.map((x) => `<div class="ti-row swap"><span class="ti-t">${e(x.title)}</span>${x.p.conf !== 'none' ? `<span class="dk-tag">${e(tt('a_predX', { x: fmtX(x.p.mult) }))}</span>` : ''}<button type="button" class="dk-mini" data-cp="${e(x.title)}">${ic('copy', 13)}</button><a class="dk-mini" href="#tool/predict?t=${encodeURIComponent(x.title)}">${ic('target', 13)}</a></div>`).join('')}</div>` : '') + `
+      <div class="ti-list">${swaps.map((x) => `<div class="ti-row swap"><span class="ti-t">${e(x.title)}</span>${x.p.conf !== 'none' ? `<span class="dk-tag">${e(tt('a_predX', { x: fmtX(x.p.mult) }))}</span>` : ''}<button type="button" class="dk-mini" data-cp="${e(x.title)}">${ic('copy', 13)}</button><a class="dk-mini" href="#tool/predict?t=${encodeURIComponent(x.title)}">${ic('target', 13)}</a>${C.plus.toBoardBtn(x.title)}</div>`).join('')}</div>` : '') + `
       <h3 class="tp-h">${e(tt('a_ideas'))}</h3>
-      <div class="ti-list">${ideas.map((x) => `<div class="ti-row"><span class="ti-t">${e(x.title)}</span><span class="dk-tag gray">${e(C.t('fmt_' + x.fmt))}</span>${x.x ? `<span class="dk-tag ${x.x >= 1.5 ? 'amber' : 'gray'}">${e(tt('a_fmtX', { x: fmtX(x.x) }))}</span>` : ''}${x.p.conf !== 'none' ? `<span class="dk-tag">${e(tt('a_predX', { x: fmtX(x.p.mult) }))}</span>` : ''}<button type="button" class="dk-mini" data-cp="${e(x.title)}">${ic('copy', 13)}</button><a class="dk-mini" href="#tool/predict?t=${encodeURIComponent(x.title)}">${ic('target', 13)}</a></div>`).join('') || `<div class="dk-empty">${e(tt('a_none'))}</div>`}</div>
+      <div class="ti-list">${ideas.map((x) => `<div class="ti-row"><span class="ti-t">${e(x.title)}</span><span class="dk-tag gray">${e(C.t('fmt_' + x.fmt))}</span>${x.x ? `<span class="dk-tag ${x.x >= 1.5 ? 'amber' : 'gray'}">${e(tt('a_fmtX', { x: fmtX(x.x) }))}</span>` : ''}${x.p.conf !== 'none' ? `<span class="dk-tag">${e(tt('a_predX', { x: fmtX(x.p.mult) }))}</span>` : ''}<button type="button" class="dk-mini" data-cp="${e(x.title)}">${ic('copy', 13)}</button><a class="dk-mini" href="#tool/predict?t=${encodeURIComponent(x.title)}">${ic('target', 13)}</a>${C.plus.toBoardBtn(x.title)}</div>`).join('') || `<div class="dk-empty">${e(tt('a_none'))}</div>`}</div>
       <div class="dk-row" style="margin-top:6px">
         <section class="ti-box f1"><h3 class="tp-h">${e(tt('a_check', { s: chk.score }))}</h3><p class="dk-sub" style="margin:0 0 6px">“${e(isTitle ? s : ideas[0]?.title || s)}”</p>
           <ul class="ti-chk">${chk.checks.map((c) => `<li class="${c.ok ? 'ok' : 'no'}">${c.ok ? ic('check', 15) : C.svg(C.IC.x, 15)}<span>${e(tt('ck_' + c.k + (c.ok ? '1' : '0'), { n: c.v ?? '', a: c.a ?? '', b: c.b ?? '' }))}</span></li>`).join('')}</ul></section>
@@ -715,6 +717,7 @@ async function tTitle(v, r, alive) {
           <p class="dk-sub">${e(tt('a_tagsFrom', { n: tg.from }))}</p></section>
       </div>`;
     v.querySelectorAll('[data-cp]').forEach((b) => b.addEventListener('click', () => copyText(b.dataset.cp)));
+    C.plus.bindToBoard(v.querySelector('#tiOut'), tt('t_title') + ' · ' + s);
   };
   v.querySelector('#tiForm').addEventListener('submit', (ev) => { ev.preventDefault(); run(); });
   if (seed) run();

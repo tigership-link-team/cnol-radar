@@ -47,6 +47,7 @@ export const PT = {
     cmpCurve: '조회수 크는 모양 (평소)', cmpCurveSub: '사흘~30일 전에 올린 영상 · 올린 뒤 시간별 가운데 값과 가운데 50%', cmpCurveNone: '곡선을 그릴 기록이 아직 모자라요 (사흘 지난 영상 3개부터).',
     cmpMedian: '가운데 값', cmpTop: '최근 30일 잘된 영상', cmpKw: '자주 터지는 키워드', cmpShared: '여러 채널에서 함께 터지는 소재', cmpSharedNone: '겹치는 소재가 아직 없어요.',
     cmpThis: '비교에 넣기', cmpGo: '고른 채널 비교 ({n})', cmpPick: '비교할 채널로 고르기',
+    heatTitle: '업로드 시간표', heatSub: '최근 90일 · 한국 시간 · 칸 = 올린 영상 수', heatCell: '{d} {h}시 · 영상 {n}개', heatX: ' · 평소의 {x}배', heatBest: '가장 잘 된 시간: {d} {h}시 — 평소의 {x}배 (영상 {n}개)', heatNone: '시간대마다 비교할 영상이 아직 적어요 (칸마다 2개부터).', heatLg: '영상 수',
     curveText: '보통 첫 24시간에 {a}회, 72시간에 {b}회 — 사흘 조회수의 {p}%가 첫날에 나와요.', curveText24: '보통 첫 24시간에 {a}회가 나와요.', chCurve: '조회수 크는 모양',
     cChange: '48시간 변화', cHit: '터진 비율', cState: '상태', stErr: '수집 오류', stIdle: '{d}일째 업로드 없음', stBr: '터진 영상 {n}', stUp: '상승 {p}%', stDown: '하락 {p}%', stOk: '보통', stNew: '모으는 중',
     sortBy: '{c} 기준으로 정렬',
@@ -91,6 +92,7 @@ export const PT = {
     cmpCurve: 'How views grow (usual)', cmpCurveSub: 'Videos posted 3–30 days ago · median and middle 50% by hours since upload', cmpCurveNone: 'Not enough history yet (needs 3 videos older than 3 days).',
     cmpMedian: 'Median', cmpTop: 'Best videos · 30 days', cmpKw: 'Keywords that break out', cmpShared: 'Topics breaking out on several channels', cmpSharedNone: 'No shared topics yet.',
     cmpThis: 'Add to compare', cmpGo: 'Compare selected ({n})', cmpPick: 'Select for comparison',
+    heatTitle: 'Upload schedule', heatSub: 'Last 90 days · Korea time · cell = videos posted', heatCell: '{d} {h}h · {n} videos', heatX: ' · {x}× usual', heatBest: 'Best slot: {d} {h}h — {x}× usual ({n} videos)', heatNone: 'Not enough videos per time slot yet (2 per slot).', heatLg: 'Videos',
     curveText: 'Usually {a} views in the first 24h and {b} by 72h — {p}% of three-day views come on day one.', curveText24: 'Usually {a} views in the first 24h.', chCurve: 'How views grow',
     cChange: '48h change', cHit: 'Hit rate', cState: 'Status', stErr: 'Collect error', stIdle: 'No upload in {d} days', stBr: '{n} breakouts', stUp: 'Up {p}%', stDown: 'Down {p}%', stOk: 'Steady', stNew: 'Collecting',
     sortBy: 'Sort by {c}',
@@ -135,6 +137,7 @@ export const PT = {
     cmpCurve: '再生数の伸び方（普段）', cmpCurveSub: '3〜30日前の動画・投稿後の時間ごとの中央値と中央50%', cmpCurveNone: '曲線を描く記録がまだ足りません（3日たった動画3本から）。',
     cmpMedian: '中央値', cmpTop: '直近30日の伸びた動画', cmpKw: 'よく伸びるキーワード', cmpShared: '複数のチャンネルで一緒に伸びているネタ', cmpSharedNone: '重なるネタはまだありません。',
     cmpThis: '比較に追加', cmpGo: '選んだチャンネルを比較（{n}）', cmpPick: '比較用に選ぶ',
+    heatTitle: '投稿時間表', heatSub: '直近90日・韓国時間・マス = 投稿本数', heatCell: '{d} {h}時・動画{n}本', heatX: '・普段の{x}倍', heatBest: '一番伸びた時間：{d} {h}時 — 普段の{x}倍（動画{n}本）', heatNone: '時間帯ごとに比べる動画がまだ少ないです（各マス2本から）。', heatLg: '本数',
     curveText: '普段は最初の24時間で{a}回、72時間で{b}回 — 3日間の再生数の{p}%が初日に集まります。', curveText24: '普段は最初の24時間で{a}回です。', chCurve: '再生数の伸び方',
     cChange: '48時間の変化', cHit: 'ヒット率', cState: '状態', stErr: '収集エラー', stIdle: '{d}日投稿なし', stBr: '急上昇 {n}本', stUp: '上昇 {p}%', stDown: '下降 {p}%', stOk: '通常', stNew: '収集中',
     sortBy: '{c}で並べ替え',
@@ -304,10 +307,47 @@ function curveText(rows) {
 // 채널 상세: '조회수 크는 모양' 카드
 export function chCurveCard(raw) {
   const rows = curveRows(raw);
-  if (rows.length < 2) return { html: `<section class="dk-card full dk-fade"><div class="dk-ch"><h2>${e(t('chCurve'))}</h2><span class="dk-sub">${e(t('cmpCurveSub'))}</span></div><div class="dk-empty">${e(t('cmpCurveNone'))}</div></section>`, bind() {} };
+  if (rows.length < 2) return { html: `<section class="dk-card f2 dk-fade"><div class="dk-ch"><h2>${e(t('chCurve'))}</h2><span class="dk-sub">${e(t('cmpCurveSub'))}</span></div><div class="dk-empty">${e(t('cmpCurveNone'))}</div></section>`, bind() {} };
   const L = curveLine('chCv', rows, 170);
   const txt = curveText(rows);
-  return { html: `<section class="dk-card full dk-fade"><div class="dk-ch"><h2>${e(t('chCurve'))}</h2><span class="dk-sub">${e(t('cmpCurveSub'))}</span></div>${L.html}${txt ? `<p class="dk-why">${e(txt)}</p>` : ''}</section>`, bind: (v) => L.bind(v) };
+  return { html: `<section class="dk-card f2 dk-fade"><div class="dk-ch"><h2>${e(t('chCurve'))}</h2><span class="dk-sub">${e(t('cmpCurveSub'))}</span></div>${L.html}${txt ? `<p class="dk-why">${e(txt)}</p>` : ''}</section>`, bind: (v) => L.bind(v) };
+}
+// 채널 상세: 업로드 시간표 (최근 90일 · 한국 시간 · 요일 × 3시간 칸, 한 색 진하기 = 올린 영상 수)
+export function uploadHeat(list) {
+  const now = Date.now();
+  const vids = (list || []).filter((s) => s.published_at && now - Date.parse(s.published_at) <= 90 * 864e5);
+  const cell = new Map();
+  for (const s of vids) {
+    const k = new Date(Date.parse(s.published_at) + 9 * 3600e3);
+    const key = k.getUTCDay() * 8 + Math.floor(k.getUTCHours() / 3);
+    if (!cell.has(key)) cell.set(key, { n: 0, r: [] });
+    const c = cell.get(key);
+    c.n++;
+    if (s.ratio != null) c.r.push(Number(s.ratio));
+  }
+  const step = (n) => (n <= 0 ? 0 : n === 1 ? 1 : n <= 3 ? 2 : n <= 6 ? 3 : 4);
+  let best = null;
+  for (const [key, c] of cell) if (c.r.length >= 2) { const m = C.median(c.r); if (!best || m > best.m) best = { key, m, n: c.n }; }
+  const dayName = (d) => new Date(Date.UTC(2023, 0, 1 + d)).toLocaleDateString(C.loc(), { weekday: 'short', timeZone: 'UTC' });
+  const hrs = (b) => `${b * 3}–${b * 3 + 3}`;
+  const DAYS = [1, 2, 3, 4, 5, 6, 0];
+  const cellHtml = (d, b) => {
+    const c = cell.get(d * 8 + b) || { n: 0, r: [] };
+    const x = c.r.length ? C.median(c.r) : null;
+    const lab = t('heatCell', { d: dayName(d), h: hrs(b), n: c.n }) + (x != null ? t('heatX', { x: fx(x) }) : '');
+    const isBest = best && best.key === d * 8 + b;
+    return `<span class="hm-c s${step(c.n)}${isBest ? ' best' : ''}" role="cell" title="${e(lab)}" aria-label="${e(lab)}">${c.n || ''}</span>`;
+  };
+  const lg = [[0, '0'], [1, '1'], [2, '2–3'], [3, '4–6'], [4, '7+']];
+  return `<section class="dk-card f1 dk-fade"><div class="dk-ch"><h2>${e(t('heatTitle'))}</h2><span class="dk-sub">${e(t('heatSub'))}</span></div>
+    ${vids.length ? `<div class="hm" role="table" aria-label="${e(t('heatTitle'))}">
+      <div class="hm-row hm-hd" role="row"><span role="columnheader"></span>${[0, 1, 2, 3, 4, 5, 6, 7].map((b) => `<span role="columnheader">${b * 3}</span>`).join('')}</div>
+      ${DAYS.map((d) => `<div class="hm-row" role="row"><span role="rowheader">${e(dayName(d))}</span>${[0, 1, 2, 3, 4, 5, 6, 7].map((b) => cellHtml(d, b)).join('')}</div>`).join('')}
+    </div>
+    <div class="hm-lg" aria-hidden="true"><span>${e(t('heatLg'))}</span>${lg.map(([k, l]) => `<i class="hm-c s${k}"></i><em>${l}</em>`).join('')}</div>
+    <p class="dk-why">${e(best ? t('heatBest', { d: dayName(Math.floor(best.key / 8)), h: hrs(best.key % 8), x: fx(best.m), n: best.n }) : t('heatNone'))}</p>`
+    : `<div class="dk-empty">${e(t('noShorts'))}</div>`}
+  </section>`;
 }
 
 // ---------- 채널 비교 ----------
@@ -730,6 +770,18 @@ export function startNotify() {
   if (!notifyOn()) return;
   pollAlerts(true).catch(() => {});
   ntTimer = setInterval(() => { pollAlerts(false).catch(() => {}); }, 4 * 60e3);
+}
+
+// ---------- 도구 결과를 소재 보드에 바로 담기 ----------
+export const toBoardBtn = (title) => `<button type="button" class="dk-mini" data-tb="${e(title)}">${C.svg(C.IC.ideas, 13)}${e(t('toBoard'))}</button>`;
+export function bindToBoard(root, note) {
+  root?.querySelectorAll('[data-tb]').forEach((b) => b.addEventListener('click', async () => {
+    b.disabled = true;
+    const out = await C.act({ action: 'idea', op: 'add', title: String(b.dataset.tb).slice(0, 200), note: String(note || '').slice(0, 2000) });
+    if (!out.ok) { b.disabled = false; C.snack(C.errText(out.error)); return; }
+    b.textContent = t('inBoard');
+    C.snack(t('added'));
+  }));
 }
 
 // ---------- 도구 기록 (이 브라우저에만) ----------

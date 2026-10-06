@@ -1635,7 +1635,7 @@ function pickCard(s) {
     <div class="body">
       <a class="t" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}" style="color:inherit;text-decoration:none">${esc(s.title)}</a>
       <span class="m">${esc(s.channel_title)} · ${esc(ageTxt(s.age_h))}</span>
-      <div class="tags">${s._fit ? `<span class="dk-fit${s._fit.score < 50 ? ' low' : ''}">${esc(t('fit', { n: s._fit.score }))}</span>` : ''}${ratioTag(s.ratio)}${f.map((k) => `<span class="dk-tag gray">${esc(t('fmt_' + k))}</span>`).join('')}</div>
+      <div class="tags">${s._fit ? `<span class="dk-fit${s._fit.score < 50 ? ' low' : ''}">${esc(t('fit', { n: s._fit.score }))}</span>` : ''}${ratioTag(s.ratio)}${P.paceTag(s, 1.5)}${f.map((k) => `<span class="dk-tag gray">${esc(t('fmt_' + k))}</span>`).join('')}</div>
       ${s._fit && s._fit.why.length ? `<p class="dk-why"><b>${esc(t('fitTitle'))}</b> · ${esc(s._fit.why.join(' · '))}</p>` : ''}
       <p class="dk-why"><b>${esc(t('whyTitle'))}</b> · ${esc(whyOf(s))}</p>
       <p class="dk-why"><b>${esc(t('applyTitle'))}</b> · ${esc(t('tip_' + (f[0] || 'default')))}</p>
@@ -1647,7 +1647,7 @@ function tileHtml(s) {
   return `<div class="dk-tile dk-fade">
     <a class="dk-thumb" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}" style="background-image:url('${cssUrl(vthumb(s.thumb))}')" aria-label="${esc(t('sxCurve'))}: ${esc(s.title)}"><span class="b">${ratioTag(s.ratio)}</span><span class="v">${esc(fmtN(s.views))}</span></a>
     <a class="t" href="${ytShort(s.id)}" target="_blank" rel="noopener" data-short="${esc(s.id)}">${esc(s.title)}</a>
-    <div class="m"><span>${esc(ageTxt(s.age_h))}</span>${s.v48 > 0 ? `<span>48h +${esc(fmtN(s.v48))}</span>` : ''}<button type="button" class="dk-mini" data-board="${esc(s.id)}" ${inBoard ? 'disabled' : ''}>${esc(t(inBoard ? 'inBoard' : 'add'))}</button></div>
+    <div class="m"><span>${esc(ageTxt(s.age_h))}</span>${s.v48 > 0 ? `<span>48h +${esc(fmtN(s.v48))}</span>` : ''}${P.paceTag(s, 1.5)}<button type="button" class="dk-mini" data-board="${esc(s.id)}" ${inBoard ? 'disabled' : ''}>${esc(t(inBoard ? 'inBoard' : 'add'))}</button></div>
   </div>`;
 }
 function bindBoardButtons(root, list) {
@@ -2433,7 +2433,7 @@ async function vChannel(v, r, alive) {
       <div id="cbWrap">${cc.html}</div>
     </section>
   </div>
-  ${cv.html}
+  <div class="dk-row">${cv.html}${P.uploadHeat(live)}</div>
   ${tryList.length ? `<section class="dk-card full dk-fade"><div class="dk-ch"><h2 style="display:flex;align-items:center;gap:8px">${svg(IC.try, 20)}${esc(t('try'))}</h2><a class="dk-sub" href="#try" id="toTry" style="font-weight:700">${esc(t('tryMore'))} →</a></div><div class="ty-grid home">${tryList.map((sg, i) => tyCardHtml(sg, i, 'tc', c.id)).join('')}</div></section>` : ''}
   <div class="dk-row">
     <section class="dk-card f1 dk-fade"><div class="dk-ch"><h2>${esc(t('chAlgo'))}</h2><a class="dk-sub" href="#insights" id="toIns">${esc(t('insights'))} →</a></div>${an.n >= 5 ? insListHtml(an) : `<div class="dk-empty">${esc(t('insFew'))}</div>`}</section>
