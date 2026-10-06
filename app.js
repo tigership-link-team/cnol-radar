@@ -2,11 +2,13 @@
 // 읽기: Supabase RPC(지금 워크스페이스만 · RLS) · 수집·편집: Edge Function `radar` (유튜브 · AI 키는 서버에만)
 // v11: 속도(같은 시간 대비) · 지금 뜨는 중 · 채널 비교 · 소재 보드 · 찾기(⌘K) · 브라우저 알림 → radar-plus.js
 // v12: 팀 · 요금제 · 워크스페이스 바꾸기 · RADAR에게 묻기(AI 대화) → radar-team.js
+// v14: 주간 리포트(PDF 저장 · 고객 공유 링크) → radar-report.js · report.js
 import { sb, getLang, setLang, esc, loginUrl, emailToId } from '/common.js';
 import { mountAgent, vHome as aHome, vRefs, vWave, vTools, vTool, dropPool } from '/agent.js';
 import * as P from '/radar-plus.js';
 import * as TMM from '/radar-team.js';
 import * as PU from '/radar-push.js';
+import * as RP from '/radar-report.js';
 
 const LANGS = ['ko', 'en', 'ja'];
 let lang = getLang();
@@ -14,7 +16,7 @@ let lang = getLang();
 const T = {
   ko: {
     home: '대시보드', picks: '소재 추천', ranking: '쇼츠 랭킹', alerts: '에이전트 알림', collect: '채널 수집', channels: '채널 목록',
-    ideas: '소재 보드', partners: '음원·광고 연결', status: '설정·상태', landing: '소개 페이지',
+    ideas: '소재 보드', partners: '음원·광고 연결', notify: '알림 설정', status: '설정·상태', landing: '소개 페이지',
     secRadar: '레이더', secCollect: '수집', secWork: '작업', brandSub: '크놀레이더 · 실험 모드',
     testNote: '<b>실험 모드</b> · 로그인 없이 열린 공용 공간이에요. 로그인을 붙이면 사람마다 따로 보여요.',
     refreshAll: '지금 새로고침', refreshing: '새로고침 중…', refreshed: '새로고침 완료 · 채널 {n}개', refreshSkip: '방금 수집했어요. 10분 뒤에 다시 할 수 있어요.',
@@ -92,7 +94,7 @@ const T = {
   },
   en: {
     home: 'Dashboard', picks: 'Idea picks', ranking: 'Shorts ranking', alerts: 'Agent alerts', collect: 'Collect channels', channels: 'Channels',
-    ideas: 'Idea board', partners: 'Music & ads', status: 'Settings & status', landing: 'About CNOL RADAR',
+    ideas: 'Idea board', partners: 'Music & ads', notify: 'Notifications', status: 'Settings & status', landing: 'About CNOL RADAR',
     secRadar: 'Radar', secCollect: 'Collection', secWork: 'Workspace', brandSub: 'Test mode',
     testNote: '<b>Test mode</b> · a shared space open without sign-in. Once sign-in is added, everyone gets their own view.',
     refreshAll: 'Refresh now', refreshing: 'Refreshing…', refreshed: 'Refreshed · {n} channels', refreshSkip: 'Just collected. You can refresh again in 10 minutes.',
@@ -170,7 +172,7 @@ const T = {
   },
   ja: {
     home: 'ダッシュボード', picks: 'ネタ提案', ranking: 'ショートランキング', alerts: 'エージェント通知', collect: 'チャンネル収集', channels: 'チャンネル一覧',
-    ideas: 'ネタボード', partners: '音源・広告', status: '設定・状態', landing: '紹介ページ',
+    ideas: 'ネタボード', partners: '音源・広告', notify: '通知設定', status: '設定・状態', landing: '紹介ページ',
     secRadar: 'レーダー', secCollect: '収集', secWork: '作業', brandSub: 'テストモード',
     testNote: '<b>テストモード</b>・ログインなしで開いた共用スペースです。ログインを付けると人ごとに分かれて表示されます。',
     refreshAll: '今すぐ更新', refreshing: '更新中…', refreshed: '更新完了・{n}チャンネル', refreshSkip: '収集したばかりです。10分後に再度更新できます。',
@@ -659,7 +661,7 @@ Object.assign(T.ja, {
   qShow: '紹介ページの公開動画：{at}に更新', derived: '48時間の再生数・いつもとの比較・スコア・予測は、CNOL RADARがYouTubeの公開データから計算した値です。YouTubeが提供する指標ではありません。'
 });
 // v11 문구 (radar-plus.js) — 지금 뜨는 중 · 채널 비교 · 소재 보드 · 찾기 · 알림
-for (const l of LANGS) Object.assign(T[l], P.PT[l], TMM.TM[l], PU.TP[l]);
+for (const l of LANGS) Object.assign(T[l], P.PT[l], TMM.TM[l], PU.TP[l], RP.TR[l]);
 const t = (k, v) => {
   let s = (T[lang] && T[lang][k]) ?? T.ko[k] ?? k;
   if (v) for (const x of Object.keys(v)) s = s.split('{' + x + '}').join(v[x]);
@@ -1544,7 +1546,7 @@ function tryRunsHtml(runs, own) {
 
 // ---------- 틀: 메뉴 5개 · 메뉴마다 안쪽 탭 ----------
 const GROUPS = [
-  { k: 'agent', ic: 'agent', tabs: ['home'], hidden: ['alerts'] },
+  { k: 'agent', ic: 'agent', tabs: ['home', 'report'], hidden: ['alerts'] },
   { k: 'ovG', ic: 'overview', tabs: ['overview', 'radar', 'ranking'] },
   { k: 'refsG', ic: 'channels', tabs: ['refs', 'channels', 'compare'], hidden: ['ch', 'collect'] },
   { k: 'ideasG', ic: 'picks', tabs: ['picks', 'try', 'wave', 'ideas'] },
@@ -1592,6 +1594,7 @@ function renderChrome() {
   if (pill) pill.innerHTML = TMM.topPill();
   const ra = document.getElementById('refreshAll');
   ra.innerHTML = `${svg(IC.refresh, 16)}<span>${esc(t('refreshAll'))}</span>`;
+  ra.setAttribute('aria-label', t('refreshAll')); ra.title = t('refreshAll'); // 폰에서는 글자가 숨어도 화면 읽기 프로그램이 읽어요
   const viewer = !!(S.ws && S.ws.role === 'viewer' && !S.user?.admin);
   ra.hidden = viewer;
   document.body.dataset.role = viewer ? 'viewer' : (S.ws ? S.ws.role : '');
@@ -1624,7 +1627,7 @@ async function render() {
   S.same = key === lastKey && v.childElementCount > 0;
   lastKey = key;
   v.classList.toggle('dk-still', S.same);
-  const views = { home: aHome, refs: vRefs, wave: vWave, tools: vTools, tool: vTool, overview: vOverview, radar: P.vRadar, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, channels: vChannels, compare: P.vCompare, ch: vChannel, ideas: P.vBoard, partners: vPartners, status: vStatus, team: TMM.vTeam, notify: PU.vNotify };
+  const views = { report: RP.vReport, home: aHome, refs: vRefs, wave: vWave, tools: vTools, tool: vTool, overview: vOverview, radar: P.vRadar, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, channels: vChannels, compare: P.vCompare, ch: vChannel, ideas: P.vBoard, partners: vPartners, status: vStatus, team: TMM.vTeam, notify: PU.vNotify };
   document.title = t(r.name === 'ch' ? 'channels' : r.name) + ' · CNOL RADAR';
   try {
     await views[r.name](v, r, alive);
@@ -1886,7 +1889,7 @@ document.addEventListener('click', (e) => {
 // ---------- 에이전트 · 오늘 보고 (에이전트가 말하듯 차례로 보고해요) ----------
 const nextRunTxt = () => { const d = new Date(); d.setMinutes(5, 0, 0); if (d <= new Date()) d.setHours(d.getHours() + 1); return d.toLocaleTimeString(loc(), { hour: 'numeric', minute: '2-digit' }); };
 const greet = () => { const h = new Date(Date.now() + 9 * 3600e3).getUTCHours(); return t(h < 11 ? 'greet0' : h < 18 ? 'greet1' : 'greet2'); };
-const agAv = (sm) => `<span class="ag-av${sm ? ' sm' : ''}"><img src="/logo.png" alt="" width="${sm ? 18 : 24}" height="${sm ? 16 : 21}"></span>`;
+const agAv = (sm) => `<span class="ag-av${sm ? ' sm' : ''}"><img src="/logo-96.png" alt="" width="${sm ? 18 : 24}" height="${sm ? 16 : 21}"></span>`;
 const agMsg = (text, extra = '') => `<article class="ag-msg dk-fade">${agAv(true)}<div class="ag-b"><p>${esc(text)}</p>${extra}</div></article>`;
 // ---------- 분석 · 한눈에 (채널 전부를 한 화면에: 48시간 · 채널 순위 · 28일 개요 · 잘된 영상) ----------
 async function vOverview(v, r, alive) {
@@ -2646,6 +2649,19 @@ document.getElementById('refreshAll').addEventListener('click', async (e) => {
   render();
 });
 window.addEventListener('hashchange', () => { render(); document.getElementById('main').scrollTo({ top: 0 }); });
+// 가로로 밀리는 표는 키보드(Tab)로도 밀 수 있게 이름표를 달아요 (v14 접근성)
+let tabFixQ = 0;
+new MutationObserver(() => {
+  if (tabFixQ) return;
+  tabFixQ = requestAnimationFrame(() => {
+    tabFixQ = 0;
+    document.querySelectorAll('.dk-tablewrap:not([tabindex])').forEach((w) => {
+      w.tabIndex = 0; w.setAttribute('role', 'region');
+      const h = w.closest('.dk-card,section,article')?.querySelector('h2,h3');
+      w.setAttribute('aria-label', ((h && h.textContent) || document.title).trim().slice(0, 80));
+    });
+  });
+}).observe(document.getElementById('view'), { childList: true, subtree: true });
 // 보고 있는 화면이면 5분마다 새로 불러와요 (매시 5분 자동 수집 반영)
 setInterval(() => {
   if (document.visibilityState !== 'visible') return;
@@ -2663,6 +2679,7 @@ P.mountPlus(CTX);
 TMM.mountTeam(CTX);
 TMM.bindAcct();
 PU.mountPush(CTX);
+RP.mountReport(CTX);
 P.mountKeys();
 
 // ---------- 관리자 로그인 확인 (로그인 안 했으면 로그인 화면으로) ----------

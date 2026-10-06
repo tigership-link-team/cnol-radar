@@ -496,7 +496,9 @@ export function mountChat() {
 }
 function paintFab() {
   const fab = document.getElementById('rcFab');
-  if (fab) fab.innerHTML = `${svg(IC.chat, 20)}<span>${e(t('chatFab'))}</span>`;
+  if (!fab) return;
+  fab.innerHTML = `${svg(IC.chat, 20)}<span>${e(t('chatFab'))}</span>`;
+  fab.setAttribute('aria-label', t('chatFab')); fab.title = t('chatFab');
 }
 export function chatLang() { paintFab(); if (CH.open) paintPanel(); }
 async function aiState() {
@@ -540,7 +542,7 @@ function paintHead() {
 }
 function paintPanel() {
   const panel = document.getElementById('rcPanel');
-  panel.innerHTML = `<header class="rc-h"><span class="ag-av sm"><img src="/logo.png" alt="" width="18" height="16"></span><div class="rc-ht"><b id="rcTitle">${e(t('chatTitle'))}</b><small id="rcMode">${e(t('chatModeData'))}</small></div>
+  panel.innerHTML = `<header class="rc-h"><span class="ag-av sm"><img src="/logo-96.png" alt="" width="18" height="16"></span><div class="rc-ht"><b id="rcTitle">${e(t('chatTitle'))}</b><small id="rcMode">${e(t('chatModeData'))}</small></div>
     <button type="button" class="rc-ic" id="rcClear" title="${e(t('chatClear'))}" aria-label="${e(t('chatClear'))}">${svg('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>', 17)}</button>
     <button type="button" class="rc-ic" id="rcX" aria-label="${e(t('chatClose'))}">${svg(IC.x, 18)}</button></header>
     <div class="rc-log" id="rcLog" aria-live="polite"></div>
@@ -643,7 +645,8 @@ const RX = {
   team: /팀원|멤버|누가\s?(있|들어)|members?|team ?mates?|メンバー/i,
   board: /소재\s?보드|아이디어\s?보드|보드|idea board|board|ネタボード/i,
   quota: /할당량|쿼터|포인트|quota|クォータ/i,
-  push: /(알림|푸시|노티).{0,6}(켜|받|설정|오게|와|보내)|폰으로|휴대폰|핸드폰|푸시|push notif|notifications?|turn on alerts|通知(を|の)?(オン|受け|設定|届)|プッシュ/i
+  push: /(알림|푸시|노티).{0,6}(켜|받|설정|오게|와|보내)|폰으로|휴대폰|핸드폰|푸시|push notif|notifications?|turn on alerts|通知(を|の)?(オン|受け|設定|届)|プッシュ/i,
+  report: /리포트|보고서|주간\s?보고|월간\s?보고|pdf|weekly report|report|レポート|報告書/i
 };
 const fx = (x) => (x >= 10 ? String(Math.round(x)) : Number(x).toFixed(1));
 const ytUrl = (id, kind) => (kind === 'long' ? 'https://www.youtube.com/watch?v=' + id : 'https://www.youtube.com/shorts/' + id);
@@ -655,6 +658,7 @@ async function localAnswer(q) {
   if (cmd && cmd.add) return { text: t('aAddQ'), btns: [{ label: t('chatAddBtn'), add: cmd.add, primary: true }] };
   if (RX.push.test(q) && S.user?.guest) return { text: t('aGuest'), btns: [{ label: t('guestLogin'), to: '/login?next=%2Fapp', primary: true }] };
   if (RX.push.test(q)) return { text: (C.push?.pushOn() ? t('aPushOn') + ' ' : '') + t('aPush'), btns: [{ label: t('chatGo'), to: '#notify', primary: true }] };
+  if (RX.report.test(q)) return { text: t('aReport'), btns: [{ label: t('chatGo'), to: '#report', primary: true }] };
   if (RX.rising.test(q)) {
     const feed = await C.rpc('radar_feed', { p_hours: 48, p_role: null, p_kind: S.kind }).catch(() => []);
     const top = (feed || []).filter((x) => x.pace != null && x.pace >= 1.5).sort((a, b) => b.pace - a.pace).slice(0, 4);

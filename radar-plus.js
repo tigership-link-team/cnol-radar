@@ -824,9 +824,9 @@ function match(text, q) {
   return 0;
 }
 const GO = { h: 'home', o: 'overview', r: 'radar', k: 'ranking', f: 'refs', c: 'channels', m: 'compare', p: 'picks', w: 'wave', i: 'ideas', t: 'tools', a: 'alerts', s: 'status' };
-const PAGES = ['home', 'overview', 'radar', 'ranking', 'refs', 'channels', 'compare', 'picks', 'try', 'wave', 'ideas', 'tools', 'alerts', 'status'];
+const PAGES = ['home', 'report', 'overview', 'radar', 'ranking', 'refs', 'channels', 'compare', 'picks', 'try', 'wave', 'ideas', 'tools', 'alerts', 'status'];
 const TOOLS = [['topic', 'search'], ['predict', 'target'], ['title', 'wand'], ['thumb', 'image'], ['comments', 'chat'], ['dna', 'dna']];
-const PIC = { home: 'agent', overview: 'overview', radar: 'up', ranking: 'ranking', refs: 'channels', channels: 'channels', compare: 'compare', picks: 'picks', try: 'try', wave: 'insights', ideas: 'ideas', tools: 'tools', alerts: 'alerts', status: 'status' };
+const PIC = { home: 'agent', report: 'overview', overview: 'overview', radar: 'up', ranking: 'ranking', refs: 'channels', channels: 'channels', compare: 'compare', picks: 'picks', try: 'try', wave: 'insights', ideas: 'ideas', tools: 'tools', alerts: 'alerts', status: 'status' };
 let pf = null;
 let pfItems = [];
 let pfSel = 0;

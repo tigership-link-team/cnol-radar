@@ -32,7 +32,7 @@
       ]
     },
     {
-      "source": "/(app|admin|join|login)",
+      "source": "/(app|admin|join|login|r)",
       "headers": [
         {
           "key": "X-Robots-Tag",

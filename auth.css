@@ -1,6 +1,6 @@
 /* CNOL RADAR 로그인 · 초대 가입 — 대시보드(v10)와 같은 디자인: 남색 소개 칸 + 흰 카드 + 파란 포인트 */
 :root{
-  --ink:#152232; --ink2:#4b5a6e; --muted:#738092; --line:#e5eaf0; --line2:#d8dfe8; --soft:#f5f7fa;
+  --ink:#152232; --ink2:#4b5a6e; --muted:#627186; --line:#e5eaf0; --line2:#d8dfe8; --soft:#f5f7fa;
   --blue:#2f6fed; --blue2:#1d4fd8; --blue-soft:#eaf1ff; --navy:#17212d; --navy2:#233143; --navy-ink:#c8d0dc;
   --ok:#047857; --ok-bg:#ecfdf5; --err:#b91c1c; --err-bg:#fef2f2; --warn:#92400e; --warn-bg:#fffbeb;
   --font:Inter,'Pretendard Variable',Pretendard,'Noto Sans KR','Noto Sans JP',system-ui,-apple-system,sans-serif;

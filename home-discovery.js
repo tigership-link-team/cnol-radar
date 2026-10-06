@@ -293,6 +293,7 @@ function constellation(data) {
   real.forEach((ch, k) => chosen.splice(Math.min(chosen.length, 6 + k * 7), 0, ch));
   const stage = node('div', 'hd-constellation-stage is-row');
   const scroll = node('div', 'hd-logo-scroll');
+  scroll.tabIndex = 0; scroll.setAttribute('role', 'region'); scroll.setAttribute('aria-label', c('constellation')); // 키보드로도 옆으로 밀 수 있게
   const strip = node('div', 'hd-logo-strip');
   strip.style.setProperty('--hd-logo-count', String(chosen.length));
   scroll.append(strip); stage.append(scroll);

@@ -123,7 +123,8 @@ function apply() {
   document.querySelectorAll('[data-i18n-aria]').forEach((el) => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
   document.querySelectorAll('[data-i18n-alt]').forEach((el) => el.setAttribute('alt', t(el.dataset.i18nAlt)));
   // 실제 대시보드 화면 — 언어마다 그 언어로 찍은 화면
-  document.querySelectorAll('img[data-shot]').forEach((img) => { const src = `/img/${img.dataset.shot}-${lang}.jpg`; if (img.getAttribute('src') !== src) img.setAttribute('src', src); });
+  // 폰에서는 작은 WebP(800px), 큰 화면에서는 1600px — 예전 JPG보다 3~5배 가벼워요 (v14)
+  document.querySelectorAll('img[data-shot]').forEach((img) => { const b = `/img/${img.dataset.shot}-${lang}`; if (img.getAttribute('src') !== b + '.jpg') { img.setAttribute('srcset', `${b}-800.webp 800w, ${b}-1600.webp 1600w`); img.setAttribute('src', b + '.jpg'); } });
   document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   document.querySelectorAll('[data-price]').forEach((el) => {
     const id = el.dataset.price;

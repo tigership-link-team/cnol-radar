@@ -1,6 +1,6 @@
 /* CNOL RADAR 관리자 콘솔 — 대시보드(v10)와 같은 디자인: 남색 사이드바 · 흰 카드 · 파란 포인트 */
 :root{
-  --ink:#152232; --ink-2:#5d6b7e; --muted:#738092; --line:#e5eaf0; --line-2:#d8dfe8; --bg:#f5f7fa; --surface:#fff;
+  --ink:#152232; --ink-2:#5d6b7e; --muted:#627186; --line:#e5eaf0; --line-2:#d8dfe8; --bg:#f5f7fa; --surface:#fff;
   --primary:#2f6fed; --primary-dark:#1d4fd8; --primary-tint:#eaf1ff; --primary-soft:#f1f6ff;
   --navy:#17212d; --navy-2:#233143; --navy-3:#2a3e58; --navy-ink:#c8d0dc;
   --up:#047857; --down:#b91c1c; --warn-bg:#fffbeb; --warn-ink:#92400e;
