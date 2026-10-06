@@ -316,3 +316,52 @@ button.cap{width:100%;font:inherit;text-align:left;cursor:pointer;-webkit-appear
 .home-discovery .hd-video-media.is-long img{object-fit:cover;background:#f4f4f7}
 .home-discovery .hd-video-media img{filter:saturate(.94)}
 .hd-video-title{font-weight:600}
+
+/* Multi-channel illustration: keep all 30 identities and the measured chart. */
+#multi .hd-multi-dashboard{padding:26px;border-color:#e3e8f0;border-radius:22px;background:#fff;box-shadow:0 12px 36px -28px #263c6829;gap:20px}
+#multi .hd-constellation-head{gap:10px 20px;margin-bottom:8px}
+#multi .hd-constellation-head h3{font-size:16px;line-height:1.5}
+#multi .hd-connection-caption{font-size:11px;color:#687386}
+#multi .hd-constellation-stage.is-row{height:184px;margin-top:12px;background:radial-gradient(ellipse at 50% 100%,#eef6ff,transparent 70%)}
+#multi .hd-constellation-stage::before{opacity:.18;background-size:26px 26px}
+#multi .hd-logo-scroll{box-sizing:border-box;padding:10px 1px 12px}
+#multi .hd-logo-strip{box-sizing:border-box;gap:2px;padding:1px 0}
+#multi .hd-constellation-node.is-row .hd-constellation-avatar{box-sizing:border-box;width:100%;max-width:38px;aspect-ratio:1;border-width:1.5px;box-shadow:0 0 0 1px #e2e8f0}
+#multi .hd-constellation-node.is-real .hd-constellation-avatar{box-shadow:0 0 0 1px #7ebcf2}
+#multi .hd-constellation-node.is-row.is-bolt .hd-constellation-avatar,
+#multi .hd-constellation-node.is-row.is-game .hd-constellation-avatar,
+#multi .hd-constellation-node.is-row.is-film .hd-constellation-avatar{font-size:clamp(6px,.75vw,9px);letter-spacing:-.15px;text-shadow:none}
+#multi .hd-constellation-node.is-row.is-music .hd-constellation-avatar,
+#multi .hd-constellation-node.is-row.is-star .hd-constellation-avatar,
+#multi .hd-constellation-node.is-row.is-wave .hd-constellation-avatar{font-size:clamp(12px,1.25vw,18px);text-shadow:none}
+#multi .hd-constellation-stage.is-row .hd-constellation-lines{top:46px;height:130px}
+#multi .hd-constellation-stage.is-row .hd-constellation-path{stroke:#84b9e9;stroke-width:1;stroke-dasharray:4 9;opacity:.28}
+#multi .hd-constellation-hub{padding:8px 14px;border-color:#d6e5f4;background:#f6faff;color:#2568a5;box-shadow:none}
+#multi .hd-constellation-aggregate{padding:24px;border-color:#e3e8f0;border-radius:16px;box-shadow:none}
+#multi .hd-constellation-aggregate::before{background:#c9ddef;width:1px}
+#multi .hd-studio-head{padding-bottom:13px;border-bottom:1px solid #edf0f5}
+#multi .hd-studio-source{color:#687386}
+#multi .hd-studio-note{color:#687386;line-height:1.7}
+#multi .hd-channel-snapshot{padding:16px;border-color:#e5ebf2;border-radius:14px;background:#fcfdff;box-shadow:none}
+#multi .hd-channel-minute{padding-top:9px;border-top:1px solid #edf1f6}
+@media(max-width:1000px){
+  #multi .hd-multi-dashboard{padding:22px}
+  #multi .hd-constellation-aggregate{padding:20px}
+}
+@media(max-width:640px){
+  #multi .hd-multi-dashboard{padding:16px;border-radius:17px;gap:17px}
+  #multi .hd-constellation-head h3{font-size:14px}
+  #multi .hd-connection-caption{font-size:10px}
+  #multi .hd-constellation-stage.is-row{height:170px;margin-top:8px}
+  #multi .hd-logo-scroll{padding:10px 1px 13px}
+  #multi .hd-constellation-node.is-row .hd-constellation-avatar{max-width:32px;height:auto}
+  #multi .hd-constellation-node.is-row.is-bolt .hd-constellation-avatar,
+  #multi .hd-constellation-node.is-row.is-game .hd-constellation-avatar,
+  #multi .hd-constellation-node.is-row.is-film .hd-constellation-avatar{font-size:7px}
+  #multi .hd-constellation-node.is-row.is-music .hd-constellation-avatar,
+  #multi .hd-constellation-node.is-row.is-star .hd-constellation-avatar,
+  #multi .hd-constellation-node.is-row.is-wave .hd-constellation-avatar{font-size:15px}
+  #multi .hd-constellation-stage.is-row .hd-constellation-lines{top:48px;height:116px}
+  #multi .hd-constellation-aggregate{padding:16px;border-radius:13px}
+  #multi .hd-channel-snapshot{padding:13px}
+}

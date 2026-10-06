@@ -44,13 +44,16 @@ new MutationObserver(applyMediaLabels).observe(document.documentElement, {
 const IS_PUBLIC_MEDIA_PAGE = document.body.classList.contains('md') || Boolean(document.getElementById('previewMain'));
 const thumbnailCache = new Map();
 const thumbnailLoops = new Map();
-let thumbnailMotionEnabled = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+const thumbnailReduce = matchMedia('(prefers-reduced-motion: reduce)');
+let thumbnailMotionEnabled = !thumbnailReduce.matches;
+let thumbnailMotionChoice = null;
+let referenceAutoPaused = false;
 const thumbnailObserver = IS_PUBLIC_MEDIA_PAGE && 'IntersectionObserver' in window
   ? new IntersectionObserver((entries) => {
     for (const entry of entries) {
       const loop = thumbnailLoops.get(entry.target);
       if (!loop) continue;
-      loop.visible = entry.isIntersecting;
+      loop.visible = entry.isIntersecting && entry.intersectionRatio > 0;
       refreshThumbnailLoop(loop);
     }
   }, { threshold: [0, 0.05] }) : null;
@@ -71,7 +74,11 @@ function sceneThumbnails(id) {
     image.onload = () => finish(image.naturalWidth >= 200 && image.naturalHeight >= 200 ? image.src : null);
     image.onerror = () => finish(null);
     image.src = `https://i.ytimg.com/vi/${id}/hq${number}.jpg`;
-  }))).then((sources) => sources.filter(Boolean));
+  }))).then((sources) => {
+    const available = sources.filter(Boolean);
+    if (!available.length) thumbnailCache.delete(id);
+    return available;
+  });
   thumbnailCache.set(id, promise);
   return promise;
 }
@@ -85,15 +92,18 @@ function stopThumbnailTimer(loop) {
 
 function forgetThumbnailLoop(loop) {
   stopThumbnailTimer(loop);
+  if (thumbnailLoops.get(loop.card) !== loop) return;
   thumbnailObserver?.unobserve(loop.card);
   thumbnailLoops.delete(loop.card);
+  loop.card.classList.remove('is-thumbnail-looping', 'is-motion-enabled');
 }
 
 function scheduleThumbnailLoop(loop) {
   if (loop.timer !== null || loop.sources.length < 2) return;
   loop.timer = setTimeout(() => {
     loop.timer = null;
-    if (!loop.card.isConnected) { forgetThumbnailLoop(loop); return; }
+    if (!loop.card.isConnected || thumbnailLoops.get(loop.card) !== loop
+      || loop.card.querySelector('img') !== loop.image) { forgetThumbnailLoop(loop); return; }
     if (!thumbnailMotionEnabled || !loop.requested || !loop.visible || document.hidden) return;
     loop.index = (loop.index + 1) % loop.sources.length;
     loop.image.src = loop.sources[loop.index];
@@ -105,66 +115,135 @@ function scheduleThumbnailLoop(loop) {
 }
 
 function refreshThumbnailLoop(loop) {
-  if (!loop.card.isConnected) { forgetThumbnailLoop(loop); return; }
-  const running = thumbnailMotionEnabled && loop.requested && loop.visible && !document.hidden;
-  loop.card.classList.toggle('is-thumbnail-looping', running);
-  loop.card.classList.toggle('is-motion-enabled', running);
-  if (!running) { stopThumbnailTimer(loop); return; }
-  if (!loop.loading) {
+  if (!loop.card.isConnected || thumbnailLoops.get(loop.card) !== loop
+    || loop.card.querySelector('img') !== loop.image) {
+    forgetThumbnailLoop(loop);
+    return;
+  }
+  const wanted = thumbnailMotionEnabled && loop.requested && loop.visible && !document.hidden;
+  if (wanted && !loop.loading) {
     loop.loading = true;
     sceneThumbnails(loop.id).then((sources) => {
-      if (!loop.card.isConnected) { forgetThumbnailLoop(loop); return; }
+      if (!loop.card.isConnected || thumbnailLoops.get(loop.card) !== loop) {
+        forgetThumbnailLoop(loop);
+        return;
+      }
       loop.sources = [...new Set([loop.original, ...sources])];
+      loop.loaded = true;
       refreshThumbnailLoop(loop);
     });
   }
+  const running = wanted && loop.loaded && loop.sources.length > 1;
+  loop.card.classList.toggle('is-thumbnail-looping', running);
+  loop.card.classList.toggle('is-motion-enabled', running);
+  if (!running) { stopThumbnailTimer(loop); return; }
   scheduleThumbnailLoop(loop);
 }
 
-export function setThumbnailMotionEnabled(value) {
+export function setThumbnailMotionEnabled(value, userInitiated = false) {
   if (!IS_PUBLIC_MEDIA_PAGE) return;
+  const previous = thumbnailMotionEnabled;
   thumbnailMotionEnabled = Boolean(value);
+  if (userInitiated) thumbnailMotionChoice = thumbnailMotionEnabled;
+  if (userInitiated && thumbnailMotionEnabled && !previous) {
+    referenceAutoPaused = false;
+    for (const loop of thumbnailLoops.values()) {
+      if (loop.card.matches('.creator-video') && !loop.manuallyPaused) loop.requested = true;
+    }
+  }
   for (const loop of thumbnailLoops.values()) refreshThumbnailLoop(loop);
 }
 
-export function startThumbnailMotion(card) {
-  if (!IS_PUBLIC_MEDIA_PAGE) return false;
+function viewportVisible(card) {
+  const bounds = card.getBoundingClientRect();
+  return bounds.width > 0 && bounds.height > 0 && bounds.bottom > 0 && bounds.top < innerHeight
+    && bounds.right > 0 && bounds.left < innerWidth;
+}
+
+function registerThumbnailLoop(card) {
+  if (!IS_PUBLIC_MEDIA_PAGE) return null;
   const id = card.dataset.loopVideo || card.dataset.video;
   const image = card.querySelector('img');
-  if (!VIDEO_ID.test(id || '') || !image) return false;
+  if (!VIDEO_ID.test(id || '') || !image) return null;
   let loop = thumbnailLoops.get(card);
+  if (loop && (loop.id !== id || loop.image !== image)) {
+    forgetThumbnailLoop(loop);
+    loop = null;
+  }
   if (!loop) {
     const original = image.getAttribute('src') || image.src;
-    const bounds = card.getBoundingClientRect();
-    loop = { card, image, id, original, sources: [original], index: 0, loading: false,
-      requested: true, visible: bounds.bottom > 0 && bounds.top < innerHeight,
-      timer: null, animation: null };
+    if (!original) return null;
+    loop = { card, image, id, original, sources: [original], index: 0, loading: false, loaded: false,
+      requested: !card.matches('.creator-video') || !referenceAutoPaused, manuallyPaused: false,
+      visible: thumbnailObserver ? false : viewportVisible(card), timer: null, animation: null };
     thumbnailLoops.set(card, loop);
     thumbnailObserver?.observe(card);
   }
+  return loop;
+}
+
+export function startThumbnailMotion(card) {
+  const loop = registerThumbnailLoop(card);
+  if (!loop) return false;
+  if (loop.loaded && loop.sources.length < 2) {
+    loop.loading = false;
+    loop.loaded = false;
+  }
   loop.requested = true;
+  loop.manuallyPaused = false;
   refreshThumbnailLoop(loop);
   return true;
 }
 
+function discoverThumbnailCards() {
+  for (const loop of thumbnailLoops.values()) {
+    if (!loop.card.isConnected || loop.card.querySelector('img') !== loop.image
+      || (loop.card.dataset.loopVideo || loop.card.dataset.video) !== loop.id) forgetThumbnailLoop(loop);
+  }
+  for (const card of document.querySelectorAll('.creator-video[data-video]')) {
+    const loop = registerThumbnailLoop(card);
+    if (loop) refreshThumbnailLoop(loop);
+  }
+}
+
 function toggleThumbnailMotion(card) {
   const loop = thumbnailLoops.get(card);
-  if (loop?.requested) {
+  if (loop?.requested && thumbnailMotionEnabled && (!loop.loaded || loop.sources.length > 1)) {
     loop.requested = false;
+    loop.manuallyPaused = true;
     refreshThumbnailLoop(loop);
     return true;
   }
   thumbnailMotionEnabled = true;
+  thumbnailMotionChoice = true;
   document.dispatchEvent(new Event('radar:motion-request'));
   return startThumbnailMotion(card);
 }
 
 if (IS_PUBLIC_MEDIA_PAGE) {
+  discoverThumbnailCards();
+  new MutationObserver(discoverThumbnailCards).observe(document.body, {
+    childList: true, subtree: true, attributes: true, attributeFilter: ['data-video']
+  });
+  thumbnailReduce.addEventListener('change', () => {
+    if (thumbnailMotionChoice === null) setThumbnailMotionEnabled(!thumbnailReduce.matches);
+  });
+  if (!thumbnailObserver) {
+    const updateVisibility = () => {
+      for (const loop of thumbnailLoops.values()) {
+        loop.visible = viewportVisible(loop.card);
+        refreshThumbnailLoop(loop);
+      }
+    };
+    window.addEventListener('scroll', updateVisibility, { passive: true });
+    window.addEventListener('resize', updateVisibility);
+  }
   document.addEventListener('visibilitychange', () => {
     for (const loop of thumbnailLoops.values()) refreshThumbnailLoop(loop);
   });
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
+    referenceAutoPaused = true;
     for (const loop of thumbnailLoops.values()) {
       if (loop.card.matches('.creator-video')) {
         loop.requested = false;

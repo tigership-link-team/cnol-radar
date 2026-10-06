@@ -124,7 +124,7 @@ function apply() {
   document.querySelectorAll('[data-i18n-alt]').forEach((el) => el.setAttribute('alt', t(el.dataset.i18nAlt)));
   // 실제 대시보드 화면 — 언어마다 그 언어로 찍은 화면
   // 폰에서는 작은 WebP(800px), 큰 화면에서는 1600px — 예전 JPG보다 3~5배 가벼워요 (v14)
-  document.querySelectorAll('img[data-shot]').forEach((img) => { const b = `/img/${img.dataset.shot}-${lang}`; const visual = img.dataset.shot === 'app-refs' ? b + '-visual-v2.jpg' : b + '.jpg'; if (img.getAttribute('src') !== visual) { img.setAttribute('srcset', img.dataset.shot === 'app-refs' ? `${visual} 1425w` : `${b}-800.webp 800w, ${b}-1600.webp 1600w`); img.setAttribute('src', visual); } });
+  document.querySelectorAll('img[data-shot]').forEach((img) => { const b = `/img/${img.dataset.shot}-${lang}`; const refs = img.dataset.shot === 'app-refs'; const visual = b + (refs ? '-visual-v2.jpg' : '-visual-v3.jpg'); if (img.getAttribute('src') !== visual) { img.setAttribute('srcset', `${visual} ${refs ? 1425 : 1280}w`); img.setAttribute('src', visual); } });
   document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   document.querySelectorAll('[data-price]').forEach((el) => {
     const id = el.dataset.price;

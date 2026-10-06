@@ -24,7 +24,7 @@ function update() {
     el.classList.toggle('is-motion-enabled', running);
     if (running && el.dataset.loopVideo) startThumbnailMotion(el);
   });
-  setThumbnailMotionEnabled(enabled);
+  setThumbnailMotionEnabled(enabled, userChoice !== null);
 }
 if (portraits.length) {
   const collage = document.querySelector('.creator-collage');
