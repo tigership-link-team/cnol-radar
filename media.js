@@ -1,4 +1,4 @@
-// Homepage reference videos. Cards stay ordinary YouTube links without JavaScript.
+// Public reference cards loop scene thumbnails in their existing image nodes.
 const VIDEO_ID = /^[A-Za-z0-9_-]{11}$/;
 const LABELS = {
   ko: {
@@ -24,10 +24,6 @@ const LABELS = {
   }
 };
 
-let dialog;
-let returnFocus;
-let bodyOverflow;
-
 function labels() {
   const lang = document.documentElement.lang.toLowerCase().split('-')[0];
   return LABELS[lang] || LABELS.ko;
@@ -44,121 +40,145 @@ new MutationObserver(applyMediaLabels).observe(document.documentElement, {
   attributes: true, attributeFilter: ['lang']
 });
 
-function element(tag, className, content) {
-  const node = document.createElement(tag);
-  node.className = className;
-  if (content !== undefined) node.textContent = content;
-  return node;
+// The homepage keeps its existing image nodes and uses public scene thumbnails only.
+const IS_PUBLIC_MEDIA_PAGE = document.body.classList.contains('md') || Boolean(document.getElementById('previewMain'));
+const thumbnailCache = new Map();
+const thumbnailLoops = new Map();
+let thumbnailMotionEnabled = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+const thumbnailObserver = IS_PUBLIC_MEDIA_PAGE && 'IntersectionObserver' in window
+  ? new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      const loop = thumbnailLoops.get(entry.target);
+      if (!loop) continue;
+      loop.visible = entry.isIntersecting;
+      refreshThumbnailLoop(loop);
+    }
+  }, { threshold: [0, 0.05] }) : null;
+
+function sceneThumbnails(id) {
+  if (thumbnailCache.has(id)) return thumbnailCache.get(id);
+  const promise = Promise.all([1, 2, 3].map((number) => new Promise((resolve) => {
+    const image = new Image();
+    let settled = false;
+    const finish = (source) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      image.onload = image.onerror = null;
+      resolve(source);
+    };
+    const timeout = setTimeout(() => finish(null), 10000);
+    image.onload = () => finish(image.naturalWidth >= 200 && image.naturalHeight >= 200 ? image.src : null);
+    image.onerror = () => finish(null);
+    image.src = `https://i.ytimg.com/vi/${id}/hq${number}.jpg`;
+  }))).then((sources) => sources.filter(Boolean));
+  thumbnailCache.set(id, promise);
+  return promise;
 }
 
-function cleanUp() {
-  if (!dialog) return;
-  // Removing the iframe stops playback, releases its connection and clears its state.
-  dialog.querySelector('iframe')?.remove();
-  if (bodyOverflow !== undefined) {
-    document.body.style.overflow = bodyOverflow;
-    bodyOverflow = undefined;
+function stopThumbnailTimer(loop) {
+  clearTimeout(loop.timer);
+  loop.timer = null;
+  loop.animation?.cancel();
+  loop.animation = null;
+}
+
+function forgetThumbnailLoop(loop) {
+  stopThumbnailTimer(loop);
+  thumbnailObserver?.unobserve(loop.card);
+  thumbnailLoops.delete(loop.card);
+}
+
+function scheduleThumbnailLoop(loop) {
+  if (loop.timer !== null || loop.sources.length < 2) return;
+  loop.timer = setTimeout(() => {
+    loop.timer = null;
+    if (!loop.card.isConnected) { forgetThumbnailLoop(loop); return; }
+    if (!thumbnailMotionEnabled || !loop.requested || !loop.visible || document.hidden) return;
+    loop.index = (loop.index + 1) % loop.sources.length;
+    loop.image.src = loop.sources[loop.index];
+    loop.animation?.cancel();
+    loop.animation = typeof loop.image.animate === 'function'
+      ? loop.image.animate([{ opacity: 0.45 }, { opacity: 1 }], { duration: 700, easing: 'ease-out' }) : null;
+    scheduleThumbnailLoop(loop);
+  }, 2200);
+}
+
+function refreshThumbnailLoop(loop) {
+  if (!loop.card.isConnected) { forgetThumbnailLoop(loop); return; }
+  const running = thumbnailMotionEnabled && loop.requested && loop.visible && !document.hidden;
+  loop.card.classList.toggle('is-thumbnail-looping', running);
+  loop.card.classList.toggle('is-motion-enabled', running);
+  if (!running) { stopThumbnailTimer(loop); return; }
+  if (!loop.loading) {
+    loop.loading = true;
+    sceneThumbnails(loop.id).then((sources) => {
+      if (!loop.card.isConnected) { forgetThumbnailLoop(loop); return; }
+      loop.sources = [...new Set([loop.original, ...sources])];
+      refreshThumbnailLoop(loop);
+    });
   }
-  const focusTarget = returnFocus;
-  returnFocus = undefined;
-  if (focusTarget?.isConnected) focusTarget.focus({ preventScroll: true });
-  document.dispatchEvent(new Event('radar:video-close'));
+  scheduleThumbnailLoop(loop);
 }
 
-function closeVideo() {
-  if (dialog?.open) dialog.close();
-  cleanUp();
+export function setThumbnailMotionEnabled(value) {
+  if (!IS_PUBLIC_MEDIA_PAGE) return;
+  thumbnailMotionEnabled = Boolean(value);
+  for (const loop of thumbnailLoops.values()) refreshThumbnailLoop(loop);
 }
 
-function getDialog() {
-  if (dialog) return dialog;
-  dialog = element('dialog', 'media-dialog');
-  dialog.setAttribute('aria-labelledby', 'media-video-title');
-  dialog.setAttribute('aria-describedby', 'media-video-reference');
-  dialog.addEventListener('cancel', (event) => {
-    event.preventDefault();
-    closeVideo();
-  });
-  dialog.addEventListener('close', () => {
-    if (!dialog.open) cleanUp();
-  });
-  dialog.addEventListener('click', (event) => {
-    if (event.target !== dialog) return;
-    const bounds = dialog.getBoundingClientRect();
-    const outside = event.clientX < bounds.left || event.clientX > bounds.right
-      || event.clientY < bounds.top || event.clientY > bounds.bottom;
-    if (outside) closeVideo();
-  });
-  document.body.append(dialog);
-  return dialog;
+export function startThumbnailMotion(card) {
+  if (!IS_PUBLIC_MEDIA_PAGE) return false;
+  const id = card.dataset.loopVideo || card.dataset.video;
+  const image = card.querySelector('img');
+  if (!VIDEO_ID.test(id || '') || !image) return false;
+  let loop = thumbnailLoops.get(card);
+  if (!loop) {
+    const original = image.getAttribute('src') || image.src;
+    const bounds = card.getBoundingClientRect();
+    loop = { card, image, id, original, sources: [original], index: 0, loading: false,
+      requested: true, visible: bounds.bottom > 0 && bounds.top < innerHeight,
+      timer: null, animation: null };
+    thumbnailLoops.set(card, loop);
+    thumbnailObserver?.observe(card);
+  }
+  loop.requested = true;
+  refreshThumbnailLoop(loop);
+  return true;
 }
 
-function openVideo(card) {
-  const videoId = card.dataset.video;
-  if (!VIDEO_ID.test(videoId || '')) return false;
-  const copy = labels();
-  const modal = getDialog();
-  const shorts = card.dataset.format === 'shorts';
-  const title = card.dataset.title || copy.title;
-
-  if (modal.open) closeVideo();
-  document.dispatchEvent(new Event('radar:video-open'));
-  modal.replaceChildren();
-  modal.classList.toggle('is-shorts', shorts);
-
-  const closeButton = element('button', 'media-close', '×');
-  closeButton.type = 'button';
-  closeButton.setAttribute('aria-label', copy.close);
-  closeButton.addEventListener('click', closeVideo);
-
-  const player = element('div', 'media-player');
-  player.classList.toggle('is-shorts', shorts);
-  const frame = element('iframe', 'media-frame');
-  const embed = new URL(`https://www.youtube-nocookie.com/embed/${videoId}`);
-  embed.search = new URLSearchParams({ autoplay: '0', controls: '1', playsinline: '1', rel: '0' }).toString();
-  frame.src = embed.href;
-  frame.title = title;
-  frame.width = shorts ? '360' : '960';
-  frame.height = shorts ? '640' : '540';
-  frame.style.minWidth = '200px';
-  frame.style.minHeight = '200px';
-  frame.referrerPolicy = 'strict-origin-when-cross-origin';
-  frame.allow = 'accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-  frame.allowFullscreen = true;
-  player.append(frame);
-
-  const caption = element('div', 'media-caption');
-  const heading = element('h2', 'media-title', title);
-  heading.id = 'media-video-title';
-  const channel = card.dataset.channel;
-  if (channel) caption.append(element('p', 'media-channel', channel));
-  const source = element('span', 'media-source', 'YouTube');
-  const reference = element('p', 'media-reference', copy.reference);
-  reference.id = 'media-video-reference';
-  caption.prepend(heading);
-  caption.append(source, reference);
-  modal.append(closeButton, player, caption);
-
-  returnFocus = card;
-  bodyOverflow = document.body.style.overflow;
-  document.body.style.overflow = 'hidden';
-  try {
-    modal.showModal();
-    closeButton.focus({ preventScroll: true });
+function toggleThumbnailMotion(card) {
+  const loop = thumbnailLoops.get(card);
+  if (loop?.requested) {
+    loop.requested = false;
+    refreshThumbnailLoop(loop);
     return true;
-  } catch {
-    cleanUp();
-    modal.replaceChildren();
-    return false;
   }
+  thumbnailMotionEnabled = true;
+  document.dispatchEvent(new Event('radar:motion-request'));
+  return startThumbnailMotion(card);
+}
+
+if (IS_PUBLIC_MEDIA_PAGE) {
+  document.addEventListener('visibilitychange', () => {
+    for (const loop of thumbnailLoops.values()) refreshThumbnailLoop(loop);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    for (const loop of thumbnailLoops.values()) {
+      if (loop.card.matches('.creator-video')) {
+        loop.requested = false;
+        refreshThumbnailLoop(loop);
+      }
+    }
+  });
 }
 
 document.addEventListener('click', (event) => {
-  if (event.defaultPrevented || event.button !== 0 || event.metaKey
-    || event.ctrlKey || event.shiftKey || event.altKey) return;
-  if (typeof HTMLDialogElement === 'undefined'
-    || typeof HTMLDialogElement.prototype.showModal !== 'function') return;
+  if (!IS_PUBLIC_MEDIA_PAGE || event.defaultPrevented || event.button !== 0) return;
   const card = event.target instanceof Element
     ? event.target.closest('.creator-video[data-video]') : null;
-  if (card && openVideo(card)) event.preventDefault();
+  if (!card) return;
+  event.preventDefault();
+  toggleThumbnailMotion(card);
 });

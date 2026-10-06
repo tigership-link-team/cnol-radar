@@ -300,3 +300,19 @@ button.cap{width:100%;font:inherit;text-align:left;cursor:pointer;-webkit-appear
 @media(max-width:640px){.md-plans.four{grid-template-columns:minmax(0,1fr);max-width:560px}}
 @media(max-width:640px){.hd-studio-hero .lbl{font-size:13px}.hd-studio-hero .side b{font-size:19px}.hd-studio-snapshot.v10 .hd-studio-chart.is-combined .hd-studio-series{height:140px}}
 @media(prefers-reduced-motion:reduce){.hd-studio-hero .lbl i{animation:none}}
+
+/* Distinct channel marks and quieter image frames, without changing content. */
+.hd-constellation-floating{animation:none}
+.hd-constellation-stage.is-row .hd-constellation-path{opacity:.22;stroke-width:.85;animation-duration:22s}
+.hd-constellation-node.is-real .hd-constellation-avatar{box-shadow:0 0 0 1px #82bff6,0 4px 10px #426d9e12}
+.hd-constellation-node.is-real .hd-constellation-avatar img{object-fit:contain;box-sizing:border-box;padding:2px;background:#fff}
+.hd-constellation-node.is-portrait:not(:nth-child(1)):not(:nth-child(8)):not(:nth-child(15)):not(:nth-child(24)) .hd-constellation-avatar{position:relative;background-image:none;background-color:var(--hd-avatar-color);background-size:auto}
+.hd-constellation-node.is-portrait:not(:nth-child(1)):not(:nth-child(8)):not(:nth-child(15)):not(:nth-child(24)) .hd-constellation-avatar::before{content:"";position:absolute;inset:24%;border:2px solid #fff;border-radius:50%;box-sizing:border-box}
+.hd-constellation-node.is-portrait:nth-child(3n) .hd-constellation-avatar::before{border-radius:3px;transform:rotate(-12deg)}
+.hd-constellation-node.is-portrait:nth-child(4n) .hd-constellation-avatar::before{inset:29% 24% 29% 32%;border:0;border-radius:1px;background:#fff;clip-path:polygon(0 0,100% 50%,0 100%)}
+.hd-constellation-node.is-portrait:nth-child(5n) .hd-constellation-avatar::before{inset:26%;border-radius:3px;transform:rotate(45deg)}
+.hd-panel,.hd-studio-snapshot{box-shadow:none;border-color:#e8ebf0}
+.home-discovery .creator-video.hd-video-media{border-radius:14px;box-shadow:0 4px 12px #2023350d;outline:1px solid #20233508;outline-offset:-1px;background:#f4f4f7}
+.home-discovery .hd-video-media.is-long img{object-fit:cover;background:#f4f4f7}
+.home-discovery .hd-video-media img{filter:saturate(.94)}
+.hd-video-title{font-weight:600}
