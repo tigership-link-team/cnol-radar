@@ -1,6 +1,6 @@
 // CNOL RADAR — 공통 모듈 (Supabase · 언어 · 알림)
-import { createClient } from '/supabase.js'; // @supabase/supabase-js 2.117.2 고정 번들
-import { DICT } from './i18n.js';
+import { createClient } from '/supabase.js?v=15'; // @supabase/supabase-js 2.117.2 고정 번들
+import { DICT } from './i18n.js?v=15';
 
 // 공개용 키 — 행 단위 보안(RLS)으로 보호돼요. 서비스 키는 절대 여기에 넣지 마세요.
 export const SUPABASE_URL = 'https://gbgcoxjnjlrzbwclevul.supabase.co';
@@ -14,11 +14,16 @@ export const LANGS = ['ko', 'en', 'ja'];
 export function getLang() {
   let l = null;
   try { l = localStorage.getItem('radar.lang'); } catch (e) { /* 저장소를 못 쓰는 환경 */ }
-  if (!LANGS.includes(l)) {
-    const n = (navigator.language || 'ko').slice(0, 2).toLowerCase();
-    l = LANGS.includes(n) ? n : 'ko';
-  }
+  if (!LANGS.includes(l)) l = sysLang();
   return l;
+}
+
+// 브라우저 언어: 목록에 한국어가 하나라도 있으면 한국어 — 영어판 브라우저를 쓰는 한국 분도 같은 화면을 봐요
+export function sysLang() {
+  let list = [];
+  try { list = (navigator.languages && navigator.languages.length ? [...navigator.languages] : [navigator.language || 'ko']).map((x) => String(x || '').slice(0, 2).toLowerCase()); } catch (e) { list = ['ko']; }
+  if (list.includes('ko')) return 'ko';
+  return list.find((x) => LANGS.includes(x)) || 'ko';
 }
 
 export function setLang(l) {

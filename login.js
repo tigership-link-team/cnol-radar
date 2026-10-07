@@ -1,5 +1,5 @@
 // CNOL RADAR 로그인 — 팀원 ID·비밀번호 로그인, 1회용 링크로 관리자 비밀번호 정하기, 사용 신청(→ 관리자가 초대 링크를 보내요)
-import { sb, getLang, setLang, getSession, idToEmail, safeNext } from '/common.js';
+import { sb, getLang, setLang, getSession, idToEmail, safeNext } from '/common.js?v=15';
 
 const L = {
   ko: {

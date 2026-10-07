@@ -4,8 +4,8 @@
   var lang = null;
   try { lang = localStorage.getItem('radar.lang'); } catch (e) { /* 저장소를 못 쓰는 환경 */ }
   if (LANGS.indexOf(lang) < 0) {
-    var n = (navigator.language || 'ko').slice(0, 2).toLowerCase();
-    lang = LANGS.indexOf(n) >= 0 ? n : 'ko';
+    var list = (navigator.languages && navigator.languages.length ? Array.prototype.slice.call(navigator.languages) : [navigator.language || 'ko']).map(function (x) { return String(x || '').slice(0, 2).toLowerCase(); });
+    lang = list.indexOf('ko') >= 0 ? 'ko' : (list.filter(function (x) { return LANGS.indexOf(x) >= 0; })[0] || 'ko');
   }
   function show(l) {
     lang = l;

@@ -3,7 +3,7 @@
   --ink:#152232; --ink2:#4b5a6e; --muted:#627186; --line:#e5eaf0; --line2:#d8dfe8; --soft:#f5f7fa;
   --blue:#2f6fed; --blue2:#1d4fd8; --blue-soft:#eaf1ff; --navy:#17212d; --navy2:#233143; --navy-ink:#c8d0dc;
   --ok:#047857; --ok-bg:#ecfdf5; --err:#b91c1c; --err-bg:#fef2f2; --warn:#92400e; --warn-bg:#fffbeb;
-  --font:Inter,'Pretendard Variable',Pretendard,'Noto Sans KR','Noto Sans JP',system-ui,-apple-system,sans-serif;
+  --font:Roboto,'Pretendard Variable',Pretendard,'Noto Sans KR','Noto Sans JP',-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
   --ease:cubic-bezier(.22,1,.36,1);
 }
 *{box-sizing:border-box}
@@ -105,3 +105,36 @@ form{display:flex;flex-direction:column;gap:14px;margin:0}
 /* v13 둘러보기 모드 안내 */
 .card.pv{border-color:#c7d7fe;background:#f5f8ff}
 .card.pv .btn{align-self:flex-start;text-decoration:none}
+
+/* ===== v15 머티리얼 (#6200EE · #03DAC6) — 대시보드와 같은 디자인 · 어느 브라우저에서나 같은 모양 ===== */
+:root{color-scheme:only light;
+  --ink:#1D1B20; --ink2:#49454F; --muted:#625B71; --line:#E7E0EC; --line2:#79747E; --soft:#FEF7FF;
+  --blue:#6200EE; --blue2:#3700B3; --blue-soft:#EDE3FF; --navy:#3700B3; --navy2:rgba(255,255,255,.14); --navy-ink:#EADDFF;
+  --ease:cubic-bezier(.2,0,0,1)}
+body{-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+button,input,select,textarea{font-family:inherit}
+button{-webkit-appearance:none;appearance:none}
+input[type="text"],input[type="password"],input[type="email"]{-webkit-appearance:none;appearance:none}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (min-width:980px){.au-side{background:linear-gradient(160deg,#6200EE 0%,#3700B3 70%,#2A0090 100%)}}
+.au-side small{color:#D0BCFF}
+.au-pts li i{border-radius:20px;background:rgba(255,255,255,.16);color:#03DAC6}
+.brand span{border:0;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.18),0 1px 3px 1px rgba(0,0,0,.09)}
+.lang{padding:0;height:36px;border:1px solid var(--line2);border-radius:18px;background:transparent;overflow:hidden}
+.lang button{border-radius:0;padding:0 12px;color:var(--ink)}
+.lang button+button{border-left:1px solid var(--line2)}
+.lang button[aria-pressed="true"]{background:#E8DEF8;color:#1D192B;box-shadow:none;font-weight:700}
+.card{border:0;border-radius:28px;box-shadow:0 1px 2px rgba(0,0,0,.18),0 1px 3px 1px rgba(0,0,0,.09)}
+.card.soft{box-shadow:none;background:#F7F2FA}
+.card.pv{background:#F3EDFF}
+.badge{border-radius:8px}
+.inp input{height:56px;border-radius:8px;border-color:var(--line2)}
+.inp input:hover{border-color:var(--ink)}
+.inp input:focus{border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue)}
+.eye{border-radius:20px;top:8px}
+.btn{height:48px;border-radius:24px;font-weight:700;letter-spacing:.1px}
+.btn:hover{background:#6F14EF;box-shadow:0 1px 2px rgba(0,0,0,.2),0 1px 3px 1px rgba(0,0,0,.1)}
+.btn.line{background:transparent;color:var(--blue);border-color:var(--line2);height:44px}
+.btn.line:hover{background:rgba(98,0,238,.08);color:var(--blue);box-shadow:none}
+.msg.err,.msg.ok,.msg.warn{border-radius:12px}
+.inv,.me{border-radius:16px}

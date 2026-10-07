@@ -2,7 +2,7 @@
 // · 기간 고르기(7 · 14 · 28일) · PDF로 저장(브라우저 인쇄) · 고객에게 보낼 공유 링크 (대표 · 편집만)
 // · 리포트 숫자는 서버 함수 radar_report가, 공유 링크 스냅샷은 서버(radar v11)가 DB에서 직접 만들어요
 // app.js가 mountReport(ctx)로 공용 함수를 넘겨줘요. 문구(TR)는 app.js가 T에 합쳐요.
-import { reportHtml, bindReport, printReport, makeFmt, titleKey } from '/report.js';
+import { reportHtml, bindReport, printReport, makeFmt, titleKey } from '/report.js?v=15';
 
 let C = null;
 const e = (s) => C.esc(s);
@@ -32,7 +32,10 @@ export const TR = {
     aReport: '주간 리포트에서 기간 성과를 한 장으로 볼 수 있어요. PDF로 저장하거나 공유 링크로 고객에게 보낼 수 있어요.',
     err_REPORT_LIMIT: '공유 링크는 한 번에 20개까지 열어 둘 수 있어요. 안 쓰는 링크를 꺼 주세요.',
     err_REPORT_BUSY: '공유 링크는 한 시간에 10개까지 만들 수 있어요. 잠시 뒤에 다시 해 주세요.',
-    err_REPORT_FAIL: '리포트를 만들지 못했어요. 잠시 뒤 다시 해 주세요.'
+    err_REPORT_FAIL: '리포트를 만들지 못했어요. 잠시 뒤 다시 해 주세요.',
+    rpScope: '리포트 범위', rpScopeAll: '전체 (내 채널 모두 · 레퍼런스)', rpScopeCh: '크리에이터 · {c}',
+    rpCreatorNote: '크리에이터 전용 리포트예요. 다른 크리에이터의 숫자와 팀의 소재 보드는 들어가지 않아 크리에이터에게 그대로 보내도 돼요.',
+    rpLinkFor: '{c} 전용', err_BAD_CHANNEL: '내 크리에이터(내 채널)만 고를 수 있어요.'
   },
   en: {
     report: 'Weekly report', tab_report: 'Weekly report',
@@ -50,7 +53,10 @@ export const TR = {
     aReport: 'The weekly report shows your period on one page. Save it as a PDF or send a share link to clients.',
     err_REPORT_LIMIT: 'You can keep up to 20 share links open. Turn off the ones you no longer need.',
     err_REPORT_BUSY: 'You can create up to 10 share links per hour. Please try again a bit later.',
-    err_REPORT_FAIL: 'Could not create the report. Please try again shortly.'
+    err_REPORT_FAIL: 'Could not create the report. Please try again shortly.',
+    rpScope: 'Report scope', rpScopeAll: 'Everything (all your channels · references)', rpScopeCh: 'Creator · {c}',
+    rpCreatorNote: 'A creator-only report. Other creators’ numbers and your team’s idea board are left out, so you can send it straight to the creator.',
+    rpLinkFor: 'For {c}', err_BAD_CHANNEL: 'You can only pick one of your own creators (your channels).'
   },
   ja: {
     report: '週間レポート', tab_report: '週間レポート',
@@ -68,7 +74,10 @@ export const TR = {
     aReport: '週間レポートで期間の成果を1枚で確認できます。PDFで保存したり、共有リンクでクライアントに送ったりできます。',
     err_REPORT_LIMIT: '共有リンクは同時に20件まで公開できます。使わないリンクを停止してください。',
     err_REPORT_BUSY: '共有リンクは1時間に10件まで作成できます。少し後でもう一度お試しください。',
-    err_REPORT_FAIL: 'レポートを作成できませんでした。少し後でもう一度お試しください。'
+    err_REPORT_FAIL: 'レポートを作成できませんでした。少し後でもう一度お試しください。',
+    rpScope: 'レポートの範囲', rpScopeAll: 'すべて（自分のチャンネル全部・参考）', rpScopeCh: 'クリエイター・{c}',
+    rpCreatorNote: 'クリエイター専用のレポートです。ほかのクリエイターの数字やチームのネタボードは含まれないので、そのままクリエイターに送れます。',
+    rpLinkFor: '{c}専用', err_BAD_CHANNEL: '自分のクリエイター（自分のチャンネル）だけ選べます。'
   }
 };
 
@@ -96,10 +105,15 @@ const daysNow = () => { const d = Number(ls.get('radar.rpDays')); return DAYS.in
 const keepNow = () => { const d = Number(ls.get('radar.rpKeep')); return KEEP.includes(d) ? d : 7; };
 const linkUrl = (tok) => `${SITE}/r#${tok}`;
 
-function toolsHtml(days) {
+function scopeHtml(mine, ch) {
+  if (!mine.length) return '';
+  return `<div class="rp-scope"><label for="rpScope" class="dk-sub" style="font-weight:700">${e(t('rpScope'))}</label><select class="dk-select" id="rpScope"><option value="">${e(t('rpScopeAll'))}</option>${mine.map((c) => `<option value="${e(c.id)}"${c.id === ch ? ' selected' : ''}>${e(t('rpScopeCh', { c: c.title }))}</option>`).join('')}</select></div>${ch ? `<p class="rp-linknote" style="margin:0">${e(t('rpCreatorNote'))}</p>` : ''}`;
+}
+function toolsHtml(days, mine, ch) {
   const share = canShare();
   const who = C.S.user?.guest ? t('rpGuest') : !share ? t('rpViewer') : '';
   return `<section class="dk-card rp-tools rp-noprint dk-fade">
+    ${scopeHtml(mine, ch)}
     <div class="rp-tbar">
       <div class="dk-seg" role="group" aria-label="${e(t('rpPeriod'))}">${DAYS.map((n) => `<button type="button" data-rpdays="${n}" aria-pressed="${n === days}">${e(t('rpDays', { n }))}</button>`).join('')}</div>
       <div class="rp-acts">
@@ -119,7 +133,7 @@ function linksHtml() {
   const day = (iso) => F.kst(iso, { month: 'short', day: 'numeric' });
   return `<h3 class="rp-lh">${e(t('rpLinks'))} <small>${links.length}</small></h3><ul class="rp-ll">${links.map((l) => {
     const url = linkUrl(l.token);
-    const meta = t('rpLinkMeta', { title: F.t(titleKey(l.days)), at: day(l.at), until: day(l.until), v: F.nf(l.views || 0) }) + (l.seen ? t('rpSeen', { t: when(l.seen) }) : '');
+    const meta = (l.chTitle ? t('rpLinkFor', { c: l.chTitle }) + ' · ' : '') + t('rpLinkMeta', { title: F.t(titleKey(l.days)), at: day(l.at), until: day(l.until), v: F.nf(l.views || 0) }) + (l.seen ? t('rpSeen', { t: when(l.seen) }) : '');
     return `<li data-id="${e(l.id)}">
       <div class="u"><code title="${e(url)}">${e(url.replace(/^https:\/\//, '').slice(0, 34))}…</code><small>${e(meta)}</small></div>
       <div class="b">
@@ -152,18 +166,24 @@ async function copy(text) {
   } catch (er) { return false; }
 }
 
+const qsOf = () => { const h = location.hash || ''; const i = h.indexOf('?'); return new URLSearchParams(i >= 0 ? h.slice(i + 1) : ''); };
 export async function vReport(v, r, alive) {
   const days = daysNow();
   C.loading(v, t('tab_report'), e(t('rpSub')));
+  // v15: 크리에이터(내 채널) 하나만의 리포트 — #report?ch=채널ID
+  const chans = await C.getChans().catch(() => []);
+  const mine = (chans || []).filter((c) => c.role === 'mine');
+  let ch = qsOf().get('ch') || '';
+  if (ch && !mine.some((c) => c.id === ch)) ch = '';
   let data = null;
-  try { data = await C.rpc('radar_report', { p_days: days }); } catch (er) { data = null; }
+  try { data = ch ? await C.rpc('radar_report_x', { p_days: days, p_channel: ch }) : await C.rpc('radar_report', { p_days: days }); } catch (er) { data = null; }
   if (!alive()) return;
   if (!data) {
     v.innerHTML = C.head(t('tab_report'), e(t('rpSub'))) + `<div class="dk-card"><div class="dk-empty">${e(t('rpLoadFail'))}</div></div>`;
     return;
   }
   last = data;
-  v.innerHTML = C.head(t('tab_report'), e(t('rpSub'))) + toolsHtml(days) + `<article class="rp-doc dk-fade" id="rpDoc" aria-label="${e(t('tab_report'))}">${reportHtml(data, { lang: C.lang })}</article>`;
+  v.innerHTML = C.head(t('tab_report'), e(t('rpSub'))) + toolsHtml(days, mine, ch) + `<article class="rp-doc dk-fade" id="rpDoc" aria-label="${e(t('tab_report'))}">${reportHtml(data, { lang: C.lang })}</article>`;
   bindReport(v.querySelector('#rpDoc'));
   v.querySelectorAll('[data-rpdays]').forEach((b) => b.addEventListener('click', () => {
     const n = Number(b.dataset.rpdays);
@@ -172,6 +192,7 @@ export async function vReport(v, r, alive) {
     C.render();
   }));
   v.querySelector('#rpPrint').addEventListener('click', () => printReport(last, C.lang));
+  v.querySelector('#rpScope')?.addEventListener('change', (ev) => { location.hash = '#report' + (ev.target.value ? '?ch=' + encodeURIComponent(ev.target.value) : ''); });
   if (canShare()) {
     paintLinks(v);
     loadLinks(v, alive).catch(() => {});
@@ -181,7 +202,7 @@ export async function vReport(v, r, alive) {
       btn.disabled = true;
       const label = btn.querySelector('span');
       label.textContent = t('rpSharing');
-      const out = await C.act({ action: 'report_share', days: daysNow(), keep: keepNow(), lang: C.lang });
+      const out = await C.act({ action: 'report_share', days: daysNow(), keep: keepNow(), lang: C.lang, ...(ch ? { channel: ch } : {}) });
       btn.disabled = false;
       label.textContent = t('rpShare');
       if (!out.ok) { C.snack(C.errText(out.error)); return; }
@@ -192,7 +213,7 @@ export async function vReport(v, r, alive) {
     });
     v.querySelector('.rp-tools').addEventListener('click', async (ev) => {
       const cp = ev.target.closest('[data-rpcopy]');
-      if (cp) { C.snack((await copy(linkUrl(cp.dataset.rpcopy))) ? t('rpCopied') : linkUrl(cp.dataset.rpcopy)); return; }
+      if (cp) { const ok = await copy(linkUrl(cp.dataset.rpcopy)); C.snack(ok ? t('rpCopied') : linkUrl(cp.dataset.rpcopy)); if (ok && C.mo) C.mo.done(cp); return; }
       const sd = ev.target.closest('[data-rpsend]');
       if (sd) {
         const F = makeFmt(C.lang);

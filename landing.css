@@ -1,5 +1,5 @@
 /* CNOL RADAR 소개 페이지 — Material Design (#6200EE · #03DAC6) + 부드러운 마이크로 트랜지션 */
-:root{
+:root{color-scheme:only light;
   --p:#6200EE; --p2:#3700B3; --p-cont:#EDE3FF; --on-p-cont:#21005D;
   --s:#03DAC6; --s2:#018786; --s-cont:#D3F8F4; --on-s-cont:#00403B;
   --bg:#FFFFFF; --tint:#F7F3FE; --ink:#1C1B1F; --ink2:#49454F; --ink3:#6F6A75; --line:#E7E0EC; --outline:#CAC4D0;

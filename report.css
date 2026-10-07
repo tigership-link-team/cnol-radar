@@ -1,8 +1,8 @@
 /* CNOL RADAR v14 — 기간 리포트 (대시보드 #report · 공유 링크 /r · PDF 인쇄 같은 모양)
    글자 대비 4.5:1 이상 · 폰에서는 한 줄씩 · A4 인쇄에 맞춰요 */
-.rp-doc{--rp-ink:#152232;--rp-ink2:#4b5a6e;--rp-mut:#627186;--rp-line:#e5eaf0;--rp-soft:#f5f7fa;--rp-blue:#2f6fed;--rp-blue2:#1d4fd8;--rp-blue-soft:#eaf1ff;--rp-up:#0f766e;--rp-down:#b91c1c;
+.rp-doc{--rp-ink:#1D1B20;--rp-ink2:#49454F;--rp-mut:#625B71;--rp-line:#E7E0EC;--rp-soft:#F7F2FA;--rp-blue:#6200EE;--rp-blue2:#3700B3;--rp-blue-soft:#EDE3FF;--rp-up:#0f766e;--rp-down:#b91c1c;
   box-sizing:border-box;width:100%;max-width:1040px;margin:0 auto;padding:34px 38px 26px;background:#fff;border:1px solid var(--rp-line);border-radius:16px;color:var(--rp-ink);
-  font-family:Inter,'Pretendard Variable',Pretendard,'Noto Sans KR','Noto Sans JP',system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+  font-family:Roboto,'Pretendard Variable',Pretendard,'Noto Sans KR','Noto Sans JP',-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
 html:lang(ja) .rp-doc{word-break:normal;line-break:strict}
 .rp-doc *,.rp-doc *::before,.rp-doc *::after{box-sizing:border-box}
 .rp-doc a{color:inherit;text-decoration:none}
@@ -52,24 +52,24 @@ html:lang(ja) .rp-doc{word-break:normal;line-break:strict}
 .rp-lg span{display:inline-flex;align-items:center;gap:6px}
 .rp-lg i{display:inline-block;width:12px;height:10px;border-radius:3px;background:var(--rp-blue)}
 .rp-lg i.avg{height:0;border-top:2px dashed #8a6d1d;border-radius:0;background:none;width:16px}
-.rp-lg i.today{background:#9dbbf8}
+.rp-lg i.today{background:#C5B0F5}
 .rp-plot{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:150px auto;column-gap:8px}
 .rp-y{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;font-size:11px;line-height:1;color:var(--rp-mut);font-variant-numeric:tabular-nums;padding:0 0 1px}
 .rp-y span{transform:translateY(-1px)}
 .rp-area{position:relative;min-width:0}
 .rp-grid{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}
-.rp-grid i{display:block;height:1px;background:#edf1f6}
-.rp-grid i:last-child{background:#b8c2cf}
+.rp-grid i{display:block;height:1px;background:#F3EDF7}
+.rp-grid i:last-child{background:#C4BDCC}
 .rp-avg{position:absolute;left:0;right:0;height:0;border-top:2px dashed #8a6d1d;pointer-events:none;z-index:2}
 .rp-bars{position:absolute;inset:0 0 1px;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));column-gap:clamp(2px,1.2%,10px);align-items:end}
 .rp-bar{position:relative;display:flex;align-items:flex-end;height:100%;cursor:default;outline:none}
 .rp-bar i{display:block;width:100%;min-height:0;border-radius:4px 4px 0 0;background:var(--rp-blue);transition:filter .2s}
-.rp-bar.today i{background:#9dbbf8}
+.rp-bar.today i{background:#C5B0F5}
 .rp-bar.on i,.rp-bar:hover i{filter:brightness(.85)}
 .rp-bar:focus-visible i{outline:2px solid var(--rp-blue2);outline-offset:2px}
 .rp-x{grid-column:2;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));column-gap:clamp(2px,1.2%,10px);margin-top:6px;font-size:11px;color:var(--rp-mut);text-align:center;white-space:nowrap}
 .rp-x span{overflow:visible}
-.rp-tip{position:absolute;top:-6px;transform:translate(-50%,-100%);padding:5px 9px;border-radius:7px;background:#152232;color:#fff;font-size:12px;font-weight:650;white-space:nowrap;pointer-events:none;z-index:3;box-shadow:0 6px 16px -6px rgba(16,24,40,.45)}
+.rp-tip{position:absolute;top:-6px;transform:translate(-50%,-100%);padding:5px 9px;border-radius:7px;background:#1D1B20;color:#fff;font-size:12px;font-weight:650;white-space:nowrap;pointer-events:none;z-index:3;box-shadow:0 6px 16px -6px rgba(16,24,40,.45)}
 .rp-chempty{padding:22px 14px;border-radius:10px;background:var(--rp-soft);color:var(--rp-ink2);font-size:13px;text-align:center}
 .rp-chart .rp-chempty{margin-top:10px}
 .rp-note{margin:6px 0 0;font-size:12.5px;color:var(--rp-mut);line-height:1.55}
@@ -83,7 +83,7 @@ html:lang(ja) .rp-doc{word-break:normal;line-break:strict}
 .rp-vlist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
 .rp-vlist.sm{grid-template-columns:minmax(0,1fr);gap:10px}
 .rp-v{display:flex;gap:12px;align-items:flex-start;min-width:0;padding:10px;border:1px solid var(--rp-line);border-radius:12px}
-.rp-v .th{flex:0 0 auto;display:block;width:128px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#e8edf3}
+.rp-v .th{flex:0 0 auto;display:block;width:128px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#ECE6F0}
 .rp-vlist.sm .rp-v .th{width:104px}
 .rp-v .th img{display:block;width:100%;height:100%;object-fit:cover}
 .rp-v .tx{display:flex;flex-direction:column;gap:3px;min-width:0}
@@ -114,7 +114,7 @@ html:lang(ja) .rp-doc{word-break:normal;line-break:strict}
 .rp-t .best a{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-weight:600}
 .rp-t .best small{color:var(--rp-mut);font-weight:500}
 .rp-ch{display:flex;align-items:center;gap:9px;min-width:160px}
-.rp-ch img,.rp-ch .ph{flex:0 0 auto;width:28px;height:28px;border-radius:50%;object-fit:cover;background:#e3e9f1}
+.rp-ch img,.rp-ch .ph{flex:0 0 auto;width:28px;height:28px;border-radius:50%;object-fit:cover;background:#E6E0E9}
 .rp-ch>span{display:flex;flex-direction:column;min-width:0}
 .rp-ch em{font-size:11px}
 .rp-d{font-weight:800}
@@ -162,52 +162,75 @@ html:lang(ja) .rp-doc{word-break:normal;line-break:strict}
 .rp-tbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
 .rp-acts{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .rp-acts .dk-btn{min-height:40px}
-.rp-keep{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--pv-ink2,#4b5a6e)}
-.rp-keep select{height:40px;padding:0 10px;border:1px solid var(--pv-line,#e5eaf0);border-radius:10px;background:#fff;font:inherit;font-size:13.5px;color:var(--pv-ink,#152232)}
-.rp-linknote{margin:0;font-size:12.5px;color:var(--pv-muted,#627186);line-height:1.6}
-.rp-nolinks{margin:0;font-size:13px;color:var(--pv-ink2,#4b5a6e)}
-.rp-lh{display:flex;align-items:center;gap:8px;margin:2px 0 8px;font-size:14px;font-weight:800;color:var(--pv-ink,#152232)}
-.rp-lh small{padding:1px 8px;border-radius:999px;background:var(--pv-soft,#f5f7fa);font-size:12px;color:var(--pv-ink2,#4b5a6e)}
+.rp-keep{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--pv-ink2,#49454F)}
+.rp-keep select{height:40px;padding:0 10px;border:1px solid var(--pv-line,#E7E0EC);border-radius:10px;background:#fff;font:inherit;font-size:13.5px;color:var(--pv-ink,#1D1B20)}
+.rp-linknote{margin:0;font-size:12.5px;color:var(--pv-muted,#625B71);line-height:1.6}
+.rp-nolinks{margin:0;font-size:13px;color:var(--pv-ink2,#49454F)}
+.rp-lh{display:flex;align-items:center;gap:8px;margin:2px 0 8px;font-size:14px;font-weight:800;color:var(--pv-ink,#1D1B20)}
+.rp-lh small{padding:1px 8px;border-radius:999px;background:var(--pv-soft,#F7F2FA);font-size:12px;color:var(--pv-ink2,#49454F)}
 .rp-ll{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.rp-ll li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--pv-line,#e5eaf0);border-radius:12px;background:#fff}
+.rp-ll li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--pv-line,#E7E0EC);border-radius:12px;background:#fff}
 .rp-ll .u{display:flex;flex-direction:column;gap:3px;min-width:0}
-.rp-ll code{font:600 13px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--pv-ink,#152232);overflow-wrap:anywhere}
-.rp-ll small{font-size:12px;color:var(--pv-muted,#627186)}
+.rp-ll code{font:600 13px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--pv-ink,#1D1B20);overflow-wrap:anywhere}
+.rp-ll small{font-size:12px;color:var(--pv-muted,#625B71)}
 .rp-ll .b{display:flex;flex-wrap:wrap;gap:6px}
 .rp-ll .dk-btn{text-decoration:none}
 @media (max-width:640px){.rp-acts{width:100%}.rp-acts .dk-btn{flex:1 1 auto}.rp-keep{flex:1 1 100%;justify-content:space-between}}
 
 /* ===== 공유 리포트 페이지 (/r) ===== */
-body.rpg{margin:0;min-height:100vh;background:#f5f7fa;color:#152232;font-family:Inter,'Pretendard Variable',Pretendard,'Noto Sans KR','Noto Sans JP',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
-.rpg-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px max(16px,calc((100vw - 1040px) / 2));background:rgba(255,255,255,.94);border-bottom:1px solid #e5eaf0;-webkit-backdrop-filter:saturate(160%) blur(8px);backdrop-filter:saturate(160%) blur(8px)}
-.rpg-brand{display:inline-flex;align-items:center;gap:9px;color:#152232;text-decoration:none;font-size:15px;font-weight:850;letter-spacing:.2px}
+body.rpg{margin:0;min-height:100vh;background:#F7F2FA;color:#1D1B20;font-family:Roboto,'Pretendard Variable',Pretendard,'Noto Sans KR','Noto Sans JP',-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Malgun Gothic',sans-serif;-webkit-font-smoothing:antialiased}
+.rpg-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px max(16px,calc((100vw - 1040px) / 2));background:rgba(255,255,255,.94);border-bottom:1px solid #E7E0EC;-webkit-backdrop-filter:saturate(160%) blur(8px);backdrop-filter:saturate(160%) blur(8px)}
+.rpg-brand{display:inline-flex;align-items:center;gap:9px;color:#1D1B20;text-decoration:none;font-size:15px;font-weight:850;letter-spacing:.2px}
 .rpg-brand img{display:block;width:26px;height:auto}
 .rpg-acts{display:flex;align-items:center;gap:8px}
-.rpg-lang{display:flex;padding:3px;border:1px solid #e5eaf0;border-radius:9px;background:#fff}
-.rpg-lang button{min-width:38px;min-height:32px;padding:0 8px;border:0;border-radius:6px;background:transparent;font:inherit;font-size:12px;font-weight:750;color:#627186;cursor:pointer}
-.rpg-lang button[aria-pressed="true"]{background:#eaf1ff;color:#1d4fd8}
-.rpg-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:0 14px;border:0;border-radius:10px;background:#2f6fed;color:#fff;font:inherit;font-size:13.5px;font-weight:750;text-decoration:none;cursor:pointer;white-space:nowrap}
-.rpg-btn:hover{background:#1d4fd8}
-.rpg-btn.ghost{background:#fff;color:#152232;border:1px solid #d8dfe8}
-.rpg-btn.ghost:hover{background:#f5f7fa}
-.rpg-btn:focus-visible,.rpg-lang button:focus-visible,.rpg-brand:focus-visible{outline:2px solid #2f6fed;outline-offset:2px}
+.rpg-lang{display:flex;padding:3px;border:1px solid #E7E0EC;border-radius:9px;background:#fff}
+.rpg-lang button{min-width:38px;min-height:32px;padding:0 8px;border:0;border-radius:6px;background:transparent;font:inherit;font-size:12px;font-weight:750;color:#625B71;cursor:pointer}
+.rpg-lang button[aria-pressed="true"]{background:#EDE3FF;color:#3700B3}
+.rpg-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:0 14px;border:0;border-radius:10px;background:#6200EE;color:#fff;font:inherit;font-size:13.5px;font-weight:750;text-decoration:none;cursor:pointer;white-space:nowrap}
+.rpg-btn:hover{background:#3700B3}
+.rpg-btn.ghost{background:#fff;color:#1D1B20;border:1px solid #DDD6E3}
+.rpg-btn.ghost:hover{background:#F7F2FA}
+.rpg-btn:focus-visible,.rpg-lang button:focus-visible,.rpg-brand:focus-visible{outline:2px solid #6200EE;outline-offset:2px}
 .rpg-main{padding:22px 16px 10px;outline:0}
-.rpg-badge{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;max-width:1040px;margin:0 auto 12px;font-size:12.5px;color:#4b5a6e}
-.rpg-badge span{padding:3px 10px;border-radius:999px;background:#eaf1ff;color:#1d4fd8;font-weight:800}
-.rpg-state{max-width:560px;margin:60px auto;padding:28px 24px;border:1px solid #e5eaf0;border-radius:16px;background:#fff;text-align:center}
+.rpg-badge{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;max-width:1040px;margin:0 auto 12px;font-size:12.5px;color:#49454F}
+.rpg-badge span{padding:3px 10px;border-radius:999px;background:#EDE3FF;color:#3700B3;font-weight:800}
+.rpg-state{max-width:560px;margin:60px auto;padding:28px 24px;border:1px solid #E7E0EC;border-radius:16px;background:#fff;text-align:center}
 .rpg-state .m{margin:0;font-size:16px;font-weight:750}
-.rpg-state .s{margin:8px 0 0;font-size:13.5px;color:#4b5a6e}
+.rpg-state .s{margin:8px 0 0;font-size:13.5px;color:#49454F}
 .rpg-state .rpg-btn{margin-top:16px}
-.rpg-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;max-width:1040px;margin:14px auto 40px;padding:18px 20px;box-sizing:border-box;border-radius:16px;background:#17212d;color:#fff}
+.rpg-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;max-width:1040px;margin:14px auto 40px;padding:18px 20px;box-sizing:border-box;border-radius:16px;background:#1D1B20;color:#fff}
 .rpg-cta b{display:block;font-size:15px}
 .rpg-cta p{margin:4px 0 0;font-size:13px;color:#c8d0dc;line-height:1.6;max-width:640px}
 @media (max-width:860px){.rpg-cta{margin:14px 16px 32px}}
 @media (max-width:520px){.rpg-brand span{display:none}.rpg-btn{padding:0 12px}}
 
 /* ===== 인쇄 · PDF로 저장 (A4) ===== */
+/* ===== v15 머티리얼: 둥근 모서리 · 그림자 단계 · 알약 버튼 · 크리에이터 리포트 ===== */
+.rp-doc{border:0;border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.18),0 1px 3px 1px rgba(0,0,0,.09)}
+.rp-wsby{font-weight:600;color:var(--rp-mut)}
+.rp-cols>.rp-box:only-child{grid-column:1/-1}
+.rp-ll li{border-radius:12px;border-color:#E7E0EC}
+.rp-keep select{height:40px;border-radius:8px;border-color:#79747E;-webkit-appearance:none;appearance:none;padding:0 34px 0 12px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2349454F' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center}
+body.rpg{background:#FEF7FF;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body.rpg button{font-family:inherit;-webkit-appearance:none;appearance:none}
+.rpg-top{background:#FEF7FF;border-bottom:1px solid #E7E0EC}
+.rpg-lang{padding:0;height:36px;border:1px solid #79747E;border-radius:18px;overflow:hidden;background:transparent}
+.rpg-lang button{min-height:0;height:100%;border-radius:0;color:#1D1B20;font-weight:600}
+.rpg-lang button+button{border-left:1px solid #79747E}
+.rpg-lang button[aria-pressed="true"]{background:#E8DEF8;color:#1D192B;font-weight:700}
+.rpg-btn{min-height:40px;padding:0 20px;border-radius:20px;font-weight:700;letter-spacing:.1px}
+.rpg-btn:hover{background:#6F14EF;box-shadow:0 1px 2px rgba(0,0,0,.2),0 1px 3px 1px rgba(0,0,0,.1)}
+.rpg-btn.ghost{background:transparent;color:#6200EE;border:1px solid #79747E}
+.rpg-btn.ghost:hover{background:rgba(98,0,238,.08);box-shadow:none}
+.rpg-badge span{border-radius:8px;background:#EADDFF;color:#21005D}
+.rpg-state{border:0;border-radius:28px;box-shadow:0 1px 2px rgba(0,0,0,.18),0 1px 3px 1px rgba(0,0,0,.09)}
+.rpg-cta{border-radius:16px;background:#322F35;color:#F5EFF7}
+.rpg-cta p{color:#CAC4D0}
+.rpg-cta .rpg-btn.ghost{background:#D0BCFF;color:#21005D;border:0}
+.rpg-cta .rpg-btn.ghost:hover{background:#DCCBFF}
 @media print{
   @page{size:A4;margin:12mm 11mm 13mm}
-  .rp-doc{max-width:none;padding:0;border:0;border-radius:0;font-size:12px}
+  .rp-doc{max-width:none;padding:0;border:0;border-radius:0;font-size:12px;box-shadow:none!important}
   .rp-doc,.rp-doc *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .rp-title{font-size:23px}
   .rp-kpis{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
@@ -230,6 +253,11 @@ body.rpg{margin:0;min-height:100vh;background:#f5f7fa;color:#152232;font-family:
   .rpg-main{padding:0}
   body.dk:has(.rp-doc){background:#fff!important}
   body.dk:has(.rp-doc) .dk-side,body.dk:has(.rp-doc) .dk-top,body.dk:has(.rp-doc) .dk-head,body.dk:has(.rp-doc) .dk-tabs,body.dk:has(.rp-doc) .dk-lead,body.dk:has(.rp-doc) .dk-derived,
-  body.dk:has(.rp-doc) .rc-fab,body.dk:has(.rp-doc) .rc-panel,body.dk:has(.rp-doc) .dk-snack,body.dk:has(.rp-doc) .dk-orbs,body.dk:has(.rp-doc) #view>:not(.rp-doc){display:none!important}
+  body.dk:has(.rp-doc) .rc-fab,body.dk:has(.rp-doc) .rc-panel,body.dk:has(.rp-doc) .md-bnav,body.dk:has(.rp-doc) .md-scrim,body.dk:has(.rp-doc) .md-efab,body.dk:has(.rp-doc) .dk-snack,body.dk:has(.rp-doc) .dk-orbs,body.dk:has(.rp-doc) #view>:not(.rp-doc){display:none!important}
   body.dk:has(.rp-doc) .dk-shell,body.dk:has(.rp-doc) .dk-main,body.dk:has(.rp-doc) #view{display:block!important;height:auto!important;overflow:visible!important;padding:0!important;margin:0!important}
+  /* :has()를 모르는 브라우저용 같은 규칙 (PDF로 저장 버튼이 body에 rp-print를 달아요) */
+  body.dk.rp-print{background:#fff!important}
+  body.dk.rp-print .dk-side,body.dk.rp-print .dk-top,body.dk.rp-print .dk-head,body.dk.rp-print .dk-tabs,body.dk.rp-print .dk-lead,body.dk.rp-print .dk-derived,
+  body.dk.rp-print .rc-fab,body.dk.rp-print .rc-panel,body.dk.rp-print .dk-snack,body.dk.rp-print .md-bnav,body.dk.rp-print .md-scrim,body.dk.rp-print #view>:not(.rp-doc){display:none!important}
+  body.dk.rp-print .dk-shell,body.dk.rp-print .dk-main,body.dk.rp-print #view{display:block!important;height:auto!important;overflow:visible!important;padding:0!important;margin:0!important}
 }

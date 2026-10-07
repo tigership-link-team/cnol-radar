@@ -3,8 +3,8 @@
 // · 사이드바 계정 칸: 워크스페이스 바꾸기 · 내 역할 · 관리자 콘솔
 // · RADAR에게 묻기: 지켜보는 데이터로 바로 답하고(키 없이), 서버에 AI 키가 있으면 AI가 이 워크스페이스 데이터만 보고 답해요
 // app.js가 mountTeam(ctx)로 공용 함수를 넘겨줘요. 문구(TM)는 app.js가 T에 합쳐요.
-import { parseCmd } from '/agent.js';
-import { TT } from '/agent-i18n.js';
+import { parseCmd } from '/agent.js?v=15';
+import { TT } from '/agent-i18n.js?v=15';
 
 let C = null;
 export function mountTeam(ctx) { C = ctx; }
@@ -497,7 +497,9 @@ export function mountChat() {
 function paintFab() {
   const fab = document.getElementById('rcFab');
   if (!fab) return;
-  fab.innerHTML = `${svg(IC.chat, 20)}<span>${e(t('chatFab'))}</span>`;
+  // Amicro sparkle: 올리면 말풍선이 위로 빠지고 반짝이(별)가 아래에서 올라와요 (600/25)
+  const star = '<path d="M12 3l2.4 5.9 6.3.5-4.8 4.1 1.5 6.2L12 16.4l-5.4 3.3 1.5-6.2-4.8-4.1 6.3-.5z"/>';
+  fab.innerHTML = `<span class="mi-sw">${svg(IC.chat, 22).replace('<svg ', '<svg class="mi-a" ')}${svg(star, 22).replace('<svg ', '<svg class="mi-b" ')}<svg class="mi-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.4 7.6H22l-6.2 4.5 2.4 7.6-6.2-4.5-6.2 4.5 2.4-7.6L2 9.6h7.6z"/></svg></span><span>${e(t('chatFab'))}</span>`;
   fab.setAttribute('aria-label', t('chatFab')); fab.title = t('chatFab');
 }
 export function chatLang() { paintFab(); if (CH.open) paintPanel(); }

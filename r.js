@@ -1,7 +1,7 @@
 // CNOL RADAR v14 — 공유 리포트 보기 (/r#열쇠) · 로그인 없이 봐요
 // · 열쇠는 주소의 # 뒤에 있어요 (# 뒤는 서버 기록 · 다른 사이트로 넘어가지 않아요)
 // · 리포트는 링크를 만든 순간의 스냅샷이에요. 링크가 닫히면(기한 · 끄기) 바로 못 봐요
-import { reportHtml, bindReport, printReport, makeFmt, titleKey, esc } from '/report.js';
+import { reportHtml, bindReport, printReport, makeFmt, titleKey, esc } from '/report.js?v=15';
 
 const FN = 'https://gbgcoxjnjlrzbwclevul.supabase.co/functions/v1/radar';
 const KEY = 'sb_publishable_u1HixC_2hyoQi9Sd_mnaWQ_0nHSrQ8b'; // 공개용 키 (서비스 키 아님)
@@ -30,7 +30,11 @@ const UI = {
   }
 };
 const LANGS = ['ko', 'en', 'ja'];
-let lang = (() => { const n = (navigator.language || 'ko').slice(0, 2).toLowerCase(); return LANGS.includes(n) ? n : 'ko'; })();
+let lang = (() => { // 브라우저 언어 목록에 한국어가 있으면 한국어 (보낸 사람이 고른 언어가 오면 그걸로 바꿔요)
+  let list = ['ko'];
+  try { list = (navigator.languages && navigator.languages.length ? [...navigator.languages] : [navigator.language || 'ko']).map((x) => String(x || '').slice(0, 2).toLowerCase()); } catch (er) { /* 그대로 */ }
+  return list.includes('ko') ? 'ko' : list.find((x) => LANGS.includes(x)) || 'ko';
+})();
 let got = null; // 서버에서 받은 리포트
 const u = (k, v) => { let s = UI[lang][k] ?? UI.ko[k] ?? k; if (v) for (const x of Object.keys(v)) s = s.split('{' + x + '}').join(String(v[x])); return s; };
 const $ = (id) => document.getElementById(id);
@@ -65,7 +69,8 @@ function paint() {
   if (!got) return;
   const F = makeFmt(lang);
   const d = got.report;
-  document.title = `${F.t(titleKey(d && d.days))}${d && d.ws ? ' · ' + d.ws : ''} · CNOL RADAR`;
+  const who = d && d.creator && d.creator.title ? d.creator.title : d && d.ws ? d.ws : '';
+  document.title = `${F.t(titleKey(d && d.days))}${who ? ' · ' + who : ''} · CNOL RADAR`;
   const until = got.until ? F.kst(got.until, { year: 'numeric', month: 'short', day: 'numeric' }) : '';
   const made = got.at ? F.kst(got.at, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
   $('rpg').innerHTML = `<p class="rpg-badge rp-noprint"><span>${esc(u('shared'))}</span>${until ? `<small>${esc(u('until', { d: until, m: made }))}</small>` : ''}</p><article class="rp-doc" id="rpDoc">${reportHtml(d, { lang, h1: true })}</article>`;

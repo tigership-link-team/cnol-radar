@@ -1,7 +1,7 @@
 // CNOL RADAR — 관리자 콘솔 (개요 · 워크스페이스 · 회원 · 협업 요청 · 문의 · 운영 준비)
 // 화면은 누구나 열 수 있지만, 데이터는 Supabase RLS와 is_admin() 검사로 관리자에게만 내려와요.
 // v12: 워크스페이스(회사)마다 요금제 · 팀원 · 초대 링크 — 사용 신청(문의) → 워크스페이스 만들고 대표 초대 링크 보내기
-import { sb, SUPABASE_URL, SUPABASE_KEY, getLang, esc, snack, requireSession, emailToId } from '/common.js';
+import { sb, SUPABASE_URL, SUPABASE_KEY, getLang, esc, snack, requireSession, emailToId } from '/common.js?v=15';
 
 const D = {
   ko: {

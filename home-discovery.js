@@ -75,7 +75,7 @@ function node(tag, className, content) {
 }
 function language() {
   const lang = document.documentElement.lang.toLowerCase().split('-')[0];
-  return Object.hasOwn(COPY, lang) ? lang : 'ko';
+  return Object.prototype.hasOwnProperty.call(COPY, lang) ? lang : 'ko'; // 옛 사파리(iOS 15.0~15.3)에서도 되게
 }
 const c = (key, values) => {
   let s = COPY[language()][key] ?? COPY.ko[key] ?? key;

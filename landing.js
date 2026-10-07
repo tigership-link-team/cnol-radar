@@ -1,5 +1,5 @@
 // CNOL RADAR 소개 페이지 — 언어 · 요금 · 그림 · Material 리플 · 마이크로 트랜지션 (Supabase는 불러오지 않아요)
-import { DICT } from './i18n.js';
+import { DICT } from './i18n.js?v=15';
 
 const LANGS = ['ko', 'en', 'ja'];
 const KEY = 'radar.lang'; // 대시보드와 같은 키
@@ -10,8 +10,10 @@ function getLang() {
   let l = null;
   try { l = localStorage.getItem(KEY); } catch (e) { /* 저장소를 못 쓰는 환경 */ }
   if (!LANGS.includes(l)) {
-    const n = (navigator.language || 'ko').slice(0, 2).toLowerCase();
-    l = LANGS.includes(n) ? n : 'ko';
+    // 브라우저 언어 목록에 한국어가 하나라도 있으면 한국어 (대시보드와 같은 규칙)
+    let list = ['ko'];
+    try { list = (navigator.languages && navigator.languages.length ? [...navigator.languages] : [navigator.language || 'ko']).map((x) => String(x || '').slice(0, 2).toLowerCase()); } catch (e) { /* 그대로 */ }
+    l = list.includes('ko') ? 'ko' : list.find((x) => LANGS.includes(x)) || 'ko';
   }
   return l;
 }

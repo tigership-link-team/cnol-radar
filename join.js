@@ -2,7 +2,7 @@
 // · 링크 코드(#code=…)는 주소창에서 바로 지우고 이 탭에서만 기억해요 (기록 · 공유에 남지 않게)
 // · 이미 로그인한 계정이면 그 계정으로 바로 들어갈 수 있어요
 // · 비밀번호 다시 정하기 링크도 같은 화면에서 처리해요
-import { sb, getLang, setLang, getSession, idToEmail } from '/common.js';
+import { sb, getLang, setLang, getSession, idToEmail } from '/common.js?v=15';
 
 const L = {
   ko: {

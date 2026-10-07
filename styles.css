@@ -1,5 +1,5 @@
 /* CNOL RADAR — shared styles (Material, purple #6200EE / teal #03DAC6) */
-:root{
+:root{color-scheme:only light;
   --primary:#6200EE; --primary-dark:#3700B3; --primary-tint:#EDE7F6; --primary-soft:#F3EEFC;
   --secondary:#03DAC6; --on-secondary:#121212;
   --ink:#1D1B20; --ink-2:#5F5B66; --line:#E7E4EC; --line-2:#CFCAD8; --bg:#F6F5F9; --surface:#FFFFFF;

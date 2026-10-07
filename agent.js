@@ -1,8 +1,8 @@
 // CNOL RADAR — 1인 맞춤 에이전트 화면
 // 에이전트 보고(첫 화면) · 내 채널로 시작하기 · 맞춤 레퍼런스 · 도구(소재 검색·예측·제목/태그·썸네일·댓글 속 소재·채널 모델) · 소재 파도
 // app.js가 mountAgent(ctx)로 공용 함수를 넘겨줘요 (순환 import 없이)
-import * as M from '/model.js';
-import { TT } from '/agent-i18n.js';
+import * as M from '/model.js?v=15';
+import { TT } from '/agent-i18n.js?v=15';
 
 let C = null;
 const A = { pool: null, poolKey: '', poolAt: 0, topic: null, cm: null, thumbUrl: null };
@@ -85,6 +85,14 @@ async function loadPool(days = 30) {
   return list;
 }
 export function dropPool() { A.pool = null; }
+// v15 찾기 화면: 추천 키워드 (내 채널 소재 DNA + 지금 도는 소재 파도) · 레퍼런스 영상 모음
+export async function suggestKws(n = 10) {
+  const pool = await loadPool(21);
+  const dna = await loadDna(pool).catch(() => null);
+  const dk = dna ? dna.kws.slice(0, 6).map((k) => k.k) : [];
+  const wk = M.waves(pool, { max: 6 }).map((w) => w.k);
+  return { pool, dna: dk, waves: wk, kws: [...new Set([...dk, ...wk])].slice(0, n) };
+}
 async function loadDna(pool) {
   await C.getProfile();
   const mine = C.S.profList || [];
@@ -208,8 +216,8 @@ function bindOnboard(v) {
 
 // ---------- 에이전트에게 시키기 (말로 시키면 맞는 도구로 데려가요) ----------
 const enc = encodeURIComponent;
-const VID_IN = /(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
-const CH_IN = /(youtube\.com\/(?:@[^\s/?]+|channel\/UC[\w-]{22}|c\/[^\s/?]+)|(?:^|\s)@[\w.\-]{3,30}(?:\s|$))/;
+export const VID_IN = /(?:youtube\.com\/(?:watch\?v=|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
+export const CH_IN = /(youtube\.com\/(?:@[^\s/?]+|channel\/UC[\w-]{22}|c\/[^\s/?]+)|(?:^|\s)@[\w.\-]{3,30}(?:\s|$))/;
 const FILLER = /^(소재|소재로|어때|어때요|어떨까|어떨까요|해볼까|해볼까요|분석|분석해|분석해줘|찾아줘|알려줘|검색|검색해줘|좀|해줘|요즘|how|about|is|ideas?|for|search|find|について|どう|どう？|ネタ|は|を)$/i;
 export function parseCmd(raw, chans = []) {
   const s = String(raw || '').trim();
@@ -581,6 +589,39 @@ function topicHtml(d) {
     <h3 class="tp-h">${e(tt('a_topicChans'))}</h3><div class="tp-chs">${(d.channels || []).slice(0, 10).map((c) => `<div class="tp-ch">${C.avatar(c.thumb)}<span class="txt"><b>${e(c.title)}</b><small>${e(c.subs == null ? tt('a_subsHidden') : tt('a_subs', { n: C.fmtN(c.subs) }))} · ${e(tt('a_inTop', { n: c.n }))}</small></span>${c.tracked ? `<span class="dk-tag gray">${e(tt('a_watching'))}</span>` : `<button type="button" class="dk-btn sm" data-watch="${e(c.id)}">${e(tt('a_watch'))}</button>`}</div>`).join('')}</div>
     <p class="dk-sub">${e(tt('a_topicFoot', { n: d.n }))}${d.cached ? ' · ' + e(tt('a_cached')) : ''}</p>`;
 }
+// v15: 찾기 화면(#find)도 같은 소재 검색을 써요 — 결과 그리기 · 버튼 달기 · 불러오기를 밖으로 내보내요
+export const topicView = (d) => topicHtml(d);
+export const topicCached = (q) => (A.topic && q && A.topic.q.toLowerCase() === String(q).trim().replace(/\s+/g, ' ').toLowerCase() && A.topic.kind === kindNow() ? A.topic : null);
+export async function topicFetch(q) {
+  const hit = topicCached(q);
+  if (hit) return hit;
+  C.plus.histAdd('topic', q);
+  const d = await C.act({ action: 'topic', q, lang: L(), kind: kindNow() });
+  if (d.ok) A.topic = d;
+  return d;
+}
+// 소재 검색 결과 안의 버튼: 지켜보기 · 소재 보드에 담기 · 관련 키워드로 다시 찾기
+export function bindTopicOut(out, d, onQ) {
+  out.querySelectorAll('[data-watch]').forEach((b) => b.addEventListener('click', async () => {
+    b.disabled = true;
+    b.innerHTML = '<span class="dk-spin"></span>';
+    const o = await C.act({ action: 'add', inputs: [b.dataset.watch], role: 'reference', source: 'discover' });
+    if (!o.ok || !(o.results || [])[0]?.ok) { b.disabled = false; b.textContent = tt('a_watch'); C.snack(C.errText(o.ok ? o.results?.[0]?.error : o.error)); return; }
+    b.outerHTML = `<span class="dk-tag gray">${e(tt('a_watching'))}</span>`;
+    C.snack(tt('a_added', { n: 1, v: C.fmtFull((o.results[0].shorts || 0) + (o.results[0].longs || 0)) }));
+    C.S.chansAt = 0; dropPool();
+  }));
+  out.querySelectorAll('[data-vb]').forEach((b) => b.addEventListener('click', async () => {
+    const x = [...(d.hot || []), ...(d.smallWins || [])].find((y) => y.id === b.dataset.vb);
+    if (!x) return;
+    b.disabled = true;
+    const o = await C.act({ action: 'idea', op: 'add', title: String(x.title).slice(0, 200), source_video_id: x.id, note: `${x.chTitle} · ${tt('t_topic')}: ${d.q}` });
+    if (!o.ok) { b.disabled = false; C.snack(C.errText(o.error)); return; }
+    b.textContent = C.t('inBoard');
+    C.snack(C.t('added'));
+  }));
+  if (onQ) out.querySelectorAll('[data-q]').forEach((b) => b.addEventListener('click', () => onQ(b.dataset.q)));
+}
 async function tTopic(v, r, alive) {
   const q0 = query().get('q') || (A.topic && A.topic.q) || '';
   const pool = await loadPool(21);
@@ -603,27 +644,7 @@ async function tTopic(v, r, alive) {
     out.innerHTML = topicHtml(d);
     bindTopic();
   };
-  const bindTopic = () => {
-    out.querySelectorAll('[data-watch]').forEach((b) => b.addEventListener('click', async () => {
-      b.disabled = true;
-      b.innerHTML = '<span class="dk-spin"></span>';
-      const o = await C.act({ action: 'add', inputs: [b.dataset.watch], role: 'reference', source: 'discover' });
-      if (!o.ok || !(o.results || [])[0]?.ok) { b.disabled = false; b.textContent = tt('a_watch'); C.snack(C.errText(o.ok ? o.results?.[0]?.error : o.error)); return; }
-      b.outerHTML = `<span class="dk-tag gray">${e(tt('a_watching'))}</span>`;
-      C.snack(tt('a_added', { n: 1, v: C.fmtFull((o.results[0].shorts || 0) + (o.results[0].longs || 0)) }));
-      C.S.chansAt = 0; dropPool();
-    }));
-    out.querySelectorAll('[data-vb]').forEach((b) => b.addEventListener('click', async () => {
-      const x = [...(A.topic.hot || []), ...(A.topic.smallWins || [])].find((y) => y.id === b.dataset.vb);
-      if (!x) return;
-      b.disabled = true;
-      const o = await C.act({ action: 'idea', op: 'add', title: String(x.title).slice(0, 200), source_video_id: x.id, note: `${x.chTitle} · ${tt('t_topic')}: ${A.topic.q}` });
-      if (!o.ok) { b.disabled = false; C.snack(C.errText(o.error)); return; }
-      b.textContent = C.t('inBoard');
-      C.snack(C.t('added'));
-    }));
-    out.querySelectorAll('[data-q]').forEach((b) => b.addEventListener('click', () => run(b.dataset.q)));
-  };
+  const bindTopic = () => bindTopicOut(out, A.topic, run);
   v.querySelectorAll('.dk-chips [data-q]').forEach((b) => b.addEventListener('click', () => run(b.dataset.q)));
   v.querySelector('#tpForm').addEventListener('submit', (ev) => { ev.preventDefault(); run(v.querySelector('#tpIn').value.trim()); });
   if (A.topic && A.topic.q === q0 && A.topic.kind === kindNow()) bindTopic();

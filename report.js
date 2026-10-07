@@ -241,7 +241,7 @@ export function reportHtml(d, opt = {}) {
   const head = `<header class="rp-hd">
     <div class="rp-brand"><img src="/logo-96.png" alt="" width="22" height="19"><span>CNOL RADAR</span></div>
     <${opt.h1 ? 'h1' : 'h2'} class="rp-title">${esc(t(titleKey(days)))}</${opt.h1 ? 'h1' : 'h2'}>
-    ${d.ws ? `<p class="rp-ws">${esc(d.ws)}</p>` : ''}
+    ${d.creator && d.creator.title ? `<p class="rp-ws">${esc(d.creator.title)}${d.ws ? ` <span class="rp-wsby">· ${esc(d.ws)}</span>` : ''}</p>` : d.ws ? `<p class="rp-ws">${esc(d.ws)}</p>` : ''}
     <p class="rp-period">${esc(t('period', { a: F.dLong(d.from), b: F.dLong(d.to), n: days }))}</p>
     <p class="rp-meta">${esc(t('prevPeriod', { a: F.dShort(d.prev_from), b: F.dShort(d.prev_to) }))} · ${esc(t('made', { t: F.kst(d.now, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) }))}</p>
   </header>`;
@@ -350,11 +350,11 @@ export function reportHtml(d, opt = {}) {
   const nextSec = `<section class="rp-sec rp-next"><h3>${esc(t('secNext'))}</h3>
     <div class="rp-cols">
       <div class="rp-box"><h4>${esc(t('nextIdeas'))}</h4>${next.length ? `<p class="rp-note">${esc(t('nextNote'))}</p><ol class="rp-vlist sm">${next.map(vCard).join('')}</ol>` : `<p class="rp-note">${esc(t('noNext'))}</p>`}</div>
-      <div class="rp-box"><h4>${esc(t('board'))}</h4>
+      ${d.ideas ? `<div class="rp-box"><h4>${esc(t('board'))}</h4>
         <p class="rp-stages">${STAGES.map((s) => `<span><b>${esc(F.nf(num(stages[s]) || 0))}</b>${esc(t('st_' + s))}</span>`).join('')}</p>
         <h5>${esc(t('due'))}</h5>${due.length ? `<ul class="rp-due">${due.map((x) => { const late = x.due_on && x.due_on < today; return `<li><span>${esc(x.title)}</span><small class="${late ? 'down' : ''}">${esc(late ? t('overdue') : t('dueOn', { d: F.dShort(x.due_on) }))} · ${esc(t('st_' + (STAGES.includes(x.stage) ? x.stage : 'idea')))}</small></li>`; }).join('')}</ul>` : `<p class="rp-note">${esc(t('noDue'))}</p>`}
         ${shipped.length ? `<h5>${esc(t('shipped'))}</h5><ul class="rp-due">${shipped.map((x) => { const url = x.vid ? ytVideo(x.vid, false) : null; return `<li><span>${url ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(x.title)}</a>` : esc(x.title)}</span>${x.views != null ? `<small>${esc(t('viewsN', { v: F.cf(num(x.views)) }))}</small>` : ''}</li>`; }).join('')}</ul>` : ''}
-      </div>
+      </div>` : ''}
     </div></section>`;
 
   // 알림 요약
@@ -399,9 +399,12 @@ export function bindReport(root) {
 export function printReport(d, lang) {
   const F = makeFmt(lang || 'ko');
   const old = document.title;
-  const name = `CNOL RADAR ${F.t(titleKey(d && d.days))} ${d && d.from ? d.from : ''}~${d && d.to ? d.to : ''}${d && d.ws ? ' ' + d.ws : ''}`.replace(/[\\/:*?"<>|]+/g, ' ').trim();
+  const who = d && d.creator && d.creator.title ? d.creator.title : d && d.ws ? d.ws : '';
+  const name = `CNOL RADAR ${F.t(titleKey(d && d.days))} ${d && d.from ? d.from : ''}~${d && d.to ? d.to : ''}${who ? ' ' + who : ''}`.replace(/[\\/:*?"<>|]+/g, ' ').trim();
   document.title = name;
-  const back = () => { document.title = old; window.removeEventListener('afterprint', back); };
+  // :has()를 모르는 옛 브라우저(파이어폭스 120 이하 등)도 인쇄할 때 메뉴를 숨기게 표시를 달아요
+  document.body.classList.add('rp-print');
+  const back = () => { document.title = old; document.body.classList.remove('rp-print'); window.removeEventListener('afterprint', back); };
   window.addEventListener('afterprint', back);
   setTimeout(back, 60e3);
   window.print();

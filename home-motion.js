@@ -1,4 +1,4 @@
-import { setThumbnailMotionEnabled, startThumbnailMotion } from './media.js';
+import { setThumbnailMotionEnabled, startThumbnailMotion } from './media.js?v=15';
 // 첫 화면 인물 이미지(AI로 만든 이미지)를 천천히 움직여요. 화면에 보일 때만, 움직임 줄이기 설정을 지켜요.
 const portraits = [...document.querySelectorAll('.creator-portrait')];
 const toggle = document.querySelector('[data-motion-toggle]');

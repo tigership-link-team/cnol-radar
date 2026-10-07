@@ -3,12 +3,16 @@
 // v11: 속도(같은 시간 대비) · 지금 뜨는 중 · 채널 비교 · 소재 보드 · 찾기(⌘K) · 브라우저 알림 → radar-plus.js
 // v12: 팀 · 요금제 · 워크스페이스 바꾸기 · RADAR에게 묻기(AI 대화) → radar-team.js
 // v14: 주간 리포트(PDF 저장 · 고객 공유 링크) → radar-report.js · report.js
-import { sb, getLang, setLang, esc, loginUrl, emailToId } from '/common.js';
-import { mountAgent, vHome as aHome, vRefs, vWave, vTools, vTool, dropPool } from '/agent.js';
-import * as P from '/radar-plus.js';
-import * as TMM from '/radar-team.js';
-import * as PU from '/radar-push.js';
-import * as RP from '/radar-report.js';
+// v15: 머티리얼 디자인 + Amicro 마이크로 트랜지션 → md.css · md-motion.js / 찾기 화면 → radar-find.js / 크리에이터 현황(MCN) → radar-roster.js
+import { sb, getLang, setLang, esc, loginUrl, emailToId } from '/common.js?v=15';
+import { mountAgent, vHome as aHome, vRefs, vWave, vTools, vTool, dropPool } from '/agent.js?v=15';
+import * as P from '/radar-plus.js?v=15';
+import * as TMM from '/radar-team.js?v=15';
+import * as PU from '/radar-push.js?v=15';
+import * as RP from '/radar-report.js?v=15';
+import * as MO from '/md-motion.js?v=15';
+import * as FD from '/radar-find.js?v=15';
+import * as RO from '/radar-roster.js?v=15';
 
 const LANGS = ['ko', 'en', 'ja'];
 let lang = getLang();
@@ -661,7 +665,11 @@ Object.assign(T.ja, {
   qShow: '紹介ページの公開動画：{at}に更新', derived: '48時間の再生数・いつもとの比較・スコア・予測は、CNOL RADARがYouTubeの公開データから計算した値です。YouTubeが提供する指標ではありません。'
 });
 // v11 문구 (radar-plus.js) — 지금 뜨는 중 · 채널 비교 · 소재 보드 · 찾기 · 알림
-for (const l of LANGS) Object.assign(T[l], P.PT[l], TMM.TM[l], PU.TP[l], RP.TR[l]);
+for (const l of LANGS) Object.assign(T[l], P.PT[l], TMM.TM[l], PU.TP[l], RP.TR[l], FD.TR[l], RO.TR[l]);
+// v15 틀: 휴대폰 메뉴 · 아래 내비게이션
+Object.assign(T.ko, { mMenu: '메뉴 열기', mMenuX: '메뉴 닫기', navAria: '메뉴', bnAria: '주요 메뉴' });
+Object.assign(T.en, { mMenu: 'Open menu', mMenuX: 'Close menu', navAria: 'Menu', bnAria: 'Main menu' });
+Object.assign(T.ja, { mMenu: 'メニューを開く', mMenuX: 'メニューを閉じる', navAria: 'メニュー', bnAria: 'メインメニュー' });
 const t = (k, v) => {
   let s = (T[lang] && T[lang][k]) ?? T.ko[k] ?? k;
   if (v) for (const x of Object.keys(v)) s = s.split('{' + x + '}').join(v[x]);
@@ -829,6 +837,9 @@ IC.agent = '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><pa
 IC.overview = '<path d="M3 20h18"/><path d="M6 20v-5M6 12V9"/><path d="M12 20v-8M12 9V5"/><path d="M18 20v-3M18 14v-4"/>';
 IC.logout = '<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/>';
 IC.dl = '<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>';
+IC.search = '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>';
+IC.creators = '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17.5" cy="9.5" r="2.6"/><path d="M16.2 14.2a5 5 0 0 1 5.3 5.8"/>';
+IC.menu = '<path d="M4 7h16M4 12h16M4 17h16"/>';
 const svg = (p, s = 19) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 const avatar = (url, sq) => (url ? `<img class="dk-av${sq ? ' sq' : ''}" src="${esc(url)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="dk-av${sq ? ' sq' : ''}"></span>`);
 const ratioTag = (x) => (x == null ? '' : `<span class="dk-tag ${x >= 3 ? 'red' : x >= 1.5 ? 'amber' : 'gray'}">${esc(t('ratio', { x: Number(x).toFixed(1) }))}</span>`);
@@ -978,7 +989,7 @@ function bindLegend(root, id) {
   }
 }
 // 채널 색: 검증된 8색을 순서대로(순위가 아니라 채널에 붙여요) · 9개부터는 '그 외 채널'로 묶어요
-const SERIES_COLORS = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#4a3aa7', '#e34948'];
+const SERIES_COLORS = ['#6200EE', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#2a78d6', '#e34948']; // v15: 첫 색은 머티리얼 보라 (색맹 구분 검사 통과)
 const OTHER_COLOR = '#b5b0c6';
 function buildSeries(bc, chans) {
   const tot = new Map();
@@ -1085,7 +1096,7 @@ function hbarsHtml(rows) {
 
 // ---------- 유튜브 스튜디오식 선 차트 ----------
 // 오른쪽 눈금 · 옅은 가로선 · 회색 '평소 범위' 띠 · 마우스를 따라 세로선 + 점 + 흰 툴팁
-const YT_LINE = '#065fd4';
+const YT_LINE = '#6200EE';
 function niceStep(range, n = 4) {
   if (!(range > 0)) return 1;
   const raw = range / n, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p;
@@ -1546,7 +1557,9 @@ function tryRunsHtml(runs, own) {
 
 // ---------- 틀: 메뉴 5개 · 메뉴마다 안쪽 탭 ----------
 const GROUPS = [
+  { k: 'findG', ic: 'search', tabs: ['find'], fab: true },
   { k: 'agent', ic: 'agent', tabs: ['home', 'report'], hidden: ['alerts'] },
+  { k: 'crG', ic: 'creators', tabs: ['roster'] },
   { k: 'ovG', ic: 'overview', tabs: ['overview', 'radar', 'ranking'] },
   { k: 'refsG', ic: 'channels', tabs: ['refs', 'channels', 'compare'], hidden: ['ch', 'collect'] },
   { k: 'ideasG', ic: 'picks', tabs: ['picks', 'try', 'wave', 'ideas'] },
@@ -1567,23 +1580,43 @@ function route() {
   if (S.user?.guest && GUEST_HIDE.includes(h)) return { name: 'status' };
   return { name: ROUTES.includes(h) && h !== 'ch' && h !== 'tool' ? h : 'home' };
 }
+let navG = null; // 활성 표시가 다른 메뉴로 옮겨 갈 때만 펼쳐지는 움직임을 줘요
+const BN = ['agent', 'crG', 'ovG', 'refsG', 'ideasG']; // 휴대폰 아래 내비게이션 (5개)
 function renderNav() {
   const g0 = groupOf(route().name);
-  const item = (g, cls = '') => {
-    const badge = g.k === 'agent' && S.unread ? `<span class="n">${S.unread > 99 ? '99+' : S.unread}</span>` : '';
-    return `<a class="dk-nav${cls}" href="#${g.tabs[0]}" ${g0 === g ? 'aria-current="page"' : ''}>${svg(IC[g.ic], cls ? 16 : 19)}${esc(t('g_' + g.k))}${badge}</a>`;
-  };
-  document.getElementById('nav').innerHTML = GROUPS.filter((g) => !g.minor).map((g) => item(g)).join('')
+  const moved = navG !== (g0 && g0.k);
+  navG = g0 && g0.k;
+  const badgeOf = (g) => (g.k === 'agent' && S.unread ? `<span class="n">${S.unread > 99 ? '99+' : S.unread}</span>` : '');
+  const item = (g, cls = '') => `<a class="dk-nav${cls}${g0 === g && moved ? ' ind-in' : ''}" href="#${g.tabs[0]}" ${g0 === g ? 'aria-current="page"' : ''}>${svg(IC[g.ic], cls ? 16 : 19)}${esc(t('g_' + g.k))}${badgeOf(g)}</a>`;
+  const nav = document.getElementById('nav');
+  nav.setAttribute('aria-label', t('navAria'));
+  nav.innerHTML = GROUPS.filter((g) => !g.minor && !g.fab).map((g) => item(g)).join('')
     + `<span class="dk-div" aria-hidden="true"></span>` + GROUPS.filter((g) => g.minor).map((g) => item(g, ' sub')).join('')
     + `<a class="dk-nav sub" href="/">${svg(IC.landing, 16)}${esc(t('landing'))}</a>`;
+  // 드로어 맨 위 떠 있는 버튼(찾기) — 지금 찾기 화면이면 눌린 모양
+  const fab = document.getElementById('fabFind');
+  if (fab) { if (g0 && g0.fab) fab.setAttribute('aria-current', 'page'); else fab.removeAttribute('aria-current'); }
+  // 휴대폰 아래 내비게이션
+  const bnav = document.getElementById('bnav');
+  if (bnav) {
+    bnav.setAttribute('aria-label', t('bnAria'));
+    bnav.style.setProperty('--bn', String(BN.length));
+    bnav.innerHTML = BN.map((k) => GROUPS.find((g) => g.k === k)).filter(Boolean).map((g) => `<a class="bn-i" href="#${g.tabs[0]}" ${g0 === g ? 'aria-current="page"' : ''}><span class="bn-ind">${svg(IC[g.ic], 22)}${badgeOf(g)}</span><span class="bn-l">${esc(t('g_' + g.k))}</span></a>`).join('');
+  }
   const cr = document.getElementById('crumb');
   if (cr) cr.innerHTML = `CNOL RADAR <span aria-hidden="true">/</span> <b>${esc(g0 ? t('g_' + g0.k) : t('home'))}</b>`;
   const dv = document.querySelector('#derived span');
   if (dv) dv.textContent = t('derived');
-  const bn = document.getElementById('bellN');
-  bn.hidden = !S.unread;
-  bn.textContent = S.unread > 99 ? '99+' : String(S.unread || '');
+  for (const id of ['bellN', 'bellN2']) {
+    const bn = document.getElementById(id);
+    if (!bn) continue;
+    bn.hidden = !S.unread;
+    bn.textContent = S.unread > 99 ? '99+' : String(S.unread || '');
+  }
   document.getElementById('bell').setAttribute('aria-label', t('alerts'));
+  document.getElementById('bell2')?.setAttribute('aria-label', t('alerts'));
+  const mb = document.getElementById('menuBtn');
+  if (mb) mb.setAttribute('aria-label', document.body.classList.contains('nav-open') ? t('mMenuX') : t('mMenu'));
 }
 function renderChrome() {
   document.documentElement.lang = lang;
@@ -1627,7 +1660,7 @@ async function render() {
   S.same = key === lastKey && v.childElementCount > 0;
   lastKey = key;
   v.classList.toggle('dk-still', S.same);
-  const views = { report: RP.vReport, home: aHome, refs: vRefs, wave: vWave, tools: vTools, tool: vTool, overview: vOverview, radar: P.vRadar, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, channels: vChannels, compare: P.vCompare, ch: vChannel, ideas: P.vBoard, partners: vPartners, status: vStatus, team: TMM.vTeam, notify: PU.vNotify };
+  const views = { find: FD.vFind, roster: RO.vRoster, report: RP.vReport, home: aHome, refs: vRefs, wave: vWave, tools: vTools, tool: vTool, overview: vOverview, radar: P.vRadar, picks: vPicks, try: vTry, insights: vInsights, ranking: vRanking, alerts: vAlerts, channels: vChannels, compare: P.vCompare, ch: vChannel, ideas: P.vBoard, partners: vPartners, status: vStatus, team: TMM.vTeam, notify: PU.vNotify };
   document.title = t(r.name === 'ch' ? 'channels' : r.name) + ' · CNOL RADAR';
   try {
     await views[r.name](v, r, alive);
@@ -1635,7 +1668,7 @@ async function render() {
     console.error(e);
     if (alive()) v.innerHTML = head(t(r.name === 'ch' ? 'channels' : r.name), '') + `<div class="dk-card"><div class="dk-empty">${esc(t('loadFail'))}<br><small>${esc(e.message || String(e))}</small></div></div>`;
   }
-  if (alive()) v.classList.remove('dk-busy');
+  if (alive()) { v.classList.remove('dk-busy'); MO.enter(v, S.same); }
   updateUnread().catch(() => {});
 }
 
@@ -2648,7 +2681,35 @@ document.getElementById('refreshAll').addEventListener('click', async (e) => {
   dropPool();
   render();
 });
-window.addEventListener('hashchange', () => { render(); document.getElementById('main').scrollTo({ top: 0 }); });
+window.addEventListener('hashchange', () => { navClose(false); render(); document.getElementById('main').scrollTo({ top: 0 }); window.scrollTo({ top: 0 }); });
+// ---------- 휴대폰: 옆에서 나오는 메뉴(모달 드로어) ----------
+function navOpen() {
+  if (innerWidth > 900) return;
+  document.body.classList.add('nav-open');
+  const sc = document.getElementById('scrim');
+  sc.hidden = false;
+  requestAnimationFrame(() => sc.classList.add('on'));
+  const mb = document.getElementById('menuBtn');
+  mb.setAttribute('aria-expanded', 'true');
+  mb.setAttribute('aria-label', t('mMenuX'));
+  setTimeout(() => document.querySelector('#side .dk-nav[aria-current="page"], #side .dk-nav')?.focus({ preventScroll: true }), 60);
+}
+function navClose(focusBack = true) {
+  if (!document.body.classList.contains('nav-open')) return;
+  document.body.classList.remove('nav-open');
+  const sc = document.getElementById('scrim');
+  sc.classList.remove('on');
+  setTimeout(() => { if (!document.body.classList.contains('nav-open')) sc.hidden = true; }, 320);
+  const mb = document.getElementById('menuBtn');
+  mb.setAttribute('aria-expanded', 'false');
+  mb.setAttribute('aria-label', t('mMenu'));
+  if (focusBack) mb.focus({ preventScroll: true });
+}
+document.getElementById('menuBtn')?.addEventListener('click', () => (document.body.classList.contains('nav-open') ? navClose() : navOpen()));
+document.getElementById('scrim')?.addEventListener('click', () => navClose());
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.body.classList.contains('nav-open')) { e.preventDefault(); navClose(); } });
+document.getElementById('side')?.addEventListener('click', (e) => { if (e.target.closest('a[href^="#"]') && document.body.classList.contains('nav-open')) navClose(false); });
+addEventListener('resize', () => { if (innerWidth > 900) navClose(false); });
 // 가로로 밀리는 표는 키보드(Tab)로도 밀 수 있게 이름표를 달아요 (v14 접근성)
 let tabFixQ = 0;
 new MutationObserver(() => {
@@ -2672,7 +2733,7 @@ const CTX = {
   svg, IC, head, loading, snack, avatar, ratioTag, ytShort, vthumb, cssUrl, barsHtml, bindBars, trySuggest, tyCardHtml, bindTry, tryHidden, tryRuns,
   learnStore, pickList, alertHtml, bindAlertButtons, bindBoardButtons, render, errText, renderNav, nextRunTxt, greet, agAv, agMsg,
   buildSeries, stackCols, stackHtml, bindStack, legendHtml, bindLegend,
-  ytLine, xTicks, quant, median, tokens, loc, YT_LINE, alertParts, openShort, updateUnread, route, plus: P, push: PU
+  ytLine, xTicks, quant, median, tokens, loc, YT_LINE, alertParts, openShort, updateUnread, route, plus: P, push: PU, mo: MO
 };
 mountAgent(CTX);
 P.mountPlus(CTX);
@@ -2680,7 +2741,10 @@ TMM.mountTeam(CTX);
 TMM.bindAcct();
 PU.mountPush(CTX);
 RP.mountReport(CTX);
+FD.mountFind(CTX);
+RO.mountRoster(CTX);
 P.mountKeys();
+MO.startMotion();
 
 // ---------- 관리자 로그인 확인 (로그인 안 했으면 로그인 화면으로) ----------
 async function signOut(btn) {

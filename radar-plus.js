@@ -3,7 +3,7 @@
 // · 지금 뜨는 중 · 채널 비교 · 채널 '조회수 크는 모양' · 소재 보드(끌어 옮기기 · 올릴 날 · 올린 영상 성과)
 // · 설정(최근 7일 할당량 · 자동 수집 상태 · 브라우저 알림 · 단축키) · 어디서나 찾기(⌘K / Ctrl+K / '/') · G 다음 글자 단축키
 // app.js가 mountPlus(ctx)로 공용 함수를 넘겨줘요 (순환 import 없이). 문구(PT)는 app.js가 T에 합쳐요.
-import { TT } from '/agent-i18n.js';
+import { TT } from '/agent-i18n.js?v=15';
 
 let C = null;
 export function mountPlus(ctx) { C = ctx; }
@@ -63,7 +63,7 @@ export const PT = {
     ntOn: '알림 켜기', ntOff: '알림 끄기', ntOnState: '켜져 있어요 · 4분마다 확인해요', ntOffState: '꺼져 있어요', ntDenied: '브라우저에서 알림이 막혀 있어요. 주소창 왼쪽 자물쇠 → 알림 → 허용으로 바꿔 주세요.',
     ntNo: '이 브라우저는 페이지 알림을 지원하지 않아요.', ntTest: '시험 알림', ntTestBody: '알림이 이렇게 떠요. 새 급상승 영상이 생기면 알려 드릴게요.',
     kbTitle: '단축키', kbFind: '어디서나 찾기', kbGo: '화면 이동: G 다음 글자', kbList: 'H 에이전트 · O 한눈에 · R 지금 뜨는 중 · K 영상 랭킹 · F 맞춤 레퍼런스 · C 채널 목록 · M 채널 비교 · P 추천 소재 · W 소재 파도 · I 소재 보드 · T 도구 · A 알림 · S 설정',
-    pfFind: '찾기', pfPh: '채널 · 영상 · 화면 · 도구를 찾거나, 소재를 적어 보세요', pfPages: '화면', pfTools: '도구', pfChans: '채널', pfVids: '영상', pfCmds: '바로 하기',
+    pfFind: '찾기', pfBar: '채널 · 영상 · 소재 찾기', pfAll: '찾기 화면', pfAllQ: '‘{q}’ 전부 찾기', pfAllSub: '채널 · 영상 · 소재 보드 · 유튜브 전체 · 영입 후보', pfAllOpen: '찾기 화면 열기', pfPh: '채널 · 영상 · 화면 · 도구를 찾거나, 소재를 적어 보세요', pfPages: '화면', pfTools: '도구', pfChans: '채널', pfVids: '영상', pfCmds: '바로 하기',
     pfTopic: '“{q}” 소재 검색', pfTitleQ: '“{q}”로 제목 만들기', pfPred: '“{q}” 몇 배 나올지 예측', pfRefresh: '지금 새로고침', pfKind: '쇼츠/롱폼 바꾸기 (지금: {k})', pfLang: '언어 바꾸기: {l}',
     pfNone: '찾는 게 없어요', pfHint: '↑↓ 고르기 · Enter 열기 · Esc 닫기', pfKeys: 'G 다음 H·O·R·C·M·I·T·S로 바로 이동',
     hsTitle: '최근 쓴 도구', hsClear: '기록 지우기',
@@ -108,7 +108,7 @@ export const PT = {
     ntOn: 'Turn on', ntOff: 'Turn off', ntOnState: 'On · checks every 4 minutes', ntOffState: 'Off', ntDenied: 'Notifications are blocked in this browser. Click the lock icon in the address bar → Notifications → Allow.',
     ntNo: 'This browser does not support page notifications.', ntTest: 'Test', ntTestBody: 'This is how alerts look. We will tell you when something breaks out.',
     kbTitle: 'Keyboard shortcuts', kbFind: 'Find anything', kbGo: 'Jump: G then a letter', kbList: 'H Agent · O At a glance · R Rising now · K Video ranking · F References · C Channels · M Compare · P Picks · W Topic waves · I Idea board · T Tools · A Alerts · S Settings',
-    pfFind: 'Find', pfPh: 'Find channels, videos, pages, tools — or type a topic', pfPages: 'Pages', pfTools: 'Tools', pfChans: 'Channels', pfVids: 'Videos', pfCmds: 'Actions',
+    pfFind: 'Find', pfBar: 'Search channels, videos, ideas', pfAll: 'Find page', pfAllQ: 'Search everything for “{q}”', pfAllSub: 'Channels · videos · idea board · all of YouTube · creator scouting', pfAllOpen: 'Open the Find page', pfPh: 'Find channels, videos, pages, tools — or type a topic', pfPages: 'Pages', pfTools: 'Tools', pfChans: 'Channels', pfVids: 'Videos', pfCmds: 'Actions',
     pfTopic: 'Search topic “{q}”', pfTitleQ: 'Make titles for “{q}”', pfPred: 'Forecast “{q}”', pfRefresh: 'Refresh now', pfKind: 'Switch Shorts/long-form (now: {k})', pfLang: 'Language: {l}',
     pfNone: 'Nothing found', pfHint: '↑↓ to choose · Enter to open · Esc to close', pfKeys: 'G then H·O·R·C·M·I·T·S jumps straight there',
     hsTitle: 'Recent tools', hsClear: 'Clear history',
@@ -153,7 +153,7 @@ export const PT = {
     ntOn: '通知をオン', ntOff: '通知をオフ', ntOnState: 'オン・4分ごとに確認', ntOffState: 'オフ', ntDenied: 'このブラウザで通知がブロックされています。アドレスバー左の鍵 → 通知 → 許可にしてください。',
     ntNo: 'このブラウザはページ通知に対応していません。', ntTest: 'テスト通知', ntTestBody: '通知はこのように表示されます。急上昇があればお知らせします。',
     kbTitle: 'ショートカット', kbFind: 'どこでも検索', kbGo: '画面移動：Gの次に文字', kbList: 'H エージェント・O ひと目で・R 急上昇中・K 動画ランキング・F リファレンス・C チャンネル一覧・M 比較・P おすすめ・W ネタの波・I ネタボード・T ツール・A 通知・S 設定',
-    pfFind: '検索', pfPh: 'チャンネル・動画・画面・ツールを検索、またはネタを入力', pfPages: '画面', pfTools: 'ツール', pfChans: 'チャンネル', pfVids: '動画', pfCmds: 'すぐ実行',
+    pfFind: '検索', pfBar: 'チャンネル・動画・ネタを検索', pfAll: '検索画面', pfAllQ: '「{q}」をすべて探す', pfAllSub: 'チャンネル・動画・ネタボード・YouTube全体・スカウト候補', pfAllOpen: '検索画面を開く', pfPh: 'チャンネル・動画・画面・ツールを検索、またはネタを入力', pfPages: '画面', pfTools: 'ツール', pfChans: 'チャンネル', pfVids: '動画', pfCmds: 'すぐ実行',
     pfTopic: '「{q}」のネタを検索', pfTitleQ: '「{q}」でタイトルを作る', pfPred: '「{q}」を予測', pfRefresh: '今すぐ更新', pfKind: 'ショート/長尺を切り替え（現在：{k}）', pfLang: '言語：{l}',
     pfNone: '見つかりません', pfHint: '↑↓ 選択・Enter 開く・Esc 閉じる', pfKeys: 'Gの次にH・O・R・C・M・I・T・Sですぐ移動',
     hsTitle: '最近使ったツール', hsClear: '履歴を消す',
@@ -823,10 +823,10 @@ function match(text, q) {
   if (/^[ㄱ-ㅎ]+$/.test(q) && cho(s).includes(q)) return 1.5;
   return 0;
 }
-const GO = { h: 'home', o: 'overview', r: 'radar', k: 'ranking', f: 'refs', c: 'channels', m: 'compare', p: 'picks', w: 'wave', i: 'ideas', t: 'tools', a: 'alerts', s: 'status' };
-const PAGES = ['home', 'report', 'overview', 'radar', 'ranking', 'refs', 'channels', 'compare', 'picks', 'try', 'wave', 'ideas', 'tools', 'alerts', 'status'];
+const GO = { h: 'home', o: 'overview', r: 'radar', k: 'ranking', f: 'refs', c: 'channels', m: 'compare', p: 'picks', w: 'wave', i: 'ideas', t: 'tools', a: 'alerts', s: 'status', '/': 'find', u: 'roster' };
+const PAGES = ['find', 'home', 'report', 'roster', 'overview', 'radar', 'ranking', 'refs', 'channels', 'compare', 'picks', 'try', 'wave', 'ideas', 'tools', 'alerts', 'status'];
 const TOOLS = [['topic', 'search'], ['predict', 'target'], ['title', 'wand'], ['thumb', 'image'], ['comments', 'chat'], ['dna', 'dna']];
-const PIC = { home: 'agent', report: 'overview', overview: 'overview', radar: 'up', ranking: 'ranking', refs: 'channels', channels: 'channels', compare: 'compare', picks: 'picks', try: 'try', wave: 'insights', ideas: 'ideas', tools: 'tools', alerts: 'alerts', status: 'status' };
+const PIC = { find: 'search', roster: 'creators', home: 'agent', report: 'overview', overview: 'overview', radar: 'up', ranking: 'ranking', refs: 'channels', channels: 'channels', compare: 'compare', picks: 'picks', try: 'try', wave: 'insights', ideas: 'ideas', tools: 'tools', alerts: 'alerts', status: 'status' };
 let pf = null;
 let pfItems = [];
 let pfSel = 0;
@@ -861,10 +861,28 @@ function pfBuild() {
   });
   return pf;
 }
+// v15 찾기 화면: 화면 · 도구 중 맞는 것
+export function pagesFor(q) {
+  const tl = TT[C.lang] || TT.ko;
+  const out = [];
+  for (const k of PAGES) {
+    const lab = t('tab_' + k) !== 'tab_' + k ? t('tab_' + k) : t(k);
+    const sc = match(lab + ' ' + t(k), q);
+    if (sc) out.push({ label: lab, sub: '', icon: C.IC[PIC[k]] || PIC2[PIC[k]] || SEARCH, href: '#' + k, sc: sc + 0.5 });
+  }
+  for (const [k, icn] of TOOLS) {
+    const sc = match(tl['t_' + k], q);
+    if (sc) out.push({ label: tl['t_' + k], sub: tl['td_' + k] || '', icon: C.IC[icn] || PIC2[icn] || SEARCH, href: '#tool/' + k, sc: sc + 0.4 });
+  }
+  return out.sort((a, b) => b.sc - a.sc);
+}
 function pfCollect(q) {
   const out = [];
   const tl = TT[C.lang] || TT.ko;
   const add = (g, label, sub, icon, run, sc) => out.push({ g, label, sub, icon, run, sc });
+  const raw0 = pf ? pf.querySelector('#pfIn').value.trim() : q;
+  if (q) add('pfAll', t('pfAllQ', { q: raw0 }), t('pfAllSub'), 'search', () => { location.hash = '#find?q=' + enc(raw0); }, 9);
+  else add('pfAll', t('pfAllOpen'), t('pfAllSub'), 'search', () => { location.hash = '#find'; }, 9);
   for (const k of PAGES) { const sc = match(t('tab_' + k) + ' ' + t(k), q); if (sc) add('pfPages', t('tab_' + k) !== 'tab_' + k ? t('tab_' + k) : t(k), '', PIC[k], () => { location.hash = '#' + k; }, sc + 0.5); }
   for (const [k, icn] of TOOLS) { const sc = match(tl['t_' + k], q); if (sc) add('pfTools', tl['t_' + k], tl['td_' + k] || '', icn, () => { location.hash = '#tool/' + k; }, sc + 0.4); }
   for (const c of C.S.chans || []) {
@@ -886,7 +904,7 @@ function pfCollect(q) {
     ...['ko', 'en', 'ja'].filter((l) => l !== C.lang).map((l) => [t('pfLang', { l: { ko: '한국어', en: 'English', ja: '日本語' }[l] }), 'globe', () => document.querySelector(`[data-lang="${l}"]`)?.click()])
   ];
   for (const [label, icon, run] of cmds) { const sc = match(label, q); if (sc) add('pfCmds', label, '', icon, run, q ? sc : 0.2); }
-  const order = ['pfPages', 'pfTools', 'pfChans', 'pfVids', 'pfCmds'];
+  const order = ['pfAll', 'pfPages', 'pfTools', 'pfChans', 'pfVids', 'pfCmds'];
   if (!q) return out.sort((a, b) => order.indexOf(a.g) - order.indexOf(b.g));
   // 무리별 최고 점수 순으로 무리를 놓고, 무리 안에서는 점수 순
   const best = new Map();
@@ -902,7 +920,7 @@ function pfRender() {
   pf.querySelector('#pfList').innerHTML = pfItems.length ? pfItems.map((x, i) => {
     const hd = x.g !== g ? `<div class="pf-g" role="presentation">${e(t(x.g))}</div>` : '';
     g = x.g;
-    return `${hd}<div class="pf-o" role="option" id="pfo${i}" data-i="${i}" aria-selected="${String(i === pfSel)}">${C.svg(C.IC[x.icon] || PIC2[x.icon] || SEARCH, 17)}<span class="l"><b>${e(x.label)}</b>${x.sub ? `<small>${e(x.sub)}</small>` : ''}</span><kbd>↵</kbd></div>`;
+    return `${hd}<div class="pf-o${x.g === 'pfAll' ? ' all' : ''}" role="option" id="pfo${i}" data-i="${i}" aria-selected="${String(i === pfSel)}">${C.svg(C.IC[x.icon] || PIC2[x.icon] || SEARCH, 17)}<span class="l"><b>${e(x.label)}</b>${x.sub ? `<small>${e(x.sub)}</small>` : ''}</span><kbd>↵</kbd></div>`;
   }).join('') : `<div class="pf-none">${e(t('pfNone'))}</div>`;
   pfMark();
 }
@@ -926,6 +944,19 @@ export function pfOpen(q = '') {
   pf.querySelector('#pfKeys').textContent = t('pfKeys');
   inp.value = q;
   pfSel = 0;
+  const bar = document.getElementById('findBtn');
+  const r0 = bar && bar.offsetParent ? bar.getBoundingClientRect() : null;
+  if (r0 && innerWidth > 900) {
+    const w = Math.min(Math.max(r0.width, 640), innerWidth - r0.left - 16);
+    pf.style.setProperty('--pf-l', Math.max(8, r0.left) + 'px');
+    pf.style.setProperty('--pf-t', Math.max(8, r0.top - 4) + 'px');
+    pf.style.setProperty('--pf-w', w + 'px');
+  } else {
+    const w = Math.min(720, innerWidth - 32);
+    pf.style.setProperty('--pf-l', Math.round((innerWidth - w) / 2) + 'px');
+    pf.style.setProperty('--pf-t', '12px');
+    pf.style.setProperty('--pf-w', w + 'px');
+  }
   pf.hidden = false;
   document.body.classList.add('pf-on');
   pfRender();
@@ -961,6 +992,6 @@ export function findLabel() {
   const btn = document.getElementById('findBtn');
   if (!btn) return;
   const mac = /Mac|iPhone|iPad/.test(navigator.platform || '');
-  btn.innerHTML = `${C.svg(SEARCH, 16)}<span>${e(t('pfFind'))}</span><kbd>${mac ? '⌘' : 'Ctrl'} K</kbd>`;
+  btn.innerHTML = `${C.svg(SEARCH, 20)}<span class="ph">${e(t('pfBar'))}</span><kbd>${mac ? '⌘' : 'Ctrl'} K</kbd>`;
   btn.setAttribute('aria-label', t('pfFind') + ' (' + (mac ? '⌘' : 'Ctrl') + '+K)');
 }

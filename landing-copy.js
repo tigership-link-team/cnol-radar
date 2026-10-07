@@ -1,5 +1,5 @@
 // Homepage copy only. Loaded after i18n.js so dashboard copy remains unchanged.
-import { DICT } from './i18n.js';
+import { DICT } from './i18n.js?v=15';
 
 const LANDING_COPY = {
   ko: {
